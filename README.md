@@ -9,7 +9,7 @@ Contents
 --------
 
 * `doc`: currently empty. Prose documentation will follow  and can be generated through [OxGarage](http://www.tei-c.org/oxgarage/)
-* `schema`: currently empty. Can be generated through [OxGarage](http://www.tei-c.org/oxgarage/)
+* `schema`: RelaxNG schemata, generated with the [roma cli](http://www.tei-c.org/Guidelines/Customization/odds.xml#romacommandline) from the ODD files below
 * `src`: source ODD files
 	* `WeGA_biblio.odd.xml`: WeGA ODD file for bibliographic documents 
 	* `WeGA_common.odd.xml`: common macros and definitions for global use in the WeGA Digital Edition
@@ -22,3 +22,7 @@ Contents
 	* `WeGA_writings.odd.xml`: WeGA ODD file for writings
 
 
+License
+-------
+
+This work is licensed under a [Creative Commons Attribution 3.0 Unported License](http://creativecommons.org/licenses/by-nc-sa/3.0/)
