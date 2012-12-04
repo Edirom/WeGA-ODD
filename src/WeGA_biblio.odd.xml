@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_allPlus.rng" type="xml"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0"
+    xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>WeGA biblio ODD</title>
+                <author>Peter Stadler</author>
+                <funder><ref target="http://www.adwmainz.de">Akademie der Wissenschaften und der Literatur, Mainz</ref></funder>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <orgName><ref target="http://www.weber-gesamtausgabe.de">Carl-Maria-von-Weber-Gesamtausgabe</ref></orgName>
+                    <address>
+                        <addrLine>Gartenstr. 20</addrLine>
+                        <addrLine>32756 Detmold</addrLine>
+                        <addrLine>Germany</addrLine>
+                    </address>
+                </publisher>
+                <availability status="restricted">
+                    <p>This work is licensed under a <ref type="license" target="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution 3.0 Unported License</ref>.</p>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <p>Written from scratch (with a lot of help from tei-c.org).</p>
+            </sourceDesc>
+        </fileDesc>
+        <revisionDesc status="rev1.1.5">
+            <change who="Peter Stadler" when="2012-12-12">Initial commit to github in conjunction with the WeGA website release 1.1.5</change>
+        </revisionDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div>
+                <head>WeGA ODD file for bibliographic documents</head>
+                <p>Prose descriptions will follow …</p>
+            </div>
+            <div>
+                <schemaSpec ident="wegaBiblio" xml:lang="en" start="biblStruct">
+                    <moduleRef key="core"/>
+                    <moduleRef key="tei"/>
+                    <moduleRef key="header"/>
+                    <moduleRef key="textstructure"/>
+                    <moduleRef key="namesdates"/>
+                    <moduleRef key="figures"/>
+                    <moduleRef key="tagdocs"/>
+                    <moduleRef key="linking"/>
+
+                    <xi:include href="WeGA_common.odd.xml"/>
+                    <specGrpRef target="#myPatterns"/>
+                    
+                    <elementSpec ident="biblStruct" mode="change" module="core">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.sortable" mode="delete"/>
+                            <memberOf key="att.declarable" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                            <memberOf key="att.docStatus" mode="add"/>
+                        </classes>
+                        <content>
+                            <rng:zeroOrMore>
+                                <rng:ref name="analytic"/>
+                            </rng:zeroOrMore>
+                            <rng:oneOrMore>
+                                <rng:ref name="monogr"/>
+                                <rng:zeroOrMore>
+                                    <rng:ref name="series"/>
+                                </rng:zeroOrMore>
+                            </rng:oneOrMore>
+                            <rng:interleave>
+                                <rng:optional>
+                                    <rng:ref name="keywords"/>
+                                </rng:optional>
+                                <rng:optional>
+                                    <rng:element name="note">
+                                        <rng:ref name="macro.specialPara"/>
+                                    </rng:element>
+                                </rng:optional>
+                                <rng:zeroOrMore>
+                                    <rng:ref name="idno"/>
+                                </rng:zeroOrMore>
+                            </rng:interleave>
+                        </content>
+                        <attList>
+                            <attDef ident="xml:id" mode="add" usage="req">
+                                <datatype>
+                                    <rng:ref name="key.biblio.pattern"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="type" mode="add" usage="req">
+                                <valList type="closed">
+                                    <valItem ident="article">
+                                        <desc>Zeitungs- oder Zeitschriftenartikel</desc>
+                                    </valItem>
+                                    <valItem ident="book">
+                                        <desc>Buch bzw. Monographie</desc>
+                                    </valItem>
+                                    <valItem ident="inbook">
+                                        <desc>Teil (z.B. Kapitel) einer Monographie, meist vom selben Autor</desc>
+                                    </valItem>
+                                    <valItem ident="incollection">
+                                        <desc>Teil eines Buches (z.B. Aufsatz in einem Sammelband) mit einem eigenen Titel. Hierunter fallen insbesondere auch die Jahrbücher wie "Weberiana"</desc>
+                                    </valItem>
+                                    <valItem ident="inproceedings">
+                                        <desc>Artikel in einem Konferenzbericht. Ausschlaggebend ist, dass der Hinweis auf die Konferenz im Titel der Monographie genannt wird</desc>
+                                    </valItem>
+                                    <valItem ident="mastersthesis">
+                                        <desc>Bachelor-, Master- oder Magisterarbeit</desc>
+                                    </valItem>
+                                    <valItem ident="misc">
+                                        <desc>Alles, was nicht anders zuzuordnen ist</desc>
+                                    </valItem>
+                                    <valItem ident="online">
+                                        <desc>(native) online Veröffentlichungen wie Blog-Posts, Wikieinträge o.ä.</desc>
+                                    </valItem>
+                                    <valItem ident="phdthesis">
+                                        <desc>ungedruckte (aka "maschinenschriftliche") Dissertation</desc>
+                                    </valItem>
+                                    <valItem ident="review">
+                                        <desc>Rezension</desc>
+                                    </valItem>
+                                </valList>
+                            </attDef>
+                            <attDef ident="status" mode="change" usage="req"/>
+                        </attList>
+                    </elementSpec>
+                    
+                    <elementSpec ident="keywords" mode="change" module="header">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:oneOrMore>
+                                <rng:ref name="term"/>
+                            </rng:oneOrMore>
+                        </content>
+                        <attList>
+                            <attDef ident="scheme" mode="change" usage="req">
+                                <valList type="closed" mode="replace">
+                                    <valItem ident="WeGA_cat"/>
+                                </valList>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+                    
+                    <!--<elementSpec ident="title" mode="change" module="core">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.canonical" mode="delete"/>
+                        </classes>
+                        <attList>
+                            <attDef ident="level" mode="change" usage="req">
+                                <valList type="closed" mode="replace">
+                                    <valItem ident="s">
+                                        <desc>(series) Reihentitel</desc>
+                                    </valItem>
+                                    <valItem ident="a">
+                                        <desc>(analytic) Titel des Einzelwerks / der Datei</desc>
+                                    </valItem>
+                                </valList>
+                            </attDef>
+                            <attDef ident="xml:lang" mode="add" usage="req">
+                                <datatype>
+                                    <rng:ref name="data.language"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="type" mode="delete"/>
+                        </attList>
+                    </elementSpec>-->
+                    
+                    <elementSpec ident="term" mode="change" module="core">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.declaring" mode="delete"/>
+                            <memberOf key="att.pointing" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                            <memberOf key="att.canonical" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:ref name="WeGA_keywords.list"/>
+                        </content>
+                        <attList>
+                            <attDef ident="cRef" mode="delete"/>
+                            <attDef ident="sortKey" mode="delete"/>
+                        </attList>
+                    </elementSpec>
+                    
+                </schemaSpec>
+            </div>
+        </body>
+    </text>
+</TEI>

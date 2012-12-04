@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_allPlus.rng" type="xml"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0"
+    xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>WeGA diaries ODD</title>
+                <author>Peter Stadler</author>
+                <funder><ref target="http://www.adwmainz.de">Akademie der Wissenschaften und der Literatur, Mainz</ref></funder>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <orgName><ref target="http://www.weber-gesamtausgabe.de">Carl-Maria-von-Weber-Gesamtausgabe</ref></orgName>
+                    <address>
+                        <addrLine>Gartenstr. 20</addrLine>
+                        <addrLine>32756 Detmold</addrLine>
+                        <addrLine>Germany</addrLine>
+                    </address>
+                </publisher>
+                <availability status="restricted">
+                    <p>This work is licensed under a <ref type="license" target="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution 3.0 Unported License</ref>.</p>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <p>Written from scratch (with a lot of help from tei-c.org).</p>
+            </sourceDesc>
+        </fileDesc>
+        <revisionDesc status="rev1.1.5">
+            <change who="Peter Stadler" when="2012-12-12">Initial commit to github in conjunction with the WeGA website release 1.1.5</change>
+        </revisionDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div>
+                <head>WeGA ODD file for diaries</head>
+                <p>Prose descriptions will follow …</p>
+            </div>
+            <div>
+                <schemaSpec ident="wegaDiaries" xml:lang="en" start="TEI div ab" prefix="wega_">
+                    <moduleRef key="core"/>
+                    <moduleRef key="tei"/>
+                    <moduleRef key="header"/>
+                    <moduleRef key="textstructure"/>
+                    <moduleRef key="namesdates"/>
+                    <moduleRef key="msdescription"/>
+                    <moduleRef key="transcr"/>
+                    <moduleRef key="linking"/>
+<!--                    <moduleRef key="gaiji"/>-->
+
+                    <xi:include href="WeGA_common.odd.xml"/>
+                    <specGrpRef target="#myPatterns"/>
+
+                    <elementSpec ident="text" mode="change" module="textstructure">
+                        <classes mode="change">
+                            <memberOf key="att.declaring" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:ref name="front"/>
+                            <rng:ref name="body"/>
+                        </content>
+                        <attList>
+                            <attDef ident="type" mode="add" usage="req">
+                                <valList type="closed">
+                                    <valItem ident="diary"/>
+                                </valList>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+
+                    <elementSpec ident="body" mode="change" module="textstructure">
+                        <classes mode="change">
+                            <memberOf key="att.declaring" mode="delete"/>
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:oneOrMore>
+                                <rng:choice>
+                                    <rng:element name="include" ns="http://www.w3.org/2001/XInclude">
+                                        <rng:attribute name="href">
+                                            <rng:ref name="data.pointer"/>
+                                        </rng:attribute>
+                                    </rng:element>
+                                    <rng:ref name="div"/>
+                                    <!--<rng:oneOrMore>
+                                            <rng:ref name="ab"/>
+                                        </rng:oneOrMore>-->
+                                    <!--<rng:ref name="att.global.attributes"/>-->
+
+                                </rng:choice>
+                            </rng:oneOrMore>
+                        </content>
+                    </elementSpec>
+
+                    <elementSpec ident="div" mode="change" module="textstructure">
+                        <classes mode="change">
+                            <memberOf key="att.declaring" mode="delete"/>
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.divLike" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:oneOrMore>
+                                <rng:choice>
+                                    <rng:ref name="ab"/>
+                                    <rng:ref name="pb"/>
+                                </rng:choice>
+                            </rng:oneOrMore>
+                        </content>
+                        <attList>
+                            <attDef ident="xml:id" mode="add" usage="req">
+                                <datatype>
+                                    <rng:ref name="ID"/>
+                                </datatype>
+                            </attDef>
+                            <!--<attDef ident="xml:base" mode="add" usage="opt">
+                                <datatype>
+                                    <value>http://www.tei-c.org/ns/1.0</value>
+                                </datatype>
+                            </attDef>-->
+                            <attDef ident="facs" mode="add" usage="mwa">
+                                <datatype>
+                                    <rng:ref name="data.pointer"/>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+
+                    <elementSpec ident="measure" mode="change" module="core">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <attList>
+                            <attDef ident="type" mode="replace">
+                                <valList type="closed">
+                                    <valItem ident="expense">
+                                        <desc>(Ausgabe) getätigte Ausgaben</desc>
+                                    </valItem>
+                                    <valItem ident="income">
+                                        <desc>(Einnahme) gewonnene Einnahmen</desc>
+                                    </valItem>
+                                    <valItem ident="rebooking">
+                                        <desc>(Umbuchung) Ein- und Auszahlungen auf eigenes Konto</desc>
+                                    </valItem>
+                                </valList>
+                            </attDef>
+                            <attDef ident="unit" mode="replace">
+                                <valList type="closed">
+                                    <valItem ident="gr">
+                                        <desc>Groschen</desc>
+                                    </valItem>
+                                    <valItem ident="rh">
+                                        <desc>Taler</desc>
+                                    </valItem>
+                                    <valItem ident="pf">
+                                        <desc>Pfennig</desc>
+                                    </valItem>
+                                    <valItem ident="f">
+                                        <desc>Gulden</desc>
+                                    </valItem>
+                                    <valItem ident="xr">
+                                        <desc>Kreuzer</desc>
+                                    </valItem>
+                                    <valItem ident="fd">
+                                        <desc>Friedrich d'or</desc>
+                                    </valItem>
+                                    <valItem ident="#">
+                                        <desc>Dukaten</desc>
+                                    </valItem>
+                                </valList>
+                            </attDef>
+                            <attDef ident="quantity" mode="change">
+                                <datatype>
+                                    <rng:data type="decimal"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="commodity" mode="delete"/>
+                            <attDef ident="rend" mode="add" usage="opt">
+                                <desc>(rendition) erlaubt die Angabe von "inline" für Webersche Ausgaben im Fließtext.</desc>
+                                <valList type="closed">
+                                    <valItem ident="inline"/>
+                                </valList>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+                    
+                    <elementSpec ident="ab" mode="change" module="linking">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                            <memberOf key="att.declaring" mode="delete"/>
+                            <memberOf key="att.docStatus" mode="add"/>
+                        </classes>
+                        <attList>
+                            <attDef ident="xml:id" mode="add" usage="req">
+                                <datatype>
+                                    <rng:ref name="key.diaryDay.pattern"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="n" mode="add" usage="mwa">
+                                <datatype>
+                                    <rng:data type="date"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="status" mode="change" usage="req"/>
+                            <attDef ident="part" mode="delete"/>
+                        </attList>
+                    </elementSpec>
+
+                    <!--<elementSpec ident="ref" mode="change">
+                        <classes mode="change">
+                            <memberOf mode="delete" key="att.global"/>
+                            <memberOf mode="delete" key="att.pointing"/>
+                            <memberOf key="att.declaring" mode="delete"/>
+                        </classes>
+                        <attList>
+                            <attDef ident="target" mode="replace" usage="req">
+                                <datatype>
+                                    <rng:ref name="key.diary.pattern"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="type" mode="add" usage="req">
+                                <valList type="closed">
+                                    <valItem ident="duplicate"/>
+                                </valList>
+                            </attDef>
+                        </attList>
+                    </elementSpec>-->
+                </schemaSpec>
+            </div>
+        </body>
+    </text>
+</TEI>

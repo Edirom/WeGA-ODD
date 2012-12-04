@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_allPlus.rng" type="xml"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0"
+    xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>WeGA news ODD</title>
+                <author>Peter Stadler</author>
+                <funder><ref target="http://www.adwmainz.de">Akademie der Wissenschaften und der Literatur, Mainz</ref></funder>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <orgName><ref target="http://www.weber-gesamtausgabe.de">Carl-Maria-von-Weber-Gesamtausgabe</ref></orgName>
+                    <address>
+                        <addrLine>Gartenstr. 20</addrLine>
+                        <addrLine>32756 Detmold</addrLine>
+                        <addrLine>Germany</addrLine>
+                    </address>
+                </publisher>
+                <availability status="restricted">
+                    <p>This work is licensed under a <ref type="license" target="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution 3.0 Unported License</ref>.</p>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <p>Written from scratch (with a lot of help from tei-c.org).</p>
+            </sourceDesc>
+        </fileDesc>
+        <revisionDesc status="rev1.1.5">
+            <change who="Peter Stadler" when="2012-12-12">Initial commit to github in conjunction with the WeGA website release 1.1.5</change>
+        </revisionDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div>
+                <head>WeGA ODD file for website news</head>
+                <p>Prose descriptions will follow …</p>
+            </div>
+            <div>
+                <schemaSpec ident="wegaNews" xml:lang="en" start="TEI">
+                    <moduleRef key="core"/>
+                    <moduleRef key="tei"/>
+                    <moduleRef key="header"/>
+                    <moduleRef key="textstructure"/>
+                    <moduleRef key="namesdates"/>
+                    <moduleRef key="figures"/>
+<!--                    <moduleRef key="transcr"/>-->
+                    <!--                    <moduleRef key="msdescription"/>-->
+                    <!--                    <moduleRef key="linking"/>-->
+
+                    <xi:include href="WeGA_common.odd.xml"/>
+                    <specGrpRef target="#myPatterns"/>
+                    
+                    <elementSpec ident="TEI" mode="change" module="textstructure">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:choice>
+                                <!--   Ordentlicher Eintrag   -->
+                                <rng:group>
+                                    <rng:ref name="teiHeader"/>
+                                    <rng:choice>
+                                        <rng:group>
+                                            <rng:oneOrMore>
+                                                <rng:ref name="model.resourceLike"/>
+                                            </rng:oneOrMore>
+                                            <rng:optional>
+                                                <rng:ref name="text"/>
+                                            </rng:optional>
+                                        </rng:group>
+                                        <rng:ref name="text"/>
+                                    </rng:choice>
+                                </rng:group>
+                                <!--  Dubletten  -->
+                                <rng:element name="ref">
+                                    <rng:attribute name="type">
+                                        <rng:value>duplicate</rng:value>
+                                    </rng:attribute>
+                                    <rng:attribute name="target">
+                                        <rng:ref name="key.newsSg.pattern"/>
+                                    </rng:attribute>
+                                    <rng:empty/>
+                                </rng:element>
+                            </rng:choice>
+                        </content>
+                        <attList>
+                            <attDef ident="version" mode="delete"/>
+                            <attDef ident="xml:id" mode="add" usage="req">
+                                <datatype>
+                                    <rng:ref name="key.newsSg.pattern"/>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+                    
+                    <elementSpec ident="text" mode="change" module="textstructure">
+                        <classes mode="change">
+                            <memberOf key="att.declaring" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:ref name="body"/>
+                        </content>
+                        <attList>
+                            <attDef ident="type" mode="add" usage="req">
+                                <valList type="closed">
+                                    <valItem ident="news"/>
+                                </valList>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+                    
+                    <elementSpec ident="body" mode="change" module="textstructure">
+                        <classes mode="change">
+                            <memberOf key="att.declaring" mode="delete"/>
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:oneOrMore>
+                                <rng:ref name="div"/>
+                            </rng:oneOrMore>
+                        </content>
+                    </elementSpec>
+                    
+                    <elementSpec ident="div" mode="change" module="textstructure">
+                        <classes mode="change">
+                            <memberOf key="att.declaring" mode="delete"/>
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                            <memberOf key="att.divLike" mode="delete"/>
+                        </classes>
+                        <attList>
+                            <attDef ident="xml:lang" mode="add" usage="req">
+                                <datatype>
+                                    <rng:ref name="data.language"/>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+                    
+                    <elementSpec ident="publicationStmt" mode="change" module="header">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:element name="date">
+                                <rng:attribute name="when">
+                                    <rng:data type="dateTime"/>
+                                </rng:attribute>
+                                <rng:empty/>
+                            </rng:element>
+                        </content>
+                    </elementSpec>
+                    
+                    <elementSpec ident="titleStmt" mode="change" module="header">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:oneOrMore>
+                                <rng:ref name="title"/>
+                            </rng:oneOrMore>
+                            <rng:oneOrMore>
+                                <rng:ref name="author"/>
+                            </rng:oneOrMore>
+                        </content>
+                    </elementSpec>
+                    
+                    <elementSpec ident="profileDesc" mode="change" module="header">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:ref name="textClass"/>
+                        </content>
+                    </elementSpec>
+                    
+                    <elementSpec ident="textClass" mode="change" module="header">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.declaring" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:ref name="keywords"/>
+                        </content>
+                    </elementSpec>
+                    
+                    <elementSpec ident="keywords" mode="change" module="header">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:oneOrMore>
+                                <rng:ref name="term"/>
+                            </rng:oneOrMore>
+                        </content>
+                        <attList>
+                            <attDef ident="scheme" mode="change" usage="req">
+                                <valList type="closed" mode="replace">
+                                    <valItem ident="WeGA_cat"/>
+                                </valList>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+                    
+                    <elementSpec ident="term" mode="change" module="core">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.declaring" mode="delete"/>
+                            <memberOf key="att.pointing" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                            <memberOf key="att.canonical" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:ref name="WeGA_keywords.list"/>
+                        </content>
+                        <attList>
+                            <attDef ident="cRef" mode="delete"/>
+                            <attDef ident="sortKey" mode="delete"/>
+                        </attList>
+                    </elementSpec>
+                    
+                </schemaSpec>
+            </div>
+        </body>
+    </text>
+</TEI>

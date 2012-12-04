@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?oxygen RNGSchema="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_allPlus.rng" type="xml"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0"
+    xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron"
+    xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>WeGA writings ODD</title>
+                <author>Peter Stadler</author>
+                <funder><ref target="http://www.adwmainz.de">Akademie der Wissenschaften und der Literatur, Mainz</ref></funder>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <orgName><ref target="http://www.weber-gesamtausgabe.de">Carl-Maria-von-Weber-Gesamtausgabe</ref></orgName>
+                    <address>
+                        <addrLine>Gartenstr. 20</addrLine>
+                        <addrLine>32756 Detmold</addrLine>
+                        <addrLine>Germany</addrLine>
+                    </address>
+                </publisher>
+                <availability status="restricted">
+                    <p>This work is licensed under a <ref type="license" target="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution 3.0 Unported License</ref>.</p>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <p>Written from scratch (with a lot of help from tei-c.org).</p>
+            </sourceDesc>
+        </fileDesc>
+        <revisionDesc status="rev1.1.5">
+            <change who="Peter Stadler" when="2012-12-12">Initial commit to github in conjunction with the WeGA website release 1.1.5</change>
+        </revisionDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div>
+                <head>WeGA ODD file for writings</head>
+                <p>Prose descriptions will follow …</p>
+            </div>
+            <div>
+                <schemaSpec ident="wegaWritings" xml:lang="en" start="TEI">
+                    <moduleRef key="core" include="abbr add addrLine address analytic author bibl biblScope biblStruct cb choice cit corr date del desc editor email emph expan foreign gap gloss graphic head headItem headLabel hi imprint index item l label lb lg list listBibl measure milestone monogr name note num orig p pb postBox postCode ptr pubPlace publisher q quote ref relatedItem resp respStmt rs series sic soCalled sp speaker stage street term textLang title unclear"/>
+                    <moduleRef key="tei"/>
+                    <moduleRef key="header" include="authority availability change creation distributor edition editionStmt editorialDecl encodingDesc extent fileDesc funder handNote idno keywords langUsage language licence notesStmt profileDesc projectDesc publicationStmt quotation revisionDesc seriesStmt sourceDesc teiHeader textClass titleStmt"/>
+                    <moduleRef key="textstructure" include=" TEI back body byline closer dateline div floatingText imprimatur opener postscript salute signed text titlePage titlePart"/>
+                    <moduleRef key="namesdates" include="country geogName orgName persName placeName region settlement"/>
+                    <moduleRef key="figures" include="cell figDesc figure row table"/>
+                    <moduleRef key="transcr" include="addSpan damage damageSpan delSpan ex facsimile handShift redo space subst supplied"/>
+                    <moduleRef key="msdescription" include="acquisition additional altIdentifier collection handDesc history incipit institution msDesc msIdentifier msPart physDesc provenance repository"/>
+                    <moduleRef key="linking" include="anchor seg"/>
+                    <moduleRef key="textcrit" include="app listWit rdg witness"/>
+
+                    <xi:include href="WeGA_common.odd.xml"/>
+                    <specGrpRef target="#myPatterns"/>
+                    
+                    <!--<xi:include href="foo.xml" 
+                        xpointer="xpointer(//t:div/*)xmlns(t=http://www.tei-c.org/ns/1.0)">                        
+                        <xi:fallback> ERROR: cannot locate XInclude ODD elements </xi:fallback>
+                        </xi:include>-->
+                    
+                    <elementSpec ident="TEI" mode="change" module="textstructure">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:choice>
+                                <!--   Ordentlicher Eintrag   -->
+                                <rng:group>
+                                    <rng:ref name="teiHeader"/>
+                                    <rng:choice>
+                                        <rng:group>
+                                            <rng:oneOrMore>
+                                                <rng:ref name="model.resourceLike"/>
+                                            </rng:oneOrMore>
+                                            <rng:optional>
+                                                <rng:ref name="text"/>
+                                            </rng:optional>
+                                        </rng:group>
+                                        <rng:ref name="text"/>
+                                    </rng:choice>
+                                </rng:group>
+                                <!--  Dubletten  -->
+                                <rng:element name="ref">
+                                    <rng:attribute name="type">
+                                        <rng:value>duplicate</rng:value>
+                                    </rng:attribute>
+                                    <rng:attribute name="target">
+                                        <rng:ref name="key.writing.pattern"/>
+                                    </rng:attribute>
+                                    <rng:empty/>
+                                </rng:element>
+                            </rng:choice>
+                        </content>
+                        <attList>
+                            <attDef ident="xml:id">
+                                <datatype>
+                                    <rng:choice>
+                                        <rng:ref name="key.writing.pattern"/>
+                                    </rng:choice>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+                    
+                    <elementSpec ident="text" mode="change" module="textstructure">
+                        <classes mode="change">
+                            <memberOf key="att.declaring" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:ref name="body"/>
+                        </content>
+                        <attList>
+                            <attDef ident="type" mode="add" usage="req">
+                                <valList type="closed">
+                                    <valItem ident="performance-review"/>
+                                    <valItem ident="historic-news"/>
+                                </valList>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+                    
+                    <elementSpec ident="body" mode="change" module="textstructure">
+                        <classes mode="change">
+                            <memberOf key="att.declaring" mode="delete"/>
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:oneOrMore>
+                                <rng:ref name="div"/>
+                            </rng:oneOrMore>
+                        </content>
+                    </elementSpec>
+                    
+                    <elementSpec ident="div" mode="change" module="textstructure">
+                        <classes mode="change">
+                            <memberOf key="att.declaring" mode="delete"/>
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                            <memberOf key="att.divLike" mode="delete"/>
+                        </classes>
+                        <attList>
+                            <attDef ident="decls" mode="add" usage="mwa">
+                                <datatype>
+                                    <rng:ref name="data.pointer"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="xml:id" mode="add" usage="opt">
+                                <datatype>
+                                    <rng:data type="ID"/>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+                    
+                    <!--<elementSpec ident="imprint" mode="change" module="core">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:oneOrMore>
+                                <rng:choice>
+                                    <rng:group>
+                                        <rng:ref name="model.imprintPart"/>
+                                    </rng:group>
+                                    <rng:group>
+                                        <rng:ref name="model.dateLike"/>
+                                    </rng:group>
+                                </rng:choice>
+                                <rng:optional>
+                                    <rng:element name="note">
+                                        <rng:attribute name="type">
+                                            <rng:value>fontUsage</rng:value>
+                                        </rng:attribute>
+                                        <rng:ref name="macro.specialPara"/>
+                                    </rng:element>
+                                </rng:optional>
+                            </rng:oneOrMore>
+                        </content>
+                        <constraintSpec scheme="isoschematron" ident="no-date-attribute">
+                            <gloss>no attributes on <gi>date</gi></gloss>
+                            <constraint>
+                                <sch:assert test="./tei:date/(@when, @notBefore, @notAfter, @from, @to)">tei:date benötigt ein Attribut @when, @notBefore o.ä.</sch:assert>
+                            </constraint>
+                        </constraintSpec>
+                    </elementSpec>-->
+                    
+                    <elementSpec ident="notesStmt" mode="change" module="header">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:optional>
+                                <rng:element name="note">
+                                    <rng:attribute name="type">
+                                        <rng:value>summary</rng:value><a:documentation>Zusammenfassung</a:documentation>
+                                    </rng:attribute>
+                                    <rng:ref name="macro.specialPara"/>
+                                </rng:element>
+                            </rng:optional>
+                            <rng:optional>
+                                <rng:element name="note">
+                                    <rng:attribute name="type">
+                                        <rng:value>editorial</rng:value><a:documentation>Generalkommentar</a:documentation>
+                                    </rng:attribute>
+                                    <rng:ref name="macro.specialPara"/>
+                                </rng:element>
+                            </rng:optional>
+                            <rng:zeroOrMore>
+                                <rng:element name="note">
+                                    <rng:attribute name="type">
+                                        <rng:value>part</rng:value>
+                                    </rng:attribute>
+                                    <rng:attribute name="n">
+                                        <rng:data type="int"/>
+                                    </rng:attribute>
+                                    <rng:ref name="ref"/>
+                                </rng:element>
+                            </rng:zeroOrMore>
+                        </content>
+                    </elementSpec>
+                    
+                    <!--<elementSpec ident="ref" mode="change" module="core">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.pointing" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                            <memberOf key="att.declaring" mode="delete"/>
+                        </classes>
+                        <attList>
+                            <attDef ident="cRef" mode="delete"/>
+                            <attDef ident="type" mode="add" usage="mwa">
+                                <valList type="closed">
+                                    <valItem ident="footnoteAnchor">
+                                        <desc>Marks the footnote sign within the text</desc>
+                                    </valItem>
+                                </valList>
+                            </attDef>
+                            <attDef ident="target" mode="add" usage="req">
+                                <datatype>
+                                    <rng:ref name="data.pointer"/>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                    </elementSpec>-->
+                    
+                    <elementSpec ident="idno" mode="change" module="header">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <attList>
+                            <attDef ident="type" mode="replace" usage="opt">
+                                <valList type="closed">
+                                    <valItem ident="WeGA">
+                                        <desc>The document identifier of the Carl-Maria-von-Weber-Gesamtausgabe (WeGA)</desc>
+                                    </valItem>
+                                    <valItem ident="KS">
+                                        <desc>The document identifier from Georg Kaiser's "Sämtliche Schriften von Carl Maria von Weber" (Schuster &amp; Löffler 1908)</desc>
+                                    </valItem>
+                                </valList>
+                            </attDef>
+                            <attDef ident="n" mode="add" usage="mwa">
+                                <datatype>
+                                    <rng:choice>
+                                        <rng:ref name="WeS.pattern"/>
+                                        <rng:ref name="KS.pattern"/>
+                                    </rng:choice>
+                                </datatype>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+                    
+                </schemaSpec>
+            </div>
+        </body>
+    </text>
+</TEI>
