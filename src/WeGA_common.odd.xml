@@ -193,6 +193,7 @@
                 <rng:value>KH</rng:value><a:documentation>Kristin Herold</a:documentation>
                 <rng:value>ED</rng:value><a:documentation>Esther Dubke</a:documentation>
                 <rng:value>RK</rng:value><a:documentation>Roland Kolb</a:documentation>
+            <rng:value>SF</rng:value><a:documentation>Shino Funayama</a:documentation>
             </rng:choice>
         </content>
     </macroSpec>
@@ -540,19 +541,28 @@
             <memberOf key="att.naming" mode="delete"/>
             <memberOf key="att.typed" mode="delete"/>
         </classes>
-        <!--<content>
-            <!-\-                            <datatype>-\->
-            <rng:optional>
-                <rng:ref name="settlement"/>
-            </rng:optional>
-            <rng:optional>
-                <rng:ref name="region"/>
-            </rng:optional>
-            <rng:optional>
-                <rng:ref name="country"/>
-            </rng:optional>
-            <!-\-                            </datatype>-\->
-        </content>-->
+        <content>
+            <rng:oneOrMore>
+                <rng:choice>
+                    <rng:ref name="settlement"/>
+                    <rng:ref name="region"/>
+                    <rng:ref name="country"/>
+                    <rng:ref name="hi"/>
+                    <rng:text/>
+                </rng:choice>
+            </rng:oneOrMore>
+        </content>
+        <constraintSpec scheme="isoschematron" ident="placeNameHeuristics">
+            <gloss>warnings for unusual usages</gloss>
+            <constraint>
+                <sch:report
+                    test="not(ancestor::tei:correspDesc) and normalize-space(.) = ''"
+                    >Leeres Element placeName gefunden</sch:report>
+                <sch:report
+                    test="not(ancestor::tei:correspDesc) and not(./*)"
+                    >Kein Kindelement für placeName</sch:report>
+            </constraint>
+        </constraintSpec>
         <attList>
             <attDef ident="cert" mode="add" usage="rwa">
                 <datatype>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2013-02-19T15:33:29Z. 
+Schema generated from ODD source 2013-02-28T15:10:23Z. 
 Edition: 2.3.0. Last updated on 17th January 2013.
 Edition Location: http://www.tei-c.org/Vault/P5/2.3.0/
 
@@ -5438,7 +5438,25 @@ Suggested values include: 1] main; 2] sub(subordinate) ; 3] alt(alternate) ; 4] 
   <define name="wega_placeName">
     <element name="placeName">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains an absolute or relative place name.  [13.2.3. ]</a:documentation>
-      <ref name="wega_macro.phraseSeq"/>
+      <oneOrMore>
+        <choice>
+          <ref name="wega_settlement"/>
+          <ref name="wega_region"/>
+          <ref name="wega_country"/>
+          <ref name="wega_hi"/>
+          <text/>
+        </choice>
+      </oneOrMore>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="placeName-constraint-placeNameHeuristics1">
+        <rule context="tei:placeName">
+          <sch:report xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" test="not(ancestor::tei:correspDesc) and normalize-space(.) = ''">Leeres Element placeName gefunden</sch:report>
+        </rule>
+      </pattern>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="placeName-constraint-placeNameHeuristics2">
+        <rule context="tei:placeName">
+          <sch:report xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" test="not(ancestor::tei:correspDesc) and not(./*)">Kein Kindelement für placeName</sch:report>
+        </rule>
+      </pattern>
       <ref name="wega_att.personal.attributes"/>
       <optional>
         <attribute name="cert">
