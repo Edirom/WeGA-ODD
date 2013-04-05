@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2013-01-21T20:52:42Z. 
+Schema generated from ODD source 2013-04-05T17:13:15Z. 
 Edition: 2.3.0. Last updated on 17th January 2013.
 Edition Location: http://www.tei-c.org/Vault/P5/2.3.0/
 
 -->
   <!--
-                    This work is licensed under a Creative Commons Attribution 3.0 Unported License.
+                    This work is licensed under a Creative Commons Attribution 3.0 Unported License (CC BY 3.0).
                 -->
   <define name="macro.paraContent">
     <zeroOrMore>
@@ -181,6 +181,11 @@ Edition Location: http://www.tei-c.org/Vault/P5/2.3.0/
       <param name="pattern">A07\d{4}</param>
     </data>
   </define>
+  <define name="key.biblio.pattern">
+    <data type="string">
+      <param name="pattern">A11\d{4}</param>
+    </data>
+  </define>
   <define name="staffSignatures.list">
     <choice>
       <value>PS</value>
@@ -235,6 +240,8 @@ Edition Location: http://www.tei-c.org/Vault/P5/2.3.0/
       <a:documentation xmlns="http://www.tei-c.org/ns/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude">Esther Dubke</a:documentation>
       <value>RK</value>
       <a:documentation xmlns="http://www.tei-c.org/ns/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude">Roland Kolb</a:documentation>
+      <value>SF</value>
+      <a:documentation xmlns="http://www.tei-c.org/ns/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude">Shino Funayama</a:documentation>
     </choice>
   </define>
   <define name="WeGA_keywords.list">
@@ -2261,6 +2268,8 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
           <value>news</value>
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+          <value>biblio</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
         </choice>
       </attribute>
       <optional>
@@ -2278,6 +2287,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
             <ref name="key.writing.pattern"/>
             <ref name="key.writings.pattern"/>
             <ref name="key.newsPl.pattern"/>
+            <ref name="key.biblio.pattern"/>
           </choice>
         </attribute>
       </optional>
@@ -3572,7 +3582,25 @@ dedicatory epistle, or other division of a text.  [4.2.2. ]</a:documentation>
   <define name="placeName">
     <element name="placeName">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains an absolute or relative place name.  [13.2.3. ]</a:documentation>
-      <ref name="macro.phraseSeq"/>
+      <oneOrMore>
+        <choice>
+          <ref name="settlement"/>
+          <ref name="region"/>
+          <ref name="country"/>
+          <ref name="hi"/>
+          <text/>
+        </choice>
+      </oneOrMore>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="placeName-constraint-placeNameHeuristics1">
+        <rule context="tei:placeName">
+          <sch:report xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="not(ancestor::tei:correspDesc) and normalize-space(.) = ''">Leeres Element placeName gefunden</sch:report>
+        </rule>
+      </pattern>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="placeName-constraint-placeNameHeuristics2">
+        <rule context="tei:placeName">
+          <sch:report xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="not(ancestor::tei:correspDesc) and not(./*)">Kein Kindelement für placeName</sch:report>
+        </rule>
+      </pattern>
       <ref name="att.personal.attributes"/>
       <optional>
         <attribute name="cert">
