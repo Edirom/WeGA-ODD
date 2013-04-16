@@ -1729,16 +1729,19 @@
                 </rng:optional>
             </rng:oneOrMore>
         </content>
-        <constraintSpec scheme="isoschematron" ident="issueVol">
-            <desc>checks for the cooccurence of issues without volume</desc>
-            <constraint>
-                <sch:report test="tei:biblScope[@type='issue'] and not(tei:biblScope[@type='vol'])">issue ohne volume</sch:report>
-            </constraint>
-        </constraintSpec>
         <constraintSpec scheme="isoschematron" ident="no-date-attribute">
             <gloss>no attributes on <gi>date</gi></gloss>
             <constraint>
                 <sch:assert test="tei:date/(@when, @notBefore, @notAfter, @from, @to)">tei:date benötigt ein Attribut @when, @notBefore o.ä.</sch:assert>
+            </constraint>
+        </constraintSpec>
+    </elementSpec>
+    
+    <elementSpec ident="monogr" mode="change" module="core">
+        <constraintSpec scheme="isoschematron" ident="issueVol">
+            <desc>checks for the cooccurence of issues without volume</desc>
+            <constraint>
+                <sch:report test="(tei:imprint/tei:biblScope[@type='issue'] and not(tei:imprint/tei:biblScope[@type='vol'])) and not(matches(tei:title[@level='j'], 'Weberiana'))">issue ohne volume</sch:report>
             </constraint>
         </constraintSpec>
     </elementSpec>
