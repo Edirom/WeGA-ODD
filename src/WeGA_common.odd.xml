@@ -602,7 +602,7 @@
                     test="not(ancestor::tei:correspDesc) and normalize-space(.) = ''"
                     >Leeres Element placeName gefunden</sch:report>
                 <sch:report
-                    test="not(ancestor::tei:correspDesc) and not(./*)"
+                    test="not(ancestor::tei:correspDesc or ancestor::tei:keywords) and not(./*)"
                     >Kein Kindelement für placeName</sch:report>
             </constraint>
         </constraintSpec>
@@ -1779,9 +1779,15 @@
             </rng:oneOrMore>
         </content>
         <constraintSpec scheme="isoschematron" ident="no-date-attribute">
-            <gloss>no attributes on <gi>date</gi></gloss>
+            <gloss>checks for attributes on <gi>date</gi></gloss>
             <constraint>
                 <sch:assert test="tei:date/(@when, @notBefore, @notAfter, @from, @to)">tei:date benötigt ein Attribut @when, @notBefore o.ä.</sch:assert>
+            </constraint>
+        </constraintSpec>
+        <constraintSpec scheme="isoschematron" ident="duplicate-biblScope-type">
+            <gloss>checks for duplicate encodings of <gi>biblScope</gi></gloss>
+            <constraint>
+                <sch:report test="count(distinct-values(tei:biblScope/@type)) ne count(tei:biblScope/@type)">duplicate value for biblScope</sch:report>
             </constraint>
         </constraintSpec>
     </elementSpec>
