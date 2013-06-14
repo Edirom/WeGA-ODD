@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2013-06-03T15:29:11Z. 
+Schema generated from ODD source 2013-06-14T14:28:24Z. 
 Edition: 2.3.0. Last updated on 17th January 2013.
 Edition Location: http://www.tei-c.org/Vault/P5/2.3.0/
 
@@ -191,6 +191,11 @@ Edition Location: http://www.tei-c.org/Vault/P5/2.3.0/
   <define name="pnd.pattern">
     <data type="string">
       <param name="pattern">[0-9]{8,9}[0-9X]</param>
+    </data>
+  </define>
+  <define name="viaf.pattern">
+    <data type="string">
+      <param name="pattern">[0-9]{8}</param>
     </data>
   </define>
   <define name="pages.pattern">
@@ -3327,12 +3332,17 @@ Suggested values include: 1] vol(volume) ; 2] issue; 3] pp(pages) ; 4] ll (lines
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(identifier) supplies any form of identifier used to identify some object,
   such as a bibliographic item, a person, a title, an organization,
   etc. in a standardized way. [2.2.4.  2.2.5.  3.11.2.3. ]</a:documentation>
-      <ref name="pnd.pattern"/>
+      <choice>
+        <ref name="pnd.pattern"/>
+        <ref name="viaf.pattern"/>
+      </choice>
       <attribute name="type">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
         <choice>
           <value>gnd</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"> (Gemeinsame Normdatei) </a:documentation>
+          <value>viaf</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"> (Virtual International Authority File) </a:documentation>
         </choice>
       </attribute>
       <empty/>
@@ -3756,9 +3766,9 @@ Suggested values include: 1] vol(volume) ; 2] issue; 3] pp(pages) ; 4] ll (lines
           <empty/>
         </element>
         <group>
-          <optional>
+          <zeroOrMore>
             <ref name="idno"/>
-          </optional>
+          </zeroOrMore>
           <element name="persName">
             <ref name="macro.persNameContent"/>
             <attribute name="type">
