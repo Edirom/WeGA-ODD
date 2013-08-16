@@ -601,7 +601,8 @@
                 </rng:choice>
             </rng:oneOrMore>
         </content>
-        <constraintSpec scheme="isoschematron" ident="placeNameHeuristics">
+        <!-- Im Schema sollte zunächst ein @type ermöglicht und dies in den Daten nachgetragen werden  -->
+        <!--<constraintSpec scheme="isoschematron" ident="placeNameHeuristics">
             <gloss>Warnings for unusual usages</gloss>
             <constraint>
                 <sch:report
@@ -611,7 +612,7 @@
                     test="not(ancestor::tei:correspDesc or ancestor::tei:keywords) and not(./*)"
                     >Kein Kindelement für placeName</sch:report>
             </constraint>
-        </constraintSpec>
+        </constraintSpec>-->
         <attList>
             <attDef ident="cert" mode="add" usage="rwa">
                 <datatype>
@@ -1190,16 +1191,18 @@
     </elementSpec>
     
     <elementSpec ident="listWit" mode="change" module="textcrit">
-        <classes>
+        <classes mode="change">
             <memberOf key="att.global" mode="delete"/>
+            <memberOf key="att.sortable" mode="delete"/>
         </classes>
     </elementSpec>
     
     <elementSpec ident="listBibl" mode="change" module="core">
-        <classes>
+        <classes mode="change">
             <memberOf key="att.global" mode="delete"/>
             <memberOf key="att.declarable" mode="delete"/>
             <memberOf key="att.typed" mode="delete"/>
+            <memberOf key="att.sortable" mode="delete"/>
         </classes>
     </elementSpec>
     
@@ -1641,6 +1644,12 @@
             <memberOf key="att.canonical" mode="delete"/>
             <memberOf key="att.typed" mode="delete"/>
         </classes>
+        <constraintSpec scheme="isoschematron" ident="duplicate-title">
+            <desc>checks for the occurence of a following title element with the same bibliographic level</desc>
+            <constraint>
+                <sch:report test="@level = following-sibling::tei:title[not(@type)]/@level">Following title without @type</sch:report>
+            </constraint>
+        </constraintSpec>
         <attList>
             <attDef ident="level" mode="change" usage="req"/>
             <attDef ident="xml:lang" mode="add" usage="mwa"/>
@@ -1811,6 +1820,9 @@
         </constraintSpec>
     </elementSpec>
     
+    
+    <!-- Darf durchaus vorkommen … -->
+    <!--
     <elementSpec ident="monogr" mode="change" module="core">
         <constraintSpec scheme="isoschematron" ident="issueVol">
             <desc>checks for the cooccurence of issues without volume</desc>
@@ -1819,6 +1831,7 @@
             </constraint>
         </constraintSpec>
     </elementSpec>
+    -->
     
     <elementSpec ident="witness" mode="change" module="textcrit">
         <classes mode="change">
