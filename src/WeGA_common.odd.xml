@@ -1703,6 +1703,15 @@
                     >cooccurence of exact and uncertain date attributes</sch:report>
             </constraint>
         </constraintSpec>
+        <constraintSpec scheme="isoschematron" ident="dateHeuristics5">
+            <desc>If a <gi>date</gi> is present it must either have an attribute 
+                <att>when</att>, <att>notBefore</att>, <att>notAfter</att>, <att>from</att> or <att>to</att>.
+                Alternatively the content of <gi>date</gi> may contain at least four zeros, "unknown" or "o.J.", which qualifies as undated.
+            </desc>
+            <constraint>
+                <sch:assert test="@when or @notBefore or @notAfter or @from or @to or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</sch:assert>
+            </constraint>
+        </constraintSpec>
         <attList>
             <attDef ident="xml:id" mode="add" usage="mwa"/>
             <attDef ident="n" mode="add" usage="mwa"/>
@@ -1806,12 +1815,6 @@
                 </rng:optional>
             </rng:oneOrMore>
         </content>
-        <constraintSpec scheme="isoschematron" ident="no-date-attribute">
-            <gloss>checks for attributes on <gi>date</gi></gloss>
-            <constraint>
-                <sch:assert test="tei:date/(@when, @notBefore, @notAfter, @from, @to)">tei:date benötigt ein Attribut @when, @notBefore o.ä.</sch:assert>
-            </constraint>
-        </constraintSpec>
         <constraintSpec scheme="isoschematron" ident="duplicate-biblScope-type">
             <gloss>checks for duplicate encodings of <gi>biblScope</gi></gloss>
             <constraint>
