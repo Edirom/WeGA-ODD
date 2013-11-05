@@ -13,35 +13,35 @@ TEI_XSL=/Users/pstadler/WeGA/TEI-Entwicklung/xsl-current/xml/tei/stylesheet
 ROMAOPTS=--nodtd --noxsd
 
 # the target directory for the created RNG schema files
-TARGET_DIR=./schemata
+TARGET_DIR=./schema
 
 
 all: letters persons var biblio news diaries writings
 
 letters:
-	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} odd/WeGA_letters.odd.xml ${TARGET_DIR}
+	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} src/WeGA_letters.odd.xml ${TARGET_DIR}
 
 persons:
-	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} odd/WeGA_persons.odd.xml ${TARGET_DIR}
+	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} src/WeGA_persons.odd.xml ${TARGET_DIR}
 
 var:
-	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} odd/WeGA_var.odd.xml ${TARGET_DIR}
+	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} src/WeGA_var.odd.xml ${TARGET_DIR}
 
 biblio:
-	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} odd/WeGA_biblio.odd.xml ${TARGET_DIR}
+	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} src/WeGA_biblio.odd.xml ${TARGET_DIR}
 
 news:
-	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} odd/WeGA_news.odd.xml ${TARGET_DIR}
+	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} src/WeGA_news.odd.xml ${TARGET_DIR}
 
 diaries:
-	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} odd/WeGA_diaries.odd.xml ${TARGET_DIR}
+	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} src/WeGA_diaries.odd.xml ${TARGET_DIR}
 
 writings:
-	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} odd/WeGA_writings.odd.xml ${TARGET_DIR}
+	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} src/WeGA_writings.odd.xml ${TARGET_DIR}
 
 clean:
 	echo "cleaning up"
-	rm -rf ${TARGET_DIR}/odd
+	rm -rf ${TARGET_DIR}/src
 	find ${TARGET_DIR} -name '*.rnc' | xargs /bin/rm -f
 	echo "... done"
 
