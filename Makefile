@@ -1,13 +1,10 @@
 # Makefile for creating RNG schema files from WeGA ODD files
 
-# Path to local roma2.sh script (https://github.com/TEIC/Roma)
-ROMA=/Users/annamariakomprecht/Arbeit/WeGA/TEI/Roma/roma2.sh
-
-# Path to local p5subset.xml (get the latest release from http://sourceforge.net/projects/tei/files/TEI-P5-all/)
-TEI_SOURCE=/Users/annamariakomprecht/Arbeit/WeGA/TEI/tei-2.5.0/xml/tei/odd/p5subset.xml
-
-# Path to local installation of the TEI stylesheets (https://github.com/TEIC/Stylesheets)
-TEI_XSL=/Users/annamariakomprecht/Arbeit/WeGA/TEI/tei-stylesheets
+# add a file local.build.properties to current directory and specify
+# ROMA = Path to local roma2.sh script (https://github.com/TEIC/Roma)
+# TEI_SOURCE = Path to local p5subset.xml (get the latest release from http://sourceforge.net/projects/tei/files/TEI-P5-all/)
+# TEI_XSL = Path to local installation of the TEI stylesheets (https://github.com/TEIC/Stylesheets)
+include local.build.properties
 
 # Options to be passed to roma2.sh (see roma2.sh --help)
 ROMAOPTS=--nodtd --noxsd
