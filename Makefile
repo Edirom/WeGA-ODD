@@ -16,7 +16,7 @@ ROMAOPTS=--nodtd --noxsd
 TARGET_DIR=./schema
 
 
-all: letters persons var biblio news diaries writings
+all: letters persons var biblio news diaries writings places
 
 letters:
 	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} src/WeGA_letters.odd.xml ${TARGET_DIR}
@@ -38,6 +38,9 @@ diaries:
 
 writings:
 	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} src/WeGA_writings.odd.xml ${TARGET_DIR}
+	
+places:
+	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} src/WeGA_places.odd.xml ${TARGET_DIR}
 
 clean:
 	echo "cleaning up"
