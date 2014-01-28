@@ -4,7 +4,7 @@
 ROMA=/Users/annamariakomprecht/Arbeit/WeGA/TEI/Roma/roma2.sh
 
 # Path to local p5subset.xml (get the latest release from http://sourceforge.net/projects/tei/files/TEI-P5-all/)
-TEI_SOURCE=//Users/annamariakomprecht/Arbeit/WeGA/TEI/tei-2.5.0/xml/tei/odd/p5subset.xml
+TEI_SOURCE=/Users/annamariakomprecht/Arbeit/WeGA/TEI/tei-2.5.0/xml/tei/odd/p5subset.xml
 
 # Path to local installation of the TEI stylesheets (https://github.com/TEIC/Stylesheets)
 TEI_XSL=/Users/annamariakomprecht/Arbeit/WeGA/TEI/tei-stylesheets
