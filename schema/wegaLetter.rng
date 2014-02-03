@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-01-28T14:01:29Z. 
-Edition: 2.5.0. Last updated on
-	26th July 2013.
-Edition Location: http://www.tei-c.org/Vault/P5/2.5.0/
+Schema generated from ODD source 2014-01-31T14:29:32Z. 
+Edition: Version 2.6.0. Last updated on
+	20th January 2014, revision 12802
+Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
   
 -->
   <!--This work is licensed under a Creative Commons Attribution 3.0 Unported License (CC BY 3.0).-->
@@ -382,7 +382,7 @@ Edition Location: http://www.tei-c.org/Vault/P5/2.5.0/
     <optional>
       <attribute name="unit">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">names the unit used for the measurement
-Suggested values include: 1] cm(centimetres) ; 2] mm(millimetres) ; 3] in(inches) ; 4] lines; 5] chars(characters) </a:documentation>
+Suggested values include: 1] cm; 2] mm; 3] in; 4] lines; 5] chars</a:documentation>
         <choice>
           <value>cm</value>
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(centimetres) </a:documentation>
@@ -410,7 +410,7 @@ Suggested values include: 1] cm(centimetres) ; 2] mm(millimetres) ; 3] in(inches
   <define name="wega_att.dimensions.attribute.extent">
     <optional>
       <attribute name="extent">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the size of the object concerned using a project-specific vocabulary combining quantity and units in a single string of words. </a:documentation>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the size of the object concerned using a project-specific vocabulary combining quantity and units in a single string of words.</a:documentation>
         <ref name="wega_data.text"/>
       </attribute>
     </optional>
@@ -442,7 +442,7 @@ Sample values include: 1] all; 2] most; 3] range</a:documentation>
   <define name="wega_att.damaged.attribute.hand">
     <optional>
       <attribute name="hand">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">in the case of damage (deliberate defacement, inking out, etc.) assignable to a distinct hand, signifies the hand responsible for the damage.</a:documentation>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">in the case of damage (deliberate defacement, inking out, etc.) assignable to a distinct hand, signifies the hand responsible for the damage by pointing to one of the hand identifiers declared in the document header (see section ).</a:documentation>
         <ref name="wega_data.pointer"/>
       </attribute>
     </optional>
@@ -459,7 +459,7 @@ Sample values include: 1] rubbing; 2] mildew; 3] smoke</a:documentation>
   <define name="wega_att.damaged.attribute.degree">
     <optional>
       <attribute name="degree">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">signifies the degree of damage according to a convenient scale. The damage tag with the degree attribute should only be used where the text may be read with some confidence; text supplied from other sources should be tagged as supplied.</a:documentation>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">provides a coded representation of the degree of damage, either as a number between 0 (undamaged) and 1 (very extensively damaged), or as one of the codes high, medium, low, or unknown. The damage element with the degree attribute should only be used where the text may be read with some confidence; text supplied from other sources should be tagged as supplied.</a:documentation>
         <choice>
           <ref name="wega_data.probability"/>
           <ref name="wega_data.certainty"/>
@@ -492,7 +492,7 @@ Sample values include: 1] rubbing; 2] mildew; 3] smoke</a:documentation>
   <define name="wega_att.cReferencing.attribute.cRef">
     <optional>
       <attribute name="cRef">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(canonical reference) specifies the destination of the pointer by supplying a canonical reference from a scheme defined in a refsDecl element in the TEI header</a:documentation>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(canonical reference) specifies the destination of the pointer by supplying a canonical reference expressed using the scheme defined in a refsDecl element in the TEI header</a:documentation>
         <ref name="wega_data.text"/>
       </attribute>
     </optional>
@@ -650,6 +650,7 @@ belongs, but this <sch:name/> element has no textual content.</sch:assert>
     </optional>
   </define>
   <define name="wega_att.responsibility.attributes">
+    <ref name="wega_att.source.attributes"/>
     <ref name="wega_att.responsibility.attribute.cert"/>
     <ref name="wega_att.responsibility.attribute.resp"/>
   </define>
@@ -677,7 +678,6 @@ belongs, but this <sch:name/> element has no textual content.</sch:assert>
     <ref name="wega_att.dimensions.attributes"/>
     <ref name="wega_att.responsibility.attributes"/>
     <ref name="wega_att.editLike.attribute.evidence"/>
-    <ref name="wega_att.editLike.attribute.source"/>
     <ref name="wega_att.editLike.attribute.instant"/>
   </define>
   <define name="wega_att.editLike.attribute.evidence">
@@ -696,18 +696,6 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the intervention or interpretation has been made by the editor, cataloguer, or scholar on the basis of their expertise.</a:documentation>
               <data type="Name"/>
             </choice>
-          </oneOrMore>
-        </list>
-      </attribute>
-    </optional>
-  </define>
-  <define name="wega_att.editLike.attribute.source">
-    <optional>
-      <attribute name="source">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains a list of one or more pointers indicating sources supporting the given intervention or interpretation.</a:documentation>
-        <list>
-          <oneOrMore>
-            <ref name="wega_data.pointer"/>
           </oneOrMore>
         </list>
       </attribute>
@@ -773,7 +761,7 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
   <define name="wega_att.global.attribute.style">
     <optional>
       <attribute name="style">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains an expression in some formal style definition language which defines the rendering or presentation used for this element in the source text </a:documentation>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains an expression in some formal style definition language which defines the rendering or presentation used for this element in the source text</a:documentation>
         <ref name="wega_data.text"/>
       </attribute>
     </optional>
@@ -801,7 +789,7 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
   <define name="wega_att.global.attribute.xmlspace">
     <optional>
       <attribute name="xml:space">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">signals an intention about how white space should be managed by applications. </a:documentation>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">signals an intention about how white space should be managed by applications.</a:documentation>
         <choice>
           <value>default</value>
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">signals that the application's default white-space processing modes are acceptable</a:documentation>
@@ -910,7 +898,7 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
   <define name="wega_att.media.attribute.width">
     <optional>
       <attribute name="width">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Where the media are displayed, indicates the display width </a:documentation>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Where the media are displayed, indicates the display width</a:documentation>
         <ref name="wega_data.outputMeasurement"/>
       </attribute>
     </optional>
@@ -949,7 +937,7 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
     <optional>
       <attribute name="unit">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the units used for the measurement, usually using the standard symbol for the desired units.
-Suggested values include: 1] m(metre) ; 2] kg(kilogram) ; 3] s(second) ; 4] Hz(hertz) ; 5] Pa(pascal) ; 6] Ω(ohm) ; 7] L(litre) ; 8] t(tonne) ; 9] ha(hectare) ; 10] Å(ångström) ; 11] mL(millilitre) ; 12] cm(centimetre) ; 13] dB(decibel) ; 14] kbit(kilobit) ; 15] Kibit(kibibit) ; 16] kB(kilobyte) ; 17] KiB(kibibyte) ; 18] MB(megabyte) ; 19] MiB(mebibyte) </a:documentation>
+Suggested values include: 1] m; 2] kg; 3] s; 4] Hz; 5] Pa; 6] Ω; 7] L; 8] t; 9] ha; 10] Å; 11] mL; 12] cm; 13] dB; 14] kbit; 15] Kibit; 16] kB; 17] KiB; 18] MB; 19] MiB</a:documentation>
         <choice>
           <value>m</value>
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(metre) SI base unit of length</a:documentation>
@@ -1022,7 +1010,7 @@ Suggested values include: 1] m(metre) ; 2] kg(kilogram) ; 3] s(second) ; 4] Hz(h
   <define name="wega_att.naming.attribute.role">
     <optional>
       <attribute name="role">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">may be used to specify further information about the entity referenced by this name, for example the occupation of a person, or the status of a place. </a:documentation>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">may be used to specify further information about the entity referenced by this name, for example the occupation of a person, or the status of a place.</a:documentation>
         <ref name="wega_data.enumerated"/>
       </attribute>
     </optional>
@@ -1155,7 +1143,7 @@ Suggested values include: 1] below; 2] bottom; 3] margin; 4] top; 5] opposite; 6
   <define name="wega_att.edition.attribute.ed">
     <optional>
       <attribute name="ed">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(edition) supplies an arbitrary identifier for the source edition in which the associated feature (for example, a page, column, or line break) occurs at this point in the text.</a:documentation>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(edition) supplies a sigil or other arbitrary identifier for the source edition in which the associated feature (for example, a page, column, or line break) occurs at this point in the text.</a:documentation>
         <list>
           <oneOrMore>
             <ref name="wega_data.word"/>
@@ -1191,7 +1179,7 @@ Suggested values include: 1] below; 2] bottom; 3] margin; 4] top; 5] opposite; 6
     <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:*[@spanTo]">
       <sch:assert test="id(substring(@spanTo,2)) and following::*[@xml:id=substring(current()/@spanTo,2)]">
 The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow the current element <sch:name/>
-         </sch:assert>
+                  </sch:assert>
     </sch:rule>
   </pattern>
   <define name="wega_att.tableDecoration.attributes">
@@ -1240,7 +1228,7 @@ Suggested values include: 1] label; 2] data</a:documentation>
   <define name="wega_att.transcriptional.attribute.hand">
     <optional>
       <attribute name="hand">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">signifies the hand of the agent which made the intervention.</a:documentation>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the hand of the agent which made the intervention.</a:documentation>
         <ref name="wega_data.pointer"/>
       </attribute>
     </optional>
@@ -1283,6 +1271,31 @@ Sample values include: 1] duplicate; 2] duplicate-partial; 3] excessStart; 4] ex
       <attribute name="versionDate">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the date on which the source text was extracted and sent to the translator</a:documentation>
         <ref name="wega_data.temporal.w3c"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="wega_att.citing.attribute.unit">
+    <optional>
+      <attribute name="unit">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">identifies the unit of information conveyed by the element, e.g. columns, pages, volume.
+Suggested values include: 1] volume; 2] issue; 3] page; 4] line; 5] chapter; 6] part; 7] column</a:documentation>
+        <choice>
+          <value>volume</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the element contains a volume number.</a:documentation>
+          <value>issue</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the element contains an issue number, or volume and issue numbers.</a:documentation>
+          <value>page</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the element contains a page number or page range.</a:documentation>
+          <value>line</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the element contains a line number or line range.</a:documentation>
+          <value>chapter</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the element contains a chapter indication (number and/or title)</a:documentation>
+          <value>part</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the element identifies a part of a book or collection.</a:documentation>
+          <value>column</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the element identifies a column.</a:documentation>
+          <data type="Name"/>
+        </choice>
       </attribute>
     </optional>
   </define>
@@ -2195,14 +2208,18 @@ Sample values include: 1] duplicate; 2] duplicate-partial; 3] excessStart; 4] ex
       <ref name="wega_model.placeNamePart_sequenceRepeatable"/>
     </oneOrMore>
   </define>
-  <define name="wega_model.publicationStmtPart">
+  <define name="wega_model.publicationStmtPart.agency">
+    <choice>
+      <ref name="wega_publisher"/>
+      <ref name="wega_distributor"/>
+      <ref name="wega_authority"/>
+    </choice>
+  </define>
+  <define name="wega_model.publicationStmtPart.detail">
     <choice>
       <ref name="wega_address"/>
       <ref name="wega_date"/>
-      <ref name="wega_publisher"/>
       <ref name="wega_pubPlace"/>
-      <ref name="wega_distributor"/>
-      <ref name="wega_authority"/>
       <ref name="wega_idno"/>
       <ref name="wega_availability"/>
     </choice>
@@ -2331,6 +2348,7 @@ Sample values include: 1] duplicate; 2] duplicate-partial; 3] excessStart; 4] ex
     <choice>
       <ref name="wega_model.headLike"/>
       <ref name="wega_opener"/>
+      <ref name="wega_signed"/>
     </choice>
   </define>
   <define name="wega_model.divTop">
@@ -2617,7 +2635,7 @@ Sample values include: 1] duplicate; 2] duplicate-partial; 3] excessStart; 4] ex
   <define name="wega_att.source.attribute.source">
     <optional>
       <attribute name="source">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(pointer to a bibliographical source reference) provides a pointer to the bibliographical source from which a quotation or citation is drawn.</a:documentation>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">provides a pointer to the bibliographical source from which a quotation or citation is drawn.</a:documentation>
         <list>
           <oneOrMore>
             <ref name="wega_data.pointer"/>
@@ -2731,7 +2749,7 @@ Suggested values include: 1] page; 2] column; 3] line; 4] book; 5] poem; 6] cant
   </define>
   <define name="wega_foreign">
     <element name="foreign">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(foreign) identifies a word or phrase as belonging to some language other than that of the surrounding text.  [3.3.2.1. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(foreign) identifies a word or phrase as belonging to some language other than that of the surrounding text. [3.3.2.1. ]</a:documentation>
       <ref name="wega_macro.phraseSeq"/>
       <ref name="wega_att.global.attributes"/>
       <empty/>
@@ -2832,7 +2850,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
             <value>emph</value>
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">rhetorically emphasized</a:documentation>
             <value>mentioned</value>
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">refering to itself, not its normal referant</a:documentation>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">refering to itself, not its normal referent</a:documentation>
             <data type="Name"/>
           </choice>
         </attribute>
@@ -2842,7 +2860,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
   </define>
   <define name="wega_cit">
     <element name="cit">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(cited quotation) contains a quotation from some other document, together with a bibliographic reference to its source. In a dictionary it may contain an example text with at least one occurrence of the word form, used in the sense being described, or a translation of the headword, or an example.  [3.3.3.  4.3.1.  9.3.5.1. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(cited quotation) contains a quotation from some other document, together with a bibliographic reference to its source. In a dictionary it may contain an example text with at least one occurrence of the word form, used in the sense being described, or a translation of the headword, or an example. [3.3.3.  4.3.1.  9.3.5.1. ]</a:documentation>
       <oneOrMore>
         <choice>
           <ref name="wega_model.qLike"/>
@@ -2872,6 +2890,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
       <ref name="wega_macro.limitedContent"/>
       <ref name="wega_att.global.attributes"/>
       <ref name="wega_att.translatable.attributes"/>
+      <ref name="wega_att.typed.attributes"/>
       <empty/>
     </element>
   </define>
@@ -3136,7 +3155,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
   </define>
   <define name="wega_email">
     <element name="email">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(electronic mail address) contains an e-mail address identifying a location to which e-mail messages can be delivered.  [3.5.2. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(electronic mail address) contains an e-mail address identifying a location to which e-mail messages can be delivered. [3.5.2. ]</a:documentation>
       <ref name="wega_macro.phraseSeq"/>
       <ref name="wega_att.global.attributes"/>
       <empty/>
@@ -3192,7 +3211,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
   </define>
   <define name="wega_postCode">
     <element name="postCode">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(postal code) contains a numerical or alphanumeric code used as part of a postal address to simplify sorting or delivery of mail.  [3.5.2. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(postal code) contains a numerical or alphanumeric code used as part of a postal address to simplify sorting or delivery of mail. [3.5.2. ]</a:documentation>
       <text/>
       <ref name="wega_att.global.attributes"/>
       <empty/>
@@ -3200,7 +3219,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
   </define>
   <define name="wega_postBox">
     <element name="postBox">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(postal box or post office box) contains a number or other identifier for some postal delivery point other than a street address.  [3.5.2. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(postal box or post office box) contains a number or other identifier for some postal delivery point other than a street address. [3.5.2. ]</a:documentation>
       <text/>
       <ref name="wega_att.global.attributes"/>
       <empty/>
@@ -3453,11 +3472,11 @@ attributes @target and @cRef may be supplied on <name/>.</report>
 Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:documentation>
           <choice>
             <value>ordered</value>
-            <a:documentation>list items are numbered or lettered. </a:documentation>
+            <a:documentation>list items are numbered or lettered.</a:documentation>
             <value>bulleted</value>
-            <a:documentation>list items are marked with a bullet or other typographic device. </a:documentation>
+            <a:documentation>list items are marked with a bullet or other typographic device.</a:documentation>
             <value>simple</value>
-            <a:documentation>list items are not numbered or bulleted. </a:documentation>
+            <a:documentation>list items are not numbered or bulleted.</a:documentation>
             <value>gloss</value>
             <a:documentation>each list item glosses some term or concept, which is given by a label element preceding the list item.</a:documentation>
             <data type="Name"/>
@@ -3540,6 +3559,7 @@ Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:docume
       <ref name="wega_att.pointing.attribute.targetLang"/>
       <ref name="wega_att.pointing.attribute.evaluate"/>
       <ref name="wega_att.responsibility.attribute.cert"/>
+      <ref name="wega_att.source.attribute.source"/>
       <ref name="wega_att.typed.attribute.subtype"/>
       <attribute name="resp">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(responsible party) indicates the agency responsible for the intervention or interpretation, for example an editor or transcriber.</a:documentation>
@@ -3896,6 +3916,7 @@ Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:docume
         </group>
       </choice>
       <ref name="wega_att.global.attributes"/>
+      <ref name="wega_att.canonical.attributes"/>
       <empty/>
     </element>
   </define>
@@ -3942,13 +3963,13 @@ Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:docume
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the bibliographic level for a title, that is, whether it identifies an article, book, journal, series, or unpublished material.</a:documentation>
         <choice>
           <value>a</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(analytic) the title applies to an analytic item, such as an article, poem, or other work published as part of a larger item. </a:documentation>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(analytic) the title applies to an analytic item, such as an article, poem, or other work published as part of a larger item.</a:documentation>
           <value>m</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(monographic) the title applies to a monograph such as a book or other item considered to be a distinct publication, including single volumes of multi-volume works </a:documentation>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(monographic) the title applies to a monograph such as a book or other item considered to be a distinct publication, including single volumes of multi-volume works</a:documentation>
           <value>j</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(journal) the title applies to any serial or periodical publication such as a journal, magazine, or newspaper </a:documentation>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(journal) the title applies to any serial or periodical publication such as a journal, magazine, or newspaper</a:documentation>
           <value>s</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(series) the title applies to a series of otherwise distinct publications such as a collection </a:documentation>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(series) the title applies to a series of otherwise distinct publications such as a collection</a:documentation>
           <value>u</value>
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(unpublished) the title applies to any unpublished material (including theses and dissertations unless published by a commercial press)</a:documentation>
         </choice>
@@ -3996,6 +4017,7 @@ Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:docume
     <element name="biblScope">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(scope of bibliographic reference) defines the scope of a bibliographic reference, for example as a list of page numbers, or a named subdivision of a larger work. [3.11.2.4. ]</a:documentation>
       <ref name="wega_pages.pattern"/>
+      <ref name="wega_att.citing.attribute.unit"/>
       <attribute name="type">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.</a:documentation>
         <choice>
@@ -4013,29 +4035,6 @@ Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:docume
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(number) the element contains the issue number of a journal or newspaper as a subunit of volume or year (e.g. Allgemeine Musikalische Zeitung), not to be confused with "edition".</a:documentation>
         </choice>
       </attribute>
-      <optional>
-        <attribute name="unit">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">identifies the unit of information conveyed by the element, e.g. columns, pages, volume.
-Suggested values include: 1] volume; 2] issue; 3] page; 4] line; 5] chapter; 6] part; 7] column</a:documentation>
-          <choice>
-            <value>volume</value>
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the element contains a volume number.</a:documentation>
-            <value>issue</value>
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the element contains an issue number, or volume and issue numbers.</a:documentation>
-            <value>page</value>
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the element contains a page number or page range.</a:documentation>
-            <value>line</value>
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the element contains a line number or line range.</a:documentation>
-            <value>chapter</value>
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the element contains a chapter indication (number and/or title)</a:documentation>
-            <value>part</value>
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the element identifies a part of a book or collection.</a:documentation>
-            <value>column</value>
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the element identifies a column.</a:documentation>
-            <data type="Name"/>
-          </choice>
-        </attribute>
-      </optional>
       <empty/>
     </element>
   </define>
@@ -4050,7 +4049,7 @@ Suggested values include: 1] volume; 2] issue; 3] page; 4] line; 5] chapter; 6] 
   </define>
   <define name="wega_bibl">
     <element name="bibl">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(bibliographic citation) contains a loosely-structured bibliographic citation of which the sub-components may or may not be explicitly tagged.  [3.11.1.  2.2.7.  15.3.2. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(bibliographic citation) contains a loosely-structured bibliographic citation of which the sub-components may or may not be explicitly tagged. [3.11.1.  2.2.7.  15.3.2. ]</a:documentation>
       <zeroOrMore>
         <choice>
           <text/>
@@ -4073,7 +4072,7 @@ Suggested values include: 1] volume; 2] issue; 3] page; 4] line; 5] chapter; 6] 
   </define>
   <define name="wega_biblStruct">
     <element name="biblStruct">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(structured bibliographic citation) contains a structured bibliographic citation, in which only bibliographic sub-elements appear and in a specified order.  [3.11.1.  2.2.7.  15.3.2. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(structured bibliographic citation) contains a structured bibliographic citation, in which only bibliographic sub-elements appear and in a specified order. [3.11.1.  2.2.7.  15.3.2. ]</a:documentation>
       <group>
         <zeroOrMore>
           <ref name="wega_analytic"/>
@@ -4248,6 +4247,7 @@ relatedItem element must be empty</sch:report>
       <ref name="wega_macro.specialPara"/>
       <ref name="wega_att.ascribed.attributes"/>
       <ref name="wega_att.global.attributes"/>
+      <ref name="wega_att.placement.attributes"/>
       <optional>
         <attribute name="type">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the kind of stage direction.
@@ -4280,7 +4280,7 @@ Suggested values include: 1] setting; 2] entrance; 3] exit; 4] business; 5] nove
   </define>
   <define name="wega_textLang">
     <element name="textLang">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(text language) describes the languages and writing systems identified within the bibliographic work being described, rather than its description.  [3.11.2.4.  10.6.6. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(text language) describes the languages and writing systems identified within the bibliographic work being described, rather than its description. [3.11.2.4.  10.6.6. ]</a:documentation>
       <ref name="wega_macro.phraseSeq"/>
       <ref name="wega_att.global.attributes"/>
       <optional>
@@ -4373,6 +4373,7 @@ Sample values include: 1] text; 2] corpus</a:documentation>
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(funding body) specifies the name of an individual, institution, or organization responsible for the funding of a project or text. [2.2.1. ]</a:documentation>
       <ref name="wega_macro.phraseSeq.limited"/>
       <ref name="wega_att.global.attributes"/>
+      <ref name="wega_att.canonical.attributes"/>
       <empty/>
     </element>
   </define>
@@ -4412,13 +4413,20 @@ Sample values include: 1] text; 2] corpus</a:documentation>
   </define>
   <define name="wega_publicationStmt">
     <element name="publicationStmt">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(publication statement) groups information concerning the publication or distribution of an electronic or other text.  [2.2.4.  2.2. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(publication statement) groups information concerning the publication or distribution of an electronic or other text. [2.2.4.  2.2. ]</a:documentation>
       <choice>
         <oneOrMore>
-          <ref name="wega_model.pLike"/>
+          <group>
+            <group>
+              <ref name="wega_model.publicationStmtPart.agency"/>
+            </group>
+            <zeroOrMore>
+              <ref name="wega_model.publicationStmtPart.detail"/>
+            </zeroOrMore>
+          </group>
         </oneOrMore>
         <oneOrMore>
-          <ref name="wega_model.publicationStmtPart"/>
+          <ref name="wega_model.pLike"/>
         </oneOrMore>
       </choice>
       <ref name="wega_att.global.attributes"/>
@@ -4489,11 +4497,11 @@ Sample values include: 1] text; 2] corpus</a:documentation>
         <a:documentation>describes the status of a document either currently or, when associated with a dated element, at the time indicated.</a:documentation>
         <choice>
           <value>free</value>
-          <a:documentation>the text is freely available. </a:documentation>
+          <a:documentation>the text is freely available.</a:documentation>
           <value>unknown</value>
-          <a:documentation>the status of the text is unknown. </a:documentation>
+          <a:documentation>the status of the text is unknown.</a:documentation>
           <value>restricted</value>
-          <a:documentation>the text is not freely available. </a:documentation>
+          <a:documentation>the text is not freely available.</a:documentation>
         </choice>
       </attribute>
       <empty/>
@@ -4616,7 +4624,7 @@ Sample values include: 1] text; 2] corpus</a:documentation>
   </define>
   <define name="wega_quotation">
     <element name="quotation">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies editorial practice adopted with respect to quotation marks in the original.  [2.3.3.  15.3.2. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies editorial practice adopted with respect to quotation marks in the original. [2.3.3.  15.3.2. ]</a:documentation>
       <zeroOrMore>
         <ref name="wega_model.pLike"/>
       </zeroOrMore>
@@ -4630,14 +4638,14 @@ On <name/>, either the @marks attribute should be used, or a paragraph of descri
       <ref name="wega_att.declarable.attributes"/>
       <optional>
         <attribute name="marks">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(quotation marks) indicates whether or not quotation marks have been retained as content within the text. </a:documentation>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(quotation marks) indicates whether or not quotation marks have been retained as content within the text.</a:documentation>
           <choice>
             <value>none</value>
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">no quotation marks have been retained </a:documentation>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">no quotation marks have been retained</a:documentation>
             <value>some</value>
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">some quotation marks have been retained </a:documentation>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">some quotation marks have been retained</a:documentation>
             <value>all</value>
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">all quotation marks have been retained </a:documentation>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">all quotation marks have been retained</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -4720,7 +4728,7 @@ On <name/>, either the @marks attribute should be used, or a paragraph of descri
       </attribute>
       <optional>
         <attribute name="usage">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the approximate percentage (by volume) of the text which uses this language. </a:documentation>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the approximate percentage (by volume) of the text which uses this language.</a:documentation>
           <data type="nonNegativeInteger">
             <param name="maxInclusive">100</param>
           </data>
@@ -4754,7 +4762,7 @@ On <name/>, either the @marks attribute should be used, or a paragraph of descri
       <ref name="wega_att.global.attributes"/>
       <optional>
         <attribute name="scheme">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">identifies the controlled vocabulary within which the set of keywords concerned is defined. </a:documentation>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">identifies the controlled vocabulary within which the set of keywords concerned is defined identifies the classification scheme within which the set of categories concerned is defined, for example by a taxonomy element, or by some other resource.</a:documentation>
           <ref name="wega_data.pointer"/>
         </attribute>
       </optional>
@@ -4837,6 +4845,7 @@ On <name/>, either the @marks attribute should be used, or a paragraph of descri
         </element>
       </choice>
       <ns xmlns="http://purl.oclc.org/dsdl/schematron" prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
+      <ns xmlns="http://purl.oclc.org/dsdl/schematron" prefix="xs" uri="http://www.w3.org/2001/XMLSchema"/>
       <ns xmlns="http://purl.oclc.org/dsdl/schematron" prefix="rng" uri="http://relaxng.org/ns/structure/1.0"/>
       <attribute name="xml:id">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(identifier) provides a unique identifier for the element bearing the attribute.</a:documentation>
@@ -5030,7 +5039,14 @@ On <name/>, either the @marks attribute should be used, or a paragraph of descri
   <define name="wega_dateline">
     <element name="dateline">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains a brief description of the place, date, time, etc. of production of a letter, newspaper story, or other work, prefixed or suffixed to it as a kind of heading or trailer. [4.2.2. ]</a:documentation>
-      <ref name="wega_macro.phraseSeq"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="wega_model.gLike"/>
+          <ref name="wega_model.phrase"/>
+          <ref name="wega_model.global"/>
+        </choice>
+      </zeroOrMore>
       <optional>
         <attribute name="rend">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(rendition) specifies the text alignment in the source.</a:documentation>
@@ -5113,7 +5129,7 @@ On <name/>, either the @marks attribute should be used, or a paragraph of descri
   <define name="wega_salute">
     <element name="salute">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(salutation) contains a salutation or greeting prefixed to a foreword, dedicatory epistle, or other division of a text, or the salutation in the closing of a letter, preface, etc. [4.2.2. ]</a:documentation>
-      <ref name="wega_macro.phraseSeq"/>
+      <ref name="wega_macro.paraContent"/>
       <ref name="wega_att.global.attributes"/>
       <empty/>
     </element>
@@ -5170,7 +5186,7 @@ On <name/>, either the @marks attribute should be used, or a paragraph of descri
   </define>
   <define name="wega_titlePage">
     <element name="titlePage">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(title page) contains the title page of a text, appearing within the front or back matter.  [4.6. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(title page) contains the title page of a text, appearing within the front or back matter. [4.6. ]</a:documentation>
       <group>
         <zeroOrMore>
           <ref name="wega_model.global"/>
@@ -5203,18 +5219,18 @@ On <name/>, either the @marks attribute should be used, or a paragraph of descri
       <optional>
         <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" name="type" a:defaultValue="main">
           <a:documentation>specifies the role of this subdivision of the title.
-Suggested values include: 1] main; 2] sub(subordinate) ; 3] alt(alternate) ; 4] short; 5] desc(descriptive) </a:documentation>
+Suggested values include: 1] main; 2] sub; 3] alt; 4] short; 5] desc</a:documentation>
           <choice>
             <value>main</value>
-            <a:documentation>main title of the work </a:documentation>
+            <a:documentation>main title of the work</a:documentation>
             <value>sub</value>
-            <a:documentation>(subordinate) subtitle of the work </a:documentation>
+            <a:documentation>(subordinate) subtitle of the work</a:documentation>
             <value>alt</value>
-            <a:documentation>(alternate) alternative title of the work </a:documentation>
+            <a:documentation>(alternate) alternative title of the work</a:documentation>
             <value>short</value>
             <a:documentation>abbreviated form of title</a:documentation>
             <value>desc</value>
-            <a:documentation>(descriptive) descriptive paraphrase of the work </a:documentation>
+            <a:documentation>(descriptive) descriptive paraphrase of the work</a:documentation>
             <data type="Name"/>
           </choice>
         </attribute>
@@ -5294,7 +5310,7 @@ Suggested values include: 1] main; 2] sub(subordinate) ; 3] alt(alternate) ; 4] 
   </define>
   <define name="wega_orgName">
     <element name="orgName">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(organization name) contains an organizational name.  [13.2.2. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(organization name) contains an organizational name. [13.2.2. ]</a:documentation>
       <ref name="wega_macro.phraseSeq"/>
       <ref name="wega_att.global.attributes"/>
       <ref name="wega_att.datable.attributes"/>
@@ -5344,6 +5360,9 @@ Suggested values include: 1] main; 2] sub(subordinate) ; 3] alt(alternate) ; 4] 
           <ref name="wega_hi"/>
           <ref name="wega_geogName"/>
           <ref name="wega_bloc"/>
+          <ref name="wega_lb"/>
+          <ref name="wega_pb"/>
+          <ref name="wega_unclear"/>
           <text/>
         </choice>
       </oneOrMore>
@@ -5368,6 +5387,8 @@ Suggested values include: 1] main; 2] sub(subordinate) ; 3] alt(alternate) ; 4] 
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes buildings designed for selling goods and services to the end-user (e.g. markets, shops).</a:documentation>
             <value>street</value>
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes a street or a street name.</a:documentation>
+            <value>zoo/botanic</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes a botanical or zoological garden.</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -5494,7 +5515,7 @@ Suggested values include: 1] main; 2] sub(subordinate) ; 3] alt(alternate) ; 4] 
   </define>
   <define name="wega_row">
     <element name="row">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains one row of a table.  [14.1.1. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains one row of a table. [14.1.1. ]</a:documentation>
       <oneOrMore>
         <ref name="wega_cell"/>
       </oneOrMore>
@@ -5505,7 +5526,7 @@ Suggested values include: 1] main; 2] sub(subordinate) ; 3] alt(alternate) ; 4] 
   </define>
   <define name="wega_cell">
     <element name="cell">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains one cell of a table.  [14.1.1. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains one cell of a table. [14.1.1. ]</a:documentation>
       <ref name="wega_macro.specialPara"/>
       <ref name="wega_att.global.attributes"/>
       <ref name="wega_att.tableDecoration.attributes"/>
@@ -5615,7 +5636,7 @@ Suggested values include: 1] main; 2] sub(subordinate) ; 3] alt(alternate) ; 4] 
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:*[@spanTo]">
           <sch:assert test="id(substring(@spanTo,2)) and following::*[@xml:id=substring(current()/@spanTo,2)]">
 The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow the current element <sch:name/>
-               </sch:assert>
+                  </sch:assert>
         </sch:rule>
       </pattern>
       <attribute name="hand">
@@ -5720,7 +5741,7 @@ The @spanTo attribute of <name/> is required.</assert>
       <ref name="wega_att.responsibility.attributes"/>
       <optional>
         <attribute name="new">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">identifies the new hand.</a:documentation>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates a handNote element describing the hand concerned.</a:documentation>
           <ref name="wega_data.pointer"/>
         </attribute>
       </optional>
@@ -5736,6 +5757,7 @@ The @spanTo attribute of <name/> is required.</assert>
           <ref name="wega_model.certLike"/>
         </choice>
       </zeroOrMore>
+      <ref name="wega_att.responsibility.attributes"/>
       <attribute name="unit">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">names the unit used for the measurement</a:documentation>
         <choice>
@@ -5895,7 +5917,7 @@ The @spanTo attribute of <name/> is required.</assert>
   </define>
   <define name="wega_collection">
     <element name="collection">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains the name of a collection of manuscripts, not necessarily located within a single repository.  [10.4. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains the name of a collection of manuscripts, not necessarily located within a single repository. [10.4. ]</a:documentation>
       <ref name="wega_macro.xtext"/>
       <ref name="wega_att.global.attributes"/>
       <ref name="wega_att.naming.attributes"/>
@@ -5994,7 +6016,7 @@ The @spanTo attribute of <name/> is required.</assert>
   </define>
   <define name="wega_origin">
     <element name="origin">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains any descriptive or other information concerning the origin of a manuscript or manuscript part.  [10.8. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains any descriptive or other information concerning the origin of a manuscript or manuscript part. [10.8. ]</a:documentation>
       <ref name="wega_macro.specialPara"/>
       <ref name="wega_att.global.attributes"/>
       <ref name="wega_att.editLike.attributes"/>
@@ -6004,7 +6026,7 @@ The @spanTo attribute of <name/> is required.</assert>
   </define>
   <define name="wega_provenance">
     <element name="provenance">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains any descriptive or other information concerning a single identifiable episode during the history of a manuscript or manuscript part, after its creation but before its acquisition.  [10.8. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains any descriptive or other information concerning a single identifiable episode during the history of a manuscript or manuscript part, after its creation but before its acquisition. [10.8. ]</a:documentation>
       <ref name="wega_macro.specialPara"/>
       <ref name="wega_att.global.attributes"/>
       <ref name="wega_att.datable.attributes"/>
@@ -6015,7 +6037,7 @@ The @spanTo attribute of <name/> is required.</assert>
   </define>
   <define name="wega_acquisition">
     <element name="acquisition">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains any descriptive or other information concerning the process by which a manuscript or manuscript part entered the holding institution.  [10.8. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains any descriptive or other information concerning the process by which a manuscript or manuscript part entered the holding institution. [10.8. ]</a:documentation>
       <ref name="wega_macro.specialPara"/>
       <ref name="wega_att.global.attributes"/>
       <ref name="wega_att.datable.attributes"/>
@@ -6271,7 +6293,7 @@ The @spanTo attribute of <name/> is required.</assert>
   <define name="wega_att.witnessed.attribute.wit">
     <optional>
       <attribute name="wit">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(witness or witnesses) contains a list of one or more pointers indicating the witnesses which attest to a given reading.</a:documentation>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(witness or witnesses) contains a space-delimited list of one or more pointers indicating the witnesses which attest to a given reading.</a:documentation>
         <list>
           <oneOrMore>
             <ref name="wega_data.pointer"/>
@@ -6308,7 +6330,7 @@ Sample values include: 1] homeoteleuton; 2] homeoarchy; 3] paleographicConfusion
   <define name="wega_att.textCritical.attribute.varSeq">
     <optional>
       <attribute name="varSeq">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(variant sequence) provides a number indicating the position of this reading in a sequence, when there is reason to presume a sequence to the variants on any one lemma.</a:documentation>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(variant sequence) provides a number indicating the position of this reading in a sequence, when there is reason to presume a sequence to the variants. </a:documentation>
         <ref name="wega_data.count"/>
       </attribute>
     </optional>
@@ -6316,14 +6338,14 @@ Sample values include: 1] homeoteleuton; 2] homeoarchy; 3] paleographicConfusion
   <define name="wega_att.textCritical.attribute.hand">
     <optional>
       <attribute name="hand">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">signifies the hand responsible for a particular reading in the witness.</a:documentation>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the hand responsible for a particular reading in the witness.</a:documentation>
         <ref name="wega_data.pointer"/>
       </attribute>
     </optional>
   </define>
   <define name="wega_app">
     <element name="app">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(apparatus entry) contains one entry in a critical apparatus, with an optional lemma and usually one or more reading or a note on the relevant passage. [12.1.1. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(apparatus entry) contains one entry in a critical apparatus, with an optional lemma and usually one or more readings or notes on the relevant passage. [12.1.1. ]</a:documentation>
       <group>
         <zeroOrMore>
           <ref name="wega_model.global"/>
