@@ -8,21 +8,21 @@ Files for documenting the Digital Edition of the [Carl-Maria-von-Weber-Gesamtaus
 Contents
 --------
 
-* `doc`: currently empty. Prose documentation will follow  and can be generated through [OxGarage](http://www.tei-c.org/oxgarage/)
-* `schema`: RelaxNG schemata, generated with the [roma cli](http://www.tei-c.org/Guidelines/Customization/odds.xml#romacommandline) from the ODD files below
+* `schema`: RelaxNG schemata, generated with the [roma cli](http://www.tei-c.org/Guidelines/Customization/odds.xml#romacommandline) from the ODD files below. For convenience, have a look at the `Makefile`.
 * `src`: source ODD files
 	* `WeGA_biblio.odd.xml`: WeGA ODD file for bibliographic documents 
 	* `WeGA_common.odd.xml`: common macros and definitions for global use in the WeGA Digital Edition
-	* `WeGA_diaries.odd.xml`: WeGA ODD file for diary entries
-	* `WeGA_letters.odd.xml`: WeGA ODD file for correspondence material
-	* `WeGA_news.odd.xml`: WeGA ODD file for website news
-	* `WeGA_persons.odd.xml`: WeGA ODD file for (short) biographies
-	* `WeGA_var.odd.xml`: WeGA ODD file for various  documents 
-	* `WeGA_works.odd.xml`: WeGA ODD file for musical works
-	* `WeGA_writings.odd.xml`: WeGA ODD file for writings
+	* `WeGA_diaries.odd.xml`: WeGA ODD file for the encoding of diary entries
+	* `WeGA_letters.odd.xml`: WeGA ODD file for the encoding of correspondence material
+	* `WeGA_news.odd.xml`: WeGA ODD file for the encoding of website news
+	* `WeGA_persons.odd.xml`: WeGA ODD file for the encoding of (short) biographies
+	* `WeGA_places.odd.xml`: WeGA ODD file for the encoding of places
+	* `WeGA_var.odd.xml`: WeGA ODD file for the encoding of various  documents 
+	* `WeGA_works.odd.xml`: WeGA ODD file for the encoding of musical works
+	* `WeGA_writings.odd.xml`: WeGA ODD file for the encoding of writings
 
 
 License
 -------
 
-This work is licensed under a [Creative Commons Attribution 3.0 Unported License (CC BY 3.0)](http://creativecommons.org/licenses/by/3.0/)
+This work is available under dual license: [BSD 2-Clause](http://opensource.org/licenses/BSD-2-Clause) and [Creative Commons Attribution 3.0 Unported License (CC BY 3.0)](http://creativecommons.org/licenses/by/3.0/)
