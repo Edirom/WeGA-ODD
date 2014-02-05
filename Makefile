@@ -6,11 +6,17 @@
 # TEI_XSL = Path to local installation of the TEI stylesheets (https://github.com/TEIC/Stylesheets)
 include local.build.properties
 
+# set the default language to english
+# it can be overwritten with e.g. DOCLANG=de when calling make
+ifndef DOCLANG
+	DOCLANG=en
+endif
+
 # Options to be passed to roma2.sh (see roma2.sh --help)
-ROMAOPTS=--nodtd --noxsd
+ROMAOPTS=--nodtd --noxsd --doclang=${DOCLANG}
 
 # the target directory for the created RNG schema files
-TARGET_DIR=./schema
+TARGET_DIR=./schema/${DOCLANG}
 
 
 all: letters persons var biblio news diaries writings places
@@ -41,9 +47,9 @@ places:
 
 clean:
 	echo "cleaning up"
-	rm -rf ${TARGET_DIR}/src
-	find ${TARGET_DIR} -name '*.rnc' | xargs /bin/rm -f
+	#rm -rf ${TARGET_DIR}/src
+	find ${TARGET_DIR}/../ -name '*.rnc' | xargs /bin/rm -f
 	echo "... done"
 
-.PHONY: letters persons var biblio news diaries writings clean all
+.PHONY: letters persons var biblio news diaries writings places clean all
 .SILENT: clean
