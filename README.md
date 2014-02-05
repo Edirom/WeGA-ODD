@@ -8,7 +8,7 @@ Files for documenting the Digital Edition of the [Carl-Maria-von-Weber-Gesamtaus
 Contents
 --------
 
-* `schema`: RelaxNG schemata, generated with the [roma cli](http://www.tei-c.org/Guidelines/Customization/odds.xml#romacommandline) from the ODD files below. For convenience, have a look at the `Makefile`.
+* `schema`: RelaxNG schemata, generated with the [roma cli](http://www.tei-c.org/Guidelines/Customization/odds.xml#romacommandline) from the ODD files below. For convenience, have a look at the `Makefile`. There are subfolders for English and German schemas which should only differ in the language of documentation (e.g. element and attribute descriptions)
 * `src`: source ODD files
 	* `WeGA_biblio.odd.xml`: WeGA ODD file for bibliographic documents 
 	* `WeGA_common.odd.xml`: common macros and definitions for global use in the WeGA Digital Edition
