@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-02-05T13:26:53Z. 
+Schema generated from ODD source 2014-02-05T21:44:12Z. 
 Edition: Version 2.6.0. Last updated on
 	20th January 2014, revision 12802
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
@@ -904,6 +904,34 @@ Empfohlene Werte sind: 1] volume; 2] issue; 3] page; 4] line; 5] chapter; 6] par
       <ref name="seg"/>
     </choice>
   </define>
+  <define name="model.hiLike">
+    <choice>
+      <ref name="hi"/>
+    </choice>
+  </define>
+  <define name="model.hiLike_alternation">
+    <choice>
+      <ref name="hi"/>
+    </choice>
+  </define>
+  <define name="model.hiLike_sequence">
+    <ref name="hi"/>
+  </define>
+  <define name="model.hiLike_sequenceOptional">
+    <optional>
+      <ref name="hi"/>
+    </optional>
+  </define>
+  <define name="model.hiLike_sequenceOptionalRepeatable">
+    <zeroOrMore>
+      <ref name="hi"/>
+    </zeroOrMore>
+  </define>
+  <define name="model.hiLike_sequenceRepeatable">
+    <oneOrMore>
+      <ref name="hi"/>
+    </oneOrMore>
+  </define>
   <define name="model.emphLike">
     <choice>
       <ref name="term"/>
@@ -970,6 +998,7 @@ Empfohlene Werte sind: 1] volume; 2] issue; 3] page; 4] line; 5] chapter; 6] par
   </define>
   <define name="model.highlighted">
     <choice>
+      <ref name="model.hiLike"/>
       <ref name="model.emphLike"/>
     </choice>
   </define>
@@ -1524,6 +1553,7 @@ Empfohlene Werte sind: 1] volume; 2] issue; 3] page; 4] line; 5] chapter; 6] par
   </define>
   <define name="model.limitedPhrase">
     <choice>
+      <ref name="model.hiLike"/>
       <ref name="model.emphLike"/>
       <ref name="model.ptrLike"/>
       <ref name="model.phrase.xml"/>
@@ -1599,6 +1629,53 @@ Empfohlene Werte sind: 1] volume; 2] issue; 3] page; 4] line; 5] chapter; 6] par
       <optional>
         <attribute name="xml:id">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Bezeichner) liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.</a:documentation>
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <empty/>
+    </element>
+  </define>
+  <define name="hi">
+    <element name="hi">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(hervorgehoben) markiert ein Wort oder eine Phrase als grafisch deutlich vom umgebenden Text abgehoben, aus Gründen über die keine Angaben gemacht werden können. [3.3.2.2.  3.3.2. ]</a:documentation>
+      <ref name="macro.paraContent"/>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="hi-constraint-hiStartsWithWithespace">
+        <rule context="tei:hi">
+          <sch:report xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="matches(.,'^\s')">whitespace at the beginning of element hi</sch:report>
+        </rule>
+      </pattern>
+      <attribute name="rend">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(graphische Darstellung) gibt an, wie das fragliche Element in der Vorlage graphisch dargestellt ist.</a:documentation>
+        <choice>
+          <value>latintype</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Schriftart: latintype.</a:documentation>
+          <value>antiqua</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Schriftart: antiqua.</a:documentation>
+          <value>superscript</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">hochgestelltes Zeichen.</a:documentation>
+          <value>subscript</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">tiefgestelltes Zeichen.</a:documentation>
+          <value>italic</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">kursive Schriftlage.</a:documentation>
+          <value>spaced_out</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">gesperrte Schriftbreite.</a:documentation>
+          <value>bold</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">fette Schriftstärke.</a:documentation>
+          <value>underline</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">unterstrichener Text.</a:documentation>
+          <value>small-caps</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Kapitälchen.</a:documentation>
+        </choice>
+      </attribute>
+      <optional>
+        <attribute name="n">
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Nummer) ordnet einem Element, das nicht unbedingt eindeutig innerhalb des Dokuments ist, eine Nummer (oder eine andere Bezeichnung) zu.</a:documentation>
+          <ref name="data.count"/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="xml:id">
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.</a:documentation>
           <data type="ID"/>
         </attribute>
       </optional>
@@ -2493,6 +2570,7 @@ Beispielwerte sind etwa: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5
         <choice>
           <ref name="model.placeNamePart"/>
           <ref name="model.milestoneLike"/>
+          <ref name="hi"/>
           <ref name="unclear"/>
           <text/>
         </choice>
