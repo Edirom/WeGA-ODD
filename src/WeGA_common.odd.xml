@@ -636,16 +636,16 @@
                 <attDef ident="rend" mode="add" usage="req">
                     <gloss versionDate="2013-11-11" xml:lang="en">rendition</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">indicates how the element in question was rendered or presented in the source text.</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="de">Ausgabe</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="de">gibt an, wie das fragliche Element ausgegeben wurde oder im Quelltext präsentiert ist.</desc>
+                    <gloss versionDate="2013-11-11" xml:lang="de">graphische Darstellung</gloss>
+                    <desc versionDate="2013-11-11" xml:lang="de">gibt an, wie das fragliche Element <emph>in der Vorlage</emph> graphisch dargestellt ist.</desc>
                     <valList type="closed">
                         <valItem ident="latintype">
                             <desc versionDate="2013-11-11" xml:lang="en">typeface: latintype.</desc>
                             <desc versionDate="2013-11-11" xml:lang="de">Schriftart: latintype.</desc>
                         </valItem>
                         <valItem ident="antiqua">
-                            <desc versionDate="2013-11-11" xml:lang="en">typeface: latintype.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">Schriftart: latintype.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="en">typeface: antiqua.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="de">Schriftart: antiqua.</desc>
                         </valItem>
                         <valItem ident="superscript">
                             <desc versionDate="2013-11-11" xml:lang="en">superscript character.</desc>
@@ -657,15 +657,15 @@
                         </valItem>
                         <valItem ident="italic">
                             <desc versionDate="2013-11-11" xml:lang="en">italic typeface.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">kursive Schriftart.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="de">kursive Schriftlage.</desc>
                         </valItem>
                         <valItem ident="spaced_out">
                             <desc versionDate="2013-11-11" xml:lang="en">spaced out typeface.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">breite Schriftart.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="de">gesperrte Schriftbreite.</desc>
                         </valItem>
                         <valItem ident="bold">
                             <desc versionDate="2013-11-11" xml:lang="en">bold typeface.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">fette Schriftart.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="de">fette Schriftstärke.</desc>
                         </valItem>
                         <valItem ident="underline">
                             <desc versionDate="2013-11-11" xml:lang="en">underlined text.</desc>
@@ -1381,6 +1381,17 @@
                     <!--<datatype>
                         <rng:ref name="data.pointer"/>
                     </datatype>-->
+                    <constraintSpec ident="spanTo-7" scheme="isoschematron">
+                        <desc>The @spanTo attribute must point to an element following the
+                            current element</desc>
+                        <constraint>
+                            <sch:rule context="tei:*[@spanTo]">
+                                <sch:assert test="id(substring(@spanTo,2)) and following::*[@xml:id=substring(current()/@spanTo,2)]">
+                                    The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow the current element <sch:name/>
+                                </sch:assert>
+                            </sch:rule>
+                        </constraint>
+                    </constraintSpec>
                 </attDef>
                 <attDef ident="hand" mode="add" usage="req">
                     <desc versionDate="2013-11-11" xml:lang="en">signifies the hand of the agent which made the intervention.</desc>
@@ -1608,7 +1619,20 @@
                         <rng:ref name="data.count"/>
                     </datatype>
                 </attDef>
-                <attDef ident="reason" mode="delete"/>
+                <attDef ident="reason" mode="change" usage="mwa">
+                    <desc versionDate="2013-11-11" xml:lang="en">gives the reason for omission</desc>
+                    <desc versionDate="2013-11-11" xml:lang="de">gibt eine Begründung für die Auslassung</desc>
+                    <valList type="closed" mode="replace">
+                        <valItem ident="illegible">
+                            <desc versionDate="2013-11-11" xml:lang="en">the ommited text is illegible</desc>
+                            <desc versionDate="2013-11-11" xml:lang="de">der ausgelassene Text ist nicht zu entziffern</desc>
+                        </valItem>
+                        <valItem ident="outOfScope">
+                            <desc versionDate="2013-11-11" xml:lang="en">the ommited text is out of scope of the WeGA edition</desc>
+                            <desc versionDate="2013-11-11" xml:lang="de">der ausgelassene Text ist außerhalb des Editionsrahmens der WeGA</desc>
+                        </valItem>
+                    </valList>
+                </attDef>
                 <attDef ident="agent" mode="delete"/>
                 <attDef ident="hand" mode="delete"/>
             </attList>
