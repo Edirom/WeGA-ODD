@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-02-12T14:20:49Z. 
+Schema generated from ODD source 2014-02-14T08:37:50Z. 
 Edition: Version 2.6.0. Last updated on
 	20th January 2014, revision 12802
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
@@ -121,21 +121,6 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
   </define>
   <define name="data.enumerated">
     <ref name="data.name"/>
-  </define>
-  <define name="data.temporal.iso">
-    <choice>
-      <data type="date"/>
-      <data type="gYear"/>
-      <data type="gMonth"/>
-      <data type="gDay"/>
-      <data type="gYearMonth"/>
-      <data type="gMonthDay"/>
-      <data type="time"/>
-      <data type="dateTime"/>
-      <data type="token">
-        <param name="pattern">[0-9.,DHMPRSTWYZ/:+\-]+</param>
-      </data>
-    </choice>
   </define>
   <define name="key.person.pattern">
     <data type="string">
@@ -495,49 +480,61 @@ Beispielwerte sind etwa: 1] all; 2] most; 3] range</a:documentation>
   <define name="att.datable.w3c.attribute.when">
     <optional>
       <attribute name="when">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-        <ref name="data.temporal.w3c"/>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">liefert den Wert des Datums oder der Uhrzeit in standardisierter Form, z.B. jjjj-mm-tt.</a:documentation>
+        <choice>
+          <data type="date"/>
+          <data type="gYear"/>
+        </choice>
       </attribute>
     </optional>
   </define>
   <define name="att.datable.w3c.attribute.notBefore">
     <optional>
       <attribute name="notBefore">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-        <ref name="data.temporal.w3c"/>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">spezifiziert das frühestmögliche Datum des Ereignisses in standardisierter Form, z.B. jjjj-mm-tt.</a:documentation>
+        <choice>
+          <data type="date"/>
+          <data type="gYear"/>
+        </choice>
       </attribute>
     </optional>
   </define>
   <define name="att.datable.w3c.attribute.notAfter">
     <optional>
       <attribute name="notAfter">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-        <ref name="data.temporal.w3c"/>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">spezifiziert das letztmöglichste Datum des Ereignisses in standardisierter Form, z.B. jjjj-mm-tt.</a:documentation>
+        <choice>
+          <data type="date"/>
+          <data type="gYear"/>
+        </choice>
       </attribute>
     </optional>
   </define>
   <define name="att.datable.w3c.attribute.from">
     <optional>
       <attribute name="from">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-        <ref name="data.temporal.w3c"/>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">gibt den Startpunkt einer Dauer in standardisierter Form an, z.B. jjjj-mm-tt.</a:documentation>
+        <choice>
+          <data type="date"/>
+          <data type="gYear"/>
+        </choice>
       </attribute>
     </optional>
   </define>
   <define name="att.datable.w3c.attribute.to">
     <optional>
       <attribute name="to">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-        <ref name="data.temporal.w3c"/>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">gibt den Endpunkt einer Dauer in standardisierter Form an, z.B. jjjj-mm-tt.</a:documentation>
+        <choice>
+          <data type="date"/>
+          <data type="gYear"/>
+        </choice>
       </attribute>
     </optional>
   </define>
   <define name="att.datable.attributes">
     <ref name="att.datable.w3c.attributes"/>
-    <ref name="att.datable.iso.attributes"/>
-    <ref name="att.datable.custom.attributes"/>
     <ref name="att.datable.attribute.calendar"/>
-    <ref name="att.datable.attribute.period"/>
   </define>
   <define name="att.datable.attribute.calendar">
     <optional>
@@ -554,14 +551,6 @@ Beispielwerte sind etwa: 1] all; 2] most; 3] range</a:documentation>
 belongs, but this <sch:name/> element has no textual content.</sch:assert>
     </sch:rule>
   </pattern>
-  <define name="att.datable.attribute.period">
-    <optional>
-      <attribute name="period">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-        <ref name="data.pointer"/>
-      </attribute>
-    </optional>
-  </define>
   <define name="att.declarable.attributes">
     <ref name="att.declarable.attribute.default"/>
   </define>
@@ -620,10 +609,16 @@ belongs, but this <sch:name/> element has no textual content.</sch:assert>
   </define>
   <define name="att.docStatus.attribute.status">
     <optional>
-      <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" name="status" a:defaultValue="draft">
-        <a:documentation>describes the status of a document either currently or, when associated with a dated element, at the time indicated.
-Beispielwerte sind etwa: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5] draft; 6] embargoed; 7] expired; 8] frozen; 9] galley; 10] proposed; 11] published; 12] recommendation; 13] submitted; 14] unfinished; 15] withdrawn</a:documentation>
-        <ref name="data.enumerated"/>
+      <attribute name="status">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">beschreibt entweder den aktuellen Status eines Dokuments oder den Zeitpunkt zu dem ein veraltetes Element zugeordnet wurde.</a:documentation>
+        <choice>
+          <value>proposed</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Kategorie "rot") unterste Kategorie, d.h. die Dokumente sind noch im Rohzustand.</a:documentation>
+          <value>candidate</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Kategorie "gelb") mittlere Kategorie für Dokumente, die schon eine gewisse Auszeichnungstiefe besitzen.</a:documentation>
+          <value>approved</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Kategorie "grün") freigegebene Dokumente, die den aktuellen Auszeichnungsvorgaben entsprechen sowie kontrolliert und durchgesehen wurden.</a:documentation>
+        </choice>
       </attribute>
     </optional>
   </define>
@@ -994,45 +989,6 @@ Empfohlene Werte sind: 1] below; 2] bottom; 3] margin; 4] top; 5] opposite; 6] o
           <value>none</value>
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
         </choice>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.sortable.attributes">
-    <ref name="att.sortable.attribute.sortKey"/>
-  </define>
-  <define name="att.sortable.attribute.sortKey">
-    <optional>
-      <attribute name="sortKey">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">supplies the sort key for this element in an index, list or group which contains it.</a:documentation>
-        <ref name="data.word"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.edition.attributes">
-    <ref name="att.edition.attribute.ed"/>
-    <ref name="att.edition.attribute.edRef"/>
-  </define>
-  <define name="att.edition.attribute.ed">
-    <optional>
-      <attribute name="ed">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-        <list>
-          <oneOrMore>
-            <ref name="data.word"/>
-          </oneOrMore>
-        </list>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.edition.attribute.edRef">
-    <optional>
-      <attribute name="edRef">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">provides a pointer to the source edition in which the associated feature (for example, a page, column, or line break) occurs at this point in the text.</a:documentation>
-        <list>
-          <oneOrMore>
-            <ref name="data.pointer"/>
-          </oneOrMore>
-        </list>
       </attribute>
     </optional>
   </define>
@@ -2327,7 +2283,6 @@ Empfohlene Werte sind: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] foreig
       <ref name="att.pointing.attributes"/>
       <ref name="att.typed.attributes"/>
       <ref name="att.canonical.attributes"/>
-      <ref name="att.sortable.attributes"/>
       <ref name="att.cReferencing.attributes"/>
       <empty/>
     </element>
@@ -2622,28 +2577,15 @@ Empfohlene Werte sind: 1] cardinal; 2] ordinal; 3] fraction; 4] percentage</a:do
       </pattern>
       <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="date-constraint-dateHeuristics5">
         <rule context="tei:date">
-          <sch:assert xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="@when or @notBefore or @notAfter or @from or @to or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</sch:assert>
+          <sch:assert xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</sch:assert>
         </rule>
       </pattern>
       <ref name="att.responsibility.attributes"/>
-      <ref name="att.datable.attribute.period"/>
       <ref name="att.datable.w3c.attribute.when"/>
       <ref name="att.datable.w3c.attribute.notBefore"/>
       <ref name="att.datable.w3c.attribute.notAfter"/>
       <ref name="att.datable.w3c.attribute.from"/>
       <ref name="att.datable.w3c.attribute.to"/>
-      <ref name="att.datable.iso.attribute.when-iso"/>
-      <ref name="att.datable.iso.attribute.notBefore-iso"/>
-      <ref name="att.datable.iso.attribute.notAfter-iso"/>
-      <ref name="att.datable.iso.attribute.from-iso"/>
-      <ref name="att.datable.iso.attribute.to-iso"/>
-      <ref name="att.datable.custom.attribute.when-custom"/>
-      <ref name="att.datable.custom.attribute.notBefore-custom"/>
-      <ref name="att.datable.custom.attribute.notAfter-custom"/>
-      <ref name="att.datable.custom.attribute.from-custom"/>
-      <ref name="att.datable.custom.attribute.to-custom"/>
-      <ref name="att.datable.custom.attribute.datingPoint"/>
-      <ref name="att.datable.custom.attribute.datingMethod"/>
       <optional>
         <attribute name="calendar">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">zeigt das System oder den Kalender auf, zu dem das dargestellte Datum des Elements gehört.</a:documentation>
@@ -2790,7 +2732,6 @@ attributes @target and @cRef may be supplied on <name/>.</report>
         </zeroOrMore>
       </group>
       <ref name="att.global.attributes"/>
-      <ref name="att.sortable.attributes"/>
       <optional>
         <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" name="type" a:defaultValue="simple">
           <a:documentation>
@@ -2816,7 +2757,6 @@ Empfohlene Werte sind: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:documenta
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"> [3.7.  2.5. ]</a:documentation>
       <ref name="macro.specialPara"/>
       <ref name="att.global.attributes"/>
-      <ref name="att.sortable.attributes"/>
       <empty/>
     </element>
   </define>
@@ -2927,7 +2867,6 @@ Empfohlene Werte sind: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:documenta
       <ref name="att.global.attributes"/>
       <ref name="att.milestoneUnit.attributes"/>
       <ref name="att.typed.attributes"/>
-      <ref name="att.edition.attributes"/>
       <ref name="att.spanning.attributes"/>
       <ref name="att.breaking.attributes"/>
       <empty/>
@@ -3222,7 +3161,6 @@ Empfohlene Werte sind: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:documenta
       <ref name="att.global.attributes"/>
       <ref name="att.declarable.attributes"/>
       <ref name="att.typed.attributes"/>
-      <ref name="att.sortable.attributes"/>
       <ref name="att.docStatus.attributes"/>
       <empty/>
     </element>
@@ -3294,7 +3232,6 @@ Empfohlene Werte sind: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:documenta
         <ref name="pnd.pattern"/>
         <ref name="viaf.pattern"/>
       </choice>
-      <ref name="att.sortable.attributes"/>
       <attribute name="type">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</a:documentation>
         <choice>
@@ -3306,91 +3243,6 @@ Empfohlene Werte sind: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:documenta
       </attribute>
       <empty/>
     </element>
-  </define>
-  <define name="att.datable.custom.attributes">
-    <ref name="att.datable.custom.attribute.when-custom"/>
-    <ref name="att.datable.custom.attribute.notBefore-custom"/>
-    <ref name="att.datable.custom.attribute.notAfter-custom"/>
-    <ref name="att.datable.custom.attribute.from-custom"/>
-    <ref name="att.datable.custom.attribute.to-custom"/>
-    <ref name="att.datable.custom.attribute.datingPoint"/>
-    <ref name="att.datable.custom.attribute.datingMethod"/>
-  </define>
-  <define name="att.datable.custom.attribute.when-custom">
-    <optional>
-      <attribute name="when-custom">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">supplies the value of a date or time in some standard form.</a:documentation>
-        <list>
-          <oneOrMore>
-            <ref name="data.word"/>
-          </oneOrMore>
-        </list>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.custom.attribute.notBefore-custom">
-    <optional>
-      <attribute name="notBefore-custom">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the earliest possible date for the event in some custom standard form.</a:documentation>
-        <list>
-          <oneOrMore>
-            <ref name="data.word"/>
-          </oneOrMore>
-        </list>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.custom.attribute.notAfter-custom">
-    <optional>
-      <attribute name="notAfter-custom">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the latest possible date for the event in some custom standard form.</a:documentation>
-        <list>
-          <oneOrMore>
-            <ref name="data.word"/>
-          </oneOrMore>
-        </list>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.custom.attribute.from-custom">
-    <optional>
-      <attribute name="from-custom">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the starting point of the period in some standard form.</a:documentation>
-        <list>
-          <oneOrMore>
-            <ref name="data.word"/>
-          </oneOrMore>
-        </list>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.custom.attribute.to-custom">
-    <optional>
-      <attribute name="to-custom">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the ending point of the period in some standard form.</a:documentation>
-        <list>
-          <oneOrMore>
-            <ref name="data.word"/>
-          </oneOrMore>
-        </list>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.custom.attribute.datingPoint">
-    <optional>
-      <attribute name="datingPoint">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">supplies a pointer to some location defining a named point in time with reference to which the datable item is understood to have occurred</a:documentation>
-        <ref name="data.pointer"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.custom.attribute.datingMethod">
-    <optional>
-      <attribute name="datingMethod">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">supplies a pointer to a calendar element or other means of interpreting the values of the custom dating attributes.</a:documentation>
-        <ref name="data.pointer"/>
-      </attribute>
-    </optional>
   </define>
   <define name="model.persNamePart">
     <choice>
@@ -3479,53 +3331,6 @@ Empfohlene Werte sind: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:documenta
     <oneOrMore>
       <ref name="roleName"/>
     </oneOrMore>
-  </define>
-  <define name="att.datable.iso.attributes">
-    <ref name="att.datable.iso.attribute.when-iso"/>
-    <ref name="att.datable.iso.attribute.notBefore-iso"/>
-    <ref name="att.datable.iso.attribute.notAfter-iso"/>
-    <ref name="att.datable.iso.attribute.from-iso"/>
-    <ref name="att.datable.iso.attribute.to-iso"/>
-  </define>
-  <define name="att.datable.iso.attribute.when-iso">
-    <optional>
-      <attribute name="when-iso">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-        <ref name="data.temporal.iso"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.iso.attribute.notBefore-iso">
-    <optional>
-      <attribute name="notBefore-iso">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-        <ref name="data.temporal.iso"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.iso.attribute.notAfter-iso">
-    <optional>
-      <attribute name="notAfter-iso">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-        <ref name="data.temporal.iso"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.iso.attribute.from-iso">
-    <optional>
-      <attribute name="from-iso">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-        <ref name="data.temporal.iso"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.iso.attribute.to-iso">
-    <optional>
-      <attribute name="to-iso">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-        <ref name="data.temporal.iso"/>
-      </attribute>
-    </optional>
   </define>
   <define name="orgName">
     <element name="orgName">
@@ -3814,7 +3619,6 @@ Empfohlene Werte sind: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:documenta
         </zeroOrMore>
       </interleave>
       <ref name="att.datable.w3c.attributes"/>
-      <ref name="att.sortable.attributes"/>
       <optional>
         <attribute name="type">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</a:documentation>
@@ -4010,32 +3814,22 @@ Empfohlene Werte sind: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:documenta
       </choice>
       <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="person-constraint-personHeuristics1">
         <rule context="tei:person">
-          <sch:report xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="count(./tei:persName[@subtype='birth']) &gt; 1">Mehrere Geburtsnamen gefunden</sch:report>
+          <sch:report xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="./tei:birth/tei:date/(@when, @notBefore, @notAfter) &gt; ./tei:death/tei:date/(@when, @notBefore, @notAfter) and not(./tei:death/tei:date/(@when, @notBefore, @notAfter)[starts-with(., '-')])">Geburtsdatum nach Todesdatum</sch:report>
         </rule>
       </pattern>
       <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="person-constraint-personHeuristics2">
         <rule context="tei:person">
-          <sch:report xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="./tei:birth/tei:date/(@when, @notBefore, @notAfter) &gt; ./tei:death/tei:date/(@when, @notBefore, @notAfter) and not(./tei:death/tei:date/(@when, @notBefore, @notAfter)[starts-with(., '-')])">Geburtsdatum nach Todesdatum</sch:report>
-        </rule>
-      </pattern>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="person-constraint-personHeuristics3">
-        <rule context="tei:person">
           <sch:report xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="./tei:death/tei:date/(@when, @notBefore, @notAfter) &gt; ./tei:birth/tei:date/(@when, @notBefore, @notAfter) and ./tei:death/tei:date/(@when, @notBefore, @notAfter)[starts-with(., '-')]">Geburtsdatum nach Todesdatum</sch:report>
         </rule>
       </pattern>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="person-constraint-personHeuristics4">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="person-constraint-personHeuristics3">
         <rule context="tei:person">
           <sch:report xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test=".//(tei:persName, tei:workName, tei:surname, tei:forename, tei:hi, tei:rs, tei:event, tei:note)[normalize-space(.) = '']">Leeres Element gefunden</sch:report>
         </rule>
       </pattern>
       <ns xmlns="http://purl.oclc.org/dsdl/schematron" prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
       <ns xmlns="http://purl.oclc.org/dsdl/schematron" prefix="rng" uri="http://relaxng.org/ns/structure/1.0"/>
-      <ref name="att.sortable.attributes"/>
-      <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" name="status" a:defaultValue="draft">
-        <a:documentation>beschreibt entweder den aktuellen Status eines Dokuments oder den damals angegebenen Zeitpunkt wenn ein veraltetes Element zugeordnet wurde.
-Beispielwerte sind etwa: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5] draft; 6] embargoed; 7] expired; 8] frozen; 9] galley; 10] proposed; 11] published; 12] recommendation; 13] submitted; 14] unfinished; 15] withdrawn</a:documentation>
-        <ref name="data.enumerated"/>
-      </attribute>
+      <ref name="att.docStatus.attributes"/>
       <attribute name="source">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
         <choice>
@@ -4103,7 +3897,6 @@ Beispielwerte sind etwa: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5
       <ref name="att.global.attributes"/>
       <ref name="att.typed.attributes"/>
       <ref name="att.editLike.attributes"/>
-      <ref name="att.sortable.attributes"/>
       <empty/>
     </element>
   </define>
