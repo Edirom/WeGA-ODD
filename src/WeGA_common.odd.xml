@@ -52,7 +52,7 @@
         <p xml:lang="en">further verbs that are used by TEI: contain, define, document, group, indicate, provide, specify, signify, supply</p>
         </div>-->
     
-    <specGrp xml:id="wega-patterns" xml:lang="en">
+    <specGrp xml:id="wega-patterns">
         <!--xmlns="http://www.tei-c.org/ns/1.0" 
         xmlns:rng="http://relaxng.org/ns/structure/1.0" 
         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" 
@@ -241,7 +241,7 @@
             </content>
         </macroSpec>
     </specGrp>
-    <specGrp xml:id="wega-lists" xml:lang="en">
+    <specGrp xml:id="wega-lists">
         <!-- Don't forget to modify the appropriate section in subversionUsers.xml -->
         <macroSpec ident="staffSignatures.list" mode="add">
             <content>
@@ -299,7 +299,7 @@
             </content>
         </macroSpec>
     </specGrp>
-    <specGrp xml:id="wega-atts" xml:lang="en">
+    <specGrp xml:id="wega-atts">
         <classSpec type="atts" ident="att.datable.w3c" mode="replace">
             <desc versionDate="2013-11-11" xml:lang="en">provides attributes for normalization of elements that contain datable events using the W3C datatypes.</desc>
             <desc versionDate="2013-11-11" xml:lang="de">stellt Attribute für die Normalisierung der Elemente, die datierbare Ereignisse im W3C-Datentypen-Format enthalten.</desc>
@@ -404,13 +404,35 @@
         <classSpec type="atts" ident="att.edition" module="tei" mode="delete"/>
         
     </specGrp>
-    <specGrp xml:id="wega-classes" xml:lang="en">
+    <specGrp xml:id="wega-classes">
         <classSpec ident="model.damagePart" type="model" mode="add">
             <desc versionDate="2013-11-11" xml:lang="en">groups elements which can be used within a damage element.</desc>
             <desc versionDate="2013-11-11" xml:lang="de">gruppiert Elemente, die innerhalb eines damage-Elements verwendet werden können.</desc>
         </classSpec>
     </specGrp>
-    <specGrp xml:id="wega-element-additions" xml:lang="en">
+    
+    <specGrp xml:id="wega-common-constraints">
+        <constraintSpec scheme="isoschematron" ident="whitespaceOnlyContent">
+            <desc versionDate="2014-03-05" xml:lang="en">Warnings for elements with whitespace only.</desc>
+            <desc versionDate="2014-03-05" xml:lang="de">Warnung vor leeren (bzw. whitespace-only) Elementen.</desc>
+            <constraint>
+                <sch:rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi | tei:head | tei:note[not(@type='part')]">
+                    <sch:report test="normalize-space(.) = ''"><sch:name/> has whitespace only content</sch:report>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
+        <constraintSpec scheme="isoschematron" ident="elementStartsWithWithespace">
+            <desc versionDate="2014-03-05" xml:lang="en">warnings for whitespace at the beginning of an element.</desc>
+            <desc versionDate="2014-03-05" xml:lang="de">Warnung vor Leerzeichen am Beginn eines Elements.</desc>
+            <constraint>
+                <sch:rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi">
+                    <sch:report test="matches(.,'^\s')">whitespace at the beginning of element <sch:name/></sch:report>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
+    </specGrp>
+    
+    <specGrp xml:id="wega-element-additions">
         <elementSpec ident="characterName" mode="add">
             <gloss versionDate="2013-11-11" xml:lang="en">characterName</gloss>
             <desc versionDate="2013-11-11" xml:lang="en">name of a role or character in a work.</desc>
@@ -422,23 +444,6 @@
             <content>
                 <rng:ref name="macro.phraseSeq"/>
             </content>
-            <constraintSpec scheme="isoschematron" ident="characterNameStartsWithWithespace">
-                <desc versionDate="2013-11-11" xml:lang="en">warnings for whitespace at the beginning of a <gi>characterName</gi>-element.</desc>
-                <desc versionDate="2013-11-11" xml:lang="de">Warnung für Leerzeichen am Beginn eines <gi>characterName</gi>-Elements.</desc>
-                <constraint>
-                    <sch:report 
-                        test="matches(.,'^\s')"
-                        >whitespace at the beginning of element characterName</sch:report>
-                </constraint>
-            </constraintSpec>
-            <constraintSpec scheme="isoschematron" ident="characternameWithoutTextContent">
-                <gloss>Warnings for characterName-element with whitespace only</gloss>
-                <constraint>
-                    <sch:report xml:lang="de"
-                        test="normalize-space(.) = ''"
-                        >Whitespace only</sch:report>
-                </constraint>
-            </constraintSpec>
             <attList>
                 <!-- wurde bisher noch nicht implementiert.
                 <attDef ident="key" mode="add" usage="mwa">
@@ -469,23 +474,6 @@
             <content>
                 <rng:ref name="macro.phraseSeq"/>
             </content>
-            <constraintSpec scheme="isoschematron" ident="workNameStartsWithWithespace">
-                <desc versionDate="2013-11-11" xml:lang="en">warnings for whitespace at the beginning of a <gi>workName</gi>-element.</desc>
-                <desc versionDate="2013-11-11" xml:lang="de">Warnung für Leerzeichen am Beginn eines <gi>workName</gi>-Elements.</desc>
-                <constraint>
-                    <sch:report
-                        test="matches(.,'^\s')"
-                        >whitespace at the beginning of element workName</sch:report>
-                </constraint>
-            </constraintSpec>
-            <constraintSpec scheme="isoschematron" ident="worknameWithoutTextContent">
-                <gloss>Warnings for workName-element with whitespace only</gloss>
-                <constraint>
-                    <sch:report xml:lang="de"
-                        test="normalize-space(.) = ''"
-                        >Whitespace only</sch:report>
-                </constraint>
-            </constraintSpec>
             <attList>
                 <attDef ident="key" mode="add" usage="mwa">
                     <desc versionDate="2013-11-11" xml:lang="en">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</desc>
@@ -510,7 +498,7 @@
         </elementSpec>
     </specGrp>
     
-    <specGrp xml:id="wega-common" xml:lang="en">
+    <specGrp xml:id="wega-common">
         <elementSpec ident="author" mode="change" module="core">
             <desc versionDate="2013-11-11" xml:lang="en">in a bibliographic reference, contains the name(s) of an author, personal or corporate, of a work; for example in the same form as that provided by a recognized bibliographic name authority.</desc>
             <desc versionDate="2013-11-11" xml:lang="de">enthält den oder die Namen eines persönlichen oder geschäftlichen Verfassers einer Arbeit im Sinne einer bibliografischen Referenz; beispielsweise in der Form von Daten, die von einer anerkannten bibliographischen Instanz bereit gestellt werden.</desc>
@@ -624,15 +612,6 @@
             <classes mode="change">
                 <memberOf key="att.global" mode="delete"/>
             </classes>
-            <constraintSpec scheme="isoschematron" ident="hiStartsWithWithespace">
-                <desc versionDate="2013-11-11" xml:lang="en">warnings for whitespace at the beginning of a <gi>hi</gi>-element.</desc>
-                <desc versionDate="2013-11-11" xml:lang="de">Warnung für Leerzeichen am Beginn eines <gi>hi</gi>-Elements.</desc>
-                <constraint>
-                    <sch:report
-                        test="matches(.,'^\s')"
-                        >whitespace at the beginning of element hi</sch:report>
-                </constraint>
-            </constraintSpec>
             <attList>
                 <attDef ident="rend" mode="add" usage="req">
                     <gloss versionDate="2013-11-11" xml:lang="en">rendition</gloss>
@@ -709,23 +688,6 @@
                 <memberOf key="att.canonical" mode="delete"/>
                 <memberOf key="att.naming" mode="delete"/>
             </classes>
-            <constraintSpec scheme="isoschematron" ident="rsStartsWithWithespace">
-                <desc versionDate="2013-11-11" xml:lang="en">Warnings for whitespace at the beginning of a <gi>rs</gi>-element</desc>
-                <desc versionDate="2013-11-11" xml:lang="de">Warnung für Leerzeichen am Beginn eines <gi>rs</gi>-Elements</desc>
-                <constraint>
-                    <sch:report
-                        test="matches(.,'^\s')"
-                        >whitespace at the beginning of element rs</sch:report>
-                </constraint>
-            </constraintSpec>
-            <constraintSpec scheme="isoschematron" ident="rsWithoutTextContent">
-                <gloss>Warnings for rs-element with whitespace only</gloss>
-                <constraint>
-                    <sch:report xml:lang="de"
-                        test="normalize-space(.) = ''"
-                        >Whitespace only</sch:report>
-                </constraint>
-            </constraintSpec>
             <attList>
                 <attDef ident="key" mode="add" usage="mwa">
                     <desc versionDate="2013-11-11" xml:lang="en">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</desc>
@@ -825,23 +787,6 @@
                 <memberOf key="att.personal" mode="delete"/>
                 <memberOf key="att.typed" mode="delete"/>
             </classes>
-            <constraintSpec scheme="isoschematron" ident="persNameStartsWithWithespace">
-                <desc versionDate="2013-11-11" xml:lang="en">warnings for whitespace at the beginning of a <gi>persName</gi>-element.</desc>
-                <desc versionDate="2013-11-11" xml:lang="de">Warnung für Leerzeichen am Beginn eines <gi>persName</gi>-Elements.</desc>
-                <constraint>
-                    <sch:report
-                        test="not(@type) and matches(.,'^\s')"
-                        >whitespace at the beginning of element persName</sch:report>
-                </constraint>
-            </constraintSpec>
-            <constraintSpec scheme="isoschematron" ident="persnameWithoutTextContent">
-                <gloss>Warnings for persName-element with whitespace only</gloss>
-                <constraint>
-                    <sch:report xml:lang="de"
-                        test="normalize-space(.) = ''"
-                        >Whitespace only</sch:report>
-                </constraint>
-            </constraintSpec>
             <attList>
                 <attDef ident="key" mode="add" usage="mwa">
                     <desc versionDate="2013-11-11" xml:lang="en">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</desc>
@@ -1070,23 +1015,6 @@
                 <memberOf key="att.naming" mode="delete"/>
                 <memberOf key="att.typed" mode="delete"/>
             </classes>
-            <constraintSpec scheme="isoschematron" ident="settlementStartsWithWithespace">
-                <desc versionDate="2013-11-11" xml:lang="en">warnings for whitespace at the beginning of a <gi>settlement</gi>-element.</desc>
-                <desc versionDate="2013-11-11" xml:lang="de">Warnung für Leerzeichen am Beginn eines <gi>settlement</gi>-Elements.</desc>
-                <constraint>
-                    <sch:report xml:lang="de"
-                        test="matches(.,'^\s')"
-                        >whitespace at the beginning of element settlement</sch:report>
-                </constraint>
-            </constraintSpec>
-            <constraintSpec scheme="isoschematron" ident="settlementWithoutTextContent">
-                <gloss>Warnings for settlement-element with whitespace only</gloss>
-                <constraint>
-                    <sch:report xml:lang="de"
-                        test="normalize-space(.) = ''"
-                        >Whitespace only</sch:report>
-                </constraint>
-            </constraintSpec>
             <!--<content>
                 <rng:interleave>
                     <rng:optional>
