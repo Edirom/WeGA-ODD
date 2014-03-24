@@ -51,6 +51,8 @@
                     <specGrpRef target="#wega-lists"/>
                     <specGrpRef target="#wega-element-additions"/>
                     <specGrpRef target="#wega-common"/>
+                    <specGrpRef target="#wega-atts"/>
+                    <specGrpRef target="#wega-common-constraints"/>
 
                     <macroSpec ident="macro.persNameContent">
                         <content>
@@ -244,15 +246,28 @@
                                     </rng:group>-->
                             </rng:choice>
                         </content>
-                        <constraintSpec scheme="isoschematron" ident="personHeuristics">
+                        <constraintSpec scheme="isoschematron" ident="personHeuristics1">
                             <gloss>foo</gloss>
                             <constraint>
-                                <sch:report test="count(./tei:persName[@subtype='birth']) > 1"
-                                    >Mehrere Geburtsnamen gefunden</sch:report>
+                                <!--<sch:report test="count(./tei:persName[@subtype='birth']) > 1"
+                                    >Mehrere Geburtsnamen gefunden</sch:report>-->
                                 <!-- für Lebensdaten nach Christi Geburt -->
                                 <sch:report
                                     test="./tei:birth/tei:date/(@when, @notBefore, @notAfter) > ./tei:death/tei:date/(@when, @notBefore, @notAfter) and not(./tei:death/tei:date/(@when, @notBefore, @notAfter)[starts-with(., '-')])"
                                     >Geburtsdatum nach Todesdatum</sch:report>
+                                <!--<sch:report
+                                    test="./tei:death/tei:date/@notBefore > ./tei:death/tei:date/@notAfter"
+                                    >Datumsangabe notBefore nach notAfter</sch:report>-->
+                                <!--<sch:report
+                                    test=".//(tei:persName, tei:workName, tei:surname, tei:forename, tei:hi, tei:rs, tei:event, tei:note)[normalize-space(.) = '']"
+                                    >Leeres Element gefunden</sch:report>-->
+                            </constraint>
+                        </constraintSpec>
+                        <constraintSpec scheme="isoschematron" ident="personHeuristics2">
+                            <gloss>foo</gloss>
+                            <constraint>
+                                <!--<sch:report test="count(./tei:persName[@subtype='birth']) > 1"
+                                    >Mehrere Geburtsnamen gefunden</sch:report>-->
                                 <!-- für Lebensdaten vor Christi Geburt -->
                                 <sch:report
                                     test="./tei:death/tei:date/(@when, @notBefore, @notAfter) > ./tei:birth/tei:date/(@when, @notBefore, @notAfter) and ./tei:death/tei:date/(@when, @notBefore, @notAfter)[starts-with(., '-')]"
@@ -260,19 +275,9 @@
                                 <!--<sch:report
                                     test="./tei:death/tei:date/@notBefore > ./tei:death/tei:date/@notAfter"
                                     >Datumsangabe notBefore nach notAfter</sch:report>-->
-                                <sch:report
+                                <!--<sch:report
                                     test=".//(tei:persName, tei:workName, tei:surname, tei:forename, tei:hi, tei:rs, tei:event, tei:note)[normalize-space(.) = '']"
-                                    >Leeres Element gefunden</sch:report>
-                            </constraint>
-                        </constraintSpec>
-                        <constraintSpec ident="c1" scheme="isoschematron">
-                            <constraint>
-                                <ns xmlns="http://purl.oclc.org/dsdl/schematron" prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
-                            </constraint>
-                        </constraintSpec>
-                        <constraintSpec ident="c2" scheme="isoschematron">
-                            <constraint>
-                                <ns xmlns="http://purl.oclc.org/dsdl/schematron" prefix="rng" uri="http://relaxng.org/ns/structure/1.0"/>
+                                    >Leeres Element gefunden</sch:report>-->
                             </constraint>
                         </constraintSpec>
                         <attList>
@@ -327,24 +332,55 @@
                                     <rng:ref name="key.person.pattern"/>
                                 </datatype>
                             </attDef>
-                            <attDef ident="status" mode="change" usage="req">
-                                <desc versionDate="2013-11-11" xml:lang="en">describes the status of a document either currently or, when associated with a dated element, at the time indicated.</desc>
-                                <desc versionDate="2013-11-11" xml:lang="de">beschreibt entweder den aktuellen Status eines Dokuments oder den damals angegebenen Zeitpunkt wenn ein veraltetes Element zugeordnet wurde.</desc>   
-                            </attDef>
                             <attDef ident="role" mode="delete"/>
                             <attDef ident="age" mode="delete"/>
                             <attDef ident="sex" mode="delete"/>
                         </attList>
                     </elementSpec>
 
-                    <elementSpec ident="surname" mode="change">
+                    <elementSpec ident="surname" mode="change" module="namesdates">
                         <desc versionDate="2013-11-11" xml:lang="en">contains a family (inherited) name, as opposed to a given, baptismal, or nick name.</desc>
-                        <desc versionDate="2013-11-11" xml:lang="de">enthält eine Familienname (der vereerbt wurde), im Gegensatz zu einem festgelegten, Tauf- oder Spitznamen.</desc>
+                        <desc versionDate="2014-03-12" xml:lang="de">enthält einen (vererbten) Familiennamen, im Gegensatz zu einem festgelegten, Tauf- oder Spitznamen.</desc>
                         <classes mode="change">
                             <memberOf key="att.global" mode="delete"/>
                             <memberOf key="att.personal" mode="delete"/>
                             <memberOf key="att.typed" mode="delete"/>
                         </classes>
+                    </elementSpec>
+                    
+                    <elementSpec ident="forename" mode="change" module="namesdates">
+                        <desc versionDate="2014-03-12" xml:lang="en">contains a forename, given or baptismal name.</desc>
+                        <desc versionDate="2014-03-12" xml:lang="de">enthält einen Vornamen.</desc>
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                            <memberOf key="att.personal" mode="delete"/>
+                        </classes>
+                        <attList>
+                            <attDef ident="full" mode="add">
+                                <valList type="closed">
+                                    <valItem ident="abb">
+                                        <gloss versionDate="2014-03-12" xml:lang="en">abbreviated</gloss>
+                                        <gloss versionDate="2014-03-12" xml:lang="de">abgekürzt</gloss>
+                                        <desc versionDate="2014-03-12" xml:lang="en">the name component is given in an abbreviated form.</desc>
+                                        <desc versionDate="2014-03-12" xml:lang="de">Der Namensbestandteil ist (in irgendeiner Form) abgekürzt.</desc>
+                                    </valItem>
+                                    <valItem ident="init">
+                                        <gloss versionDate="2014-03-12" xml:lang="en">initial letter</gloss>
+                                        <gloss versionDate="2014-03-12" xml:lang="de">Initiale</gloss>
+                                        <desc versionDate="2014-03-12" xml:lang="en">the name component is indicated only by one initial.</desc>
+                                        <desc versionDate="2014-03-12" xml:lang="de">Der Namensbestandteil ist nur durch eine Initiale gekennzeichnet.</desc>
+                                    </valItem>
+                                </valList>
+                            </attDef>
+                            <attDef ident="cert" mode="add">
+                                <valList type="closed">
+                                    <valItem ident="high"/>
+                                    <valItem ident="medium"/>
+                                    <valItem ident="low"/>
+                                </valList>
+                            </attDef>
+                        </attList>
                     </elementSpec>
 
                     <elementSpec ident="addName" mode="change">
@@ -378,8 +414,7 @@
                             </attDef>
                         </attList>
                     </elementSpec>
-
-
+                    
                     <elementSpec ident="sex" mode="change">
                         <desc versionDate="2013-11-11" xml:lang="en">specifies the sex of a person.</desc>
                         <desc versionDate="2013-11-11" xml:lang="de">gibt das Geschlecht einer Person an.</desc>
@@ -439,45 +474,6 @@
                         </content>
                     </elementSpec>
 
-                    <!--<elementSpec ident="date" mode="change">
-                        <classes mode="change">
-                            <memberOf key="att.duration" mode="delete"/>
-                            <memberOf key="att.datable" mode="delete"/>
-                            <memberOf key="att.global" mode="delete"/>
-                            <memberOf key="att.typed" mode="delete"/>
-                            <memberOf key="att.editLike" mode="delete"/>
-                            <memberOf key="att.datable.w3c" mode="add"/>
-                        </classes>
-                        <content>
-                            <rng:interleave>
-                                <rng:optional>
-                                    <rng:text/>
-                                </rng:optional>
-                                <rng:optional>
-                                    <rng:ref name="note"/>
-                                </rng:optional>
-                            </rng:interleave>
-                        </content>
-                        <attList>
-                            <attDef ident="cert" mode="add" usage="rwa">
-                                <datatype>
-                                    <rng:ref name="data.certainty"/>
-                                </datatype>
-                            </attDef>
-                            <attDef ident="type" mode="add" usage="rwa">
-                                <valList type="closed">
-                                    <valItem ident="baptism"/>
-                                    <valItem ident="funeral"/>
-                                </valList>
-                            </attDef>
-                            <attDef ident="calendar" mode="add" usage="mwa">
-                                <valList type="closed">
-                                    <valItem ident="Julian"/>
-                                </valList>
-                            </attDef>
-                        </attList>
-                    </elementSpec>-->
-
                     <elementSpec ident="occupation" mode="change">
                         <desc versionDate="2013-11-11" xml:lang="en">contains an informal description of a person's trade, profession or occupation.</desc>
                         <desc versionDate="2013-11-11" xml:lang="de">enthält eine formlose Beschreibung des Handwerks, des Berufs oder der Beschäftigung einer Person.</desc>
@@ -488,12 +484,6 @@
                             <memberOf key="att.naming" mode="delete"/>
                             <memberOf key="att.datable.w3c" mode="add"/>
                         </classes>
-                        <content>
-                            <!-- prohibit empty content -->
-                            <rng:data type="string">
-                                <rng:param name="minLength">3</rng:param>
-                            </rng:data>
-                        </content>
                         <attList>
                             <attDef ident="code" mode="delete"/>
                             <attDef ident="scheme" mode="delete"/>
@@ -686,7 +676,7 @@
                         <attList>
                             <attDef ident="type" mode="replace" usage="req">
                                 <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
-                                <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</desc>
+                                <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</desc>
                                 <valList type="closed">
                                     <valItem ident="gnd">
                                         <gloss versionDate="2013-11-11" xml:lang="en">'Gemeinsame Normdatei'</gloss>
@@ -704,12 +694,6 @@
                         </attList>
                     </elementSpec>
                     
-                    <!--<elementSpec ident="relationGrp" mode="change">
-                        <classes>
-                            <memberOf key="model.personPart" mode="add"/>
-                        </classes>
-                    </elementSpec>-->
-
                     <!-- <classSpec type="model" ident="model.personPart" module="tei" mode="change"/>-->
                     <elementSpec ident="bibl" mode="delete"/>
                     <elementSpec ident="add" mode="delete"/>
