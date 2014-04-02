@@ -38,48 +38,26 @@
                 <head>WeGA ODD file for musical works</head>
                 <p>Prose descriptions will follow …</p>
             </div>
+            <xi:include href="WeGA_common.odd.xml"/>
+            
             <div>
                 <schemaSpec ident="wegaWorks" ns="http://www.music-encoding.org/ns/mei" start="mei">
                     <moduleRef key="MEI"/>
                     <moduleRef key="MEI.shared"/>
                     <moduleRef key="MEI.header"/>
+                    <!--include="altId availability change changeDesc classCode classification 
+                    event eventList fileDesc hand handList history instrumentation instrVoice instrVoiceGrp meiHead
+                    notesStmt perfMedium physDesc physMedium plateNum provenance pubStmt revisionDesc
+                    seriesStmt source sourceDesc term termList titleStmt useRestrict watermark work workDesc"-->
                     <moduleRef key="MEI.cmn"/>
-                    <moduleRef key="MEI.namesdates"/>
-                    <moduleRef key="MEI.performance"/>
-                    <moduleRef key="MEI.edittrans"/>
+                    <moduleRef key="MEI.namesdates" include="geogName persName"/>
+<!--                    <moduleRef key="MEI.performance"/>-->
+                    <moduleRef key="MEI.edittrans" include=""/> <!-- only for inclusion of att.edit -->
+                    <moduleRef key="MEI.frbr" include="item itemList"/>
                     
-                    <macroSpec ident="key.work.pattern" mode="add">
-                        <content>
-                            <rng:data type="string">
-                                <rng:param name="pattern">A02\d{4}</rng:param>
-                            </rng:data>
-                        </content>
-                    </macroSpec>
+                    <specGrpRef target="#wega-patterns"/>
+                    <specGrpRef target="#wega-lists"/>
                     
-                    <macroSpec ident="key.person.pattern" mode="add">
-                        <content>
-                            <rng:data type="string">
-                                <rng:param name="pattern">A00\d{4}</rng:param>
-                            </rng:data>
-                        </content>
-                    </macroSpec>
-                    
-                    <macroSpec ident="marcRelator.list" mode="add">
-                        <desc><ref target="http://www.loc.gov/marc/relators/relaterm.html">MARC Code List for Relators</ref>, constrained for use in the WeGA.</desc>
-                        <content>
-                            <rng:choice>
-                                <rng:value>aut</rng:value><a:documentation>(Author) Use for a person or organization chiefly responsible for the intellectual or artistic content of a work, usually printed text. This term may also be used when more than one person or body bears such responsibility.</a:documentation>
-                                <rng:value>cmp</rng:value><a:documentation>(Composer) Use for a person or organization who creates a musical work, usually a piece of music in manuscript or printed form.</a:documentation>
-                                <rng:value>dte</rng:value><a:documentation>(Dedicatee) Use for a person or organization to whom a book, manuscript, etc., is dedicated (not the recipient of a gift).</a:documentation>
-                                <rng:value>lbt</rng:value><a:documentation>(Librettist) Use for a person or organization who is a writer of the text of an opera, oratorio, etc.</a:documentation>
-                                <rng:value>edt</rng:value><a:documentation>(Editor) Use for a person or organization who prepares for publication a work not primarily his/her own, such as by elucidating text, adding introductory or other critical matter, or technically directing an editorial staff.</a:documentation>
-                                <rng:value>editorial_assistant</rng:value><a:documentation>(Editorial Assistant) Use for a person who assisted in editing the text/score.</a:documentation>
-                                <rng:value>lyr</rng:value><a:documentation>(Lyricist) Use for a person or organization who is a writer of the text of a song.</a:documentation>
-                                <rng:value>trl</rng:value><a:documentation>(Translator) Use for a person or organization who renders a text from one language into another, or from an older form of a language into the modern form.</a:documentation>
-                            </rng:choice>
-                        </content>
-                    </macroSpec>
-
                     <elementSpec ident="mei" module="MEI.shared" mode="change">
                         <desc versionDate="2013-11-11" xml:lang="en">contains a single MEI-conformant document, consisting of an MEI header and a musical text, either in isolation or as part of an meiCorpus element. </desc>
                         <desc versionDate="2013-11-11" xml:lang="de">enthält ein einzelenes MEI-konformes Dokument, dass aus einem MEI header und muskialischem Text, entweder alleinstehend oder als Teil eines meiCorpus Elements, besteht.</desc>
@@ -138,110 +116,45 @@
                     
                 </schemaSpec>
 
-                <!--<schemaSpec ident="wegaWorks" xml:lang="en" start="TEI">
-                    <moduleRef key="core"/>
-                    <moduleRef key="tei"/>
-                    <moduleRef key="header"/>
-                    <moduleRef key="textstructure"/>
-                    <moduleRef key="namesdates"/>
-                    <moduleRef key="msdescription"/>
-                    <moduleRef key="transcr"/>
-                    <moduleRef key="linking"/>
-                    <moduleRef key="drama"/>
-
-                    <xi:include href="WeGA_common.odd.xml"/>
-                    <specGrpRef target="#myPatterns"/>
-                    
-                    <elementSpec ident="notesStmt" mode="change" module="header">
-                        <gloss versionDate="2013-11-11" xml:lang="en">notes statement</gloss>
-                        <desc versionDate="2013-11-11" xml:lang="en">providing information about a text additional to that recorded in other parts of the bibliographic description.</desc>
-                        <gloss versionDate="2013-11-11" xml:lang="en">Anmerkungsangabe</gloss>
-                        <desc versionDate="2013-11-11" xml:lang="de">Bereitstellung von Informationen zu einem Text, die zusätzlich zu den in anderen Teilen der bibliographischen Beschreibung aufgenommen werden.</desc>
-                        <classes>
-                            <memberOf key="att.global" mode="delete"/>
-                        </classes>
-                        <content>
-                            <rng:element name="note">
-                                <rng:attribute name="type">
-                                    <rng:value>model</rng:value>
-<!-\-                                    <a:documentation>Literarische Vorlage</a:documentation>-\->
-                                </rng:attribute>
-                                <rng:ref name="macro.specialPara"/>
-                            </rng:element>
-                        </content>
-                    </elementSpec>
-                    
-                    <elementSpec ident="text" mode="change" module="textstructure">
-                        <classes mode="change">
-                            <memberOf key="att.declaring" mode="delete"/>
-                            <memberOf key="att.typed" mode="delete"/>
-                            <memberOf key="att.global" mode="delete"/>
-                        </classes>
-                        <content>
-                            <rng:optional>
-                                <rng:ref name="front"/>
-                            </rng:optional>
-                            <rng:ref name="body"/>
-                            <rng:optional>
-                                <rng:ref name="back"/>
-                            </rng:optional>
-                        </content>
-                        <attList>
-                            <attDef ident="type" mode="add" usage="req">
-                                <valList type="closed">
-                                    <valItem ident="play">
-                                        <desc>Schauspiel (Drama, Trauerspiel, Lustspiel, ...)</desc>
-                                    </valItem>
-                                    <valItem ident="novel">
-                                        <desc>Roman, Novelle, ...</desc>
-                                    </valItem>
-                                    <valItem ident="poem">
-                                        <desc>Gedichte</desc>
-                                    </valItem>
-                                    <valItem ident="opera">
-                                        <desc>Alle Bühnenmusiken: Opern, Singspiele, Melodramen, ...</desc>
-                                    </valItem>
-                                    <valItem ident="orchestral">
-                                        <desc>Symphonien, Solo-Konzerte, Konzert-Ouvertüren, ...</desc>
-                                    </valItem>
-                                    <valItem ident="chamber">
-                                        <desc>Kammermusik, Harmoniemusik</desc>
-                                    </valItem>
-                                    <valItem ident="solo">
-                                        <desc>Instrumental-Solo</desc>
-                                    </valItem>
-                                    <valItem ident="vocal">
-                                        <desc>Vokalmusik einschließlich Begleitung durch ein Tasteninstrument oder Generalbass: Lieder, Gesänge, Chöre, Motetten, ...</desc>
-                                    </valItem>
-                                    <valItem ident="oratorio">
-                                        <desc>Geistliches und weltliches Oratorium</desc>
-                                    </valItem>
-                                    <valItem ident="cantata">
-                                        <desc>Kantate als Oberbegriff: geistlich und weltliche Kantaten, Huldigungs- und Festmusiken, Hymnen</desc>
-                                    </valItem>
-                                    <valItem ident="liturgical">
-                                        <desc>Messe, Requiem, Te Deum, Miserere, Antiphon, Vesper, ...</desc>
-                                    </valItem>
-                                </valList>
-                            </attDef>
-                        </attList>
-                    </elementSpec>
-                    
-                    <elementSpec ident="body" mode="change" module="textstructure">
-                        <classes mode="change">
-                            <memberOf key="att.declaring" mode="delete"/>
-                            <memberOf key="att.global" mode="delete"/>
-                        </classes>
-                        <content>
-                            <rng:choice>
-                                <rng:oneOrMore>
-                                    <rng:ref name="div"/>
-                                </rng:oneOrMore>
-                                <rng:ref name="p"/>
-                            </rng:choice>
-                        </content>
-                    </elementSpec>
-                </schemaSpec>-->
+                <!--
+                <attDef ident="type" mode="add" usage="req">
+                    <valList type="closed">
+                        <valItem ident="play">
+                            <desc>Schauspiel (Drama, Trauerspiel, Lustspiel, ...)</desc>
+                        </valItem>
+                        <valItem ident="novel">
+                            <desc>Roman, Novelle, ...</desc>
+                        </valItem>
+                        <valItem ident="poem">
+                            <desc>Gedichte</desc>
+                        </valItem>
+                        <valItem ident="opera">
+                            <desc>Alle Bühnenmusiken: Opern, Singspiele, Melodramen, ...</desc>
+                        </valItem>
+                        <valItem ident="orchestral">
+                            <desc>Symphonien, Solo-Konzerte, Konzert-Ouvertüren, ...</desc>
+                        </valItem>
+                        <valItem ident="chamber">
+                            <desc>Kammermusik, Harmoniemusik</desc>
+                        </valItem>
+                        <valItem ident="solo">
+                            <desc>Instrumental-Solo</desc>
+                        </valItem>
+                        <valItem ident="vocal">
+                            <desc>Vokalmusik einschließlich Begleitung durch ein Tasteninstrument oder Generalbass: Lieder, Gesänge, Chöre, Motetten, ...</desc>
+                        </valItem>
+                        <valItem ident="oratorio">
+                            <desc>Geistliches und weltliches Oratorium</desc>
+                        </valItem>
+                        <valItem ident="cantata">
+                            <desc>Kantate als Oberbegriff: geistlich und weltliche Kantaten, Huldigungs- und Festmusiken, Hymnen</desc>
+                        </valItem>
+                        <valItem ident="liturgical">
+                            <desc>Messe, Requiem, Te Deum, Miserere, Antiphon, Vesper, ...</desc>
+                        </valItem>
+                    </valList>
+                </attDef>
+                -->
             </div>
         </body>
     </text>
