@@ -3,6 +3,7 @@
 # add a file local.build.properties to current directory and specify
 # ROMA = Path to local roma2.sh script (https://github.com/TEIC/Roma)
 # TEI_SOURCE = Path to local p5subset.xml (get the latest release from http://sourceforge.net/projects/tei/files/TEI-P5-all/)
+# MEI_SOURCE = Path to local mei-source.xml (get the latest release from https://code.google.com/p/music-encoding/downloads/list)
 # TEI_XSL = Path to local installation of the TEI stylesheets (https://github.com/TEIC/Stylesheets)
 include local.build.properties
 
@@ -44,6 +45,9 @@ writings:
 	
 places:
 	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} src/WeGA_places.odd.xml ${TARGET_DIR}
+	
+works:
+	${ROMA} --xsl=${TEI_XSL} --localsource=${MEI_SOURCE} ${ROMAOPTS} src/WeGA_works.odd.xml ${TARGET_DIR}
 
 clean:
 	echo "cleaning up"
