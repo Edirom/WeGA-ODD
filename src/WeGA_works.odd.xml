@@ -41,22 +41,29 @@
             <xi:include href="WeGA_common.odd.xml"/>
             
             <div>
-                <schemaSpec ident="wegaWorks" ns="http://www.music-encoding.org/ns/mei" start="mei">
+                <schemaSpec ident="wegaWorks" ns="http://www.music-encoding.org/ns/mei" start="mei source">
                     <moduleRef key="MEI"/>
                     <moduleRef key="MEI.shared"/>
-                    <moduleRef key="MEI.header"/>
-                    <!--include="altId availability change changeDesc classCode classification 
-                    event eventList fileDesc hand handList history instrumentation instrVoice instrVoiceGrp meiHead
-                    notesStmt perfMedium physDesc physMedium plateNum provenance pubStmt revisionDesc
-                    seriesStmt source sourceDesc term termList titleStmt useRestrict watermark work workDesc"-->
+                    <moduleRef key="MEI.header" include="altId availability change changeDesc classCode classification 
+                        event eventList fileDesc hand handList history instrumentation instrVoice instrVoiceGrp meiHead
+                        notesStmt perfMedium physDesc physMedium plateNum provenance pubStmt revisionDesc
+                        seriesStmt source sourceDesc term termList titleStmt useRestrict watermark work workDesc"/>
                     <moduleRef key="MEI.cmn"/>
-                    <moduleRef key="MEI.namesdates" include="geogName persName"/>
+                    <moduleRef key="MEI.namesdates" include="corpName geogName persName"/>
 <!--                    <moduleRef key="MEI.performance"/>-->
                     <moduleRef key="MEI.edittrans" include=""/> <!-- only for inclusion of att.edit -->
                     <moduleRef key="MEI.frbr" include="item itemList"/>
                     
                     <specGrpRef target="#wega-patterns"/>
                     <specGrpRef target="#wega-lists"/>
+                    
+                    <macroSpec ident="macro.availabilityPart" mode="change">
+                        <content>
+                            <rng:optional>
+                                <rng:ref name="useRestrict"/>
+                            </rng:optional>
+                        </content>
+                    </macroSpec>
                     
                     <elementSpec ident="mei" module="MEI.shared" mode="change">
                         <desc versionDate="2013-11-11" xml:lang="en">contains a single MEI-conformant document, consisting of an MEI header and a musical text, either in isolation or as part of an meiCorpus element. </desc>
