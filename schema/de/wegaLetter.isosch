@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
+   <title>ISO Schematron rules</title>
+   <!-- This file generated 2014-03-05T20:14:27.421+01:00 by 'extract-isosch.xsl'. -->
+
+<!-- ********************* -->
+<!-- namespaces, declared: -->
+<!-- ********************* -->
+<ns prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
+   <ns prefix="xs" uri="http://www.w3.org/2001/XMLSchema"/>
+   <ns prefix="rng" uri="http://relaxng.org/ns/structure/1.0"/>
+
+   <!-- ********************* -->
+<!-- namespaces, implicit: -->
+<!-- ********************* -->
+<ns prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
+
+   <!-- ************ -->
+<!-- constraints: -->
+<!-- ************ -->
+<pattern id="wegaLetter-att.datable-calendar-constraint-calendar">
+          <rule context="tei:*[@calendar]">
+            <assert test="string-length(.) gt 0">
+@calendar indicates the system or calendar to which the date represented by the content of this element
+belongs, but this <name/> element has no textual content.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaLetter-att.typed-constraint-subtypeTyped">
+      <rule context="*[@subtype]">
+        <assert test="@type">The <name/> element should not be categorized in detail with @subtype
+ unless also categorized in general with @type</assert>
+      </rule>
+    </pattern>
+   <pattern id="wegaLetter-att.pointing-targetLang-constraint-targetLang">
+          <rule context="tei:*[not(self::tei:schemaSpec)][@targetLang]">
+            <assert test="count(@target)">@targetLang can only be used if @target is specified.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaLetter-att.spanning-spanTo-constraint-spanTo-2">
+          <rule context="tei:*[@spanTo]">
+            <assert test="id(substring(@spanTo,2)) and following::*[@xml:id=substring(current()/@spanTo,2)]">
+The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the current element <name/>
+                  </assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaLetter-choice-constraint-multipleUnclear">
+      <rule context="tei:choice">
+                    <report test="(count(./tei:unclear) &gt; 1) and (count(./tei:unclear[@cert='high']) != 1)">When working with several unclear, accurately one has to marked with a cert="high".</report>
+                </rule>
+   </pattern>
+   <pattern id="wegaLetter-date-constraint-dateHeuristics1">
+      <rule context="tei:date">
+                    <report test="(@notBefore gt @notAfter) and not(starts-with(@notBefore, '-'))">value of notBefore greater than notAfter</report>
+                </rule>
+   </pattern>
+   <pattern id="wegaLetter-date-constraint-dateHeuristics2">
+      <rule context="tei:date">
+                    <report test="(@notBefore lt @notAfter) and starts-with(@notBefore, '-')">value of notBefore smaller than notAfter</report>
+                </rule>
+   </pattern>
+   <pattern id="wegaLetter-date-constraint-dateHeuristics3">
+      <rule context="tei:date">
+                    <report test="(@from or @to) and (@when or @notAfter or @notBefore)">cooccurence of date and duration attributes</report>
+                </rule>
+   </pattern>
+   <pattern id="wegaLetter-date-constraint-dateHeuristics4">
+      <rule context="tei:date">
+                    <report test="@when and (@notAfter or @notBefore)">cooccurence of exact and uncertain date attributes</report>
+                </rule>
+   </pattern>
+   <pattern id="wegaLetter-date-constraint-dateHeuristics5">
+      <rule context="tei:date">
+                    <assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</assert>
+                </rule>
+   </pattern>
+   <pattern id="wegaLetter-ptr-constraint-ptrAtts">
+      <rule context="tei:ptr">
+         <report test="@target and @cRef">Only one of the
+attributes @target and @cRef may be supplied on <name/>.</report>
+      </rule>
+   </pattern>
+   <pattern id="wegaLetter-ref-constraint-refAtts">
+      <rule context="tei:ref">
+         <report test="@target and @cRef">Only one of the
+	attributes @target' and @cRef' may be supplied on <name/>
+         </report>
+      </rule>
+   </pattern>
+   <pattern id="wegaLetter-title-constraint-duplicate-title">
+      <rule context="tei:title">
+                    <report test="@level = following-sibling::tei:title[not(@type)]/@level">Following title without @type</report>
+                </rule>
+   </pattern>
+   <pattern id="wegaLetter-imprint-constraint-duplicate-biblScope-type">
+      <rule context="tei:imprint">
+                    <report test="count(distinct-values(tei:biblScope/@type)) ne count(tei:biblScope/@type)">duplicate value for biblScope</report>
+                </rule>
+   </pattern>
+   <pattern id="wegaLetter-relatedItem-constraint-targetorcontent1">
+      <rule context="tei:relatedItem">
+         <report test="@target and count( child::* ) &gt; 0">
+If the @target attribute on <name/> is used, the
+relatedItem element must be empty</report>
+         <assert test="@target or child::*">A relatedItem element should have either a 'target' attribute
+        or a child element to indicate the related bibliographic item</assert>
+      </rule>
+   </pattern>
+   <pattern id="wegaLetter-lg-constraint-atleast1oflggapl">
+      <rule context="tei:lg">
+         <assert test="count(descendant::tei:lg|descendant::tei:l|descendant::tei:gap) &gt; 0">An lg element
+        must contain at least one child l, lg or gap element.</assert>
+      </rule>
+   </pattern>
+   <pattern id="wegaLetter-quotation-constraint-quotationContents">
+      <rule context="tei:quotation">
+         <report test="not(@marks) and not (tei:p)">
+On <name/>, either the @marks attribute should be used, or a paragraph of description provided</report>
+      </rule>
+   </pattern>
+   <pattern id="wegaLetter-addSpan-constraint-spanTo">
+      <rule context="tei:addSpan">
+         <assert test="@spanTo">The spanTo= attribute of <name/> is required.</assert>
+      </rule>
+   </pattern>
+   <pattern id="wegaLetter-addSpan-spanTo-constraint-spanTo-7">
+                            <rule context="tei:*[@spanTo]">
+                                <assert test="id(substring(@spanTo,2)) and following::*[@xml:id=substring(current()/@spanTo,2)]">
+                                    The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the current element <name/>
+                                </assert>
+                            </rule>
+                        </pattern>
+   <pattern id="wegaLetter-damageSpan-constraint-spanTo">
+      <rule context="tei:damageSpan">
+         <assert test="@spanTo">
+The @spanTo attribute of <name/> is required.</assert>
+      </rule>
+   </pattern>
+   <pattern id="wegaLetter-delSpan-constraint-spanTo">
+      <rule context="tei:delSpan">
+         <assert test="@spanTo">The spanTo= attribute of <name/> is required.</assert>
+      </rule>
+   </pattern>
+   <pattern id="wegaLetter-subst-constraint-substContents1">
+      <rule context="tei:subst">
+         <assert test="child::tei:add and child::tei:del">
+            <name/> must have at least one child add and at least one child del</assert>
+      </rule>
+   </pattern>
+   <!--<pattern id="wegaLetter-msIdentifier-constraint-msId_minimal">
+      <rule context="tei:msIdentifier">
+         <report test="not(parent::tei:msPart) and       (local-name(*[1])='idno' or       local-name(*[1])='altIdentifier' or       normalize-space(.)='')">An msIdentifier must contain either a repository or location of some type, or a manuscript name</report>
+      </rule>
+   </pattern>-->
+   <pattern id="wegaLetter-constraint-whitespaceOnlyContent">
+                <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi | tei:head | tei:note[not(@type='part')]">
+                    <report test="normalize-space(.) = ''">
+            <name/> has whitespace only content</report>
+                </rule>
+            </pattern>
+   <pattern id="wegaLetter-constraint-elementStartsWithWithespace">
+                <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi">
+                    <report test="matches(.,'^\s')">whitespace at the beginning of element <name/>
+         </report>
+                </rule>
+            </pattern>
+
+   <!-- *********** -->
+<!-- deprecated: -->
+<!-- *********** -->
+<pattern>
+      <rule context="tei:quotation">
+         <report test="@form" role="nonfatal">WARNING: use of deprecated attribute — @form of the quotation element will be removed from the TEI on 2014-04-28.
+                </report>
+      </rule>
+   </pattern>
+</schema>

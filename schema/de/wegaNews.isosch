@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
+   <title>ISO Schematron rules</title>
+   <!-- This file generated 2014-03-05T20:15:34.871+01:00 by 'extract-isosch.xsl'. -->
+
+<!-- ********************* -->
+<!-- namespaces, declared: -->
+<!-- ********************* -->
+<ns prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
+   <ns prefix="xs" uri="http://www.w3.org/2001/XMLSchema"/>
+   <ns prefix="rng" uri="http://relaxng.org/ns/structure/1.0"/>
+
+   <!-- ********************* -->
+<!-- namespaces, implicit: -->
+<!-- ********************* -->
+<ns prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
+
+   <!-- ************ -->
+<!-- constraints: -->
+<!-- ************ -->
+<pattern id="wegaNews-att.datable-calendar-constraint-calendar">
+          <rule context="tei:*[@calendar]">
+            <assert test="string-length(.) gt 0">
+@calendar indicates the system or calendar to which the date represented by the content of this element
+belongs, but this <name/> element has no textual content.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaNews-att.typed-constraint-subtypeTyped">
+      <rule context="*[@subtype]">
+        <assert test="@type">The <name/> element should not be categorized in detail with @subtype
+ unless also categorized in general with @type</assert>
+      </rule>
+    </pattern>
+   <pattern id="wegaNews-att.pointing-targetLang-constraint-targetLang">
+          <rule context="tei:*[not(self::tei:schemaSpec)][@targetLang]">
+            <assert test="count(@target)">@targetLang can only be used if @target is specified.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaNews-att.spanning-spanTo-constraint-spanTo-2">
+          <rule context="tei:*[@spanTo]">
+            <assert test="id(substring(@spanTo,2)) and following::*[@xml:id=substring(current()/@spanTo,2)]">
+The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the current element <name/>
+                  </assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaNews-choice-constraint-multipleUnclear">
+      <rule context="tei:choice">
+                    <report test="(count(./tei:unclear) &gt; 1) and (count(./tei:unclear[@cert='high']) != 1)">When working with several unclear, accurately one has to marked with a cert="high".</report>
+                </rule>
+   </pattern>
+   <pattern id="wegaNews-date-constraint-dateHeuristics1">
+      <rule context="tei:date">
+                    <report test="(@notBefore gt @notAfter) and not(starts-with(@notBefore, '-'))">value of notBefore greater than notAfter</report>
+                </rule>
+   </pattern>
+   <pattern id="wegaNews-date-constraint-dateHeuristics2">
+      <rule context="tei:date">
+                    <report test="(@notBefore lt @notAfter) and starts-with(@notBefore, '-')">value of notBefore smaller than notAfter</report>
+                </rule>
+   </pattern>
+   <pattern id="wegaNews-date-constraint-dateHeuristics3">
+      <rule context="tei:date">
+                    <report test="(@from or @to) and (@when or @notAfter or @notBefore)">cooccurence of date and duration attributes</report>
+                </rule>
+   </pattern>
+   <pattern id="wegaNews-date-constraint-dateHeuristics4">
+      <rule context="tei:date">
+                    <report test="@when and (@notAfter or @notBefore)">cooccurence of exact and uncertain date attributes</report>
+                </rule>
+   </pattern>
+   <pattern id="wegaNews-date-constraint-dateHeuristics5">
+      <rule context="tei:date">
+                    <assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</assert>
+                </rule>
+   </pattern>
+   <pattern id="wegaNews-ptr-constraint-ptrAtts">
+      <rule context="tei:ptr">
+         <report test="@target and @cRef">Only one of the
+attributes @target and @cRef may be supplied on <name/>.</report>
+      </rule>
+   </pattern>
+   <pattern id="wegaNews-ref-constraint-refAtts">
+      <rule context="tei:ref">
+         <report test="@target and @cRef">Only one of the
+	attributes @target' and @cRef' may be supplied on <name/>
+         </report>
+      </rule>
+   </pattern>
+   <pattern id="wegaNews-title-constraint-duplicate-title">
+      <rule context="tei:title">
+                    <report test="@level = following-sibling::tei:title[not(@type)]/@level">Following title without @type</report>
+                </rule>
+   </pattern>
+   <pattern id="wegaNews-constraint-whitespaceOnlyContent">
+                <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi | tei:head | tei:note[not(@type='part')]">
+                    <report test="normalize-space(.) = ''">
+            <name/> has whitespace only content</report>
+                </rule>
+            </pattern>
+   <pattern id="wegaNews-constraint-elementStartsWithWithespace">
+                <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi">
+                    <report test="matches(.,'^\s')">whitespace at the beginning of element <name/>
+         </report>
+                </rule>
+            </pattern>
+</schema>

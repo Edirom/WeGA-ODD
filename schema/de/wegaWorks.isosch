@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
+   <title>ISO Schematron rules</title>
+   <!-- This file generated 2014-04-03T13:22:07.164+02:00 by 'extract-isosch.xsl'. -->
+
+<!-- ********************* -->
+<!-- namespaces, declared: -->
+<!-- ********************* -->
+<ns prefix="mei" uri="http://www.music-encoding.org/ns/mei"/>
+
+   <!-- ********************* -->
+<!-- namespaces, implicit: -->
+<!-- ********************* -->
+<ns prefix="mei" uri="http://www.music-encoding.org/ns/mei"/>
+
+   <!-- ************ -->
+<!-- constraints: -->
+<!-- ************ -->
+<pattern id="wegaWorks-att.augmentdots-dots-constraint-dots_attribute_requires_dur">
+              <rule context="mei:*[@dots]">
+                <assert test="@dur">An element with a dots attribute must also have a dur
+                  attribute.</assert>
+              </rule>
+            </pattern>
+   <pattern id="wegaWorks-att.duration.additive-dur-constraint-ignore_dots_attribute">
+              <rule context="mei:*[contains(@dur, '.')]">
+                <assert test="not(@dots)">An element with a dur attribute that contains dotted
+                  values must not have a dots attribute.</assert>
+              </rule>
+            </pattern>
+   <pattern id="wegaWorks-att.typed-subtype-constraint-When_subtype">
+              <rule context="mei:*[@subtype]">
+                <assert test="@type">An element with a subtype attribute must have a type
+                  attribute.</assert>
+              </rule>
+            </pattern>
+   <pattern id="wegaWorks-barLine-constraint-Check_barLinetaktplace">
+          <rule context="mei:barLine[@taktplace]">
+            <let name="staff" value="ancestor::mei:staff/@n"/>
+            <let name="staffpos"
+              value="count(ancestor::mei:staff/preceding-sibling::mei:staff)               + 1"/>
+            <assert test="number(@taktplace) &lt;= number(2 *               preceding::mei:staffDef[@n=$staff and @lines][1]/@lines)"/>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-clef-constraint-Check_clef_position_clef">
+          <rule context="mei:clef[ancestor::mei:staffDef[not(@lines)]]">
+            <let name="thisstaff" value="ancestor::mei:staffDef/@n"/>
+            <assert test="number(@line) &lt;=               number(preceding::mei:staffDef[@n=$thisstaff and @lines][1]/@lines)">The clef position
+              must be less than or equal to the number of lines on the staff.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-dir-constraint-Start-type_attributes_required_on_some_control_events">
+          <rule context="mei:dir[not(ancestor::mei:syllable)]">
+            <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-dynam-constraint-Start-type_attributes_required_on_some_control_events">
+          <rule context="mei:dynam">
+            <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-layer-constraint-Check_layern">
+          <rule context="mei:layer[@n]">
+            <assert test="number(@n) = round(number(@n))">The n attribute must be a single
+              integer.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-layerDef-constraint-Check_layerDefn">
+          <rule context="mei:layerDef">
+            <assert test="number(@n) = round(number(@n))">An n attribute with a single integer
+              value must be present.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-mei-constraint-Check_staff">
+          <rule context="mei:*[@staff]">
+            <assert test="every $i in tokenize(@staff, '\s+') satisfies               $i=//mei:staffDef/@n">The values in @staff must correspond to @n attribute of a
+              staffDef element.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-phrase-constraint-Start-_and_end-type_attributes_required_on_some_control_events">
+          <rule context="mei:phrase">
+            <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</assert>
+            <assert test="@dur or @dur.ges or @endid or @tstamp2">Must have one of the
+              attributes: dur, dur.ges, endid, or tstamp2</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-rest-constraint-Check_restline">
+          <rule context="mei:rest[@line]">
+            <let name="thisstaff" value="ancestor::mei:staff/@n"/>
+            <assert test="number(@line) &lt;=               number(preceding::mei:staffDef[@n=$thisstaff and @lines][1]/@lines)">The value of
+              @line must be less than or equal to the number of lines on the staff.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-section-constraint-Check_sectionexpansion">
+          <rule context="mei:section[mei:expansion]">
+            <assert test="descendant::mei:section|descendant::mei:ending|descendant::mei:rdg">Must have descendant section, ending, or rdg elements that can be pointed
+              to.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-staff-constraint-Check_staffn">
+          <rule context="mei:staff[@n]">
+            <assert test="number(@n) = round(number(@n))">The n attribute must be a single
+              integer.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-staffDef-constraint-Check_staffDefn">
+          <rule context="mei:staffDef">
+            <let name="thisstaff" value="@n"/>
+            <assert test="@n">A staffDef must have an n attribute.</assert>
+            <assert test="@lines or preceding::mei:staffDef[@n=$thisstaff and @lines]">The first
+              occurrence of a staff must declare the number of staff lines.</assert>
+            <assert test="count(mei:clef) + count(mei:clefGrp) &lt; 2">Only one clef or clefGrp
+              is permitted.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-staffDef-constraint-Check_ancestor_staff">
+          <rule context="mei:staffDef[ancestor::mei:staff]">
+            <let name="thisstaff" value="@n"/>
+            <assert test="ancestor::mei:staff/@n eq $thisstaff">If a staffDef appears in a
+              staff, it must bear the same @n than this staff.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-staffDef-constraint-Check_clef_position_staffDef">
+          <rule context="mei:staffDef[@clef.line and @lines]">
+            <assert test="number(@clef.line) &lt;= number(@lines)">The clef position must be
+              less than or equal to the number of lines on the staff.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-staffDef-constraint-Check_clef_position_staffDef_nolines">
+          <rule context="mei:staffDef[@clef.line and not(@lines)]">
+            <let name="thisstaff" value="@n"/>
+            <let name="stafflines"
+              value="preceding::mei:staffDef[@n=$thisstaff and               @lines][1]/@lines"/>
+            <assert test="number(@clef.line) &lt;= number($stafflines)">The clef position must
+              be less than or equal to the number of lines on the staff.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-staffDef-constraint-Check_tab_strings">
+          <rule context="mei:staffDef[@tab.strings and @lines]">
+            <let name="countTokens"
+              value="count(tokenize(normalize-space(@tab.strings),               '\s'))"/>
+            <assert test="$countTokens = 1 or $countTokens = @lines">The tab.strings attribute
+              must have the same number of values as there are staff lines.</assert>
+          </rule>
+        </pattern>
+          <pattern>
+            <rule context="mei:staffDef[@lines.color and @lines]">
+              <let name="countTokens"
+              value="count(tokenize(normalize-space(@lines.color),                 '\s'))"/>
+              <assert test="$countTokens = 1 or $countTokens = @lines">The lines.color attribute
+                must have either 1) a single value or 2) the same number of values as there are
+                staff lines.</assert>
+            </rule>
+            <rule context="mei:staffDef[@lines.color and not(@lines)]">
+              <let name="countTokens"
+              value="count(tokenize(normalize-space(@lines.color),                 '\s'))"/>
+              <let name="thisStaff" value="@n"/>
+              <assert test="$countTokens = 1 or $countTokens =                 preceding::mei:staffDef[@n=$thisStaff and @lines][1]/@lines">The lines.color
+                attribute must have either 1) a single value or 2) the same number of values as
+                there are staff lines.</assert>
+            </rule>
+          </pattern>
+        
+          <pattern>
+            <rule context="mei:staffDef[@ppq][ancestor::mei:scoreDef[@ppq]]">
+              <let name="staffPPQ" value="@ppq"/>
+              <let name="scorePPQ" value="ancestor::mei:scoreDef[@ppq][1]/@ppq"/>
+              <assert test="($scorePPQ mod $staffPPQ) = 0">The value of ppq must be a factor of
+                the value of ppq on an ancestor scoreDef.</assert>
+            </rule>
+          </pattern>
+        
+          <pattern>
+            <rule context="mei:staffDef[@ppq][preceding::mei:scoreDef[@ppq]]">
+              <let name="staffPPQ" value="@ppq"/>
+              <let name="scorePPQ" value="preceding::mei:scoreDef[@ppq][1]/@ppq"/>
+              <assert test="($scorePPQ mod $staffPPQ) = 0">The value of ppq must be a factor of
+                the value of ppq on a preceding scoreDef.</assert>
+            </rule>
+          </pattern>
+        <pattern id="wegaWorks-staffGrp-constraint-Check_staffGrp_unique_staff_n_values">
+          <rule context="mei:staffGrp">
+            <let name="countstaves" value="count(descendant::mei:staffDef)"/>
+            <let name="countuniqstaves"
+              value="count(distinct-values(descendant::mei:staffDef/@n))"/>
+            <assert test="$countstaves eq $countuniqstaves">Each staffDef must have a unique
+              value for the n attribute.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-tempo-constraint-tempo_in_header_disallow_most_attrs">
+          <rule context="mei:tempo[ancestor::mei:meiHead]">
+            <assert test="not(@*[name() != 'label' and name() != 'n' and name() !=               'xml:base' and name() != 'xml:id' and name() != 'xml:lang'])">Only label, n, xml:base,
+              xml:id, and xml:lang attributes allowed when this element occurs in the
+              header.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-tempo-constraint-Start-type_attributes_required_on_some_control_events">
+          <rule context="mei:tempo[not(ancestor::mei:syllable) and not(ancestor::mei:meiHead)]">
+            <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-change-constraint-change_requirements">
+          <rule context="mei:change">
+            <assert test="@isodate or mei:date">The date of the change must be recorded in an
+              isodate attribute or date element.</assert>
+            <assert test="@resp or mei:respStmt">The person responsible for the change must be
+              recorded in a resp attribute or respStmt element.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-beam-constraint-When_not_copyof_beam_content">
+          <rule context="mei:beam[not(@copyof)]">
+            <assert test="count(descendant::*[local-name()='note' or local-name()='rest' or               local-name()='chord' or local-name()='space']) &gt; 1">A beam without a copyof
+              attribute must have at least 2 note, rest, chord, or space descendants.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-beamSpan-constraint-Start-_and_end-type_attributes_required_on_some_control_events">
+          <rule context="mei:beamSpan">
+            <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</assert>
+            <assert test="@dur or @dur.ges or @endid or @tstamp2">Must have one of the
+              attributes: dur, dur.ges, endid, or tstamp2</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-bend-constraint-Start-_and_end-type_attributes_required_on_some_control_events">
+          <rule context="mei:bend">
+            <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</assert>
+            <assert test="@dur or @dur.ges or @endid or @tstamp2">Must have one of the
+              attributes: dur, dur.ges, endid, or tstamp2</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-breath-constraint-Start-type_attributes_required_on_some_control_events">
+          <rule context="mei:breath">
+            <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-fermata-constraint-Start-type_attributes_required_on_some_control_events">
+          <rule context="mei:fermata">
+            <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-gliss-constraint-Start-_and_end-type_attributes_required_on_some_control_events">
+          <rule context="mei:gliss">
+            <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</assert>
+            <assert test="@dur or @dur.ges or @endid or @tstamp2">Must have one of the
+              attributes: dur, dur.ges, endid, or tstamp2</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-hairpin-constraint-Start-_and_end-type_attributes_required_on_some_control_events">
+          <rule context="mei:hairpin">
+            <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</assert>
+            <assert test="@dur or @dur.ges or @endid or @tstamp2">Must have one of the
+              attributes: dur, dur.ges, endid, or tstamp2</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-harpPedal-constraint-Start-type_attributes_required_on_some_control_events">
+          <rule context="mei:harpPedal">
+            <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-octave-constraint-Start-_and_end-type_attributes_required_on_some_control_events">
+          <rule context="mei:octave">
+            <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</assert>
+            <assert test="@dur or @dur.ges or @endid or @tstamp2">Must have one of the
+              attributes: dur, dur.ges, endid, or tstamp2</assert>
+          </rule>
+        </pattern>
+          <pattern>
+            <rule context="mei:measure/mei:ossia">
+              <assert test="count(mei:*) = count(mei:staff)">Ossia may contain only staff
+                elements in this context.</assert>
+            </rule>
+            <rule context="mei:staff/mei:ossia">
+              <assert test="count(mei:*) = count(mei:layer)">Ossia may contain only layer
+                elements in this context.</assert>
+            </rule>
+          </pattern>
+        <pattern id="wegaWorks-pedal-constraint-Start-type_attributes_required_on_some_control_events">
+          <rule context="mei:pedal">
+            <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-slur-constraint-Start-_and_end-type_attributes_required_on_some_control_events">
+          <rule context="mei:slur">
+            <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</assert>
+            <assert test="@dur or @dur.ges or @endid or @tstamp2">Must have one of the
+              attributes: dur, dur.ges, endid, or tstamp2</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-tie-constraint-Start-_and_end-type_attributes_required_on_some_control_events">
+          <rule context="mei:tie">
+            <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</assert>
+            <assert test="@dur or @dur.ges or @endid or @tstamp2">Must have one of the
+              attributes: dur, dur.ges, endid, or tstamp2</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-tuplet-constraint-When_not_copyof_tuplet_content">
+          <rule context="mei:tuplet[not(@copyof)]">
+            <assert test="count(descendant::*[local-name()='note' or local-name()='rest' or               local-name()='chord']) &gt; 1">A tuplet without a copyof attribute must have at least
+              2 note, rest, or chord descendants.</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-tupletSpan-constraint-Start-_and_end-type_attributes_required_on_some_control_events">
+          <rule context="mei:tupletSpan">
+            <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</assert>
+            <assert test="@dur or @dur.ges or @endid or @tstamp2">Must have one of the
+              attributes: dur, dur.ges, endid, or tstamp2</assert>
+          </rule>
+        </pattern>
+   <pattern id="wegaWorks-componentGrp-constraint-checkComponentGrp">
+          <rule context="mei:componentGrp">
+            <assert test="every $i in ./child::mei:* satisfies $i/local-name() eq               ./parent::mei:*/local-name()"> Only child elements of the same name as the parent of
+              the componentGrp-element are allowed. </assert>
+          </rule>
+        </pattern>
+</schema>
