@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2014-04-02T23:31:37Z. 
+Schema generated from ODD source 2014-04-03T13:22:03Z. 
 Edition: 2013 Release
 Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -6571,6 +6571,11 @@ Empfohlene Werte sind: 1] cm; 2] mm; 3] in; 4] issue; 5] page; 6] px; 7] pt; 8] 
       <ref name="tempo"/>
     </choice>
   </define>
+  <define name="model.workLike">
+    <choice>
+      <ref name="work"/>
+    </choice>
+  </define>
   <define name="altId">
     <element name="altId">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(alternative identifier) – May contain a bibliographic identifier that does not fit within the meiHead element's id attribute, for example because the id does not fit the definition of an XML id or because multiple identifiers are needed. </a:documentation>
@@ -7021,6 +7026,9 @@ Empfohlene Werte sind: 1] cm; 2] mm; 3] in; 4] issue; 5] page; 6] px; 7] pt; 8] 
       <optional>
         <ref name="itemList"/>
       </optional>
+      <optional>
+        <ref name="componentGrp"/>
+      </optional>
       <ref name="att.common.attributes"/>
       <ref name="att.bibl.attributes"/>
       <ref name="att.datapointing.attributes"/>
@@ -7144,6 +7152,9 @@ Empfohlene Werte sind: 1] cm; 2] mm; 3] in; 4] issue; 5] page; 6] px; 7] pt; 8] 
       </optional>
       <optional>
         <ref name="classification"/>
+      </optional>
+      <optional>
+        <ref name="componentGrp"/>
       </optional>
       <ref name="att.datapointing.attributes"/>
       <ref name="att.common.attributes"/>
@@ -9449,10 +9460,45 @@ Empfohlene Werte sind: 1] cm; 2] mm; 3] in; 4] issue; 5] page; 6] px; 7] pt; 8] 
   <define name="model.transcriptionLike">
     <notAllowed/>
   </define>
+  <define name="model.expressionLike">
+    <notAllowed/>
+  </define>
   <define name="model.itemLike">
     <choice>
       <ref name="item"/>
     </choice>
+  </define>
+  <define name="model.manifestationLike">
+    <choice>
+      <ref name="source"/>
+    </choice>
+  </define>
+  <define name="componentGrp">
+    <element name="componentGrp">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(component group) – The child elements of this element are treated as parts of the elements header. Although this is an implicit way of expressing FRBR's hasPart / isPartOf -relationships, it avoids this terminology in order to prevent confusion with musical terminology. All children of a component must be the same type as its parent: works within work, items in item, etc.</a:documentation>
+      <choice>
+        <zeroOrMore>
+          <ref name="model.workLike"/>
+        </zeroOrMore>
+        <zeroOrMore>
+          <ref name="model.expressionLike"/>
+        </zeroOrMore>
+        <zeroOrMore>
+          <ref name="model.manifestationLike"/>
+        </zeroOrMore>
+        <zeroOrMore>
+          <ref name="model.itemLike"/>
+        </zeroOrMore>
+      </choice>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="componentGrp-constraint-checkComponentGrp">
+        <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:componentGrp">
+          <sch:assert test="every $i in ./child::mei:* satisfies $i/local-name() eq               ./parent::mei:*/local-name()"> Only child elements of the same name as the parent of
+              the componentGrp-element are allowed. </sch:assert>
+        </sch:rule>
+      </pattern>
+      <ref name="att.common.attributes"/>
+      <empty/>
+    </element>
   </define>
   <define name="item">
     <element name="item">
@@ -9474,6 +9520,9 @@ Empfohlene Werte sind: 1] cm; 2] mm; 3] in; 4] issue; 5] page; 6] px; 7] pt; 8] 
       </optional>
       <optional>
         <ref name="classification"/>
+      </optional>
+      <optional>
+        <ref name="componentGrp"/>
       </optional>
       <ref name="att.datapointing.attributes"/>
       <ref name="att.common.attributes"/>

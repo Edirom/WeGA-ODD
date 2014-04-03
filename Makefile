@@ -14,7 +14,7 @@ ifndef DOCLANG
 endif
 
 # Options to be passed to roma2.sh (see roma2.sh --help)
-ROMAOPTS=--nodtd --noxsd --doclang=${DOCLANG}
+ROMAOPTS=--nodtd --noxsd --doclang=${DOCLANG} --isoschematron
 
 # the target directory for the created RNG schema files
 TARGET_DIR=./schema/${DOCLANG}
