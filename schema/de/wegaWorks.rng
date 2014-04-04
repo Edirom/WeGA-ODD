@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2014-04-03T13:22:03Z. 
+Schema generated from ODD source 2014-04-03T23:01:47Z. 
 Edition: 2013 Release
 Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -911,6 +911,11 @@ Edition Location: http://www.tei-c.org/Vault/P5//
   <define name="key.work.pattern">
     <data type="string">
       <param name="pattern">A02\d{4}</param>
+    </data>
+  </define>
+  <define name="key.sources.pattern">
+    <data type="string">
+      <param name="pattern">A22\d{4}</param>
     </data>
   </define>
   <define name="marcRelator.list">
@@ -7029,10 +7034,25 @@ Empfohlene Werte sind: 1] cm; 2] mm; 3] in; 4] issue; 5] page; 6] px; 7] pt; 8] 
       <optional>
         <ref name="componentGrp"/>
       </optional>
-      <ref name="att.common.attributes"/>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="source-constraint-id-check">
+        <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:source">
+          <sch:assert test="@xml:id or ancestor::mei:source">
+                                        Am Wurzelelement muss eine XML-ID angegeben sein.
+                                    </sch:assert>
+        </sch:rule>
+      </pattern>
+      <ref name="att.common.attribute.label"/>
+      <ref name="att.common.attribute.n"/>
+      <ref name="att.common.attribute.xmlbase"/>
       <ref name="att.bibl.attributes"/>
       <ref name="att.datapointing.attributes"/>
       <ref name="att.pointing.attributes"/>
+      <optional>
+        <attribute name="xml:id">
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">regularizes the naming of an element and thus facilitates building links between it and other resources. Each id attribute within a document must have a unique value.</a:documentation>
+          <ref name="key.sources.pattern"/>
+        </attribute>
+      </optional>
       <empty/>
     </element>
   </define>
