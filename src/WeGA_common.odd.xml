@@ -440,7 +440,7 @@
             <desc versionDate="2014-03-05" xml:lang="en">Warnings for elements with whitespace only.</desc>
             <desc versionDate="2014-03-05" xml:lang="de">Warnung vor leeren (bzw. whitespace-only) Elementen.</desc>
             <constraint>
-                <sch:rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi | tei:head | tei:note[not(@type='part')]">
+                <sch:rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi | tei:head | tei:note[not(@type='part')] | tei:placeName">
                     <sch:report test="normalize-space(.) = ''"><sch:name/> has whitespace only content</sch:report>
                 </sch:rule>
             </constraint>
@@ -449,7 +449,7 @@
             <desc versionDate="2014-03-05" xml:lang="en">warnings for whitespace at the beginning of an element.</desc>
             <desc versionDate="2014-03-05" xml:lang="de">Warnung vor Leerzeichen am Beginn eines Elements.</desc>
             <constraint>
-                <sch:rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi">
+                <sch:rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
                     <sch:report test="matches(.,'^\s')">whitespace at the beginning of element <sch:name/></sch:report>
                 </sch:rule>
             </constraint>
@@ -712,6 +712,29 @@
                 <memberOf key="att.canonical" mode="delete"/>
                 <memberOf key="att.naming" mode="delete"/>
             </classes>
+            <constraintSpec scheme="isoschematron" ident="rs-typeNkey">
+                <desc versionDate="2014-04-11" xml:lang="en">warnings for wrong combination of <att>type</att> and <att>key</att> values.</desc>
+                <desc versionDate="2014-04-11" xml:lang="en">Warnung vor falscher Kombination von <att>type</att> und <att>key</att> Werten.</desc>
+                <constraint>
+                    <sch:rule context="tei:rs[@type][@key]">
+                        <sch:assert
+                            test="
+                                (matches(@key, '^A00\d{4}$') and @type='person') or
+                                (matches(@key, '^A02\d{4}$') and @type='work') or
+                                (matches(@key, '^A03\d{4}$') and @type='writing') or
+                                (matches(@key, '^A04\d{4}$') and @type='letter') or
+                                (matches(@key, '^A06\d{4}$') and @type='diaryDay') or
+                                (matches(@key, '^(A00\d{4}\s)*A00\d{4}$') and @type='persons') or
+                                (matches(@key, '^(A02\d{4}\s)*A02\d{4}$') and @type='works') or
+                                (matches(@key, '^(A03\d{4}\s)*A03\d{4}$') and @type='writings') or
+                                (matches(@key, '^(A04\d{4}\s)*A04\d{4}$') and @type='letters') or
+                                (matches(@key, '^(A05\d{4}\s)*A05\d{4}$') and @type='news') or
+                                (matches(@key, '^(A06\d{4}\s)*A06\d{4}$') and @type='diaryDays') or
+                                (matches(@key, '^(A11\d{4}\s)*A11\d{4}$') and @type='biblio')"
+                            >Type mismatch: The value for @type must be in accordance with the given ID in @key</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
             <attList>
                 <attDef ident="key" mode="add" usage="mwa">
                     <desc versionDate="2013-11-11" xml:lang="en">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</desc>
@@ -742,7 +765,7 @@
                             <desc versionDate="2013-11-11" xml:lang="de">markiert eine nicht explizit beim Namen genannte Person.</desc>
                         </valItem>
                         <valItem ident="persons">
-                            <desc versionDate="2013-11-11" xml:lang="en">marks person that are not explicitly mentioned by name.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="en">marks persons that are not explicitly mentioned by name.</desc>
                             <desc versionDate="2013-11-11" xml:lang="de">markiert mehrere nicht explizit beim Namen genannte Personen.</desc>
                         </valItem>
                         <valItem ident="letter">
@@ -750,7 +773,7 @@
                             <desc versionDate="2013-11-11" xml:lang="de">markiert einen Brief, der nicht explizit betitelt ist.</desc>
                         </valItem>
                         <valItem ident="letters">
-                            <desc versionDate="2013-11-11" xml:lang="en">marks letter that are not explicitly entitled.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="en">marks letters that are not explicitly entitled.</desc>
                             <desc versionDate="2013-11-11" xml:lang="de">markiert mehrere Briefe, die nicht explizit betitelt sind.</desc>
                         </valItem>
                         <valItem ident="diaryDay">

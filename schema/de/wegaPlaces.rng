@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-03-07T16:00:45Z. 
+Schema generated from ODD source 2014-04-11T17:40:34Z. 
 Edition: Version 2.6.0. Last updated on
 	20th January 2014, revision 12802
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
@@ -19,6 +19,32 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
       </choice>
     </zeroOrMore>
   </define>
+  <define name="data.certainty">
+    <choice>
+      <value>high</value>
+      <value>medium</value>
+      <value>low</value>
+      <value>unknown</value>
+    </choice>
+  </define>
+  <define name="data.probability">
+    <data type="double">
+      <param name="minInclusive">0</param>
+      <param name="maxInclusive">1</param>
+    </data>
+  </define>
+  <define name="data.numeric">
+    <choice>
+      <data type="double"/>
+      <data type="token">
+        <param name="pattern">(\-?[\d]+/\-?[\d]+)</param>
+      </data>
+      <data type="decimal"/>
+    </choice>
+  </define>
+  <define name="data.count">
+    <data type="nonNegativeInteger"/>
+  </define>
   <define name="data.temporal.w3c">
     <choice>
       <data type="date"/>
@@ -29,6 +55,13 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
       <data type="gMonthDay"/>
       <data type="time"/>
       <data type="dateTime"/>
+    </choice>
+  </define>
+  <define name="data.xTruthValue">
+    <choice>
+      <data type="boolean"/>
+      <value>unknown</value>
+      <value>inapplicable</value>
     </choice>
   </define>
   <define name="data.language">
@@ -95,6 +128,115 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
             <ref name="data.pointer"/>
           </oneOrMore>
         </list>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.ranging.attributes">
+    <ref name="att.ranging.attribute.atLeast"/>
+    <ref name="att.ranging.attribute.atMost"/>
+    <ref name="att.ranging.attribute.min"/>
+    <ref name="att.ranging.attribute.max"/>
+    <ref name="att.ranging.attribute.confidence"/>
+  </define>
+  <define name="att.ranging.attribute.atLeast">
+    <optional>
+      <attribute name="atLeast">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+        <ref name="data.numeric"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.ranging.attribute.atMost">
+    <optional>
+      <attribute name="atMost">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+        <ref name="data.numeric"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.ranging.attribute.min">
+    <optional>
+      <attribute name="min">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+        <ref name="data.numeric"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.ranging.attribute.max">
+    <optional>
+      <attribute name="max">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+        <ref name="data.numeric"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.ranging.attribute.confidence">
+    <optional>
+      <attribute name="confidence">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the degree of statistical confidence (between zero and one) that a value falls within the range specified by min and max, or the proportion of observed values that fall within that range.</a:documentation>
+        <ref name="data.probability"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.dimensions.attributes">
+    <ref name="att.ranging.attributes"/>
+    <ref name="att.dimensions.attribute.unit"/>
+    <ref name="att.dimensions.attribute.quantity"/>
+    <ref name="att.dimensions.attribute.extent"/>
+    <ref name="att.dimensions.attribute.precision"/>
+    <ref name="att.dimensions.attribute.scope"/>
+  </define>
+  <define name="att.dimensions.attribute.unit">
+    <optional>
+      <attribute name="unit">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+Empfohlene Werte sind: 1] cm; 2] mm; 3] in; 4] lines; 5] chars</a:documentation>
+        <choice>
+          <value>cm</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+          <value>mm</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+          <value>in</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+          <value>lines</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+          <value>chars</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+          <data type="Name"/>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.dimensions.attribute.quantity">
+    <optional>
+      <attribute name="quantity">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+        <ref name="data.numeric"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.dimensions.attribute.extent">
+    <optional>
+      <attribute name="extent">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+        <ref name="data.text"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.dimensions.attribute.precision">
+    <optional>
+      <attribute name="precision">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+        <ref name="data.certainty"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.dimensions.attribute.scope">
+    <optional>
+      <attribute name="scope">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+Beispielwerte sind etwa: 1] all; 2] most; 3] range</a:documentation>
+        <ref name="data.enumerated"/>
       </attribute>
     </optional>
   </define>
@@ -172,6 +314,66 @@ belongs, but this <sch:name/> element has no textual content.</sch:assert>
       <attribute name="period">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
         <ref name="data.pointer"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.responsibility.attributes">
+    <ref name="att.source.attributes"/>
+    <ref name="att.responsibility.attribute.cert"/>
+    <ref name="att.responsibility.attribute.resp"/>
+  </define>
+  <define name="att.responsibility.attribute.cert">
+    <optional>
+      <attribute name="cert">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+        <ref name="data.certainty"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.responsibility.attribute.resp">
+    <optional>
+      <attribute name="resp">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+        <list>
+          <oneOrMore>
+            <ref name="data.pointer"/>
+          </oneOrMore>
+        </list>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.editLike.attributes">
+    <ref name="att.dimensions.attributes"/>
+    <ref name="att.responsibility.attributes"/>
+    <ref name="att.editLike.attribute.evidence"/>
+    <ref name="att.editLike.attribute.instant"/>
+  </define>
+  <define name="att.editLike.attribute.evidence">
+    <optional>
+      <attribute name="evidence">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
+        <list>
+          <oneOrMore>
+            <choice>
+              <value>internal</value>
+              <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+              <value>external</value>
+              <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+              <value>conjecture</value>
+              <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+              <data type="Name"/>
+            </choice>
+          </oneOrMore>
+        </list>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.editLike.attribute.instant">
+    <optional>
+      <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" name="instant" a:defaultValue="false">
+        <a:documentation>indicates whether this is an instant revision or not.</a:documentation>
+        <ref name="data.xTruthValue"/>
       </attribute>
     </optional>
   </define>
@@ -478,6 +680,49 @@ belongs, but this <sch:name/> element has no textual content.</sch:assert>
       <ref name="model.pPart.data"/>
     </choice>
   </define>
+  <define name="att.source.attributes">
+    <ref name="att.source.attribute.source"/>
+  </define>
+  <define name="att.source.attribute.source">
+    <optional>
+      <attribute name="source">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">provides a pointer to the bibliographical source from which a quotation or citation is drawn.</a:documentation>
+        <list>
+          <oneOrMore>
+            <ref name="data.pointer"/>
+          </oneOrMore>
+        </list>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.personal.attributes">
+    <ref name="att.naming.attributes"/>
+    <ref name="att.personal.attribute.full"/>
+    <ref name="att.personal.attribute.sort"/>
+  </define>
+  <define name="att.personal.attribute.full">
+    <optional>
+      <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" name="full" a:defaultValue="yes">
+        <a:documentation/>
+        <choice>
+          <value>yes</value>
+          <a:documentation/>
+          <value>abb</value>
+          <a:documentation/>
+          <value>init</value>
+          <a:documentation/>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.personal.attribute.sort">
+    <optional>
+      <attribute name="sort">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+        <ref name="data.count"/>
+      </attribute>
+    </optional>
+  </define>
   <define name="idno">
     <element name="idno">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Bezeichner) lieferte jegliche Form eines Bezeichners in einer standardisierten Form, der benutzt werden kann um Objekte zu identifiziert, wie etwa ein bibliographisches Element, eine Organisation, usw. [2.2.4.  2.2.5.  3.11.2.4. ]</a:documentation>
@@ -634,17 +879,13 @@ belongs, but this <sch:name/> element has no textual content.</sch:assert>
   </define>
   <define name="placeName">
     <element name="placeName">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">enthält einen absoluten oder relativen Ortsnamen. [13.2.3. ]</a:documentation>
-      <text/>
-      <attribute name="type">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</a:documentation>
-        <choice>
-          <value>reg</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(regulär) </a:documentation>
-          <value>alt</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Alternative) </a:documentation>
-        </choice>
-      </attribute>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"> [13.2.3. ]</a:documentation>
+      <ref name="macro.phraseSeq"/>
+      <ref name="att.datable.attributes"/>
+      <ref name="att.editLike.attributes"/>
+      <ref name="att.global.attributes"/>
+      <ref name="att.personal.attributes"/>
+      <ref name="att.typed.attributes"/>
       <empty/>
     </element>
   </define>
@@ -717,12 +958,12 @@ belongs, but this <sch:name/> element has no textual content.</sch:assert>
     </choice>
   </start>
   <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaPlaces-constraint-whitespaceOnlyContent">
-    <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi | tei:head | tei:note[not(@type='part')]">
+    <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi | tei:head | tei:note[not(@type='part')] | tei:placeName">
       <sch:report test="normalize-space(.) = ''"><sch:name/> has whitespace only content</sch:report>
     </sch:rule>
   </pattern>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaPlaces-constraint-elementStartsWithWithespace">
-    <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaPlaces-constraint-elementStartsWithWhitespace">
+    <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
       <sch:report test="matches(.,'^\s')">whitespace at the beginning of element <sch:name/>
          </sch:report>
     </sch:rule>

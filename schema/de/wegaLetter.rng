@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-03-07T15:59:10Z. 
+Schema generated from ODD source 2014-04-11T17:38:32Z. 
 Edition: Version 2.6.0. Last updated on
 	20th January 2014, revision 12802
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
@@ -3067,6 +3067,11 @@ Empfohlene Werte sind: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] foreig
     <element name="rs">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(referenzierende Zeichenkette) bezeichnet ein oder mehrere Objekt(e) vom Typ Person, Werk, Tagebucheintrag, usw. [13.2.1.  3.5.1. ]</a:documentation>
       <ref name="wega_macro.phraseSeq"/>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="rs-constraint-rs-typeNkey">
+        <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:rs[@type][@key]">
+          <sch:assert test="                                 (matches(@key, '^A00\d{4}$') and @type='person') or                                 (matches(@key, '^A02\d{4}$') and @type='work') or                                 (matches(@key, '^A03\d{4}$') and @type='writing') or                                 (matches(@key, '^A04\d{4}$') and @type='letter') or                                 (matches(@key, '^A06\d{4}$') and @type='diaryDay') or                                 (matches(@key, '^(A00\d{4}\s)*A00\d{4}$') and @type='persons') or                                 (matches(@key, '^(A02\d{4}\s)*A02\d{4}$') and @type='works') or                                 (matches(@key, '^(A03\d{4}\s)*A03\d{4}$') and @type='writings') or                                 (matches(@key, '^(A04\d{4}\s)*A04\d{4}$') and @type='letters') or                                 (matches(@key, '^(A05\d{4}\s)*A05\d{4}$') and @type='news') or                                 (matches(@key, '^(A06\d{4}\s)*A06\d{4}$') and @type='diaryDays') or                                 (matches(@key, '^(A11\d{4}\s)*A11\d{4}$') and @type='biblio')">Type mismatch: The value for @type must be in accordance with the given ID in @key</sch:assert>
+        </sch:rule>
+      </pattern>
       <ref name="wega_att.typed.attribute.subtype"/>
       <attribute name="type">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</a:documentation>
@@ -3327,7 +3332,7 @@ Empfohlene Werte sind: 1] cardinal; 2] ordinal; 3] fraction; 4] percentage</a:do
     <element name="abbr">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Abkürzung) enthält eine Abkürzung von jeglicher Art. [3.5.5. ]</a:documentation>
       <ref name="wega_macro.phraseSeq"/>
-      <ref name="wega_att.typed.attributes"/>
+      <ref name="wega_att.typed.attribute.subtype"/>
       <empty/>
     </element>
   </define>
@@ -5579,6 +5584,13 @@ Empfohlene Werte sind: 1] main; 2] sub; 3] alt; 4] short; 5] desc</a:documentati
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">zeigt das Ende eines Bereichs auf, dass vom Element, welches dieses Attribut trägt, eingeleitet wird.</a:documentation>
         <ref name="wega_data.pointer"/>
       </attribute>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="spanTo-constraint-spanTo-7">
+        <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:*[@spanTo]">
+          <sch:assert test="id(substring(@spanTo,2)) and following::*[@xml:id=substring(current()/@spanTo,2)]">
+                                    The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow the current element <sch:name/>
+                                </sch:assert>
+        </sch:rule>
+      </pattern>
       <attribute name="hand">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">bezeichnet die Schreiberhand, von welcher der Eingriff vorgenommen wurde</a:documentation>
         <ref name="wega_data.pointer"/>
@@ -5697,7 +5709,8 @@ The @spanTo attribute of <name/> is required.</assert>
           <ref name="wega_model.certLike"/>
         </choice>
       </zeroOrMore>
-      <ref name="wega_att.responsibility.attributes"/>
+      <ref name="wega_att.responsibility.attribute.cert"/>
+      <ref name="wega_att.source.attribute.source"/>
       <attribute name="unit">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">nennt die für die Messung verwendete Einheit</a:documentation>
         <choice>
@@ -6130,20 +6143,28 @@ The @spanTo attribute of <name/> is required.</assert>
     <element name="seg">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(beliebiges Segment) steht für eine beliebige Segmentierung des Textes unterhalb des ‘chunk’ Levels. [16.3.  6.2.  7.2.5. ]</a:documentation>
       <ref name="wega_macro.paraContent"/>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="seg-constraint-activeOrPassivePerformance">
+        <rule context="tei:seg">
+          <sch:report xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" test="./@subtype = ('active', 'passive') and not(./@type = 'performance')">if @subtype contains 'active' or 'passive' @type has to be 'performance'</sch:report>
+        </rule>
+      </pattern>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="seg-constraint-AddresseeOrSenderCorrespondence">
+        <rule context="tei:seg">
+          <sch:report xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" test="./@subtype = ('sender', 'addressee') and not(./@type = 'correspondence')">if @subtype contains 'sender' or 'addressee' @type has to be 'correspondence'</sch:report>
+        </rule>
+      </pattern>
       <optional>
         <attribute name="type">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">erlaubt die inhaltliche Kategorisierung der Textstelle.</a:documentation>
           <choice>
             <value>chamberMusic</value>
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">markiert das gemeinsame Musizieren von Personen im kleinen (nicht-öffentlichen) Rahmen.</a:documentation>
-            <value>conductingEngagement</value>
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">markiert eine (öffentliche) Aufführung mit Weber als Dirigent.</a:documentation>
+            <value>performance</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">markiert eine Aufführung.</a:documentation>
             <value>correspondence</value>
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">markiert den Versand oder Empfang eines Briefs (Postkarte, Telegramm, o.ä.).</a:documentation>
             <value>meeting</value>
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">markiert ein Treffen (z.B. gemeinsames Essen) von Personen.</a:documentation>
-            <value>performance</value>
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">beschreibt den Besuch einer Aufführung.</a:documentation>
             <value>production</value>
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">markiert eine produktive Tätigkeit wie das Schreiben von Rezensionen oder das Komponieren von Werken.</a:documentation>
             <value>rehearsal</value>
@@ -6165,6 +6186,10 @@ The @spanTo attribute of <name/> is required.</assert>
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Autor ist Absender eines Briefs (Postkarte, Telegramm, o.ä.).</a:documentation>
             <value>addressee</value>
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Autor ist Empfänger eines Briefs (Postkarte, Telegramm, o.ä.).</a:documentation>
+            <value>active</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Weber dirigiert oder musiziert selbst.</a:documentation>
+            <value>passive</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Weber ist Besucher einer Aufführung.</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -6447,19 +6472,6 @@ Beispielwerte sind etwa: 1] homeoteleuton; 2] homeoarchy; 3] paleographicConfusi
       <ref name="wega_supplied"/>
     </choice>
   </define>
-  <define name="wega_model.correspDescPart">
-    <choice>
-      <ref name="wega_note"/>
-      <ref name="wega_incipit"/>
-      <ref name="wega_addressee"/>
-      <ref name="wega_sender"/>
-      <ref name="wega_placeSender"/>
-      <ref name="wega_placeAddressee"/>
-      <ref name="wega_dateSender"/>
-      <ref name="wega_dateAddressee"/>
-      <ref name="wega_context"/>
-    </choice>
-  </define>
   <define name="wega_characterName">
     <element name="characterName">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Name eines Charakters) Name einer Rolle oder eines Charakters in einem Werk.</a:documentation>
@@ -6523,6 +6535,19 @@ Beispielwerte sind etwa: 1] homeoteleuton; 2] homeoarchy; 3] paleographicConfusi
       </optional>
       <empty/>
     </element>
+  </define>
+  <define name="wega_model.correspDescPart">
+    <choice>
+      <ref name="wega_note"/>
+      <ref name="wega_incipit"/>
+      <ref name="wega_addressee"/>
+      <ref name="wega_sender"/>
+      <ref name="wega_placeSender"/>
+      <ref name="wega_placeAddressee"/>
+      <ref name="wega_dateSender"/>
+      <ref name="wega_dateAddressee"/>
+      <ref name="wega_context"/>
+    </choice>
   </define>
   <define name="wega_addressee">
     <element name="addressee">
@@ -6629,12 +6654,12 @@ Beispielwerte sind etwa: 1] homeoteleuton; 2] homeoarchy; 3] paleographicConfusi
     </choice>
   </start>
   <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetter-constraint-whitespaceOnlyContent">
-    <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi | tei:head | tei:note[not(@type='part')]">
+    <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi | tei:head | tei:note[not(@type='part')] | tei:placeName">
       <sch:report test="normalize-space(.) = ''"><sch:name/> has whitespace only content</sch:report>
     </sch:rule>
   </pattern>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetter-constraint-elementStartsWithWithespace">
-    <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetter-constraint-elementStartsWithWhitespace">
+    <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
       <sch:report test="matches(.,'^\s')">whitespace at the beginning of element <sch:name/>
          </sch:report>
     </sch:rule>
