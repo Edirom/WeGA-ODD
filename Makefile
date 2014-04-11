@@ -10,7 +10,7 @@ include local.build.properties
 # set the default language to english
 # it can be overwritten with e.g. DOCLANG=de when calling make
 ifndef DOCLANG
-	DOCLANG=en
+	DOCLANG=de
 endif
 
 # Options to be passed to roma2.sh (see roma2.sh --help)
@@ -20,7 +20,7 @@ ROMAOPTS=--nodtd --noxsd --doclang=${DOCLANG} --isoschematron
 TARGET_DIR=./schema/${DOCLANG}
 
 
-all: letters persons var biblio news diaries writings places
+all: letters persons var biblio news diaries writings places works
 
 letters:
 	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} src/WeGA_letters.odd.xml ${TARGET_DIR}
