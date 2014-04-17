@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2014-04-15T16:37:01.931+02:00 by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2014-04-17T16:20:05.173+02:00 by 'extract-isosch.xsl'. -->
 
 <!-- ********************* -->
 <!-- namespaces, declared: -->
 <!-- ********************* -->
-<ns prefix="s" uri="http://www.ascc.net/xml/schematron"/>
-   <ns prefix="sch" uri="http://purl.oclc.org/dsdl/schematron"/>
-   <ns prefix="sch" uri="http://purl.oclc.org/dsdl/schematron"/>
-   <ns prefix="teix" uri="http://www.tei-c.org/ns/Examples"/>
 
-   <!-- ********************* -->
+
+<!-- ********************* -->
 <!-- namespaces, implicit: -->
 <!-- ********************* -->
 <ns prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
-   <ns prefix="teix" uri="http://www.tei-c.org/ns/Examples"/>
 
    <!-- ************ -->
 <!-- constraints: -->
@@ -68,12 +64,6 @@ belongs, but this <name/> element has no textual content.</assert>
                     <assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</assert>
                 </rule>
    </pattern>
-   <pattern id="wegaBiblio-ptr-constraint-ptrAtts">
-      <rule context="tei:ptr">
-         <report test="@target and @cRef">Only one of the
-attributes @target and @cRef may be supplied on <name/>.</report>
-      </rule>
-   </pattern>
    <pattern id="wegaBiblio-ref-constraint-refAtts">
       <rule context="tei:ref">
          <report test="@target and @cRef">Only one of the
@@ -91,81 +81,6 @@ attributes @target and @cRef may be supplied on <name/>.</report>
                     <report test="count(distinct-values(tei:biblScope/@type)) ne count(tei:biblScope/@type)">duplicate value for biblScope</report>
                 </rule>
    </pattern>
-   <pattern id="wegaBiblio-seg-constraint-activeOrPassivePerformance">
-      <rule context="tei:seg">
-                    <report test="./@subtype = ('active', 'passive') and not(./@type = 'performance')">if @subtype contains 'active' or 'passive' @type has to be 'performance'</report>
-                </rule>
-   </pattern>
-   <pattern id="wegaBiblio-seg-constraint-AddresseeOrSenderCorrespondence">
-      <rule context="tei:seg">
-                    <report test="./@subtype = ('sender', 'addressee') and not(./@type = 'correspondence')">if @subtype contains 'sender' or 'addressee' @type has to be 'correspondence'</report>
-                </rule>
-   </pattern>
-   <pattern id="wegaBiblio-att.identified-constraint-spec-in-module">
-      <rule context="tei:elementSpec[@module]|tei:classSpec[@module]|tei:macroSpec[@module]">
-        <assert test="         (not(ancestor::tei:schemaSpec | ancestor::tei:TEI | ancestor::tei:teiCorpus)) or         (not(@module) or          (not(//tei:moduleSpec) and not(//tei:moduleRef))  or         (//tei:moduleSpec[@ident = current()/@module]) or          (//tei:moduleRef[@key = current()/@module]))         ">
-        Specification <value-of select="@ident"/>: the value of the module attribute ("<value-of select="@module"/>") 
-should correspond to an existing module, via a moduleSpec or
-      moduleRef</assert>
-      </rule>
-    </pattern>
-   <pattern id="wegaBiblio-att.deprecated-validUntil-constraint-deprecated">
-          <rule context="tei:*[@validUntil]">
-            <assert test="@validUntil cast as xs:date ge          current-date()">
-            <value-of select="if          (@ident) then concat('The ',@ident) else          concat('This ',local-name(.),' of          ',ancestor::tei:*[@ident][1]/@ident)"/>
-	    construct is outdated (as of <value-of select="@validUntil"/>); ODD processors may ignore it, and its use is no longer supported</assert>
-            <assert role="nonfatal"
-                 test="@validUntil cast as xs:date ge          (current-date() + (60*xs:dayTimeDuration('P1D')))">
-            <value-of select="if (@ident) then concat('The ',@ident) else concat('This ',local-name(.),' of ',ancestor::tei:*[@ident][1]/@ident)"/>  construct becomes outdated on <value-of select="@validUntil"/>
-         </assert>
-          </rule>
-        </pattern>
-   <pattern id="wegaBiblio-moduleRef-constraint-modref">
-      <rule context="tei:moduleRef">
-        <report test="* and @key">
-Child elements of <name/> are only allowed when an external module is being loaded
-        </report>
-      </rule>
-    </pattern>
-   <pattern id="wegaBiblio-moduleRef-prefix-constraint-not-same-prefix">
-          <rule context="tei:moduleRef">
-            <report test="//*[ not( generate-id(.) eq generate-id(      current() ) ) ]/@prefix = @prefix">The prefix attribute
-	    of <name/> should not match that of any other
-	    element (it would defeat the purpose)</report>
-          </rule>
-        </pattern>
-   <pattern id="wegaBiblio-constraintSpec-constraint-sch">
-      <rule context="tei:constraintSpec">
-      
-         <report test="tei:constraint/s:* and    not(@scheme='schematron')">
-	Rules in the Schematron 1.* language must be inside
-	a constraintSpec with a value of 'schematron' on the scheme attribute
-      </report>
-      </rule>
-   </pattern>
-   <pattern id="wegaBiblio-constraintSpec-constraint-isosch">
-      <rule context="tei:constraintSpec">
-      
-         <report test="tei:constraint/sch:* and    not(@scheme='isoschematron')">
-	Rules in the ISO Schematron language must be inside
-	a constraintSpec with a value of 'isoschematron' on the scheme attribute
-      </report>
-      </rule>
-   </pattern>
-   <pattern id="wegaBiblio-constraintSpec-constraint-needrules">
-      
-      <rule context="tei:macroSpec/tei:constraintSpec[@scheme='isoschematron']/tei:constraint">
-	        <report test="sch:assert|sch:report">An ISO Schematron constraint specification for a macro should not have an 'assert' or 'report' element without a parent 'rule' element</report>
-      </rule>
-    </pattern>
-   <pattern id="wegaBiblio-attDef-constraint-attDefContents">
-      <rule context="tei:attDef">
-      
-         <assert test="ancestor::teix:egXML[@valid='feasible'] or @mode eq 'change' or @mode eq 'delete' or tei:datatype or tei:valList[@type='closed']">Attribute: the definition of the @<value-of select="@ident"/> attribute in the <value-of select="ancestor::*[@ident][1]/@ident"/>
-            <value-of select="' '"/>
-            <value-of select="local-name(ancestor::*[@ident][1])"/> should have a closed valList or a datatype</assert>
-      </rule>
-   </pattern>
    <pattern id="wegaBiblio-constraint-whitespaceOnlyContent">
                 <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type='part')] | tei:placeName">
                     <report test="normalize-space(.) = ''">
@@ -178,14 +93,4 @@ Child elements of <name/> are only allowed when an external module is being load
          </report>
                 </rule>
             </pattern>
-
-   <!-- *********** -->
-<!-- deprecated: -->
-<!-- *********** -->
-<pattern>
-      <rule context="tei:moduleSpec|tei:schemaSpec|tei:elementSpec|tei:classSpec|tei:macroSpec|tei:constraintSpec|tei:attDef">
-         <report test="@status" role="nonfatal">WARNING: use of deprecated attribute — @status of the <name/> element will be removed from the TEI on 2015-06-19.
-                </report>
-      </rule>
-   </pattern>
 </schema>
