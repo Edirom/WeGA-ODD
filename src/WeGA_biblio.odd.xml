@@ -67,28 +67,46 @@
                             <memberOf key="att.docStatus" mode="add"/>
                         </classes>
                         <content>
-                            <rng:zeroOrMore>
-                                <rng:ref name="analytic"/>
-                            </rng:zeroOrMore>
-                            <rng:oneOrMore>
-                                <rng:ref name="monogr"/>
-                                <rng:zeroOrMore>
-                                    <rng:ref name="series"/>
-                                </rng:zeroOrMore>
-                            </rng:oneOrMore>
-                            <rng:interleave>
-                                <rng:optional>
-                                    <rng:ref name="keywords"/>
-                                </rng:optional>
-                                <rng:optional>
-                                    <rng:element name="note">
-                                        <rng:ref name="macro.specialPara"/>
-                                    </rng:element>
-                                </rng:optional>
-                                <rng:zeroOrMore>
-                                    <rng:ref name="idno"/>
-                                </rng:zeroOrMore>
-                            </rng:interleave>
+                            <rng:choice>
+                                <!--  Dubletten  -->
+                                <rng:element name="ref">
+                                    <rng:attribute name="type">
+                                        <rng:choice>
+                                            <rng:value>duplicate</rng:value>
+                                            <rng:value>deletion</rng:value>
+                                        </rng:choice>
+                                    </rng:attribute>
+                                    <rng:attribute name="target">
+                                        <rng:ref name="key.biblio.pattern"/>
+                                    </rng:attribute>
+                                    <rng:empty/>
+                                </rng:element>
+                                <!-- ordentlicher Eintrag -->
+                                <rng:group>
+                                    <rng:zeroOrMore>
+                                        <rng:ref name="analytic"/>
+                                    </rng:zeroOrMore>
+                                    <rng:oneOrMore>
+                                        <rng:ref name="monogr"/>
+                                        <rng:zeroOrMore>
+                                            <rng:ref name="series"/>
+                                        </rng:zeroOrMore>
+                                    </rng:oneOrMore>
+                                    <rng:interleave>
+                                        <rng:optional>
+                                            <rng:ref name="keywords"/>
+                                        </rng:optional>
+                                        <rng:optional>
+                                            <rng:element name="note">
+                                                <rng:ref name="macro.specialPara"/>
+                                            </rng:element>
+                                        </rng:optional>
+                                        <rng:zeroOrMore>
+                                            <rng:ref name="idno"/>
+                                        </rng:zeroOrMore>
+                                    </rng:interleave>
+                                </rng:group>
+                            </rng:choice>
                         </content>
                         <attList>
                             <attDef ident="xml:id" mode="add" usage="req">

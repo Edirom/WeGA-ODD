@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-04-15T16:40:49Z. 
+Schema generated from ODD source 2014-04-17T10:43:04Z. 
 Edition: Version 2.6.0. Last updated on
 	20th January 2014, revision 12802
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
@@ -2236,28 +2236,44 @@ attributes @target and @cRef may be supplied on <name/>.</report>
   <define name="biblStruct">
     <element name="biblStruct">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(structured bibliographic citation) contains a structured bibliographic citation, in which only bibliographic sub-elements appear and in a specified order. [3.11.1.  2.2.7.  15.3.2. ]</a:documentation>
-      <zeroOrMore>
-        <ref name="analytic"/>
-      </zeroOrMore>
-      <oneOrMore>
-        <ref name="monogr"/>
-        <zeroOrMore>
-          <ref name="series"/>
-        </zeroOrMore>
-      </oneOrMore>
-      <interleave>
-        <optional>
-          <ref name="keywords"/>
-        </optional>
-        <optional>
-          <element name="note">
-            <ref name="macro.specialPara"/>
-          </element>
-        </optional>
-        <zeroOrMore>
-          <ref name="idno"/>
-        </zeroOrMore>
-      </interleave>
+      <choice>
+        <element name="ref">
+          <attribute name="type">
+            <choice>
+              <value>duplicate</value>
+              <value>deletion</value>
+            </choice>
+          </attribute>
+          <attribute name="target">
+            <ref name="key.biblio.pattern"/>
+          </attribute>
+          <empty/>
+        </element>
+        <group>
+          <zeroOrMore>
+            <ref name="analytic"/>
+          </zeroOrMore>
+          <oneOrMore>
+            <ref name="monogr"/>
+            <zeroOrMore>
+              <ref name="series"/>
+            </zeroOrMore>
+          </oneOrMore>
+          <interleave>
+            <optional>
+              <ref name="keywords"/>
+            </optional>
+            <optional>
+              <element name="note">
+                <ref name="macro.specialPara"/>
+              </element>
+            </optional>
+            <zeroOrMore>
+              <ref name="idno"/>
+            </zeroOrMore>
+          </interleave>
+        </group>
+      </choice>
       <ref name="att.docStatus.attributes"/>
       <attribute name="xml:id">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(identifier) provides a unique identifier for the element bearing the attribute.</a:documentation>
