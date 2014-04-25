@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2014-04-03T23:01:51.48+02:00 by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2014-04-25T16:31:55.401+02:00 by 'extract-isosch.xsl'. -->
 
 <!-- ********************* -->
 <!-- namespaces, declared: -->
@@ -49,6 +49,26 @@
               must be less than or equal to the number of lines on the staff.</assert>
           </rule>
         </pattern>
+   <pattern id="wegaWorks-date-constraint-dateHeuristics1">
+      <rule context="mei:date">
+                                <report test="(@notbefore gt @notafter) and not(starts-with(@notbefore, '-'))">value of notBefore greater than notAfter</report>
+                            </rule>
+   </pattern>
+   <pattern id="wegaWorks-date-constraint-dateHeuristics3">
+      <rule context="mei:date">
+                                <report test="(@startdate or @enddate) and (@isodate or @notafter or @notbefore)">cooccurence of date and duration attributes</report>
+                            </rule>
+   </pattern>
+   <pattern id="wegaWorks-date-constraint-dateHeuristics4">
+      <rule context="mei:date">
+                                <report test="@isodate and (@notafter or @notbefore)">cooccurence of exact and uncertain date attributes</report>
+                            </rule>
+   </pattern>
+   <pattern id="wegaWorks-date-constraint-dateHeuristics5">
+      <rule context="mei:date">
+                                <assert test="@isodate or @notbefore or @notafter or @startdate or @enddate or @cert='unknown' or matches(., '0000|o\.J\.|unknown')">mei:date benötigt ein Attribut @isodate, @notbefore o.ä.</assert>
+                            </rule>
+   </pattern>
    <pattern id="wegaWorks-dir-constraint-Start-type_attributes_required_on_some_control_events">
           <rule context="mei:dir[not(ancestor::mei:syllable)]">
             <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of

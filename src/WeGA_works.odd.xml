@@ -181,6 +181,55 @@
                         </content>
                     </macroSpec>
                     
+                    <elementSpec ident="date" module="MEI.shared" mode="change">
+                        <classes mode="change">
+                            <memberOf key="att.bibl" mode="delete"/>
+                            <memberOf key="att.common" mode="delete"/>
+                            <memberOf key="att.facsimile" mode="delete"/>
+                            <memberOf key="att.lang" mode="delete"/>
+                        </classes>
+                        <constraintSpec scheme="isoschematron" ident="dateHeuristics1">
+                            <desc versionDate="2014-04-25" xml:lang="en">checks for the existence of an <att>notbefore</att> with a <emph>larger</emph> value than its corresponding <att>notafter</att> (for dates AC)</desc>
+                            <desc versionDate="2014-04-25" xml:lang="de">sucht nach der Existenz eines <att>notbefore</att> mit einem <emph>größeren</emph> Wert als sein entsprechendes <att>notafter</att> (für Daten n.Chr.)</desc>
+                            <constraint>
+                                <sch:report
+                                    test="(@notbefore gt @notafter) and not(starts-with(@notbefore, '-'))"
+                                    >value of notBefore greater than notAfter</sch:report>
+                            </constraint>
+                        </constraintSpec>
+                        <constraintSpec scheme="isoschematron" ident="dateHeuristics3">
+                            <desc versionDate="2014-04-25" xml:lang="en">checks for the cooccurence of date and duration attributes</desc>
+                            <desc versionDate="2014-04-25" xml:lang="de">sucht nach der Kookkurenz von Datums- und Zeitattributen</desc>
+                            <constraint>
+                                <sch:report
+                                    test="(@startdate or @enddate) and (@isodate or @notafter or @notbefore)"
+                                    >cooccurence of date and duration attributes</sch:report>
+                            </constraint>
+                        </constraintSpec>
+                        <constraintSpec scheme="isoschematron" ident="dateHeuristics4">
+                            <desc versionDate="2014-04-25" xml:lang="en">checks for the cooccurence of exact and uncertain date attributes</desc>
+                            <desc versionDate="2014-04-25" xml:lang="de">sucht nach der Kookkurenz von exaten und ungenauen Datumsattributen</desc>
+                            <constraint>
+                                <sch:report
+                                    test="@isodate and (@notafter or @notbefore)"
+                                    >cooccurence of exact and uncertain date attributes</sch:report>
+                            </constraint>
+                        </constraintSpec>
+                        <constraintSpec scheme="isoschematron" ident="dateHeuristics5">
+                            <desc versionDate="2014-04-25" xml:lang="en">If a <gi>date</gi> is present it must either have an attribute 
+                                <att>isodate</att>, <att>notbefore</att>, <att>notafter</att>, <att>startdate</att> or <att>enddate</att>.
+                                Alternatively the content of <gi>date</gi> may contain at least four zeros, "unknown" or "o.J.", which qualifies as undated.
+                            </desc>
+                            <desc  versionDate="2014-04-25" xml:lang="de">Wenn ein <gi>date</gi> vorhanden ist, muss es entweder die Attribute
+                                <att>isodate</att>, <att>notbefore</att>, <att>notafter</att>, <att>startdate</att> oder <att>enddate</att> haben.
+                                Alternativ kann der Inhalt von <gi>date</gi> mindestens vier Nullen, "unbekannt" oder "oJ" enthalten, die die Quellen dann als undatiert bezeichnen.
+                            </desc>
+                            <constraint>
+                                <sch:assert test="@isodate or @notbefore or @notafter or @startdate or @enddate or @cert='unknown' or matches(., '0000|o\.J\.|unknown')">mei:date benötigt ein Attribut @isodate, @notbefore o.ä.</sch:assert>
+                            </constraint>
+                        </constraintSpec>
+                    </elementSpec>
+                    
                 </schemaSpec>
                 
                 <!--
