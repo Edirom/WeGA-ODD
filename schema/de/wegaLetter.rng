@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-04-17T16:02:46Z. 
+Schema generated from ODD source 2014-04-25T13:39:46Z. 
 Edition: Version 2.6.0. Last updated on
 	20th January 2014, revision 12802
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
@@ -93,6 +93,9 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
   </define>
   <define name="wega_data.count">
     <data type="nonNegativeInteger"/>
+  </define>
+  <define name="wega_data.temporal.w3c">
+    <ref name="wega_wega.data.temporal.iso"/>
   </define>
   <define name="wega_data.xTruthValue">
     <choice>
@@ -272,6 +275,12 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Lena Schubert</a:documentation>
     </choice>
   </define>
+  <define name="wega_wega.data.temporal.iso">
+    <choice>
+      <data type="date"/>
+      <data type="gYear"/>
+    </choice>
+  </define>
   <define name="wega_att.canonical.attributes">
     <ref name="wega_att.canonical.attribute.key"/>
     <ref name="wega_att.canonical.attribute.ref"/>
@@ -437,55 +446,40 @@ Beispielwerte sind etwa: 1] all; 2] most; 3] range</a:documentation>
   <define name="wega_att.datable.w3c.attribute.when">
     <optional>
       <attribute name="when">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">liefert den Wert des Datums oder der Uhrzeit in standardisierter Form, z.B. jjjj-mm-tt.</a:documentation>
-        <choice>
-          <data type="date"/>
-          <data type="gYear"/>
-        </choice>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+        <ref name="wega_data.temporal.w3c"/>
       </attribute>
     </optional>
   </define>
   <define name="wega_att.datable.w3c.attribute.notBefore">
     <optional>
       <attribute name="notBefore">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">spezifiziert das frühestmögliche Datum des Ereignisses in standardisierter Form, z.B. jjjj-mm-tt.</a:documentation>
-        <choice>
-          <data type="date"/>
-          <data type="gYear"/>
-        </choice>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+        <ref name="wega_data.temporal.w3c"/>
       </attribute>
     </optional>
   </define>
   <define name="wega_att.datable.w3c.attribute.notAfter">
     <optional>
       <attribute name="notAfter">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">spezifiziert das letztmöglichste Datum des Ereignisses in standardisierter Form, z.B. jjjj-mm-tt.</a:documentation>
-        <choice>
-          <data type="date"/>
-          <data type="gYear"/>
-        </choice>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+        <ref name="wega_data.temporal.w3c"/>
       </attribute>
     </optional>
   </define>
   <define name="wega_att.datable.w3c.attribute.from">
     <optional>
       <attribute name="from">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">gibt den Startpunkt einer Dauer in standardisierter Form an, z.B. jjjj-mm-tt.</a:documentation>
-        <choice>
-          <data type="date"/>
-          <data type="gYear"/>
-        </choice>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+        <ref name="wega_data.temporal.w3c"/>
       </attribute>
     </optional>
   </define>
   <define name="wega_att.datable.w3c.attribute.to">
     <optional>
       <attribute name="to">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">gibt den Endpunkt einer Dauer in standardisierter Form an, z.B. jjjj-mm-tt.</a:documentation>
-        <choice>
-          <data type="date"/>
-          <data type="gYear"/>
-        </choice>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+        <ref name="wega_data.temporal.w3c"/>
       </attribute>
     </optional>
   </define>
@@ -1454,7 +1448,9 @@ Empfohlene Werte sind: 1] volume; 2] issue; 3] page; 4] line; 5] chapter; 6] par
     </choice>
   </define>
   <define name="wega_model.gLike">
-    <notAllowed/>
+    <choice>
+      <ref name="wega_g"/>
+    </choice>
   </define>
   <define name="wega_model.biblLike">
     <choice>
@@ -5078,6 +5074,8 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">beschreibt das Erteilen von Unterricht.</a:documentation>
             <value>travel</value>
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">markiert Reiseaktivitäten, z.B. "um 8 Uhr abgefahren", "Mittag in Wurzen", "Uebernachtet in Oschaz".</a:documentation>
+            <value>wordOfTheDay</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">markiert ein "goldenes Wort" Webers, dass auf der Startseite angezeigt werden kann.</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -5367,6 +5365,30 @@ Beispielwerte sind etwa: 1] homeoteleuton; 2] homeoarchy; 3] paleographicConfusi
       <empty/>
     </element>
   </define>
+  <define name="wega_g">
+    <element name="g">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Zeichen oder Glyphe) Repräsentiert eine Glyphe oder ein ausgefallenes (nicht im Unicode-Standard beschriebenes) Zeichen. [5. ]</a:documentation>
+      <text/>
+      <attribute name="type">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</a:documentation>
+        <choice>
+          <value>smufl</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Standard Music Font Layout) Markiert dieses Zeichen oder Glyphe als ein musikalisches Symbol nach der SMuFL Specifikation</a:documentation>
+        </choice>
+      </attribute>
+      <optional>
+        <attribute name="xml:id">
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+          <data type="ID"/>
+        </attribute>
+      </optional>
+      <attribute name="ref">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+        <ref name="wega_data.pointer"/>
+      </attribute>
+      <empty/>
+    </element>
+  </define>
   <define name="wega_model.damagePart">
     <choice>
       <ref name="wega_choice"/>
@@ -5557,7 +5579,7 @@ Beispielwerte sind etwa: 1] homeoteleuton; 2] homeoarchy; 3] paleographicConfusi
     </choice>
   </start>
   <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetter-constraint-whitespaceOnlyContent">
-    <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type='part')] | tei:placeName">
+    <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type='part')] | tei:placeName | tei:title">
       <sch:report test="normalize-space(.) = ''"><sch:name/> has whitespace only content</sch:report>
     </sch:rule>
   </pattern>
