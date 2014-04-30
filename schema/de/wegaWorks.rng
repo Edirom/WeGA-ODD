@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2014-04-30T09:29:40Z. 
+Schema generated from ODD source 2014-04-30T16:00:05Z. 
 Edition: 2013 Release
 Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -3140,11 +3140,6 @@ Empfohlene Werte sind: 1] cm; 2] mm; 3] in; 4] issue; 5] page; 6] px; 7] pt; 8] 
   <define name="model.resourceLike">
     <notAllowed/>
   </define>
-  <define name="model.respLike">
-    <choice>
-      <ref name="respStmt"/>
-    </choice>
-  </define>
   <define name="model.scoreDefLike">
     <choice>
       <ref name="scoreDef"/>
@@ -3914,22 +3909,32 @@ Empfohlene Werte sind: 1] cm; 2] mm; 3] in; 4] issue; 5] page; 6] px; 7] pt; 8] 
     </element>
   </define>
   <define name="title">
-    <element name="title">
+    <element name="title" ns="http://www.music-encoding.org/ns/mei">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Title of a bibliographic entity. </a:documentation>
-      <zeroOrMore>
+      <oneOrMore>
         <choice>
           <text/>
-          <ref name="model.textphraseLike"/>
-          <ref name="model.editLike"/>
-          <ref name="model.transcriptionLike"/>
+          <ref name="lb"/>
+          <ref name="persName"/>
         </choice>
-      </zeroOrMore>
-      <ref name="att.common.attributes"/>
-      <ref name="att.authorized.attributes"/>
-      <ref name="att.canonical.attributes"/>
-      <ref name="att.bibl.attributes"/>
+      </oneOrMore>
+      <ref name="att.common.attribute.n"/>
+      <ref name="att.id.attribute.xmlid"/>
       <ref name="att.lang.attributes"/>
-      <ref name="att.typed.attributes"/>
+      <ref name="att.typed.attribute.subtype"/>
+      <optional>
+        <attribute name="type">
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.</a:documentation>
+          <choice>
+            <value>sub</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Markiert einen Untertitel.</a:documentation>
+            <value>alt</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(alternativ) Markiert einen alternativen Titel, meist in Übersetzung (siehe xml:lang).</a:documentation>
+            <value>div</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Nummer) Markiert einen Titel einer musikalischen Nummer (z.B. Szene, Arie).</a:documentation>
+          </choice>
+        </attribute>
+      </optional>
       <optional>
         <attribute name="level">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the bibliographic level for a title.</a:documentation>
@@ -4017,18 +4022,30 @@ Empfohlene Werte sind: 1] cm; 2] mm; 3] in; 4] issue; 5] page; 6] px; 7] pt; 8] 
     </choice>
   </define>
   <define name="altId">
-    <element name="altId">
+    <element name="altId" ns="http://www.music-encoding.org/ns/mei">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(alternative identifier) – May contain a bibliographic identifier that does not fit within the meiHead element's id attribute, for example because the id does not fit the definition of an XML id or because multiple identifiers are needed. </a:documentation>
-      <zeroOrMore>
+      <text/>
+      <ref name="att.common.attribute.label"/>
+      <ref name="att.common.attribute.n"/>
+      <ref name="att.id.attribute.xmlid"/>
+      <ref name="att.typed.attribute.subtype"/>
+      <attribute name="type">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.
+Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) ; 3] KS(Kaiser-Schriften) ; 4] opus; 5] WeV(Weber Werkverzeichnis) </a:documentation>
         <choice>
-          <text/>
-          <ref name="model.lbLike"/>
-          <ref name="model.rendLike"/>
+          <value>gnd</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Gemeinsame Normdatei) Markiert Angaben (ID sowie Einheitssachtitel) nach der Gemeinsamen Normdatei.</a:documentation>
+          <value>JV</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Jähns-Verzeichnis) Markiert eine Verzeichnisnummer nach Jähns.</a:documentation>
+          <value>KS</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Kaiser-Schriften) Markiert eine Verzeichnisnummer nach Kaiser.</a:documentation>
+          <value>opus</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Markiert eine Opuszahl.</a:documentation>
+          <value>WeV</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Weber Werkverzeichnis) Markiert eine Verzeichnisnummer des WeV.</a:documentation>
+          <data type="NMTOKEN"/>
         </choice>
-      </zeroOrMore>
-      <ref name="att.bibl.attributes"/>
-      <ref name="att.common.attributes"/>
-      <ref name="att.typed.attributes"/>
+      </attribute>
       <empty/>
     </element>
   </define>
@@ -4533,16 +4550,16 @@ Empfohlene Werte sind: 1] cm; 2] mm; 3] in; 4] issue; 5] page; 6] px; 7] pt; 8] 
     </element>
   </define>
   <define name="titleStmt">
-    <element name="titleStmt">
+    <element name="titleStmt" ns="http://www.music-encoding.org/ns/mei">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(title statement) – Container for title and responsibility meta-data.</a:documentation>
       <oneOrMore>
-        <ref name="model.titleLike"/>
+        <ref name="title"/>
       </oneOrMore>
-      <zeroOrMore>
-        <ref name="model.respLike"/>
-      </zeroOrMore>
+      <optional>
+        <ref name="respStmt"/>
+      </optional>
       <ref name="att.bibl.attributes"/>
-      <ref name="att.common.attributes"/>
+      <ref name="att.id.attribute.xmlid"/>
       <empty/>
     </element>
   </define>

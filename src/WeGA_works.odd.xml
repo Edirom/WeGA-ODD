@@ -216,7 +216,7 @@
                                 <att>isodate</att>, <att>notbefore</att>, <att>notafter</att>, <att>startdate</att> or <att>enddate</att>.
                                 Alternatively the content of <gi>date</gi> may contain at least four zeros, "unknown" or "o.J.", which qualifies as undated.
                             </desc>
-                            <desc  versionDate="2014-04-25" xml:lang="de">Wenn ein <gi>date</gi> vorhanden ist, muss es entweder die Attribute
+                            <desc versionDate="2014-04-25" xml:lang="de">Wenn ein <gi>date</gi> vorhanden ist, muss es entweder die Attribute
                                 <att>isodate</att>, <att>notbefore</att>, <att>notafter</att>, <att>startdate</att> oder <att>enddate</att> haben.
                                 Alternativ kann der Inhalt von <gi>date</gi> mindestens vier Nullen, "unbekannt" oder "oJ" enthalten, die die Quellen dann als undatiert bezeichnen.
                             </desc>
@@ -226,6 +226,107 @@
                         </constraintSpec>
                     </elementSpec>
                     
+                    <elementSpec ident="altId" module="MEI.header" mode="change" ns="http://www.music-encoding.org/ns/mei">
+                        <classes mode="change">
+                            <memberOf key="att.bibl" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:text/>
+                        </content>
+                        <attList>
+                            <attDef ident="xml:base" mode="delete"/>
+                            <attDef ident="type" mode="change" usage="req">
+                                <valList mode="replace" type="semi">
+                                    <valItem ident="gnd">
+                                        <gloss versionDate="2014-04-30" xml:lang="de">Gemeinsame Normdatei</gloss>
+                                        <gloss versionDate="2014-04-30" xml:lang="en">Gemeinsame Normdatei</gloss>
+                                        <desc versionDate="2014-04-30" xml:lang="de">Markiert Angaben (ID sowie Einheitssachtitel) nach der Gemeinsamen Normdatei.</desc>
+                                        <desc versionDate="2014-04-30" xml:lang="en">marks information (ID and title) from the German authority file "Gemeinsamen Normdatei".</desc>
+                                    </valItem>
+                                    <valItem ident="JV">
+                                        <gloss versionDate="2014-04-30" xml:lang="de">Jähns-Verzeichnis</gloss>
+                                        <gloss versionDate="2014-04-30" xml:lang="en">Jähns-Verzeichnis</gloss>
+                                        <desc versionDate="2014-04-30" xml:lang="de">Markiert eine Verzeichnisnummer nach Jähns.</desc>
+                                        <desc versionDate="2014-04-30" xml:lang="en">marks a number from the Jähns-Verzeichnis.</desc>
+                                    </valItem>
+                                    <valItem ident="KS">
+                                        <gloss versionDate="2014-04-30" xml:lang="de">Kaiser-Schriften</gloss>
+                                        <gloss versionDate="2014-04-30" xml:lang="en">Kaiser-Schriften</gloss>
+                                        <desc versionDate="2014-04-30" xml:lang="de">Markiert eine Verzeichnisnummer nach Kaiser.</desc>
+                                        <desc versionDate="2014-04-30" xml:lang="en">marks a number from the Kaiser-Schriften.</desc>
+                                    </valItem>
+                                    <valItem ident="opus">
+                                        <desc versionDate="2014-04-30" xml:lang="de">Markiert eine Opuszahl.</desc>
+                                        <desc versionDate="2014-04-30" xml:lang="en">marks an opus number.</desc>
+                                    </valItem>
+                                    <valItem ident="WeV">
+                                        <gloss versionDate="2014-04-30" xml:lang="de">Weber Werkverzeichnis</gloss>
+                                        <gloss versionDate="2014-04-30" xml:lang="en">Weber Werkverzeichnis</gloss>
+                                        <desc versionDate="2014-04-30" xml:lang="de">Markiert eine Verzeichnisnummer des WeV.</desc>
+                                        <desc versionDate="2014-04-30" xml:lang="en">marks a number from the WeV.</desc>
+                                    </valItem>
+                                </valList>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+                    
+                    <elementSpec ident="titleStmt" module="MEI.header" mode="change" ns="http://www.music-encoding.org/ns/mei">
+                        <content>
+                            <rng:oneOrMore>
+                                <rng:ref name="title"/>
+                            </rng:oneOrMore>
+                            <rng:optional>
+                                <rng:ref name="respStmt"/>
+                            </rng:optional>
+                        </content>
+                        <attList>
+                            <attDef ident="label" mode="delete"/>
+                            <attDef ident="xml:base" mode="delete"/>
+                            <attDef ident="n" mode="delete"/>
+                        </attList>
+                    </elementSpec>
+                    
+                    <elementSpec ident="title" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
+                        <classes mode="change">
+                            <memberOf key="att.authorized" mode="delete"/>
+                            <memberOf key="att.canonical" mode="delete"/>
+                            <memberOf key="att.bibl" mode="delete"/>
+                            <memberOf key="att.facsimile" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:oneOrMore>
+                                <rng:choice>
+                                    <rng:text/>
+                                    <rng:ref name="lb"/>
+                                    <rng:ref name="persName"/>
+                                </rng:choice>
+                            </rng:oneOrMore>
+                        </content>
+                        <attList>
+                            <attDef ident="label" mode="delete"/>
+                            <attDef ident="xml:base" mode="delete"/>
+                            <attDef ident="type" mode="change" usage="mwa">
+                                <valList mode="replace" type="closed">
+                                    <valItem ident="sub">
+                                        <desc versionDate="2014-04-30" xml:lang="de">Markiert einen Untertitel.</desc>
+                                        <desc versionDate="2014-04-30" xml:lang="en">marks a subtitle.</desc>
+                                    </valItem>
+                                    <valItem ident="alt">
+                                        <gloss versionDate="2014-04-30" xml:lang="de">alternativ</gloss>
+                                        <gloss versionDate="2014-04-30" xml:lang="en">alternative</gloss>
+                                        <desc versionDate="2014-04-30" xml:lang="de">Markiert einen alternativen Titel, meist in Übersetzung (siehe <att>xml:lang</att>).</desc>
+                                        <desc versionDate="2014-04-30" xml:lang="en">marks an alternative title, most frequently translated (cf. <att>xml:lang</att>).</desc>
+                                    </valItem>
+                                    <valItem ident="div">
+                                        <gloss versionDate="2014-04-30" xml:lang="de">Nummer</gloss>
+                                        <gloss versionDate="2014-04-30" xml:lang="en">number</gloss>
+                                        <desc versionDate="2014-04-30" xml:lang="de">Markiert einen Titel einer musikalischen Nummer (z.B. Szene, Arie).</desc>
+                                        <desc versionDate="2014-04-30" xml:lang="en">marks a title of a musical division (e.g. scene, aria).</desc>
+                                    </valItem>
+                                </valList>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
                 </schemaSpec>
                 
                 <!--
