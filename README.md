@@ -13,6 +13,7 @@ Contents
 	* `WeGA_biblio.odd.xml`: WeGA ODD file for bibliographic documents 
 	* `WeGA_common.odd.xml`: common macros and definitions for global use in the WeGA Digital Edition
 	* `WeGA_diaries.odd.xml`: WeGA ODD file for the encoding of diary entries
+	* `WeGA_generic.odd.xml`: A generic WeGA ODD file for testing and experimental purposes
 	* `WeGA_letters.odd.xml`: WeGA ODD file for the encoding of correspondence material
 	* `WeGA_news.odd.xml`: WeGA ODD file for the encoding of website news
 	* `WeGA_persons.odd.xml`: WeGA ODD file for the encoding of (short) biographies
