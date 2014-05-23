@@ -20,7 +20,7 @@ ROMAOPTS=--nodtd --noxsd --doclang=${DOCLANG} --isoschematron
 TARGET_DIR=./schema/${DOCLANG}
 
 
-all: letters persons var biblio news diaries writings places works
+all: letters persons var biblio news diaries writings places works generic
 
 letters:
 	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} src/WeGA_letters.odd.xml ${TARGET_DIR}
@@ -48,6 +48,9 @@ places:
 	
 works:
 	${ROMA} --xsl=${TEI_XSL} --localsource=${MEI_SOURCE} ${ROMAOPTS} src/WeGA_works.odd.xml ${TARGET_DIR}
+
+generic:
+	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} src/WeGA_generic.odd.xml ${TARGET_DIR}
 
 clean:
 	echo "cleaning up"
