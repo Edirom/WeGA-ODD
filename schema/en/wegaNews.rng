@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-04-25T13:43:49Z. 
+Schema generated from ODD source 2014-05-23T21:09:07Z. 
 Edition: Version 2.6.0. Last updated on
 	20th January 2014, revision 12802
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
@@ -53,16 +53,7 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
     <data type="nonNegativeInteger"/>
   </define>
   <define name="data.temporal.w3c">
-    <choice>
-      <data type="date"/>
-      <data type="gYear"/>
-      <data type="gMonth"/>
-      <data type="gDay"/>
-      <data type="gYearMonth"/>
-      <data type="gMonthDay"/>
-      <data type="time"/>
-      <data type="dateTime"/>
-    </choice>
+    <ref name="wega.data.temporal.iso"/>
   </define>
   <define name="data.language">
     <choice>
@@ -86,21 +77,6 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
   </define>
   <define name="data.enumerated">
     <ref name="data.name"/>
-  </define>
-  <define name="data.temporal.iso">
-    <choice>
-      <data type="date"/>
-      <data type="gYear"/>
-      <data type="gMonth"/>
-      <data type="gDay"/>
-      <data type="gYearMonth"/>
-      <data type="gMonthDay"/>
-      <data type="time"/>
-      <data type="dateTime"/>
-      <data type="token">
-        <param name="pattern">[0-9.,DHMPRSTWYZ/:+\-]+</param>
-      </data>
-    </choice>
   </define>
   <define name="key.person.pattern">
     <data type="string">
@@ -247,6 +223,12 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
       <value>review</value>
     </choice>
   </define>
+  <define name="wega.data.temporal.iso">
+    <choice>
+      <data type="date"/>
+      <data type="gYear"/>
+    </choice>
+  </define>
   <define name="att.canonical.attributes">
     <ref name="att.canonical.attribute.key"/>
     <ref name="att.canonical.attribute.ref"/>
@@ -320,10 +302,7 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
   </define>
   <define name="att.datable.attributes">
     <ref name="att.datable.w3c.attributes"/>
-    <ref name="att.datable.iso.attributes"/>
-    <ref name="att.datable.custom.attributes"/>
     <ref name="att.datable.attribute.calendar"/>
-    <ref name="att.datable.attribute.period"/>
   </define>
   <define name="att.datable.attribute.calendar">
     <optional>
@@ -333,21 +312,13 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
       </attribute>
     </optional>
   </define>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="calendar-constraint-calendar">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaNews-att.datable-calendar-calendar-constraint-1">
     <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:*[@calendar]">
       <sch:assert test="string-length(.) gt 0">
 @calendar indicates the system or calendar to which the date represented by the content of this element
 belongs, but this <sch:name/> element has no textual content.</sch:assert>
     </sch:rule>
   </pattern>
-  <define name="att.datable.attribute.period">
-    <optional>
-      <attribute name="period">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">supplies a pointer to some location defining a named period of time within which the datable item is understood to have occurred.</a:documentation>
-        <ref name="data.pointer"/>
-      </attribute>
-    </optional>
-  </define>
   <define name="att.declarable.attributes">
     <ref name="att.declarable.attribute.default"/>
   </define>
@@ -391,10 +362,16 @@ belongs, but this <sch:name/> element has no textual content.</sch:assert>
   </define>
   <define name="att.docStatus.attribute.status">
     <optional>
-      <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" name="status" a:defaultValue="draft">
-        <a:documentation>describes the status of a document either currently or, when associated with a dated element, at the time indicated.
-Sample values include: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5] draft; 6] embargoed; 7] expired; 8] frozen; 9] galley; 10] proposed; 11] published; 12] recommendation; 13] submitted; 14] unfinished; 15] withdrawn</a:documentation>
-        <ref name="data.enumerated"/>
+      <attribute name="status">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">describes the status of a document either currently or, when associated with a dated element, at the time indicated.</a:documentation>
+        <choice>
+          <value>proposed</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Category "red") bottom category, i.e. documents are still in a raw state.</a:documentation>
+          <value>candidate</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Category "yellow") middle category for documents that already have a certain distinction in their markup.</a:documentation>
+          <value>approved</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Category "green") approved documents that match the current requirements of markup and went through control and checking procedures.</a:documentation>
+        </choice>
       </attribute>
     </optional>
   </define>
@@ -608,7 +585,7 @@ Suggested values include: 1] below; 2] bottom; 3] margin; 4] top; 5] opposite; 6
       </attribute>
     </optional>
   </define>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="att.typed-constraint-subtypeTyped">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaNews-att.typed-subtypeTyped-constraint-2">
     <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" context="*[@subtype]">
       <sch:assert test="@type">The <sch:name/> element should not be categorized in detail with @subtype
  unless also categorized in general with @type</sch:assert>
@@ -622,7 +599,7 @@ Suggested values include: 1] below; 2] bottom; 3] margin; 4] top; 5] opposite; 6
       </attribute>
     </optional>
   </define>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="targetLang-constraint-targetLang">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaNews-att.pointing-targetLang-targetLang-constraint-3">
     <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:*[not(self::tei:schemaSpec)][@targetLang]">
       <sch:assert test="count(@target)">@targetLang can only be used if @target is specified.</sch:assert>
     </sch:rule>
@@ -642,45 +619,6 @@ Suggested values include: 1] below; 2] bottom; 3] margin; 4] top; 5] opposite; 6
       </attribute>
     </optional>
   </define>
-  <define name="att.sortable.attributes">
-    <ref name="att.sortable.attribute.sortKey"/>
-  </define>
-  <define name="att.sortable.attribute.sortKey">
-    <optional>
-      <attribute name="sortKey">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">supplies the sort key for this element in an index, list or group which contains it.</a:documentation>
-        <ref name="data.word"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.edition.attributes">
-    <ref name="att.edition.attribute.ed"/>
-    <ref name="att.edition.attribute.edRef"/>
-  </define>
-  <define name="att.edition.attribute.ed">
-    <optional>
-      <attribute name="ed">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(edition) supplies a sigil or other arbitrary identifier for the source edition in which the associated feature (for example, a page, column, or line break) occurs at this point in the text.</a:documentation>
-        <list>
-          <oneOrMore>
-            <ref name="data.word"/>
-          </oneOrMore>
-        </list>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.edition.attribute.edRef">
-    <optional>
-      <attribute name="edRef">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(edition reference) provides a pointer to the source edition in which the associated feature (for example, a page, column, or line break) occurs at this point in the text.</a:documentation>
-        <list>
-          <oneOrMore>
-            <ref name="data.pointer"/>
-          </oneOrMore>
-        </list>
-      </attribute>
-    </optional>
-  </define>
   <define name="att.spanning.attributes">
     <ref name="att.spanning.attribute.spanTo"/>
   </define>
@@ -692,7 +630,7 @@ Suggested values include: 1] below; 2] bottom; 3] margin; 4] top; 5] opposite; 6
       </attribute>
     </optional>
   </define>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="spanTo-constraint-spanTo-2">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaNews-att.spanning-spanTo-spanTo-2-constraint-4">
     <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:*[@spanTo]">
       <sch:assert test="id(substring(@spanTo,2)) and following::*[@xml:id=substring(current()/@spanTo,2)]">
 The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow the current element <sch:name/>
@@ -1330,29 +1268,6 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
     <element name="hi">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(highlighted) marks a word or phrase as graphically distinct from the surrounding text, for reasons concerning which no claim is made. [3.3.2.2.  3.3.2. ]</a:documentation>
       <ref name="macro.paraContent"/>
-      <attribute name="rend">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(rendition) indicates how the element in question was rendered or presented in the source text.</a:documentation>
-        <choice>
-          <value>latintype</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">typeface: latintype.</a:documentation>
-          <value>antiqua</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">typeface: antiqua.</a:documentation>
-          <value>superscript</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">superscript character.</a:documentation>
-          <value>subscript</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">subscript character.</a:documentation>
-          <value>italic</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">italic typeface.</a:documentation>
-          <value>spaced_out</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">spaced out typeface.</a:documentation>
-          <value>bold</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">bold typeface.</a:documentation>
-          <value>underline</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">underlined text.</a:documentation>
-          <value>small-caps</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">small caps.</a:documentation>
-        </choice>
-      </attribute>
       <optional>
         <attribute name="n">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(number) gives a number (or other label) for an element, which is not necessarily unique within the document.</a:documentation>
@@ -1365,6 +1280,7 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
           <data type="ID"/>
         </attribute>
       </optional>
+      <ref name="att.wega.rend.attribute.rend"/>
       <empty/>
     </element>
   </define>
@@ -1378,9 +1294,9 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
     <element name="rs">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(referencing string) identifies one or more objects by type person, work, dairy entry, and so on. [13.2.1.  3.5.1. ]</a:documentation>
       <ref name="macro.phraseSeq"/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="rs-constraint-rs-typeNkey">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaNews-rs-rs-typeNkey-constraint-5">
         <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:rs[@type][@key]">
-          <sch:assert test="                                 (matches(@key, '^A00\d{4}$') and @type='person') or                                 (matches(@key, '^A02\d{4}$') and @type='work') or                                 (matches(@key, '^A03\d{4}$') and @type='writing') or                                 (matches(@key, '^A04\d{4}$') and @type='letter') or                                 (matches(@key, '^A06\d{4}$') and @type='diaryDay') or                                 (matches(@key, '^(A00\d{4}\s)*A00\d{4}$') and @type='persons') or                                 (matches(@key, '^(A02\d{4}\s)*A02\d{4}$') and @type='works') or                                 (matches(@key, '^(A03\d{4}\s)*A03\d{4}$') and @type='writings') or                                 (matches(@key, '^(A04\d{4}\s)*A04\d{4}$') and @type='letters') or                                 (matches(@key, '^(A05\d{4}\s)*A05\d{4}$') and @type='news') or                                 (matches(@key, '^(A06\d{4}\s)*A06\d{4}$') and @type='diaryDays') or                                 (matches(@key, '^(A11\d{4}\s)*A11\d{4}$') and @type='biblio')">Type mismatch: The value for @type must be in accordance with the given ID in @key</sch:assert>
+          <sch:assert test="                             (matches(@key, '^A00\d{4}$') and @type='person') or                             (matches(@key, '^A02\d{4}$') and @type='work') or                             (matches(@key, '^A03\d{4}$') and @type='writing') or                             (matches(@key, '^A04\d{4}$') and @type='letter') or                             (matches(@key, '^A06\d{4}$') and @type='diaryDay') or                             (matches(@key, '^(A00\d{4}\s)*A00\d{4}$') and @type='persons') or                             (matches(@key, '^(A02\d{4}\s)*A02\d{4}$') and @type='works') or                             (matches(@key, '^(A03\d{4}\s)*A03\d{4}$') and @type='writings') or                             (matches(@key, '^(A04\d{4}\s)*A04\d{4}$') and @type='letters') or                             (matches(@key, '^(A05\d{4}\s)*A05\d{4}$') and @type='news') or                             (matches(@key, '^(A06\d{4}\s)*A06\d{4}$') and @type='diaryDays') or                             (matches(@key, '^(A11\d{4}\s)*A11\d{4}$') and @type='biblio')">Type mismatch: The value for @type must be in accordance with the given ID in @key</sch:assert>
         </sch:rule>
       </pattern>
       <ref name="att.typed.attribute.subtype"/>
@@ -1452,50 +1368,37 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
           <ref name="model.global"/>
         </choice>
       </zeroOrMore>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="date-constraint-dateHeuristics1">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaNews-date-dateHeuristics1-constraint-1">
         <rule context="tei:date">
           <sch:report xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="(@notBefore gt @notAfter) and not(starts-with(@notBefore, '-'))">value of notBefore greater than notAfter</sch:report>
         </rule>
       </pattern>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="date-constraint-dateHeuristics2">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaNews-date-dateHeuristics2-constraint-2">
         <rule context="tei:date">
           <sch:report xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="(@notBefore lt @notAfter) and starts-with(@notBefore, '-')">value of notBefore smaller than notAfter</sch:report>
         </rule>
       </pattern>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="date-constraint-dateHeuristics3">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaNews-date-dateHeuristics3-constraint-3">
         <rule context="tei:date">
           <sch:report xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="(@from or @to) and (@when or @notAfter or @notBefore)">cooccurence of date and duration attributes</sch:report>
         </rule>
       </pattern>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="date-constraint-dateHeuristics4">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaNews-date-dateHeuristics4-constraint-4">
         <rule context="tei:date">
           <sch:report xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="@when and (@notAfter or @notBefore)">cooccurence of exact and uncertain date attributes</sch:report>
         </rule>
       </pattern>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="date-constraint-dateHeuristics5">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaNews-date-dateHeuristics5-constraint-6">
         <rule context="tei:date">
           <sch:assert xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</sch:assert>
         </rule>
       </pattern>
       <ref name="att.responsibility.attributes"/>
-      <ref name="att.datable.attribute.period"/>
       <ref name="att.datable.w3c.attribute.when"/>
       <ref name="att.datable.w3c.attribute.notBefore"/>
       <ref name="att.datable.w3c.attribute.notAfter"/>
       <ref name="att.datable.w3c.attribute.from"/>
       <ref name="att.datable.w3c.attribute.to"/>
-      <ref name="att.datable.iso.attribute.when-iso"/>
-      <ref name="att.datable.iso.attribute.notBefore-iso"/>
-      <ref name="att.datable.iso.attribute.notAfter-iso"/>
-      <ref name="att.datable.iso.attribute.from-iso"/>
-      <ref name="att.datable.iso.attribute.to-iso"/>
-      <ref name="att.datable.custom.attribute.when-custom"/>
-      <ref name="att.datable.custom.attribute.notBefore-custom"/>
-      <ref name="att.datable.custom.attribute.notAfter-custom"/>
-      <ref name="att.datable.custom.attribute.from-custom"/>
-      <ref name="att.datable.custom.attribute.to-custom"/>
-      <ref name="att.datable.custom.attribute.datingPoint"/>
-      <ref name="att.datable.custom.attribute.datingMethod"/>
       <optional>
         <attribute name="calendar">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the system or calendar to which the date represented by the content of this element belongs.</a:documentation>
@@ -1503,18 +1406,6 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
             <value>Julian</value>
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Identifies the selected date as specified according to the Julian calendar. The normalized value in when has to be specified after the standard, ergo the Gregorian calendar.</a:documentation>
           </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="xml:id">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(identifier) provides a unique identifier for the element bearing the attribute.</a:documentation>
-          <text/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="n">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-          <text/>
         </attribute>
       </optional>
       <optional>
@@ -1530,6 +1421,8 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
           </choice>
         </attribute>
       </optional>
+      <ref name="att.global.attribute.xmlid"/>
+      <ref name="att.global.attribute.n"/>
       <empty/>
     </element>
   </define>
@@ -1537,7 +1430,7 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
     <element name="ref">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(reference) defines a reference to another location, possibly modified by additional text or comment. [3.6.  16.1. ]</a:documentation>
       <ref name="macro.paraContent"/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="ref-constraint-refAtts">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaNews-ref-refAtts-constraint-5">
         <rule context="tei:ref">
           <report xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="@target and @cRef">Only one of the
 	attributes @target' and @cRef' may be supplied on <name/>
@@ -1609,7 +1502,6 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
         </zeroOrMore>
       </group>
       <ref name="att.global.attributes"/>
-      <ref name="att.sortable.attributes"/>
       <optional>
         <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" name="type" a:defaultValue="simple">
           <a:documentation>describes the form of the list.
@@ -1635,7 +1527,6 @@ Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:docume
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains one component of a list. [3.7.  2.5. ]</a:documentation>
       <ref name="macro.specialPara"/>
       <ref name="att.global.attributes"/>
-      <ref name="att.sortable.attributes"/>
       <empty/>
     </element>
   </define>
@@ -1720,7 +1611,6 @@ Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:docume
     <element name="lb">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(line break) marks the start of a new (typographic) line in some edition or version of a text. [3.10.3.  7.2.5. ]</a:documentation>
       <empty/>
-      <ref name="att.edition.attributes"/>
       <ref name="att.spanning.attributes"/>
       <optional>
         <attribute name="type">
@@ -1780,7 +1670,7 @@ Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:docume
     <element name="title">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains a title for any kind of work. [3.11.2.2.  2.2.1.  2.2.5. ]</a:documentation>
       <ref name="macro.paraContent"/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="title-constraint-duplicate-title">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaNews-title-duplicate-title-constraint-6">
         <rule context="tei:title">
           <sch:report xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="@level = following-sibling::tei:title[not(@type)]/@level">Following title without @type</sch:report>
         </rule>
@@ -1794,18 +1684,8 @@ Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:docume
           </choice>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="xml:lang">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(language) indicates the language of the element content using a ‘tag’ generated according to BCP 47.</a:documentation>
-          <text/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="xml:id">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(identifier) provides a unique identifier for the element bearing the attribute.</a:documentation>
-          <text/>
-        </attribute>
-      </optional>
+      <ref name="att.global.attribute.xmllang"/>
+      <ref name="att.global.attribute.xmlid"/>
       <attribute name="level">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the bibliographic level for a title, that is, whether it identifies an article, book, journal, series, or unpublished material.</a:documentation>
         <choice>
@@ -1843,7 +1723,6 @@ Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:docume
       <ref name="att.global.attributes"/>
       <ref name="att.declarable.attributes"/>
       <ref name="att.typed.attributes"/>
-      <ref name="att.sortable.attributes"/>
       <ref name="att.docStatus.attributes"/>
       <empty/>
     </element>
@@ -2067,138 +1946,6 @@ Sample values include: 1] text; 2] corpus</a:documentation>
       <empty/>
     </element>
   </define>
-  <define name="att.datable.custom.attributes">
-    <ref name="att.datable.custom.attribute.when-custom"/>
-    <ref name="att.datable.custom.attribute.notBefore-custom"/>
-    <ref name="att.datable.custom.attribute.notAfter-custom"/>
-    <ref name="att.datable.custom.attribute.from-custom"/>
-    <ref name="att.datable.custom.attribute.to-custom"/>
-    <ref name="att.datable.custom.attribute.datingPoint"/>
-    <ref name="att.datable.custom.attribute.datingMethod"/>
-  </define>
-  <define name="att.datable.custom.attribute.when-custom">
-    <optional>
-      <attribute name="when-custom">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">supplies the value of a date or time in some standard form.</a:documentation>
-        <list>
-          <oneOrMore>
-            <ref name="data.word"/>
-          </oneOrMore>
-        </list>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.custom.attribute.notBefore-custom">
-    <optional>
-      <attribute name="notBefore-custom">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the earliest possible date for the event in some custom standard form.</a:documentation>
-        <list>
-          <oneOrMore>
-            <ref name="data.word"/>
-          </oneOrMore>
-        </list>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.custom.attribute.notAfter-custom">
-    <optional>
-      <attribute name="notAfter-custom">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the latest possible date for the event in some custom standard form.</a:documentation>
-        <list>
-          <oneOrMore>
-            <ref name="data.word"/>
-          </oneOrMore>
-        </list>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.custom.attribute.from-custom">
-    <optional>
-      <attribute name="from-custom">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the starting point of the period in some standard form.</a:documentation>
-        <list>
-          <oneOrMore>
-            <ref name="data.word"/>
-          </oneOrMore>
-        </list>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.custom.attribute.to-custom">
-    <optional>
-      <attribute name="to-custom">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the ending point of the period in some standard form.</a:documentation>
-        <list>
-          <oneOrMore>
-            <ref name="data.word"/>
-          </oneOrMore>
-        </list>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.custom.attribute.datingPoint">
-    <optional>
-      <attribute name="datingPoint">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">supplies a pointer to some location defining a named point in time with reference to which the datable item is understood to have occurred</a:documentation>
-        <ref name="data.pointer"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.custom.attribute.datingMethod">
-    <optional>
-      <attribute name="datingMethod">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">supplies a pointer to a calendar element or other means of interpreting the values of the custom dating attributes.</a:documentation>
-        <ref name="data.pointer"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.iso.attributes">
-    <ref name="att.datable.iso.attribute.when-iso"/>
-    <ref name="att.datable.iso.attribute.notBefore-iso"/>
-    <ref name="att.datable.iso.attribute.notAfter-iso"/>
-    <ref name="att.datable.iso.attribute.from-iso"/>
-    <ref name="att.datable.iso.attribute.to-iso"/>
-  </define>
-  <define name="att.datable.iso.attribute.when-iso">
-    <optional>
-      <attribute name="when-iso">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">supplies the value of a date or time in a standard form.</a:documentation>
-        <ref name="data.temporal.iso"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.iso.attribute.notBefore-iso">
-    <optional>
-      <attribute name="notBefore-iso">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the earliest possible date for the event in standard form, e.g. yyyy-mm-dd.</a:documentation>
-        <ref name="data.temporal.iso"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.iso.attribute.notAfter-iso">
-    <optional>
-      <attribute name="notAfter-iso">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the latest possible date for the event in standard form, e.g. yyyy-mm-dd.</a:documentation>
-        <ref name="data.temporal.iso"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.iso.attribute.from-iso">
-    <optional>
-      <attribute name="from-iso">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the starting point of the period in standard form.</a:documentation>
-        <ref name="data.temporal.iso"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.datable.iso.attribute.to-iso">
-    <optional>
-      <attribute name="to-iso">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the ending point of the period in standard form.</a:documentation>
-        <ref name="data.temporal.iso"/>
-      </attribute>
-    </optional>
-  </define>
   <define name="persName">
     <element name="persName">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(personal name) contains a proper noun or proper-noun phrase referring to a person, possibly including one or more of the person's forenames, surnames, honorifics, added names, etc. [13.2.1. ]</a:documentation>
@@ -2282,17 +2029,6 @@ Sample values include: 1] text; 2] corpus</a:documentation>
       <ref name="macro.phraseSeq"/>
     </element>
   </define>
-  <define name="footNote">
-    <element name="footNote">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Special element for the transcription of a footnote (not necessarily to be rendered as such)</a:documentation>
-      <ref name="macro.specialPara"/>
-      <attribute name="xml:id">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(identifier) provides a unique identifier for the element bearing the attribute.</a:documentation>
-        <data type="ID"/>
-      </attribute>
-      <empty/>
-    </element>
-  </define>
   <define name="characterName">
     <element name="characterName">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(characterName) name of a role or character in a work.</a:documentation>
@@ -2328,17 +2064,53 @@ Sample values include: 1] text; 2] corpus</a:documentation>
       <empty/>
     </element>
   </define>
+  <define name="footNote">
+    <element name="footNote">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Special element for the transcription of a footnote (not necessarily to be rendered as such)</a:documentation>
+      <ref name="macro.specialPara"/>
+      <attribute name="xml:id">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(identifier) provides a unique identifier for the element bearing the attribute.</a:documentation>
+        <data type="ID"/>
+      </attribute>
+      <empty/>
+    </element>
+  </define>
+  <define name="att.wega.rend.attribute.rend">
+    <attribute name="rend">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(rendition) indicates how the element in question was rendered or presented in the source text.</a:documentation>
+      <choice>
+        <value>latintype</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">typeface: latintype.</a:documentation>
+        <value>antiqua</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">typeface: antiqua.</a:documentation>
+        <value>superscript</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">superscript character.</a:documentation>
+        <value>subscript</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">subscript character.</a:documentation>
+        <value>italic</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">italic typeface.</a:documentation>
+        <value>spaced_out</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">spaced out typeface.</a:documentation>
+        <value>bold</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">bold typeface.</a:documentation>
+        <value>underline</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">underlined text.</a:documentation>
+        <value>small-caps</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">small caps.</a:documentation>
+      </choice>
+    </attribute>
+  </define>
   <start>
     <choice>
       <ref name="TEI"/>
     </choice>
   </start>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaNews-constraint-whitespaceOnlyContent">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaNews-whitespaceOnlyContent-constraint-6">
     <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type='part')] | tei:placeName | tei:title">
       <sch:report test="normalize-space(.) = ''"><sch:name/> has whitespace only content</sch:report>
     </sch:rule>
   </pattern>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaNews-constraint-elementStartsWithWhitespace">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaNews-elementStartsWithWhitespace-constraint-7">
     <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
       <sch:report test="matches(.,'^\s')">whitespace at the beginning of element <sch:name/>
          </sch:report>

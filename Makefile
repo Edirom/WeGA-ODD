@@ -22,6 +22,8 @@ TARGET_DIR=./schema/${DOCLANG}
 
 all: letters persons var biblio news diaries writings places works generic
 
+tei: letters persons var biblio news diaries writings places generic
+
 letters:
 	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} src/WeGA_letters.odd.xml ${TARGET_DIR}
 
