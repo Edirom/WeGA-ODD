@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-05-23T21:06:51Z. 
+Schema generated from ODD source 2014-06-04T11:33:03Z. 
 Edition: Version 2.6.0. Last updated on
 	20th January 2014, revision 12802
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
@@ -2496,12 +2496,7 @@ Suggested values include: 1] page; 2] column; 3] line; 4] book; 5] poem; 6] cant
           <ref name="staffSignatures.list"/>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="cert">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(certainty) signifies the degree of certainty associated with the intervention or interpretation.</a:documentation>
-          <ref name="data.certainty"/>
-        </attribute>
-      </optional>
+      <ref name="att.responsibility.attribute.cert"/>
       <empty/>
     </element>
   </define>
@@ -2575,12 +2570,7 @@ Suggested values include: 1] page; 2] column; 3] line; 4] book; 5] poem; 6] cant
           </choice>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="cert">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(certainty) signifies the degree of certainty associated with the intervention or interpretation.</a:documentation>
-          <ref name="data.certainty"/>
-        </attribute>
-      </optional>
+      <ref name="att.responsibility.attribute.cert"/>
       <empty/>
     </element>
   </define>
@@ -3170,12 +3160,6 @@ Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:docume
         </attribute>
       </optional>
       <optional>
-        <attribute name="cert">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(certainty) signifies the degree of certainty associated with the intervention or interpretation.</a:documentation>
-          <ref name="data.certainty"/>
-        </attribute>
-      </optional>
-      <optional>
         <attribute name="role">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">may be used to specify further information about the entity referenced by this name, for example the occupation of a person, or the status of a place.</a:documentation>
           <choice>
@@ -3186,6 +3170,7 @@ Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:docume
           </choice>
         </attribute>
       </optional>
+      <ref name="att.responsibility.attribute.cert"/>
       <empty/>
     </element>
   </define>
@@ -3247,10 +3232,13 @@ Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:docume
     <element name="title">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains a title for any kind of work. [3.11.2.2.  2.2.1.  2.2.5. ]</a:documentation>
       <ref name="macro.paraContent"/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaGeneric-title-duplicate-title-constraint-7">
-        <rule context="tei:title">
-          <sch:report xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" test="@level = following-sibling::tei:title[not(@type)]/@level">Following title without @type</sch:report>
-        </rule>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaGeneric-title-duplicate-title-constraint-6">
+        <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:title[following-sibling::tei:title]">
+          <sch:let name="level" value="@level"/>
+          <sch:let name="type" value="string(@type)"/>
+          <sch:let name="lang" value="string(@xml:lang)"/>
+          <sch:report test="following-sibling::tei:title[@level = $level][string(@xml:lang) = $lang][string(@type) = $type]">Following title without differing @type or xml:lang attribute</sch:report>
+        </sch:rule>
       </pattern>
       <optional>
         <attribute name="type">
@@ -4174,12 +4162,7 @@ Sample values include: 1] text; 2] corpus</a:documentation>
           <ref name="key.person.pattern"/>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="cert">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(certainty) signifies the degree of certainty associated with the intervention or interpretation.</a:documentation>
-          <ref name="data.certainty"/>
-        </attribute>
-      </optional>
+      <ref name="att.responsibility.attribute.cert"/>
       <empty/>
     </element>
   </define>
@@ -4223,12 +4206,7 @@ Sample values include: 1] text; 2] corpus</a:documentation>
           </choice>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="cert">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(certainty) signifies the degree of certainty associated with the intervention or interpretation.</a:documentation>
-          <ref name="data.certainty"/>
-        </attribute>
-      </optional>
+      <ref name="att.responsibility.attribute.cert"/>
       <empty/>
     </element>
   </define>
@@ -4439,7 +4417,7 @@ Sample values include: 1] text; 2] corpus</a:documentation>
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the end of a span initiated by the element bearing this attribute.</a:documentation>
         <ref name="data.pointer"/>
       </attribute>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaGeneric-addSpan-spanTo-spanTo-7-constraint-6">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaGeneric-addSpan-spanTo-spanTo-7-constraint-7">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:*[@spanTo]">
           <sch:assert test="id(substring(@spanTo,2)) and following::*[@xml:id=substring(current()/@spanTo,2)]">
                                     The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow the current element <sch:name/>
@@ -5001,115 +4979,15 @@ Sample values include: 1] text; 2] corpus</a:documentation>
       </attribute>
     </optional>
   </define>
-  <define name="att.textCritical.attributes">
-    <ref name="att.responsibility.attributes"/>
-    <ref name="att.textCritical.attribute.type"/>
-    <ref name="att.textCritical.attribute.cause"/>
-    <ref name="att.textCritical.attribute.varSeq"/>
-    <ref name="att.textCritical.attribute.hand"/>
-  </define>
-  <define name="att.textCritical.attribute.type">
-    <optional>
-      <attribute name="type">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">classifies the reading according to some useful typology.
-Sample values include: 1] substantive; 2] orthographic</a:documentation>
-        <ref name="data.enumerated"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.textCritical.attribute.cause">
-    <optional>
-      <attribute name="cause">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">classifies the cause for the variant reading, according to any appropriate typology of possible origins.
-Sample values include: 1] homeoteleuton; 2] homeoarchy; 3] paleographicConfusion; 4] haplography; 5] dittography; 6] falseEmendation</a:documentation>
-        <ref name="data.enumerated"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.textCritical.attribute.varSeq">
-    <optional>
-      <attribute name="varSeq">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(variant sequence) provides a number indicating the position of this reading in a sequence, when there is reason to presume a sequence to the variants. </a:documentation>
-        <ref name="data.count"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.textCritical.attribute.hand">
-    <optional>
-      <attribute name="hand">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the hand responsible for a particular reading in the witness.</a:documentation>
-        <ref name="data.pointer"/>
-      </attribute>
-    </optional>
-  </define>
   <define name="app">
     <element name="app">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(apparatus entry) contains one entry in a critical apparatus, with an optional lemma and usually one or more readings or notes on the relevant passage. [12.1.1. ]</a:documentation>
-      <group>
-        <zeroOrMore>
-          <ref name="model.global"/>
-        </zeroOrMore>
-        <optional>
-          <ref name="lem"/>
-          <zeroOrMore>
-            <ref name="model.global"/>
-          </zeroOrMore>
-          <zeroOrMore>
-            <ref name="model.global"/>
-          </zeroOrMore>
-        </optional>
-        <zeroOrMore>
-          <choice>
-            <group>
-              <ref name="model.rdgLike"/>
-              <zeroOrMore>
-                <ref name="model.global"/>
-              </zeroOrMore>
-              <zeroOrMore>
-                <ref name="model.global"/>
-              </zeroOrMore>
-            </group>
-            <group>
-              <zeroOrMore>
-                <ref name="model.global"/>
-              </zeroOrMore>
-              <zeroOrMore>
-                <ref name="model.global"/>
-              </zeroOrMore>
-            </group>
-          </choice>
-        </zeroOrMore>
-      </group>
-      <ref name="att.global.attributes"/>
       <optional>
-        <attribute name="type">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">classifies the variation contained in this element according to some convenient typology.</a:documentation>
-          <ref name="data.enumerated"/>
-        </attribute>
+        <ref name="lem"/>
       </optional>
-      <optional>
-        <attribute name="from">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">identifies the beginning of the lemma in the base text.</a:documentation>
-          <ref name="data.pointer"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="to">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">identifies the endpoint of the lemma in the base text.</a:documentation>
-          <ref name="data.pointer"/>
-        </attribute>
-      </optional>
-      <optional>
-        <attribute name="loc">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(location) indicates the location of the variation, when the location-referenced method of apparatus markup is used.</a:documentation>
-          <list>
-            <oneOrMore>
-              <ref name="data.word"/>
-            </oneOrMore>
-          </list>
-        </attribute>
-      </optional>
-      <empty/>
+      <zeroOrMore>
+        <ref name="model.rdgLike"/>
+      </zeroOrMore>
     </element>
   </define>
   <define name="lem">
@@ -5125,9 +5003,8 @@ Sample values include: 1] homeoteleuton; 2] homeoarchy; 3] paleographicConfusion
           <ref name="model.rdgPart"/>
         </choice>
       </zeroOrMore>
-      <ref name="att.global.attributes"/>
-      <ref name="att.textCritical.attributes"/>
       <ref name="att.witnessed.attributes"/>
+      <ref name="att.responsibility.attribute.cert"/>
       <empty/>
     </element>
   </define>
@@ -5144,9 +5021,8 @@ Sample values include: 1] homeoteleuton; 2] homeoarchy; 3] paleographicConfusion
           <ref name="model.rdgPart"/>
         </choice>
       </zeroOrMore>
-      <ref name="att.global.attributes"/>
-      <ref name="att.textCritical.attributes"/>
       <ref name="att.witnessed.attributes"/>
+      <ref name="att.responsibility.attribute.cert"/>
       <empty/>
     </element>
   </define>
@@ -5173,6 +5049,7 @@ Sample values include: 1] homeoteleuton; 2] homeoarchy; 3] paleographicConfusion
         <ref name="msDesc"/>
         <ref name="biblStruct"/>
         <ref name="bibl"/>
+        <ref name="listBibl"/>
       </choice>
       <attribute name="n">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
@@ -5234,12 +5111,7 @@ Sample values include: 1] homeoteleuton; 2] homeoarchy; 3] paleographicConfusion
     <element name="characterName">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(characterName) name of a role or character in a work.</a:documentation>
       <ref name="macro.phraseSeq"/>
-      <optional>
-        <attribute name="cert">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(certainty) signifies the degree of certainty associated with the intervention or interpretation.</a:documentation>
-          <ref name="data.certainty"/>
-        </attribute>
-      </optional>
+      <ref name="att.responsibility.attribute.cert"/>
       <empty/>
     </element>
   </define>
@@ -5256,12 +5128,7 @@ Sample values include: 1] homeoteleuton; 2] homeoarchy; 3] paleographicConfusion
           </choice>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="cert">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(certainty) signifies the degree of certainty associated with the intervention or interpretation.</a:documentation>
-          <ref name="data.certainty"/>
-        </attribute>
-      </optional>
+      <ref name="att.responsibility.attribute.cert"/>
       <empty/>
     </element>
   </define>
@@ -5306,12 +5173,12 @@ Sample values include: 1] homeoteleuton; 2] homeoarchy; 3] paleographicConfusion
       <ref name="TEI"/>
     </choice>
   </start>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaGeneric-whitespaceOnlyContent-constraint-7">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaGeneric-whitespaceOnlyContent-constraint-8">
     <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type='part')] | tei:placeName | tei:title">
       <sch:report test="normalize-space(.) = ''"><sch:name/> has whitespace only content</sch:report>
     </sch:rule>
   </pattern>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaGeneric-elementStartsWithWhitespace-constraint-8">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaGeneric-elementStartsWithWhitespace-constraint-9">
     <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
       <sch:report test="matches(.,'^\s')">whitespace at the beginning of element <sch:name/>
          </sch:report>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2014-05-23T21:00:07.495+02:00 by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2014-06-04T11:29:37.382+02:00 by 'extract-isosch.xsl'. -->
 
 <!-- ********************* -->
 <!-- namespaces, declared: -->
@@ -79,10 +79,13 @@ The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the 
       </rule>
    </pattern>
    <pattern id="wegaDiaries-title-constraint-duplicate-title-12">
-      <rule context="tei:title">
-                    <report test="@level = following-sibling::tei:title[not(@type)]/@level">Following title without @type</report>
-                </rule>
-   </pattern>
+                    <rule context="tei:title[following-sibling::tei:title]">
+                        <let name="level" value="@level"/>
+                        <let name="type" value="string(@type)"/> 
+                        <let name="lang" value="string(@xml:lang)"/>
+                        <report test="following-sibling::tei:title[@level = $level][string(@xml:lang) = $lang][string(@type) = $type]">Following title without differing @type or xml:lang attribute</report>
+                    </rule>
+                </pattern>
    <pattern id="wegaDiaries-subst-constraint-substContents1-13">
       <rule context="tei:subst">
          <assert test="child::tei:add and child::tei:del">

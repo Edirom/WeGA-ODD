@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2014-05-23T20:59:32.143+02:00 by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2014-06-04T11:29:05.844+02:00 by 'extract-isosch.xsl'. -->
 
 <!-- ********************* -->
 <!-- namespaces, declared: -->
@@ -72,10 +72,13 @@ belongs, but this <name/> element has no textual content.</assert>
       </rule>
    </pattern>
    <pattern id="wegaBiblio-title-constraint-duplicate-title-11">
-      <rule context="tei:title">
-                    <report test="@level = following-sibling::tei:title[not(@type)]/@level">Following title without @type</report>
-                </rule>
-   </pattern>
+                    <rule context="tei:title[following-sibling::tei:title]">
+                        <let name="level" value="@level"/>
+                        <let name="type" value="string(@type)"/> 
+                        <let name="lang" value="string(@xml:lang)"/>
+                        <report test="following-sibling::tei:title[@level = $level][string(@xml:lang) = $lang][string(@type) = $type]">Following title without differing @type or xml:lang attribute</report>
+                    </rule>
+                </pattern>
    <pattern id="wegaBiblio-imprint-constraint-duplicate-biblScope-type-12">
       <rule context="tei:imprint">
                     <report test="count(distinct-values(tei:biblScope/@type)) ne count(tei:biblScope/@type)">duplicate value for biblScope</report>

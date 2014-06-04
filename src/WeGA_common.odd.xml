@@ -580,10 +580,15 @@
                 <memberOf key="att.typed" mode="delete"/>
             </classes>
             <constraintSpec scheme="isoschematron" ident="duplicate-title">
-                <desc versionDate="2013-11-11" xml:lang="en">checks for the occurence of a following <gi>title</gi> element with the same bibliographic level</desc>
-                <desc versionDate="2013-11-11" xml:lang="de">sucht nach dem Auftreten eines nachfolgenden <gi>title</gi> Elements auf der gleichen bibliographischen Ebene</desc>
+                <desc versionDate="2013-11-11" xml:lang="en">checks for the occurence of identical <gi>title</gi> elements (with the same bibliographic level and language)</desc>
+                <desc versionDate="2013-11-11" xml:lang="de">überprüft auf identische <gi>title</gi> Elemente (gleiche bibliographische Ebene und Sprache)</desc>
                 <constraint>
-                    <sch:report test="@level = following-sibling::tei:title[not(@type)]/@level">Following title without @type</sch:report>
+                    <sch:rule context="tei:title[following-sibling::tei:title]">
+                        <sch:let name="level" value="@level"/>
+                        <sch:let name="type" value="string(@type)"/> <!-- use string values so comparing non-existing atrtibutes will return true -->
+                        <sch:let name="lang" value="string(@xml:lang)"/>
+                        <sch:report test="following-sibling::tei:title[@level = $level][string(@xml:lang) = $lang][string(@type) = $type]">Following title without differing @type or xml:lang attribute</sch:report>
+                    </sch:rule>
                 </constraint>
             </constraintSpec>
             <attList>
@@ -973,50 +978,6 @@
                 <memberOf key="att.global" mode="delete"/>
             </classes>
             <attList>
-                <!--<attDef ident="rend" mode="add" usage="req">
-                    <gloss versionDate="2013-11-11" xml:lang="en">rendition</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="en">indicates how the element in question was rendered or presented in the source text.</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="de">graphische Darstellung</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="de">gibt an, wie das fragliche Element <emph>in der Vorlage</emph> graphisch dargestellt ist.</desc>
-                    <valList type="closed">
-                        <valItem ident="latintype">
-                            <desc versionDate="2013-11-11" xml:lang="en">typeface: latintype.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">Schriftart: latintype.</desc>
-                        </valItem>
-                        <valItem ident="antiqua">
-                            <desc versionDate="2013-11-11" xml:lang="en">typeface: antiqua.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">Schriftart: antiqua.</desc>
-                        </valItem>
-                        <valItem ident="superscript">
-                            <desc versionDate="2013-11-11" xml:lang="en">superscript character.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">hochgestelltes Zeichen.</desc>
-                        </valItem>
-                        <valItem ident="subscript">
-                            <desc versionDate="2013-11-11" xml:lang="en">subscript character.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">tiefgestelltes Zeichen.</desc>
-                        </valItem>
-                        <valItem ident="italic">
-                            <desc versionDate="2013-11-11" xml:lang="en">italic typeface.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">kursive Schriftlage.</desc>
-                        </valItem>
-                        <valItem ident="spaced_out">
-                            <desc versionDate="2013-11-11" xml:lang="en">spaced out typeface.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">gesperrte Schriftbreite.</desc>
-                        </valItem>
-                        <valItem ident="bold">
-                            <desc versionDate="2013-11-11" xml:lang="en">bold typeface.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">fette Schriftstärke.</desc>
-                        </valItem>
-                        <valItem ident="underline">
-                            <desc versionDate="2013-11-11" xml:lang="en">underlined text.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">unterstrichener Text.</desc>
-                        </valItem>
-                        <valItem ident="small-caps">
-                            <desc versionDate="2013-11-11" xml:lang="en">small caps.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">Kapitälchen.</desc>
-                        </valItem>
-                    </valList>
-                </attDef>-->
                 <attRef name="rend" class="att.wega.rend"/>
                 <attDef ident="n" mode="add" usage="mwa">
                     <gloss versionDate="2013-11-11" xml:lang="en">number</gloss>

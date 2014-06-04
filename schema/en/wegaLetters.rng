@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-06-02T12:09:21Z. 
+Schema generated from ODD source 2014-06-04T11:30:43Z. 
 Edition: Version 2.6.0. Last updated on
 	20th January 2014, revision 12802
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
@@ -3235,10 +3235,13 @@ Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:docume
     <element name="title">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains a title for any kind of work. [3.11.2.2.  2.2.1.  2.2.5. ]</a:documentation>
       <ref name="wega_macro.paraContent"/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-title-duplicate-title-constraint-7">
-        <rule context="tei:title">
-          <sch:report xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" test="@level = following-sibling::tei:title[not(@type)]/@level">Following title without @type</sch:report>
-        </rule>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-title-duplicate-title-constraint-6">
+        <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:title[following-sibling::tei:title]">
+          <sch:let name="level" value="@level"/>
+          <sch:let name="type" value="string(@type)"/>
+          <sch:let name="lang" value="string(@xml:lang)"/>
+          <sch:report test="following-sibling::tei:title[@level = $level][string(@xml:lang) = $lang][string(@type) = $type]">Following title without differing @type or xml:lang attribute</sch:report>
+        </sch:rule>
       </pattern>
       <optional>
         <attribute name="type">
@@ -4546,7 +4549,7 @@ Sample values include: 1] text; 2] corpus</a:documentation>
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the end of a span initiated by the element bearing this attribute.</a:documentation>
         <ref name="wega_data.pointer"/>
       </attribute>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-addSpan-spanTo-spanTo-7-constraint-6">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-addSpan-spanTo-spanTo-7-constraint-7">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:*[@spanTo]">
           <sch:assert test="id(substring(@spanTo,2)) and following::*[@xml:id=substring(current()/@spanTo,2)]">
                                     The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow the current element <sch:name/>
@@ -5428,12 +5431,12 @@ Sample values include: 1] text; 2] corpus</a:documentation>
       <ref name="wega_TEI"/>
     </choice>
   </start>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-whitespaceOnlyContent-constraint-7">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-whitespaceOnlyContent-constraint-8">
     <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type='part')] | tei:placeName | tei:title">
       <sch:report test="normalize-space(.) = ''"><sch:name/> has whitespace only content</sch:report>
     </sch:rule>
   </pattern>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-elementStartsWithWhitespace-constraint-8">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-elementStartsWithWhitespace-constraint-9">
     <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
       <sch:report test="matches(.,'^\s')">whitespace at the beginning of element <sch:name/>
          </sch:report>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-05-23T20:59:12Z. 
+Schema generated from ODD source 2014-06-04T11:28:42Z. 
 Edition: Version 2.6.0. Last updated on
 	20th January 2014, revision 12802
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
@@ -2075,6 +2075,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
           <data type="ID"/>
         </attribute>
       </optional>
+      <ref name="att.wega.rend.attribute.rend"/>
       <empty/>
     </element>
   </define>
@@ -2177,12 +2178,7 @@ Empfohlene Werte sind: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] foreig
           <ref name="staffSignatures.list"/>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="cert">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Sicherheit) besagt den Grad der Sicherheit, mit der die Intervention oder Interpretation verbunden ist.</a:documentation>
-          <ref name="data.certainty"/>
-        </attribute>
-      </optional>
+      <ref name="att.responsibility.attribute.cert"/>
       <empty/>
     </element>
   </define>
@@ -2256,12 +2252,7 @@ Empfohlene Werte sind: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] foreig
           </choice>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="cert">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Sicherheit) besagt den Grad der Sicherheit, mit der die Intervention oder Interpretation verbunden ist.</a:documentation>
-          <ref name="data.certainty"/>
-        </attribute>
-      </optional>
+      <ref name="att.responsibility.attribute.cert"/>
       <empty/>
     </element>
   </define>
@@ -2427,7 +2418,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
             <value>footnoteAnchor</value>
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">markiert das Zeichen der Fußnote im Text</a:documentation>
             <value>hyperLink</value>
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Markiert eine Passage im Text, bei der es such um einer Hyperlink zu einer externen Quelle im Internet handelt.</a:documentation>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Markiert eine Passage im Text, die auf eine externe Quelle im Internet verweist.</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -2645,12 +2636,6 @@ Empfohlene Werte sind: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:documenta
         </attribute>
       </optional>
       <optional>
-        <attribute name="cert">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Sicherheit) besagt den Grad der Sicherheit, mit der die Intervention oder Interpretation verbunden ist.</a:documentation>
-          <ref name="data.certainty"/>
-        </attribute>
-      </optional>
-      <optional>
         <attribute name="role">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">kann verwendet werden, um weitere Informationen, die über die Einheit unter diesem Namen referenziert werden, anzugeben, z. B. der Beruf einer Person, oder der Status eines Ortes.</a:documentation>
           <choice>
@@ -2661,6 +2646,7 @@ Empfohlene Werte sind: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:documenta
           </choice>
         </attribute>
       </optional>
+      <ref name="att.responsibility.attribute.cert"/>
       <empty/>
     </element>
   </define>
@@ -2722,10 +2708,13 @@ Empfohlene Werte sind: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:documenta
     <element name="title">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">enthält einen Titel für jede Art von Arbeit. [3.11.2.2.  2.2.1.  2.2.5. ]</a:documentation>
       <ref name="macro.paraContent"/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaVar-title-duplicate-title-constraint-7">
-        <rule context="tei:title">
-          <sch:report xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="@level = following-sibling::tei:title[not(@type)]/@level">Following title without @type</sch:report>
-        </rule>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaVar-title-duplicate-title-constraint-6">
+        <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:title[following-sibling::tei:title]">
+          <sch:let name="level" value="@level"/>
+          <sch:let name="type" value="string(@type)"/>
+          <sch:let name="lang" value="string(@xml:lang)"/>
+          <sch:report test="following-sibling::tei:title[@level = $level][string(@xml:lang) = $lang][string(@type) = $type]">Following title without differing @type or xml:lang attribute</sch:report>
+        </sch:rule>
       </pattern>
       <optional>
         <attribute name="type">
@@ -3612,12 +3601,7 @@ Beispielwerte sind etwa: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5
           <ref name="key.person.pattern"/>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="cert">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Sicherheit) besagt den Grad der Sicherheit, mit der die Intervention oder Interpretation verbunden ist.</a:documentation>
-          <ref name="data.certainty"/>
-        </attribute>
-      </optional>
+      <ref name="att.responsibility.attribute.cert"/>
       <empty/>
     </element>
   </define>
@@ -3660,12 +3644,7 @@ Beispielwerte sind etwa: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5
           </choice>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="cert">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Sicherheit) besagt den Grad der Sicherheit, mit der die Intervention oder Interpretation verbunden ist.</a:documentation>
-          <ref name="data.certainty"/>
-        </attribute>
-      </optional>
+      <ref name="att.responsibility.attribute.cert"/>
       <empty/>
     </element>
   </define>
@@ -4065,16 +4044,36 @@ Beispielwerte sind etwa: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5
       <empty/>
     </element>
   </define>
+  <define name="att.wega.rend.attribute.rend">
+    <attribute name="rend">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(graphische Darstellung) gibt an, wie das fragliche Element in der Vorlage graphisch dargestellt ist.</a:documentation>
+      <choice>
+        <value>latintype</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Schriftart: latintype.</a:documentation>
+        <value>antiqua</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Schriftart: antiqua.</a:documentation>
+        <value>superscript</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">hochgestelltes Zeichen.</a:documentation>
+        <value>subscript</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">tiefgestelltes Zeichen.</a:documentation>
+        <value>italic</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">kursive Schriftlage.</a:documentation>
+        <value>spaced_out</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">gesperrte Schriftbreite.</a:documentation>
+        <value>bold</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">fette Schriftstärke.</a:documentation>
+        <value>underline</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">unterstrichener Text.</a:documentation>
+        <value>small-caps</value>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Kapitälchen.</a:documentation>
+      </choice>
+    </attribute>
+  </define>
   <define name="characterName">
     <element name="characterName">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Name eines Charakters) Name einer Rolle oder eines Charakters in einem Werk.</a:documentation>
       <ref name="macro.phraseSeq"/>
-      <optional>
-        <attribute name="cert">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Sicherheit) besagt den Grad der Sicherheit, mit der die Intervention oder Interpretation verbunden ist.</a:documentation>
-          <ref name="data.certainty"/>
-        </attribute>
-      </optional>
+      <ref name="att.responsibility.attribute.cert"/>
       <empty/>
     </element>
   </define>
@@ -4091,12 +4090,7 @@ Beispielwerte sind etwa: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5
           </choice>
         </attribute>
       </optional>
-      <optional>
-        <attribute name="cert">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Sicherheit) besagt den Grad der Sicherheit, mit der die Intervention oder Interpretation verbunden ist.</a:documentation>
-          <ref name="data.certainty"/>
-        </attribute>
-      </optional>
+      <ref name="att.responsibility.attribute.cert"/>
       <empty/>
     </element>
   </define>
