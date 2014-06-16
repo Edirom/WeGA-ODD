@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <div xmlns="http://www.tei-c.org/ns/1.0"
+    xmlns:tei="http://www.tei-c.org/ns/1.0"
+    xmlns:mei="http://www.music-encoding.org/ns/mei"
     xmlns:rng="http://relaxng.org/ns/structure/1.0" 
     xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" 
     xmlns:sch="http://purl.oclc.org/dsdl/schematron" 
@@ -342,8 +344,17 @@
         </macroSpec>
         
         <classSpec type="atts" ident="att.wega.rend" mode="add">
-            <desc versionDate="2014-05-25" xml:lang="en">provides a common @rend attribute for the encoding with MEI and TEI.</desc>
-            <desc versionDate="2014-05-25" xml:lang="de">Stellt ein generisches @rend-Attribut zur Verwendung in MEI und TEI Schemata zu Verfügung.</desc>
+            <desc versionDate="2014-06-16" xml:lang="en">provides a common @rend and @n attribute for the encoding with MEI and TEI.</desc>
+            <desc versionDate="2014-06-16" xml:lang="de">Stellt ein generisches @rend- und @n-Attribut zur Verwendung in MEI und TEI Schemata zu Verfügung.</desc>
+            <constraintSpec scheme="isoschematron" ident="underline-n">
+                <desc versionDate="2014-06-16" xml:lang="en">Checks for illegal combination of <att>n</att></desc>
+                <desc versionDate="2014-06-16" xml:lang="de">Überprüft auf illegale Kombinationen von <att>n</att></desc>
+                <constraint>
+                    <sch:rule context="*:hi[@n] | *:rend[@n]">
+                        <sch:report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</sch:report>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
             <attList>
                 <attDef ident="rend" mode="add" usage="req">
                     <gloss versionDate="2013-11-11" xml:lang="en">rendition</gloss>
@@ -388,6 +399,15 @@
                             <desc versionDate="2013-11-11" xml:lang="de">Kapitälchen.</desc>
                         </valItem>
                     </valList>
+                </attDef>
+                <attDef ident="n" mode="add" usage="mwa">
+                    <gloss versionDate="2013-11-11" xml:lang="en">number</gloss>
+                    <desc versionDate="2014-06-16" xml:lang="en">gives a number for the ammount of underlinings (i.e. only applicable with hi@rend='underline').</desc>
+                    <gloss versionDate="2013-11-11" xml:lang="de">Zahl</gloss>
+                    <desc versionDate="2014-06-16" xml:lang="de">gibt die Anzahl der Unterstreichungen an (d.h., @n kann nur in Kombination mit hi@rend='underline' auftreten).</desc>
+                    <datatype>
+                        <rng:ref name="data.count"/>
+                    </datatype>
                 </attDef>
             </attList>
         </classSpec>
@@ -976,18 +996,9 @@
             <desc versionDate="2013-11-11" xml:lang="de">markiert ein Wort oder eine Phrase als grafisch deutlich vom umgebenden Text abgehoben, aus Gründen über die keine Angaben gemacht werden können.</desc>
             <classes mode="change">
                 <memberOf key="att.global" mode="delete"/>
+                <memberOf key="att.wega.rend" mode="add"/>
             </classes>
             <attList>
-                <attRef name="rend" class="att.wega.rend"/>
-                <attDef ident="n" mode="add" usage="mwa">
-                    <gloss versionDate="2013-11-11" xml:lang="en">number</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="en">gives a number (or other label) for an element, which is not necessarily unique within the document.</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="de">Nummer</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="de">ordnet einem Element, das nicht unbedingt eindeutig innerhalb des Dokuments ist, eine Nummer (oder eine andere Bezeichnung) zu.</desc>
-                    <datatype>
-                        <rng:ref name="data.count"/>
-                    </datatype>
-                </attDef>
                 <attDef ident="xml:id" mode="add" usage="opt">
                     <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
