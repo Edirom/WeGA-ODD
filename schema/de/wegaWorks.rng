@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2014-06-26T14:40:02Z. 
+Schema generated from ODD source 2014-06-27T15:24:12Z. 
 Edition: 2013 Release
 Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -423,6 +423,11 @@ Edition Location: http://www.tei-c.org/Vault/P5//
     </optional>
   </define>
   <define name="macro.availabilityPart">
+    <zeroOrMore>
+      <optional>
+        <ref name="price"/>
+      </optional>
+    </zeroOrMore>
     <optional>
       <ref name="useRestrict"/>
     </optional>
@@ -3903,9 +3908,11 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
     </element>
   </define>
   <define name="availability">
-    <element name="availability">
+    <element name="availability" ns="http://www.music-encoding.org/ns/mei">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Groups elements that describe the availability of and access to a bibliographic item, including an MEI-encoded document. </a:documentation>
-      <ref name="macro.availabilityPart"/>
+      <oneOrMore>
+        <ref name="model.availabilityPart"/>
+      </oneOrMore>
       <ref name="att.bibl.attributes"/>
       <ref name="att.common.attributes"/>
       <ref name="att.datapointing.attributes"/>
@@ -4307,6 +4314,21 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
       </zeroOrMore>
       <ref name="att.common.attributes"/>
       <ref name="att.bibl.attributes"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="price">
+    <element name="price">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The cost of access to a bibliographic item.</a:documentation>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="model.textphraseLike.limited"/>
+        </choice>
+      </zeroOrMore>
+      <ref name="att.common.attributes"/>
+      <ref name="att.bibl.attributes"/>
+      <ref name="att.measurement.attributes"/>
       <empty/>
     </element>
   </define>
@@ -7027,6 +7049,12 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
       <sch:report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</sch:report>
     </sch:rule>
   </pattern>
+  <define name="model.availabilityPart">
+    <choice>
+      <ref name="price"/>
+      <ref name="useRestrict"/>
+    </choice>
+  </define>
   <start>
     <choice>
       <ref name="mei"/>
