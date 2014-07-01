@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2014-06-27T15:24:12Z. 
+Schema generated from ODD source 2014-07-01T15:28:53Z. 
 Edition: 2013 Release
 Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -433,6 +433,9 @@ Edition Location: http://www.tei-c.org/Vault/P5//
     </optional>
   </define>
   <define name="macro.bibldescPart">
+    <optional>
+      <ref name="editionStmt"/>
+    </optional>
     <optional>
       <ref name="pubStmt"/>
     </optional>
@@ -2765,6 +2768,11 @@ Edition Location: http://www.tei-c.org/Vault/P5//
       <ref name="date"/>
     </oneOrMore>
   </define>
+  <define name="model.editionLike">
+    <choice>
+      <ref name="edition"/>
+    </choice>
+  </define>
   <define name="model.eventLike">
     <choice>
       <ref name="model.keySigLike"/>
@@ -3323,6 +3331,20 @@ Edition Location: http://www.tei-c.org/Vault/P5//
       <ref name="att.calendared.attributes"/>
       <ref name="att.datable.attributes"/>
       <ref name="att.edit.attributes"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="edition">
+    <element name="edition">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(edition designation) – A word or text phrase that indicates a difference in either content or form between the item being described and a related item previously issued by the same publisher/distributor (e.g. 2nd edition, version 2.0, etc.), or simultaneously issued by either the same publisher/distributor or another publisher/distributor (e.g. large print edition, British edition, etc.). </a:documentation>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="model.textphraseLike.limited"/>
+        </choice>
+      </zeroOrMore>
+      <ref name="att.common.attributes"/>
+      <ref name="att.bibl.attributes"/>
       <empty/>
     </element>
   </define>
@@ -4017,6 +4039,21 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
       <empty/>
     </element>
   </define>
+  <define name="editionStmt">
+    <element name="editionStmt">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(edition statement) – Container for meta-data pertaining to a particular edition of the material being described. </a:documentation>
+      <oneOrMore>
+        <ref name="model.editionLike"/>
+        <zeroOrMore>
+          <ref name="respStmt"/>
+        </zeroOrMore>
+      </oneOrMore>
+      <ref name="att.common.attributes"/>
+      <ref name="att.bibl.attributes"/>
+      <ref name="att.lang.attributes"/>
+      <empty/>
+    </element>
+  </define>
   <define name="event">
     <element name="event">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Contains a description of an event, including the dates and locations of its occurrence and prominent participants.</a:documentation>
@@ -4051,6 +4088,9 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
     <element name="fileDesc">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(file description) – Contains a full bibliographic description of the MEI file. </a:documentation>
       <ref name="titleStmt"/>
+      <optional>
+        <ref name="editionStmt"/>
+      </optional>
       <optional>
         <ref name="extent"/>
       </optional>
