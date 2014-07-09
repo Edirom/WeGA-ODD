@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-06-16T15:14:15Z. 
+Schema generated from ODD source 2014-07-09T12:05:28Z. 
 Edition: Version 2.6.0. Last updated on
 	20th January 2014, revision 12802
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
@@ -1091,19 +1091,6 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
       <ref name="model.placeNamePart_sequenceRepeatable"/>
     </oneOrMore>
   </define>
-  <define name="model.divTopPart">
-    <choice>
-      <ref name="model.headLike"/>
-    </choice>
-  </define>
-  <define name="model.divTop">
-    <choice>
-      <ref name="model.divTopPart"/>
-    </choice>
-  </define>
-  <define name="model.divBottom">
-    <notAllowed/>
-  </define>
   <define name="model.addressLike">
     <choice>
       <ref name="address"/>
@@ -1538,62 +1525,38 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
   <define name="list">
     <element name="list">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(list) contains any sequence of items organized as a list. [3.7. ]</a:documentation>
-      <group>
-        <zeroOrMore>
-          <choice>
-            <group>
-              <ref name="model.divTop"/>
-            </group>
-            <group>
-              <ref name="model.global"/>
-            </group>
-          </choice>
-        </zeroOrMore>
-        <choice>
-          <oneOrMore>
-            <ref name="item"/>
-            <zeroOrMore>
-              <ref name="model.global"/>
-            </zeroOrMore>
-          </oneOrMore>
-          <group>
-            <oneOrMore>
-              <zeroOrMore>
-                <ref name="model.global"/>
-              </zeroOrMore>
-              <ref name="item"/>
-              <zeroOrMore>
-                <ref name="model.global"/>
-              </zeroOrMore>
-            </oneOrMore>
-          </group>
-        </choice>
-        <zeroOrMore>
-          <group>
-            <group>
-              <ref name="model.divBottom"/>
-            </group>
-            <zeroOrMore>
-              <ref name="model.global"/>
-            </zeroOrMore>
-          </group>
-        </zeroOrMore>
-      </group>
-      <ref name="att.global.attributes"/>
+      <zeroOrMore>
+        <ref name="head"/>
+      </zeroOrMore>
+      <choice>
+        <oneOrMore>
+          <ref name="item"/>
+          <optional>
+            <ref name="note"/>
+          </optional>
+          <optional>
+            <ref name="model.milestoneLike"/>
+          </optional>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="item"/>
+        </oneOrMore>
+      </choice>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaPersons-list-gloss-list-constraint-6">
+        <rule context="tei:list">
+          <sch:report xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="./tei:label and not(@type='gloss')">Labels are only allowed in lists of type='gloss'</sch:report>
+        </rule>
+      </pattern>
       <optional>
         <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" name="type" a:defaultValue="simple">
-          <a:documentation>describes the form of the list.
-Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:documentation>
+          <a:documentation>characterizes the element in some sense, using any convenient classification scheme or typology.</a:documentation>
           <choice>
-            <value>ordered</value>
-            <a:documentation>list items are numbered or lettered.</a:documentation>
-            <value>bulleted</value>
-            <a:documentation>list items are marked with a bullet or other typographic device.</a:documentation>
             <value>simple</value>
             <a:documentation>list items are not numbered or bulleted.</a:documentation>
             <value>gloss</value>
             <a:documentation>each list item glosses some term or concept, which is given by a label element preceding the list item.</a:documentation>
-            <data type="Name"/>
+            <value>ordered</value>
+            <a:documentation>list items are numbered or lettered.</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -1818,7 +1781,7 @@ Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:docume
     <element name="forename">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains a forename, given or baptismal name. [13.2.1. ]</a:documentation>
       <ref name="macro.phraseSeq"/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaPersons-forename-whitespace-between-forenames-constraint-6">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaPersons-forename-whitespace-between-forenames-constraint-7">
         <rule context="tei:forename">
           <sch:report xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="following-sibling::tei:forename and not(following-sibling::node()[1] instance of text())">Fehlender Leerraum zwischen Vornamen</sch:report>
         </rule>
@@ -2245,12 +2208,12 @@ Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:docume
           </interleave>
         </group>
       </choice>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaPersons-person-personHeuristics1-constraint-7">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaPersons-person-personHeuristics1-constraint-8">
         <rule context="tei:person">
           <sch:report xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="./tei:birth/tei:date/(@when, @notBefore, @notAfter) &gt; ./tei:death/tei:date/(@when, @notBefore, @notAfter) and not(./tei:death/tei:date/(@when, @notBefore, @notAfter)[starts-with(., '-')])">Geburtsdatum nach Todesdatum</sch:report>
         </rule>
       </pattern>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaPersons-person-personHeuristics2-constraint-8">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaPersons-person-personHeuristics2-constraint-9">
         <rule context="tei:person">
           <sch:report xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="./tei:death/tei:date/(@when, @notBefore, @notAfter) &gt; ./tei:birth/tei:date/(@when, @notBefore, @notAfter) and ./tei:death/tei:date/(@when, @notBefore, @notAfter)[starts-with(., '-')]">Geburtsdatum nach Todesdatum</sch:report>
         </rule>

@@ -1638,6 +1638,63 @@
                 </attDef>
             </attList>
         </elementSpec>
+        <elementSpec ident="list" mode="change" module="core">
+            <gloss versionDate="2014-07-09" xml:lang="en">list</gloss>
+            <desc versionDate="2014-07-09" xml:lang="en">contains any sequence of items organized as a list.</desc>
+            <gloss versionDate="2014-07-09" xml:lang="de">Liste</gloss>
+            <desc versionDate="2014-07-09" xml:lang="de">enthält eine Menge von Elementen, die als Liste organisiert sind.</desc>
+            <classes mode="change">
+                <memberOf key="att.global" mode="delete"/>
+                <memberOf key="att.sortable" mode="delete"/>
+            </classes>
+            <content>
+                <rng:zeroOrMore>
+                    <rng:ref name="head"/>
+                </rng:zeroOrMore>
+                <rng:choice>
+                    <rng:oneOrMore>
+                        <rng:ref name="item"/>
+                        <rng:optional>
+                            <rng:ref name="note"/>
+                        </rng:optional>
+                        <rng:optional>
+                            <rng:ref name="model.milestoneLike"/>
+                        </rng:optional>
+                    </rng:oneOrMore>
+                    <rng:oneOrMore>
+                        <rng:ref name="label"/>
+                        <rng:ref name="item"/>
+                    </rng:oneOrMore>
+                </rng:choice>
+            </content>
+            <constraintSpec scheme="isoschematron" ident="gloss-list">
+                <desc versionDate="2014-07-09" xml:lang="en">checks for <gi>label</gi> within <gi>list</gi> without <att>type</att>='gloss'.</desc>
+                <desc versionDate="2014-07-09" xml:lang="de">stellt sicher, dass <gi>label</gi> nur innerhalb einer <gi>list</gi> mit <att>tpye</att>='gloss' vorkommen.</desc>
+                <constraint>
+                    <sch:report test="./tei:label and not(@type='gloss')">Labels are only allowed in lists of type='gloss'</sch:report>
+                </constraint>
+            </constraintSpec>
+            <attList>
+                <attDef ident="type" mode="change" usage="opt">
+                    <desc versionDate="2014-07-09" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
+                    <desc versionDate="2014-07-09" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</desc>
+                    <valList type="closed" mode="replace">
+                        <valItem ident="simple">
+                            <desc versionDate="2014-07-09" xml:lang="en">list items are not numbered or bulleted.</desc>
+                            <desc versionDate="2014-07-09" xml:lang="de">die Listenelemente erscheinen ohne typographische Markierung (z.B. Strichpunkte, Aufzählungszeichen)</desc>
+                        </valItem>
+                        <valItem ident="gloss">
+                            <desc versionDate="2014-07-09" xml:lang="en">each list item glosses some term or concept, which is given by a label element preceding the list item.</desc>
+                            <desc versionDate="2014-07-09" xml:lang="de">die Liste stellt ein Glossar dar, wobei jedem <gi>item</gi> (die Definition) ein <gi>label</gi> (der zu definierende Ausdruck) vorausgeht.</desc>
+                        </valItem>
+                        <valItem ident="ordered">
+                            <desc versionDate="2014-07-09" xml:lang="en">list items are numbered or lettered.</desc>
+                            <desc versionDate="2014-07-09" xml:lang="de">die Listenelemente sind mit einem Aufzählungszeichen präfigiert</desc>
+                        </valItem>
+                    </valList>
+                </attDef>
+            </attList>
+        </elementSpec>
     </specGrp>
     
     <specGrp xml:id="wega-header">

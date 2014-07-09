@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-06-16T15:14:34Z. 
+Schema generated from ODD source 2014-07-09T12:05:47Z. 
 Edition: Version 2.6.0. Last updated on
 	20th January 2014, revision 12802
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
@@ -1959,7 +1959,9 @@ Suggested values include: 1] label; 2] data</a:documentation>
     </choice>
   </define>
   <define name="model.divGenLike">
-    <notAllowed/>
+    <choice>
+      <ref name="divGen"/>
+    </choice>
   </define>
   <define name="model.teiHeaderPart">
     <choice>
@@ -2426,64 +2428,39 @@ attributes @target and @cRef may be supplied on <name/>.</report>
   <define name="list">
     <element name="list">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(list) contains any sequence of items organized as a list. [3.7. ]</a:documentation>
-      <group>
-        <zeroOrMore>
-          <choice>
-            <group>
-              <ref name="model.divTop"/>
-            </group>
-            <group>
-              <ref name="model.global"/>
-            </group>
-          </choice>
-        </zeroOrMore>
-        <choice>
-          <oneOrMore>
-            <ref name="item"/>
-            <zeroOrMore>
-              <ref name="model.global"/>
-            </zeroOrMore>
-          </oneOrMore>
-          <group>
-            <oneOrMore>
-              <ref name="label"/>
-              <zeroOrMore>
-                <ref name="model.global"/>
-              </zeroOrMore>
-              <ref name="item"/>
-              <zeroOrMore>
-                <ref name="model.global"/>
-              </zeroOrMore>
-            </oneOrMore>
-          </group>
-        </choice>
-        <zeroOrMore>
-          <group>
-            <group>
-              <ref name="model.divBottom"/>
-            </group>
-            <zeroOrMore>
-              <ref name="model.global"/>
-            </zeroOrMore>
-          </group>
-        </zeroOrMore>
-      </group>
-      <ref name="att.global.attributes"/>
-      <ref name="att.sortable.attributes"/>
+      <zeroOrMore>
+        <ref name="head"/>
+      </zeroOrMore>
+      <choice>
+        <oneOrMore>
+          <ref name="item"/>
+          <optional>
+            <ref name="note"/>
+          </optional>
+          <optional>
+            <ref name="model.milestoneLike"/>
+          </optional>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="label"/>
+          <ref name="item"/>
+        </oneOrMore>
+      </choice>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaVar-list-gloss-list-constraint-7">
+        <rule context="tei:list">
+          <sch:report xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="./tei:label and not(@type='gloss')">Labels are only allowed in lists of type='gloss'</sch:report>
+        </rule>
+      </pattern>
       <optional>
         <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" name="type" a:defaultValue="simple">
-          <a:documentation>describes the form of the list.
-Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:documentation>
+          <a:documentation>characterizes the element in some sense, using any convenient classification scheme or typology.</a:documentation>
           <choice>
-            <value>ordered</value>
-            <a:documentation>list items are numbered or lettered.</a:documentation>
-            <value>bulleted</value>
-            <a:documentation>list items are marked with a bullet or other typographic device.</a:documentation>
             <value>simple</value>
             <a:documentation>list items are not numbered or bulleted.</a:documentation>
             <value>gloss</value>
             <a:documentation>each list item glosses some term or concept, which is given by a label element preceding the list item.</a:documentation>
-            <data type="Name"/>
+            <value>ordered</value>
+            <a:documentation>list items are numbered or lettered.</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -2768,6 +2745,23 @@ Suggested values include: 1] ordered; 2] bulleted; 3] simple; 4] gloss</a:docume
       <ref name="att.typed.attributes"/>
       <ref name="att.sortable.attributes"/>
       <ref name="att.docStatus.attributes"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="divGen">
+    <element name="divGen">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(automatically generated text division) indicates the location at which a textual division generated automatically by a text-processing application is to appear. [3.8.2. ]</a:documentation>
+      <zeroOrMore>
+        <ref name="model.headLike"/>
+      </zeroOrMore>
+      <ref name="att.global.attributes"/>
+      <optional>
+        <attribute name="type">
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies what type of generated text division (e.g. index, table of contents, etc.) is to appear.
+Sample values include: 1] index; 2] toc; 3] figlist; 4] tablist</a:documentation>
+          <ref name="data.enumerated"/>
+        </attribute>
+      </optional>
       <empty/>
     </element>
   </define>
@@ -3092,7 +3086,7 @@ Sample values include: 1] text; 2] corpus</a:documentation>
       <zeroOrMore>
         <ref name="model.pLike"/>
       </zeroOrMore>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaVar-quotation-quotationContents-constraint-8">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaVar-quotation-quotationContents-constraint-9">
         <rule context="tei:quotation">
           <report xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="not(@marks) and not (tei:p)">
 On <name/>, either the @marks attribute should be used, or a paragraph of description provided</report>
@@ -3266,61 +3260,10 @@ Sample values include: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5] 
     <element name="body">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(text body) contains the whole body of a single unitary text, excluding any front or back matter. [4. ]</a:documentation>
       <oneOrMore>
-        <element name="div">
-          <attribute name="xml:lang">
-            <ref name="data.language"/>
-          </attribute>
-          <group>
-            <zeroOrMore>
-              <choice>
-                <ref name="model.divTop"/>
-                <ref name="model.global"/>
-              </choice>
-            </zeroOrMore>
-            <optional>
-              <choice>
-                <group>
-                  <oneOrMore>
-                    <choice>
-                      <ref name="model.divLike"/>
-                      <ref name="model.divGenLike"/>
-                    </choice>
-                    <zeroOrMore>
-                      <ref name="model.global"/>
-                    </zeroOrMore>
-                  </oneOrMore>
-                </group>
-                <group>
-                  <oneOrMore>
-                    <group>
-                      <ref name="model.common"/>
-                    </group>
-                    <zeroOrMore>
-                      <ref name="model.global"/>
-                    </zeroOrMore>
-                  </oneOrMore>
-                  <zeroOrMore>
-                    <choice>
-                      <ref name="model.divLike"/>
-                      <ref name="model.divGenLike"/>
-                    </choice>
-                    <zeroOrMore>
-                      <ref name="model.global"/>
-                    </zeroOrMore>
-                  </zeroOrMore>
-                </group>
-              </choice>
-              <zeroOrMore>
-                <group>
-                  <ref name="model.divBottom"/>
-                </group>
-                <zeroOrMore>
-                  <ref name="model.global"/>
-                </zeroOrMore>
-              </zeroOrMore>
-            </optional>
-          </group>
-        </element>
+        <choice>
+          <ref name="div"/>
+          <ref name="divGen"/>
+        </choice>
       </oneOrMore>
     </element>
   </define>
@@ -3415,6 +3358,8 @@ Sample values include: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5] 
           </choice>
         </attribute>
       </optional>
+      <ref name="att.global.attribute.xmlid"/>
+      <ref name="att.global.attribute.xmllang"/>
       <empty/>
     </element>
   </define>
@@ -3935,12 +3880,12 @@ Sample values include: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5] 
     <element name="seg">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(arbitrary segment) represents any segmentation of text below the ‘chunk’ level. [16.3.  6.2.  7.2.5. ]</a:documentation>
       <ref name="macro.paraContent"/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaVar-seg-activeOrPassivePerformance-constraint-9">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaVar-seg-activeOrPassivePerformance-constraint-10">
         <rule context="tei:seg">
           <sch:report xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="./@subtype = ('active', 'passive') and not(./@type = 'performance')">if @subtype contains 'active' or 'passive' @type has to be 'performance'</sch:report>
         </rule>
       </pattern>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaVar-seg-AddresseeOrSenderCorrespondence-constraint-10">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaVar-seg-AddresseeOrSenderCorrespondence-constraint-11">
         <rule context="tei:seg">
           <sch:report xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" test="./@subtype = ('sender', 'addressee') and not(./@type = 'correspondence')">if @subtype contains 'sender' or 'addressee' @type has to be 'correspondence'</sch:report>
         </rule>
