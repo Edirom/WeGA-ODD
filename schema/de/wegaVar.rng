@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-07-09T15:13:27Z. 
+Schema generated from ODD source 2014-07-10T11:48:09Z. 
 Edition: Version 2.6.0. Last updated on
 	20th January 2014, revision 12802
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
@@ -1104,6 +1104,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
   </define>
   <define name="model.emphLike">
     <choice>
+      <ref name="mentioned"/>
       <ref name="term"/>
       <ref name="title"/>
       <ref name="code"/>
@@ -1111,17 +1112,22 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
   </define>
   <define name="model.emphLike_alternation">
     <choice>
+      <ref name="mentioned"/>
       <ref name="term"/>
       <ref name="title"/>
       <ref name="code"/>
     </choice>
   </define>
   <define name="model.emphLike_sequence">
+    <ref name="mentioned"/>
     <ref name="term"/>
     <ref name="title"/>
     <ref name="code"/>
   </define>
   <define name="model.emphLike_sequenceOptional">
+    <optional>
+      <ref name="mentioned"/>
+    </optional>
     <optional>
       <ref name="term"/>
     </optional>
@@ -1134,6 +1140,9 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
   </define>
   <define name="model.emphLike_sequenceOptionalRepeatable">
     <zeroOrMore>
+      <ref name="mentioned"/>
+    </zeroOrMore>
+    <zeroOrMore>
       <ref name="term"/>
     </zeroOrMore>
     <zeroOrMore>
@@ -1144,6 +1153,9 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
     </zeroOrMore>
   </define>
   <define name="model.emphLike_sequenceRepeatable">
+    <oneOrMore>
+      <ref name="mentioned"/>
+    </oneOrMore>
     <oneOrMore>
       <ref name="term"/>
     </oneOrMore>
@@ -1352,34 +1364,6 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
   <define name="model.headLike_sequenceRepeatable">
     <oneOrMore>
       <ref name="head"/>
-    </oneOrMore>
-  </define>
-  <define name="model.labelLike">
-    <choice>
-      <ref name="label"/>
-    </choice>
-  </define>
-  <define name="model.labelLike_alternation">
-    <choice>
-      <ref name="label"/>
-    </choice>
-  </define>
-  <define name="model.labelLike_sequence">
-    <ref name="label"/>
-  </define>
-  <define name="model.labelLike_sequenceOptional">
-    <optional>
-      <ref name="label"/>
-    </optional>
-  </define>
-  <define name="model.labelLike_sequenceOptionalRepeatable">
-    <zeroOrMore>
-      <ref name="label"/>
-    </zeroOrMore>
-  </define>
-  <define name="model.labelLike_sequenceRepeatable">
-    <oneOrMore>
-      <ref name="label"/>
     </oneOrMore>
   </define>
   <define name="model.listLike">
@@ -1885,7 +1869,6 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
     <choice>
       <ref name="model.egLike"/>
       <ref name="model.biblLike"/>
-      <ref name="model.labelLike"/>
       <ref name="model.listLike"/>
       <ref name="model.qLike"/>
     </choice>
@@ -2099,6 +2082,14 @@ Empfohlene Werte sind: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] foreig
       </oneOrMore>
       <ref name="att.global.attributes"/>
       <ref name="att.typed.attributes"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="mentioned">
+    <element name="mentioned">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks words or phrases mentioned, not used. [3.3.3. ]</a:documentation>
+      <ref name="macro.phraseSeq"/>
+      <ref name="att.global.attributes"/>
       <empty/>
     </element>
   </define>
@@ -2708,16 +2699,15 @@ attributes @target and @cRef may be supplied on <name/>.</report>
   </define>
   <define name="divGen">
     <element name="divGen">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(automatically generated text division) indicates the location at which a textual division generated automatically by a text-processing application is to appear. [3.8.2. ]</a:documentation>
-      <zeroOrMore>
-        <ref name="model.headLike"/>
-      </zeroOrMore>
-      <ref name="att.global.attributes"/>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Automatisch generierter Textabschnitt) bezeichnet die Position, an welcher ein automatisch generierter Textabschnitt erscheinen soll. [3.8.2. ]</a:documentation>
+      <empty/>
       <optional>
         <attribute name="type">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies what type of generated text division (e.g. index, table of contents, etc.) is to appear.
-Beispielwerte sind etwa: 1] index; 2] toc; 3] figlist; 4] tablist</a:documentation>
-          <ref name="data.enumerated"/>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">spezifiziert, welche Art von Text generiert werden soll (z.B. Inhaltsverzeichnis).</a:documentation>
+          <choice>
+            <value>toc</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Inhaltsverzeichnis) </a:documentation>
+          </choice>
         </attribute>
       </optional>
       <empty/>
@@ -3607,7 +3597,7 @@ Beispielwerte sind etwa: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5
       </oneOrMore>
       <optional>
         <attribute name="rend">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Ausgabe) WeGa: verarbeiten von Informationen für die Ausgabe(!)</a:documentation>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Ausgabe) WeGA: verarbeiten von Informationen für die Ausgabe(!)</a:documentation>
           <choice>
             <value>median</value>
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Berechnen der Spaltenbreiten anhand des Medians.</a:documentation>
@@ -3648,7 +3638,7 @@ Beispielwerte sind etwa: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5
       <ref name="graphic"/>
       <optional>
         <attribute name="rend">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Ausgabe) WeGa: verarbeiten von Informationen für die Ausgabe(!)</a:documentation>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Ausgabe) WeGA: verarbeiten von Informationen für die Ausgabe(!)</a:documentation>
           <choice>
             <value>inline</value>
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Gibt an, ob die Abbildung inline wiedergegeben werden soll.</a:documentation>

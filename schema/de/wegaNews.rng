@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-07-09T15:02:06Z. 
+Schema generated from ODD source 2014-07-10T11:48:42Z. 
 Edition: Version 2.6.0. Last updated on
 	20th January 2014, revision 12802
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
@@ -228,6 +228,21 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
       <data type="date"/>
       <data type="gYear"/>
     </choice>
+  </define>
+  <define name="att.ascribed.attributes">
+    <ref name="att.ascribed.attribute.who"/>
+  </define>
+  <define name="att.ascribed.attribute.who">
+    <optional>
+      <attribute name="who">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the person, or group of people, to whom the element content is ascribed.</a:documentation>
+        <list>
+          <oneOrMore>
+            <ref name="data.pointer"/>
+          </oneOrMore>
+        </list>
+      </attribute>
+    </optional>
   </define>
   <define name="att.canonical.attributes">
     <ref name="att.canonical.attribute.key"/>
@@ -672,21 +687,27 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
   </define>
   <define name="model.emphLike">
     <choice>
+      <ref name="mentioned"/>
       <ref name="term"/>
       <ref name="title"/>
     </choice>
   </define>
   <define name="model.emphLike_alternation">
     <choice>
+      <ref name="mentioned"/>
       <ref name="term"/>
       <ref name="title"/>
     </choice>
   </define>
   <define name="model.emphLike_sequence">
+    <ref name="mentioned"/>
     <ref name="term"/>
     <ref name="title"/>
   </define>
   <define name="model.emphLike_sequenceOptional">
+    <optional>
+      <ref name="mentioned"/>
+    </optional>
     <optional>
       <ref name="term"/>
     </optional>
@@ -696,6 +717,9 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
   </define>
   <define name="model.emphLike_sequenceOptionalRepeatable">
     <zeroOrMore>
+      <ref name="mentioned"/>
+    </zeroOrMore>
+    <zeroOrMore>
       <ref name="term"/>
     </zeroOrMore>
     <zeroOrMore>
@@ -703,6 +727,9 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
     </zeroOrMore>
   </define>
   <define name="model.emphLike_sequenceRepeatable">
+    <oneOrMore>
+      <ref name="mentioned"/>
+    </oneOrMore>
     <oneOrMore>
       <ref name="term"/>
     </oneOrMore>
@@ -814,34 +841,6 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
   <define name="model.headLike_sequenceRepeatable">
     <oneOrMore>
       <ref name="head"/>
-    </oneOrMore>
-  </define>
-  <define name="model.labelLike">
-    <choice>
-      <ref name="label"/>
-    </choice>
-  </define>
-  <define name="model.labelLike_alternation">
-    <choice>
-      <ref name="label"/>
-    </choice>
-  </define>
-  <define name="model.labelLike_sequence">
-    <ref name="label"/>
-  </define>
-  <define name="model.labelLike_sequenceOptional">
-    <optional>
-      <ref name="label"/>
-    </optional>
-  </define>
-  <define name="model.labelLike_sequenceOptionalRepeatable">
-    <zeroOrMore>
-      <ref name="label"/>
-    </zeroOrMore>
-  </define>
-  <define name="model.labelLike_sequenceRepeatable">
-    <oneOrMore>
-      <ref name="label"/>
     </oneOrMore>
   </define>
   <define name="model.listLike">
@@ -1010,6 +1009,34 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
       <ref name="model.placeNamePart_sequenceRepeatable"/>
     </oneOrMore>
   </define>
+  <define name="model.qLike">
+    <choice>
+      <ref name="q"/>
+    </choice>
+  </define>
+  <define name="model.qLike_alternation">
+    <choice>
+      <ref name="q"/>
+    </choice>
+  </define>
+  <define name="model.qLike_sequence">
+    <ref name="q"/>
+  </define>
+  <define name="model.qLike_sequenceOptional">
+    <optional>
+      <ref name="q"/>
+    </optional>
+  </define>
+  <define name="model.qLike_sequenceOptionalRepeatable">
+    <zeroOrMore>
+      <ref name="q"/>
+    </zeroOrMore>
+  </define>
+  <define name="model.qLike_sequenceRepeatable">
+    <oneOrMore>
+      <ref name="q"/>
+    </oneOrMore>
+  </define>
   <define name="model.respLike">
     <choice>
       <ref name="author"/>
@@ -1113,8 +1140,8 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
   <define name="model.inter">
     <choice>
       <ref name="model.biblLike"/>
-      <ref name="model.labelLike"/>
       <ref name="model.listLike"/>
+      <ref name="model.qLike"/>
     </choice>
   </define>
   <define name="model.common">
@@ -1237,6 +1264,51 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
           <data type="ID"/>
         </attribute>
       </optional>
+      <empty/>
+    </element>
+  </define>
+  <define name="q">
+    <element name="q">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(quoted) contains material which is distinguished from the surrounding text using quotation marks or a similar method, for any one of a variety of reasons including, but not limited to: direct speech or thought, technical terms or jargon, authorial distance, quotations from elsewhere, and passages that are mentioned but not used. [3.3.3. ]</a:documentation>
+      <ref name="macro.specialPara"/>
+      <ref name="att.global.attributes"/>
+      <ref name="att.ascribed.attributes"/>
+      <ref name="att.source.attributes"/>
+      <optional>
+        <attribute name="type">
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">may be used to indicate whether the offset passage is spoken or thought, or to characterize it more finely.
+Empfohlene Werte sind: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] foreign; 6] distinct; 7] term; 8] emph; 9] mentioned</a:documentation>
+          <choice>
+            <value>spoken</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">representation of speech</a:documentation>
+            <value>thought</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">representation of thought, e.g. internal monologue</a:documentation>
+            <value>written</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">quotation from a written source</a:documentation>
+            <value>soCalled</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">authorial distance</a:documentation>
+            <value>foreign</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            <value>distinct</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">linguistically distinct</a:documentation>
+            <value>term</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">technical term</a:documentation>
+            <value>emph</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">rhetorically emphasized</a:documentation>
+            <value>mentioned</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">refering to itself, not its normal referent</a:documentation>
+            <data type="Name"/>
+          </choice>
+        </attribute>
+      </optional>
+      <empty/>
+    </element>
+  </define>
+  <define name="mentioned">
+    <element name="mentioned">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks words or phrases mentioned, not used. [3.3.3. ]</a:documentation>
+      <ref name="macro.phraseSeq"/>
+      <ref name="att.global.attributes"/>
       <empty/>
     </element>
   </define>
