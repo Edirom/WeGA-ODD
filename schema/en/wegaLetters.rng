@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-07-11T10:36:23Z. 
+Schema generated from ODD source 2014-07-16T11:20:39Z. 
 Edition: Version 2.6.0. Last updated on
 	20th January 2014, revision 12802
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
@@ -1191,24 +1191,6 @@ Suggested values include: 1] volume; 2] issue; 3] page; 4] line; 5] chapter; 6] 
       <ref name="wega_num"/>
     </oneOrMore>
   </define>
-  <define name="wega_model.egLike">
-    <notAllowed/>
-  </define>
-  <define name="wega_model.egLike_alternation">
-    <notAllowed/>
-  </define>
-  <define name="wega_model.egLike_sequence">
-    <empty/>
-  </define>
-  <define name="wega_model.egLike_sequenceOptional">
-    <empty/>
-  </define>
-  <define name="wega_model.egLike_sequenceOptionalRepeatable">
-    <empty/>
-  </define>
-  <define name="wega_model.egLike_sequenceRepeatable">
-    <notAllowed/>
-  </define>
   <define name="wega_model.graphicLike">
     <choice>
       <ref name="wega_graphic"/>
@@ -1633,9 +1615,6 @@ Suggested values include: 1] volume; 2] issue; 3] page; 4] line; 5] chapter; 6] 
   <define name="wega_model.stageLike_sequenceRepeatable">
     <notAllowed/>
   </define>
-  <define name="wega_model.entryPart">
-    <notAllowed/>
-  </define>
   <define name="wega_model.global.edit">
     <choice>
       <ref name="wega_gap"/>
@@ -1780,41 +1759,29 @@ Suggested values include: 1] volume; 2] issue; 3] page; 4] line; 5] chapter; 6] 
   <define name="wega_model.quoteLike">
     <choice>
       <ref name="wega_quote"/>
-      <ref name="wega_cit"/>
     </choice>
   </define>
   <define name="wega_model.quoteLike_alternation">
     <choice>
       <ref name="wega_quote"/>
-      <ref name="wega_cit"/>
     </choice>
   </define>
   <define name="wega_model.quoteLike_sequence">
     <ref name="wega_quote"/>
-    <ref name="wega_cit"/>
   </define>
   <define name="wega_model.quoteLike_sequenceOptional">
     <optional>
       <ref name="wega_quote"/>
-    </optional>
-    <optional>
-      <ref name="wega_cit"/>
     </optional>
   </define>
   <define name="wega_model.quoteLike_sequenceOptionalRepeatable">
     <zeroOrMore>
       <ref name="wega_quote"/>
     </zeroOrMore>
-    <zeroOrMore>
-      <ref name="wega_cit"/>
-    </zeroOrMore>
   </define>
   <define name="wega_model.quoteLike_sequenceRepeatable">
     <oneOrMore>
       <ref name="wega_quote"/>
-    </oneOrMore>
-    <oneOrMore>
-      <ref name="wega_cit"/>
     </oneOrMore>
   </define>
   <define name="wega_model.qLike">
@@ -2046,7 +2013,6 @@ Suggested values include: 1] volume; 2] issue; 3] page; 4] line; 5] chapter; 6] 
   </define>
   <define name="wega_model.inter">
     <choice>
-      <ref name="wega_model.egLike"/>
       <ref name="wega_model.biblLike"/>
       <ref name="wega_model.labelLike"/>
       <ref name="wega_model.listLike"/>
@@ -2250,28 +2216,18 @@ Suggested values include: 1] page; 2] column; 3] line; 4] book; 5] poem; 6] cant
     <element name="quote">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(quotation) contains a phrase or passage attributed by the narrator or author to some agency external to the text. [3.3.3.  4.3.1. ]</a:documentation>
       <ref name="wega_macro.specialPara"/>
-      <ref name="wega_att.global.attributes"/>
-      <ref name="wega_att.typed.attributes"/>
-      <ref name="wega_att.msExcerpt.attributes"/>
       <ref name="wega_att.source.attributes"/>
-      <empty/>
-    </element>
-  </define>
-  <define name="wega_cit">
-    <element name="cit">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(cited quotation) contains a quotation from some other document, together with a bibliographic reference to its source. In a dictionary it may contain an example text with at least one occurrence of the word form, used in the sense being described, or a translation of the headword, or an example. [3.3.3.  4.3.1.  9.3.5.1. ]</a:documentation>
-      <oneOrMore>
-        <choice>
-          <ref name="wega_model.qLike"/>
-          <ref name="wega_model.egLike"/>
-          <ref name="wega_model.biblLike"/>
-          <ref name="wega_model.ptrLike"/>
-          <ref name="wega_model.global"/>
-          <ref name="wega_model.entryPart"/>
-        </choice>
-      </oneOrMore>
-      <ref name="wega_att.global.attributes"/>
-      <ref name="wega_att.typed.attributes"/>
+      <optional>
+        <attribute name="rend">
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies how the the quotation is typographically distinct from the surrounding text. When no rend is given, the quotation is not visible.</a:documentation>
+          <choice>
+            <value>double-quotes</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the quotation is surrounded by double quotation marks.</a:documentation>
+            <value>single-quotes</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the quotation is surrounded by single quotation marks.</a:documentation>
+          </choice>
+        </attribute>
+      </optional>
       <empty/>
     </element>
   </define>
@@ -4548,17 +4504,6 @@ Sample values include: 1] text; 2] corpus</a:documentation>
       </optional>
       <empty/>
     </element>
-  </define>
-  <define name="wega_att.msExcerpt.attributes">
-    <ref name="wega_att.msExcerpt.attribute.defective"/>
-  </define>
-  <define name="wega_att.msExcerpt.attribute.defective">
-    <optional>
-      <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" name="defective" a:defaultValue="false">
-        <a:documentation>indicates whether the passage being quoted is defective, i.e. incomplete through loss or damage.</a:documentation>
-        <ref name="wega_data.xTruthValue"/>
-      </attribute>
-    </optional>
   </define>
   <define name="wega_msDesc">
     <element name="msDesc">
