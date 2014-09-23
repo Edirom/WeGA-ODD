@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-06-16T15:12:57Z. 
+Schema generated from ODD source 2014-09-23T15:24:52Z. 
 Edition: Version 2.6.0. Last updated on
 	20th January 2014, revision 12802
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
@@ -19,32 +19,6 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
       </choice>
     </zeroOrMore>
   </define>
-  <define name="data.certainty">
-    <choice>
-      <value>high</value>
-      <value>medium</value>
-      <value>low</value>
-      <value>unknown</value>
-    </choice>
-  </define>
-  <define name="data.probability">
-    <data type="double">
-      <param name="minInclusive">0</param>
-      <param name="maxInclusive">1</param>
-    </data>
-  </define>
-  <define name="data.numeric">
-    <choice>
-      <data type="double"/>
-      <data type="token">
-        <param name="pattern">(\-?[\d]+/\-?[\d]+)</param>
-      </data>
-      <data type="decimal"/>
-    </choice>
-  </define>
-  <define name="data.count">
-    <data type="nonNegativeInteger"/>
-  </define>
   <define name="data.temporal.w3c">
     <choice>
       <data type="date"/>
@@ -55,13 +29,6 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
       <data type="gMonthDay"/>
       <data type="time"/>
       <data type="dateTime"/>
-    </choice>
-  </define>
-  <define name="data.xTruthValue">
-    <choice>
-      <data type="boolean"/>
-      <value>unknown</value>
-      <value>inapplicable</value>
     </choice>
   </define>
   <define name="data.language">
@@ -128,115 +95,6 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
             <ref name="data.pointer"/>
           </oneOrMore>
         </list>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.ranging.attributes">
-    <ref name="att.ranging.attribute.atLeast"/>
-    <ref name="att.ranging.attribute.atMost"/>
-    <ref name="att.ranging.attribute.min"/>
-    <ref name="att.ranging.attribute.max"/>
-    <ref name="att.ranging.attribute.confidence"/>
-  </define>
-  <define name="att.ranging.attribute.atLeast">
-    <optional>
-      <attribute name="atLeast">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">gives a minimum estimated value for the approximate measurement.</a:documentation>
-        <ref name="data.numeric"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.ranging.attribute.atMost">
-    <optional>
-      <attribute name="atMost">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">gives a maximum estimated value for the approximate measurement.</a:documentation>
-        <ref name="data.numeric"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.ranging.attribute.min">
-    <optional>
-      <attribute name="min">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">where the measurement summarizes more than one observation or a range, supplies the minimum value observed.</a:documentation>
-        <ref name="data.numeric"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.ranging.attribute.max">
-    <optional>
-      <attribute name="max">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">where the measurement summarizes more than one observation or a range, supplies the maximum value observed.</a:documentation>
-        <ref name="data.numeric"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.ranging.attribute.confidence">
-    <optional>
-      <attribute name="confidence">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the degree of statistical confidence (between zero and one) that a value falls within the range specified by min and max, or the proportion of observed values that fall within that range.</a:documentation>
-        <ref name="data.probability"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.dimensions.attributes">
-    <ref name="att.ranging.attributes"/>
-    <ref name="att.dimensions.attribute.unit"/>
-    <ref name="att.dimensions.attribute.quantity"/>
-    <ref name="att.dimensions.attribute.extent"/>
-    <ref name="att.dimensions.attribute.precision"/>
-    <ref name="att.dimensions.attribute.scope"/>
-  </define>
-  <define name="att.dimensions.attribute.unit">
-    <optional>
-      <attribute name="unit">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">names the unit used for the measurement
-Empfohlene Werte sind: 1] cm(centimetres) ; 2] mm(millimetres) ; 3] in(inches) ; 4] lines; 5] chars(characters) </a:documentation>
-        <choice>
-          <value>cm</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(centimetres) </a:documentation>
-          <value>mm</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(millimetres) </a:documentation>
-          <value>in</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(inches) </a:documentation>
-          <value>lines</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">lines of text</a:documentation>
-          <value>chars</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(characters) characters of text</a:documentation>
-          <data type="Name"/>
-        </choice>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.dimensions.attribute.quantity">
-    <optional>
-      <attribute name="quantity">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the length in the units specified</a:documentation>
-        <ref name="data.numeric"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.dimensions.attribute.extent">
-    <optional>
-      <attribute name="extent">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the size of the object concerned using a project-specific vocabulary combining quantity and units in a single string of words.</a:documentation>
-        <ref name="data.text"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.dimensions.attribute.precision">
-    <optional>
-      <attribute name="precision">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the precision of the values specified by the other attributes.</a:documentation>
-        <ref name="data.certainty"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.dimensions.attribute.scope">
-    <optional>
-      <attribute name="scope">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">where the measurement summarizes more than one observation, specifies the applicability of this measurement.
-Beispielwerte sind etwa: 1] all; 2] most; 3] range</a:documentation>
-        <ref name="data.enumerated"/>
       </attribute>
     </optional>
   </define>
@@ -314,66 +172,6 @@ belongs, but this <sch:name/> element has no textual content.</sch:assert>
       <attribute name="period">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">supplies a pointer to some location defining a named period of time within which the datable item is understood to have occurred.</a:documentation>
         <ref name="data.pointer"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.responsibility.attributes">
-    <ref name="att.source.attributes"/>
-    <ref name="att.responsibility.attribute.cert"/>
-    <ref name="att.responsibility.attribute.resp"/>
-  </define>
-  <define name="att.responsibility.attribute.cert">
-    <optional>
-      <attribute name="cert">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(certainty) signifies the degree of certainty associated with the intervention or interpretation.</a:documentation>
-        <ref name="data.certainty"/>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.responsibility.attribute.resp">
-    <optional>
-      <attribute name="resp">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(responsible party) indicates the agency responsible for the intervention or interpretation, for example an editor or transcriber.</a:documentation>
-        <list>
-          <oneOrMore>
-            <ref name="data.pointer"/>
-          </oneOrMore>
-        </list>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.editLike.attributes">
-    <ref name="att.dimensions.attributes"/>
-    <ref name="att.responsibility.attributes"/>
-    <ref name="att.editLike.attribute.evidence"/>
-    <ref name="att.editLike.attribute.instant"/>
-  </define>
-  <define name="att.editLike.attribute.evidence">
-    <optional>
-      <attribute name="evidence">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the nature of the evidence supporting the reliability or accuracy of the intervention or interpretation.
-Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
-        <list>
-          <oneOrMore>
-            <choice>
-              <value>internal</value>
-              <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">there is internal evidence to support the intervention.</a:documentation>
-              <value>external</value>
-              <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">there is external evidence to support the intervention.</a:documentation>
-              <value>conjecture</value>
-              <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the intervention or interpretation has been made by the editor, cataloguer, or scholar on the basis of their expertise.</a:documentation>
-              <data type="Name"/>
-            </choice>
-          </oneOrMore>
-        </list>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.editLike.attribute.instant">
-    <optional>
-      <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" name="instant" a:defaultValue="false">
-        <a:documentation>indicates whether this is an instant revision or not.</a:documentation>
-        <ref name="data.xTruthValue"/>
       </attribute>
     </optional>
   </define>
@@ -515,6 +313,87 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
  unless also categorized in general with @type</sch:assert>
     </sch:rule>
   </pattern>
+  <define name="model.nameLike.agent">
+    <notAllowed/>
+  </define>
+  <define name="model.nameLike.agent_alternation">
+    <notAllowed/>
+  </define>
+  <define name="model.nameLike.agent_sequence">
+    <empty/>
+  </define>
+  <define name="model.nameLike.agent_sequenceOptional">
+    <empty/>
+  </define>
+  <define name="model.nameLike.agent_sequenceOptionalRepeatable">
+    <empty/>
+  </define>
+  <define name="model.nameLike.agent_sequenceRepeatable">
+    <notAllowed/>
+  </define>
+  <define name="model.segLike">
+    <notAllowed/>
+  </define>
+  <define name="model.hiLike">
+    <notAllowed/>
+  </define>
+  <define name="model.hiLike_alternation">
+    <notAllowed/>
+  </define>
+  <define name="model.hiLike_sequence">
+    <empty/>
+  </define>
+  <define name="model.hiLike_sequenceOptional">
+    <empty/>
+  </define>
+  <define name="model.hiLike_sequenceOptionalRepeatable">
+    <empty/>
+  </define>
+  <define name="model.hiLike_sequenceRepeatable">
+    <notAllowed/>
+  </define>
+  <define name="model.emphLike">
+    <notAllowed/>
+  </define>
+  <define name="model.emphLike_alternation">
+    <notAllowed/>
+  </define>
+  <define name="model.emphLike_sequence">
+    <empty/>
+  </define>
+  <define name="model.emphLike_sequenceOptional">
+    <empty/>
+  </define>
+  <define name="model.emphLike_sequenceOptionalRepeatable">
+    <empty/>
+  </define>
+  <define name="model.emphLike_sequenceRepeatable">
+    <notAllowed/>
+  </define>
+  <define name="model.highlighted">
+    <choice>
+      <ref name="model.hiLike"/>
+      <ref name="model.emphLike"/>
+    </choice>
+  </define>
+  <define name="model.dateLike">
+    <notAllowed/>
+  </define>
+  <define name="model.dateLike_alternation">
+    <notAllowed/>
+  </define>
+  <define name="model.dateLike_sequence">
+    <empty/>
+  </define>
+  <define name="model.dateLike_sequenceOptional">
+    <empty/>
+  </define>
+  <define name="model.dateLike_sequenceOptionalRepeatable">
+    <empty/>
+  </define>
+  <define name="model.dateLike_sequenceRepeatable">
+    <notAllowed/>
+  </define>
   <define name="model.measureLike">
     <choice>
       <ref name="geo"/>
@@ -543,7 +422,97 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
       <ref name="geo"/>
     </oneOrMore>
   </define>
+  <define name="model.graphicLike">
+    <notAllowed/>
+  </define>
+  <define name="model.offsetLike">
+    <notAllowed/>
+  </define>
+  <define name="model.offsetLike_alternation">
+    <notAllowed/>
+  </define>
+  <define name="model.offsetLike_sequence">
+    <empty/>
+  </define>
+  <define name="model.offsetLike_sequenceOptional">
+    <empty/>
+  </define>
+  <define name="model.offsetLike_sequenceOptionalRepeatable">
+    <empty/>
+  </define>
+  <define name="model.offsetLike_sequenceRepeatable">
+    <notAllowed/>
+  </define>
+  <define name="model.pPart.msdesc">
+    <notAllowed/>
+  </define>
+  <define name="model.pPart.editorial">
+    <notAllowed/>
+  </define>
+  <define name="model.pPart.editorial_alternation">
+    <notAllowed/>
+  </define>
+  <define name="model.pPart.editorial_sequence">
+    <empty/>
+  </define>
+  <define name="model.pPart.editorial_sequenceOptional">
+    <empty/>
+  </define>
+  <define name="model.pPart.editorial_sequenceOptionalRepeatable">
+    <empty/>
+  </define>
+  <define name="model.pPart.editorial_sequenceRepeatable">
+    <notAllowed/>
+  </define>
+  <define name="model.pPart.transcriptional">
+    <notAllowed/>
+  </define>
+  <define name="model.pPart.transcriptional_alternation">
+    <notAllowed/>
+  </define>
+  <define name="model.pPart.transcriptional_sequence">
+    <empty/>
+  </define>
+  <define name="model.pPart.transcriptional_sequenceOptional">
+    <empty/>
+  </define>
+  <define name="model.pPart.transcriptional_sequenceOptionalRepeatable">
+    <empty/>
+  </define>
+  <define name="model.pPart.transcriptional_sequenceRepeatable">
+    <notAllowed/>
+  </define>
+  <define name="model.pPart.edit">
+    <choice>
+      <ref name="model.pPart.editorial"/>
+      <ref name="model.pPart.transcriptional"/>
+    </choice>
+  </define>
+  <define name="model.ptrLike">
+    <notAllowed/>
+  </define>
+  <define name="model.lPart">
+    <notAllowed/>
+  </define>
+  <define name="model.global.meta">
+    <notAllowed/>
+  </define>
+  <define name="model.milestoneLike">
+    <notAllowed/>
+  </define>
   <define name="model.gLike">
+    <notAllowed/>
+  </define>
+  <define name="model.phrase.xml">
+    <notAllowed/>
+  </define>
+  <define name="model.specDescLike">
+    <notAllowed/>
+  </define>
+  <define name="model.noteLike">
+    <notAllowed/>
+  </define>
+  <define name="model.global.edit">
     <notAllowed/>
   </define>
   <define name="model.placeNamePart">
@@ -626,102 +595,147 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
       <ref name="location"/>
     </oneOrMore>
   </define>
+  <define name="model.quoteLike">
+    <notAllowed/>
+  </define>
+  <define name="model.quoteLike_alternation">
+    <notAllowed/>
+  </define>
+  <define name="model.quoteLike_sequence">
+    <empty/>
+  </define>
+  <define name="model.quoteLike_sequenceOptional">
+    <empty/>
+  </define>
+  <define name="model.quoteLike_sequenceOptionalRepeatable">
+    <empty/>
+  </define>
+  <define name="model.quoteLike_sequenceRepeatable">
+    <notAllowed/>
+  </define>
+  <define name="model.addressLike">
+    <notAllowed/>
+  </define>
+  <define name="model.addressLike_alternation">
+    <notAllowed/>
+  </define>
+  <define name="model.addressLike_sequence">
+    <empty/>
+  </define>
+  <define name="model.addressLike_sequenceOptional">
+    <empty/>
+  </define>
+  <define name="model.addressLike_sequenceOptionalRepeatable">
+    <empty/>
+  </define>
+  <define name="model.addressLike_sequenceRepeatable">
+    <notAllowed/>
+  </define>
   <define name="model.nameLike">
     <choice>
+      <ref name="model.nameLike.agent"/>
+      <ref name="model.offsetLike"/>
       <ref name="model.placeStateLike"/>
       <ref name="idno"/>
+      <ref name="model.persNamePart"/>
     </choice>
   </define>
   <define name="model.nameLike_alternation">
     <choice>
+      <ref name="model.nameLike.agent_alternation"/>
+      <ref name="model.offsetLike_alternation"/>
       <ref name="model.placeStateLike_alternation"/>
       <ref name="idno"/>
+      <ref name="model.persNamePart_alternation"/>
     </choice>
   </define>
   <define name="model.nameLike_sequence">
+    <ref name="model.nameLike.agent_sequence"/>
+    <ref name="model.offsetLike_sequence"/>
     <ref name="model.placeStateLike_sequence"/>
     <ref name="idno"/>
+    <ref name="model.persNamePart_sequence"/>
   </define>
   <define name="model.nameLike_sequenceOptional">
+    <optional>
+      <ref name="model.nameLike.agent_sequenceOptional"/>
+    </optional>
+    <optional>
+      <ref name="model.offsetLike_sequenceOptional"/>
+    </optional>
     <optional>
       <ref name="model.placeStateLike_sequenceOptional"/>
     </optional>
     <optional>
       <ref name="idno"/>
     </optional>
+    <optional>
+      <ref name="model.persNamePart_sequenceOptional"/>
+    </optional>
   </define>
   <define name="model.nameLike_sequenceOptionalRepeatable">
+    <zeroOrMore>
+      <ref name="model.nameLike.agent_sequenceOptionalRepeatable"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="model.offsetLike_sequenceOptionalRepeatable"/>
+    </zeroOrMore>
     <zeroOrMore>
       <ref name="model.placeStateLike_sequenceOptionalRepeatable"/>
     </zeroOrMore>
     <zeroOrMore>
       <ref name="idno"/>
     </zeroOrMore>
+    <zeroOrMore>
+      <ref name="model.persNamePart_sequenceOptionalRepeatable"/>
+    </zeroOrMore>
   </define>
   <define name="model.nameLike_sequenceRepeatable">
+    <oneOrMore>
+      <ref name="model.nameLike.agent_sequenceRepeatable"/>
+    </oneOrMore>
+    <oneOrMore>
+      <ref name="model.offsetLike_sequenceRepeatable"/>
+    </oneOrMore>
     <oneOrMore>
       <ref name="model.placeStateLike_sequenceRepeatable"/>
     </oneOrMore>
     <oneOrMore>
       <ref name="idno"/>
     </oneOrMore>
+    <oneOrMore>
+      <ref name="model.persNamePart_sequenceRepeatable"/>
+    </oneOrMore>
   </define>
   <define name="model.global">
-    <notAllowed/>
+    <choice>
+      <ref name="model.global.meta"/>
+      <ref name="model.milestoneLike"/>
+      <ref name="model.noteLike"/>
+      <ref name="model.global.edit"/>
+    </choice>
   </define>
   <define name="model.pPart.data">
     <choice>
+      <ref name="model.dateLike"/>
       <ref name="model.measureLike"/>
+      <ref name="model.addressLike"/>
       <ref name="model.nameLike"/>
     </choice>
   </define>
   <define name="model.phrase">
     <choice>
+      <ref name="model.segLike"/>
+      <ref name="model.highlighted"/>
+      <ref name="model.graphicLike"/>
+      <ref name="model.pPart.msdesc"/>
+      <ref name="model.pPart.edit"/>
+      <ref name="model.ptrLike"/>
+      <ref name="model.lPart"/>
+      <ref name="model.phrase.xml"/>
+      <ref name="model.specDescLike"/>
       <ref name="model.pPart.data"/>
     </choice>
-  </define>
-  <define name="att.source.attributes">
-    <ref name="att.source.attribute.source"/>
-  </define>
-  <define name="att.source.attribute.source">
-    <optional>
-      <attribute name="source">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">provides a pointer to the bibliographical source from which a quotation or citation is drawn.</a:documentation>
-        <list>
-          <oneOrMore>
-            <ref name="data.pointer"/>
-          </oneOrMore>
-        </list>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.personal.attributes">
-    <ref name="att.naming.attributes"/>
-    <ref name="att.personal.attribute.full"/>
-    <ref name="att.personal.attribute.sort"/>
-  </define>
-  <define name="att.personal.attribute.full">
-    <optional>
-      <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" name="full" a:defaultValue="yes">
-        <a:documentation>indicates whether the name component is given in full, as an abbreviation or simply as an initial.</a:documentation>
-        <choice>
-          <value>yes</value>
-          <a:documentation>the name component is spelled out in full.</a:documentation>
-          <value>abb</value>
-          <a:documentation>(abbreviated) the name component is given in an abbreviated form.</a:documentation>
-          <value>init</value>
-          <a:documentation>(initial letter) the name component is indicated only by one initial.</a:documentation>
-        </choice>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.personal.attribute.sort">
-    <optional>
-      <attribute name="sort">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the sort order of the name component in relation to others within the name.</a:documentation>
-        <ref name="data.count"/>
-      </attribute>
-    </optional>
   </define>
   <define name="idno">
     <element name="idno">
@@ -830,6 +844,24 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
       </attribute>
     </optional>
   </define>
+  <define name="model.persNamePart">
+    <notAllowed/>
+  </define>
+  <define name="model.persNamePart_alternation">
+    <notAllowed/>
+  </define>
+  <define name="model.persNamePart_sequence">
+    <empty/>
+  </define>
+  <define name="model.persNamePart_sequenceOptional">
+    <empty/>
+  </define>
+  <define name="model.persNamePart_sequenceOptionalRepeatable">
+    <empty/>
+  </define>
+  <define name="model.persNamePart_sequenceRepeatable">
+    <notAllowed/>
+  </define>
   <define name="att.datable.iso.attributes">
     <ref name="att.datable.iso.attribute.when-iso"/>
     <ref name="att.datable.iso.attribute.notBefore-iso"/>
@@ -879,13 +911,18 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
   </define>
   <define name="placeName">
     <element name="placeName">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains an absolute or relative place name. [13.2.3. ]</a:documentation>
-      <ref name="macro.phraseSeq"/>
-      <ref name="att.datable.attributes"/>
-      <ref name="att.editLike.attributes"/>
-      <ref name="att.global.attributes"/>
-      <ref name="att.personal.attributes"/>
-      <ref name="att.typed.attributes"/>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">enthält einen absoluten oder relativen Ortsnamen. [13.2.3. ]</a:documentation>
+      <text/>
+      <attribute name="type">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</a:documentation>
+        <choice>
+          <value>reg</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(regulär) </a:documentation>
+          <value>alt</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Alternative) </a:documentation>
+        </choice>
+      </attribute>
+      <ref name="att.global.attribute.xmllang"/>
       <empty/>
     </element>
   </define>
