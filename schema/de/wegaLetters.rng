@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-08-13T17:36:06Z. 
-Edition: Version 2.6.0. Last updated on
-	20th January 2014, revision 12802
-Edition Location: http://www.tei-c.org/Vault/P5/Version 2.6.0/
+Schema generated from ODD source 2014-09-23T15:37:34Z. 
+Edition: Version 2.7.0. Last updated on
+	16th September 2014, revision 13036
+Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
   
 -->
   <!--This work is licensed under a Creative Commons Attribution 3.0 Unported License (CC BY 3.0).-->
@@ -779,7 +779,11 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
     <optional>
       <attribute name="medium">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">describes the tint or type of ink, e.g. brown, or other writing medium, e.g. pencil</a:documentation>
-        <ref name="wega_data.enumerated"/>
+        <list>
+          <oneOrMore>
+            <ref name="wega_data.enumerated"/>
+          </oneOrMore>
+        </list>
       </attribute>
     </optional>
   </define>
@@ -837,8 +841,12 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
   <define name="wega_att.naming.attribute.role">
     <optional>
       <attribute name="role">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">may be used to specify further information about the entity referenced by this name, for example the occupation of a person, or the status of a place.</a:documentation>
-        <ref name="wega_data.enumerated"/>
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">may be used to specify further information about the entity referenced by this name in the form of a set of whitespace-separated values, for example the occupation of a person, or the status of a place.</a:documentation>
+        <list>
+          <oneOrMore>
+            <ref name="wega_data.enumerated"/>
+          </oneOrMore>
+        </list>
       </attribute>
     </optional>
   </define>
@@ -2098,6 +2106,7 @@ Empfohlene Werte sind: 1] volume; 2] issue; 3] page; 4] line; 5] chapter; 6] par
       <ref name="wega_bibl"/>
       <ref name="wega_edition"/>
       <ref name="wega_extent"/>
+      <ref name="wega_availability"/>
       <ref name="wega_msIdentifier"/>
     </choice>
   </define>
@@ -2845,16 +2854,17 @@ attributes @target and @cRef may be supplied on <name/>.</report>
           <sch:report xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" test="./tei:label and not(@type='gloss')">Labels are only allowed in lists of type='gloss'</sch:report>
         </rule>
       </pattern>
+      <ref name="wega_att.typed.attribute.subtype"/>
       <optional>
-        <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" name="type" a:defaultValue="simple">
-          <a:documentation>charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</a:documentation>
+        <attribute name="type">
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</a:documentation>
           <choice>
             <value>simple</value>
-            <a:documentation>die Listenelemente erscheinen ohne typographische Markierung (z.B. Strichpunkte, Aufzählungszeichen)</a:documentation>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">die Listenelemente erscheinen ohne typographische Markierung (z.B. Strichpunkte, Aufzählungszeichen)</a:documentation>
             <value>gloss</value>
-            <a:documentation>die Liste stellt ein Glossar dar, wobei jedem item (die Definition) ein label (der zu definierende Ausdruck) vorausgeht.</a:documentation>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">die Liste stellt ein Glossar dar, wobei jedem item (die Definition) ein label (der zu definierende Ausdruck) vorausgeht.</a:documentation>
             <value>ordered</value>
-            <a:documentation>die Listenelemente sind mit einem Aufzählungszeichen präfigiert</a:documentation>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">die Listenelemente sind mit einem Aufzählungszeichen präfigiert</a:documentation>
           </choice>
         </attribute>
       </optional>
@@ -3041,6 +3051,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
           <ref name="wega_model.ptrLike"/>
           <ref name="wega_date"/>
           <ref name="wega_idno"/>
+          <ref name="wega_availability"/>
         </choice>
       </zeroOrMore>
       <ref name="wega_att.global.attributes"/>
@@ -3100,6 +3111,9 @@ attributes @target and @cRef may be supplied on <name/>.</report>
           </choice>
         </optional>
         <zeroOrMore>
+          <ref name="wega_availability"/>
+        </zeroOrMore>
+        <zeroOrMore>
           <ref name="wega_model.noteLike"/>
         </zeroOrMore>
         <zeroOrMore>
@@ -3141,6 +3155,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
           <ref name="wega_biblScope"/>
           <ref name="wega_idno"/>
           <ref name="wega_model.global"/>
+          <ref name="wega_availability"/>
         </choice>
       </zeroOrMore>
       <ref name="wega_att.global.attributes"/>
@@ -3235,6 +3250,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
       <ref name="wega_macro.phraseSeq.limited"/>
       <ref name="wega_att.global.attributes"/>
       <ref name="wega_att.canonical.attributes"/>
+      <ref name="wega_att.datable.attributes"/>
       <empty/>
     </element>
   </define>
@@ -3317,7 +3333,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
   </define>
   <define name="wega_biblScope">
     <element name="biblScope">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Umfang der bibliographischen Referenz) definiert den Umfang einer bibliographischen Referenz, beispielsweise als eine Liste von Seitenzahlen oder einer benannten Unterteilung eines größeren Werkes. [3.11.2.4. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Umfang der bibliographischen Referenz) definiert den Umfang einer bibliographischen Referenz, beispielsweise als eine Liste von Seitenzahlen oder einer benannten Unterteilung eines größeren Werkes. [3.11.2.5. ]</a:documentation>
       <ref name="wega_pages.pattern"/>
       <ref name="wega_att.citing.attribute.unit"/>
       <attribute name="type">
@@ -3413,6 +3429,9 @@ attributes @target and @cRef may be supplied on <name/>.</report>
             <ref name="wega_model.milestoneLike"/>
           </choice>
         </oneOrMore>
+        <zeroOrMore>
+          <empty/>
+        </zeroOrMore>
       </group>
     </element>
   </define>
@@ -3471,7 +3490,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
   </define>
   <define name="wega_teiHeader">
     <element name="teiHeader">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(TEI-Header (elektronische Titelseite)) Beschreibungen und Erklärungen, die eine elektronische Titelseite ergeben, die jedem TEI-konformen Text vorangestellt ist. [2.1.1.  15.1. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(TEI-Header (elektronische Titelseite)) Beschreibungen und Erklärungen, die eine elektronische Titelseite für ein TEI-konformes Dokument ergeben. [2.1.1.  15.1. ]</a:documentation>
       <group>
         <ref name="wega_fileDesc"/>
         <zeroOrMore>
@@ -3885,7 +3904,7 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
   </define>
   <define name="wega_change">
     <element name="change">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">dokumentiert eine Änderung oder eine Reihe von Änderungen, die bei der Produktion von einer Quelle oder bei der Überarbeitung einer elektronischen Datei vorgenommen wurden. [2.5.  2.4.1. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">dokumentiert eine Änderung oder eine Reihe von Änderungen, die bei der Produktion von einer Quelle oder bei der Überarbeitung einer elektronischen Datei vorgenommen wurden. [2.5.  2.4.1.  11.7. ]</a:documentation>
       <ref name="wega_macro.specialPara"/>
       <ref name="wega_att.datable.attributes"/>
       <ref name="wega_att.docStatus.attributes"/>
@@ -4369,7 +4388,7 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
   </define>
   <define name="wega_country">
     <element name="country">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(country) markiert den Namen einer geopolitischen Einheit der zeitgenössischen Periode, wie etwa eine Nation oder ein souveräner Staat. [13.2.3. ]</a:documentation>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">markiert den Namen einer geopolitischen Einheit der zeitgenössischen Periode, wie etwa eine Nation oder ein souveräner Staat. [13.2.3. ]</a:documentation>
       <ref name="wega_macro.phraseSeq"/>
       <ref name="wega_att.global.attributes"/>
       <ref name="wega_att.naming.attributes"/>
@@ -4534,7 +4553,7 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
       <empty/>
       <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-addSpan-spanTo-constraint-9">
         <rule context="tei:addSpan">
-          <sch:assert xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" test="@spanTo">The spanTo= attribute of <sch:name/> is required.</sch:assert>
+          <sch:assert xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" test="@spanTo">The @spanTo attribute of <sch:name/> is required.</sch:assert>
         </rule>
       </pattern>
       <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-addSpan-spanTo_fr-constraint-10">
@@ -4686,6 +4705,7 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
         <ref name="wega_additional"/>
       </optional>
       <ref name="wega_att.typed.attributes"/>
+      <ref name="wega_att.declaring.attributes"/>
       <optional>
         <attribute name="rend">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Ausgabe) WeGA: Überlieferung des Texts: ohne Zusatz = autograph (Originalhandschrift); alternative Angaben im rend sind "draft", "copy", "autograph_copy" und "authorized_copy".</a:documentation>
