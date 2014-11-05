@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2014-10-31T14:04:16Z. 
+Schema generated from ODD source 2014-11-05T20:19:24Z. 
 Edition: Version 2.7.0. Last updated on
 	16th September 2014, revision 13036
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
@@ -992,6 +992,23 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
       </attribute>
     </optional>
   </define>
+  <define name="wega_att.transcriptional.attributes">
+    <ref name="wega_att.editLike.attributes"/>
+    <ref name="wega_att.transcriptional.attribute.hand"/>
+  </define>
+  <define name="wega_att.transcriptional.attribute.hand">
+    <optional>
+      <attribute name="hand">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">bezeichnet die Schreiberhand, von welcher der Eingriff vorgenommen wurde</a:documentation>
+        <ref name="wega_data.pointer"/>
+      </attribute>
+    </optional>
+  </define>
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-att.transcriptional-hand-hand-reference-constraint-5">
+    <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:*[@hand]">
+      <sch:assert test="id(substring(@hand,2)) or starts-with(@hand, 'wega:')">There must be an element with the xml:id = "<sch:value-of select="substring(@hand,2)"/>" which is the target of this @hand.</sch:assert>
+    </sch:rule>
+  </pattern>
   <define name="wega_att.citing.attribute.unit">
     <optional>
       <attribute name="unit">
@@ -2470,6 +2487,12 @@ Empfohlene Werte sind: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] foreig
           </list>
         </attribute>
       </optional>
+      <optional>
+        <attribute name="hand">
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">in the case of text omitted from the transcription because of deliberate deletion by an identifiable hand, indicates the hand which made the deletion.</a:documentation>
+          <ref name="wega_data.pointer"/>
+        </attribute>
+      </optional>
       <empty/>
     </element>
   </define>
@@ -2477,12 +2500,7 @@ Empfohlene Werte sind: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] foreig
     <element name="add">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Ergänzung) enthält Buchstaben, Wörter oder Sätze im Quelltext, die von einem Autor, Schreiber, Kommentator oder Korrektor eingesetzt wurden. [3.4.3. ]</a:documentation>
       <ref name="wega_macro.paraContent"/>
-      <optional>
-        <attribute name="hand">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">bezeichnet die Schreiberhand, von welcher der Eingriff vorgenommen wurde</a:documentation>
-          <ref name="wega_data.pointer"/>
-        </attribute>
-      </optional>
+      <ref name="wega_att.transcriptional.attributes"/>
       <attribute name="place">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">spezifiert wo das Element angebracht ist.</a:documentation>
         <choice>
@@ -2505,6 +2523,7 @@ Empfohlene Werte sind: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] foreig
     <element name="del">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Löschung) enthält einen Buchstaben, ein Wort, oder eine Passage die gestrichen wurde, die als gelöscht markiert, oder auf andere Weise als überflüssig oder falsch in der Textkopie von einem Autor, Schreiber, Kommentator oder Korrektor angegeben wird [3.4.3. ]</a:documentation>
       <ref name="wega_macro.paraContent"/>
+      <ref name="wega_att.transcriptional.attributes"/>
       <attribute name="rend">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Ausgabe) gibt an, wie das fragliche Element ausgegeben wurde oder im Quelltext präsentiert ist.</a:documentation>
         <choice>
@@ -2516,12 +2535,6 @@ Empfohlene Werte sind: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] foreig
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(getilgt) Das gelöschte Wort (bzw. das gelöschte Zeichen) ist durch Rasur oder sonstige Weise getilgt.</a:documentation>
         </choice>
       </attribute>
-      <optional>
-        <attribute name="hand">
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">bezeichnet die Schreiberhand, von welcher der Eingriff vorgenommen wurde</a:documentation>
-          <ref name="wega_data.pointer"/>
-        </attribute>
-      </optional>
       <empty/>
     </element>
   </define>
@@ -2555,7 +2568,7 @@ Empfohlene Werte sind: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] foreig
     <element name="rs">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(referenzierende Zeichenkette) bezeichnet ein oder mehrere Objekt(e) vom Typ Person, Werk, Tagebucheintrag, usw. [13.2.1.  3.5.1. ]</a:documentation>
       <ref name="wega_macro.phraseSeq"/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-rs-rs-typeNkey-constraint-5">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-rs-rs-typeNkey-constraint-6">
         <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:rs[@type][@key]">
           <sch:assert test="                             (matches(@key, '^A00\d{4}$') and @type='person') or                             (matches(@key, '^A02\d{4}$') and @type='work') or                             (matches(@key, '^A03\d{4}$') and @type='writing') or                             (matches(@key, '^A04\d{4}$') and @type='letter') or                             (matches(@key, '^A06\d{4}$') and @type='diaryDay') or                             (matches(@key, '^(A00\d{4}\s)*A00\d{4}$') and @type='persons') or                             (matches(@key, '^(A02\d{4}\s)*A02\d{4}$') and @type='works') or                             (matches(@key, '^(A03\d{4}\s)*A03\d{4}$') and @type='writings') or                             (matches(@key, '^(A04\d{4}\s)*A04\d{4}$') and @type='letters') or                             (matches(@key, '^(A05\d{4}\s)*A05\d{4}$') and @type='news') or                             (matches(@key, '^(A06\d{4}\s)*A06\d{4}$') and @type='diaryDays') or                             (matches(@key, '^(A11\d{4}\s)*A11\d{4}$') and @type='biblio')">Type mismatch: The value for @type must be in accordance with the given ID in @key</sch:assert>
         </sch:rule>
@@ -2732,7 +2745,7 @@ Empfohlene Werte sind: 1] cardinal; 2] ordinal; 3] fraction; 4] percentage</a:do
           <sch:report xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" test="@when and (@notAfter or @notBefore)">cooccurence of exact and uncertain date attributes</sch:report>
         </rule>
       </pattern>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-date-dateHeuristics5-constraint-6">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-date-dateHeuristics5-constraint-7">
         <rule context="tei:date">
           <sch:assert xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</sch:assert>
         </rule>
@@ -2968,7 +2981,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
     <element name="graphic">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Abbildung) bestimmt den Ort einer Abbildung, Illustration o.ä. [3.9. ]</a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-graphic-graphic-url-check-constraint-7">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-graphic-graphic-url-check-constraint-8">
         <rule context="tei:graphic">
           <sch:assert xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" test="matches(@url, '^[-_A-Za-z0-9\.]+$') or starts-with(@url, 'http')">Found invalid (non-ASCII) characters within @url</sch:assert>
         </rule>
@@ -3016,6 +3029,11 @@ attributes @target and @cRef may be supplied on <name/>.</report>
           <ref name="wega_data.pointer"/>
         </attribute>
       </optional>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-pb-facs-facs-reference-constraint-7">
+        <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:*[@facs]">
+          <sch:assert test="id(substring(@facs,2)) or starts-with(@facs, 'wega:')">There must be an element with the xml:id = "<sch:value-of select="substring(@facs,2)"/>" which is the target of this @facs.</sch:assert>
+        </sch:rule>
+      </pattern>
       <optional>
         <attribute name="n">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(numberNummer) gibt dem Element eine Nummer (oder eine andere Bezeichnung), die nicht unbedingt eindeutig im Dokument ist.</a:documentation>
@@ -3204,6 +3222,11 @@ attributes @target and @cRef may be supplied on <name/>.</report>
           <ref name="wega_data.pointer"/>
         </attribute>
       </optional>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-author-sameAs-sameAs-reference-constraint-8">
+        <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:*[@sameAs]">
+          <sch:assert test="id(substring(@sameAs,2)) or starts-with(@sameAs, 'wega:')">There must be an element with the xml:id = "<sch:value-of select="substring(@sameAs,2)"/>" which is the target of this @sameAs.</sch:assert>
+        </sch:rule>
+      </pattern>
       <optional>
         <attribute name="role">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">kann verwendet werden, um weitere Informationen, die über die Einheit unter diesem Namen referenziert werden, anzugeben, z. B. der Beruf einer Person, oder der Status eines Ortes.</a:documentation>
@@ -3278,7 +3301,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
     <element name="title">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">enthält einen Titel für jede Art von Arbeit. [3.11.2.2.  2.2.1.  2.2.5. ]</a:documentation>
       <ref name="wega_macro.paraContent"/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-title-duplicate-title-constraint-6">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-title-duplicate-title-constraint-9">
         <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:title[following-sibling::tei:title]">
           <sch:let name="level" value="@level"/>
           <sch:let name="type" value="string(@type)"/>
@@ -3498,7 +3521,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
           </zeroOrMore>
         </zeroOrMore>
       </group>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-lg-atleast1oflggapl-constraint-8">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-lg-atleast1oflggapl-constraint-11">
         <rule context="tei:lg">
           <sch:assert xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" test="count(descendant::tei:lg|descendant::tei:l|descendant::tei:gap) &gt; 0">An lg element
         must contain at least one child l, lg or gap element.</sch:assert>
@@ -4571,31 +4594,51 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
     <element name="addSpan">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(hinzugefügter Text) markiert den Beginn einer längeren Sequenz von Text, die von einem Autor, Schreiber, Kommentator oder Korrektor hinzugefügt wurde. [11.3.1.4. ]</a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-addSpan-spanTo-constraint-9">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-addSpan-spanTo-constraint-12">
         <rule context="tei:addSpan">
           <sch:assert xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" test="@spanTo">The @spanTo attribute of <sch:name/> is required.</sch:assert>
         </rule>
       </pattern>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-addSpan-spanTo_fr-constraint-10">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-addSpan-spanTo_fr-constraint-13">
         <rule context="tei:addSpan">
           <sch:assert xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" test="@spanTo">L'attribut spanTo est requis.</sch:assert>
         </rule>
+      </pattern>
+      <ref name="wega_att.editLike.attribute.evidence"/>
+      <ref name="wega_att.editLike.attribute.instant"/>
+      <ref name="wega_att.dimensions.attribute.unit"/>
+      <ref name="wega_att.dimensions.attribute.quantity"/>
+      <ref name="wega_att.dimensions.attribute.extent"/>
+      <ref name="wega_att.dimensions.attribute.precision"/>
+      <ref name="wega_att.dimensions.attribute.scope"/>
+      <ref name="wega_att.ranging.attribute.atLeast"/>
+      <ref name="wega_att.ranging.attribute.atMost"/>
+      <ref name="wega_att.ranging.attribute.min"/>
+      <ref name="wega_att.ranging.attribute.max"/>
+      <ref name="wega_att.ranging.attribute.confidence"/>
+      <ref name="wega_att.responsibility.attribute.cert"/>
+      <ref name="wega_att.responsibility.attribute.resp"/>
+      <ref name="wega_att.source.attribute.source"/>
+      <attribute name="hand">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">bezeichnet die Schreiberhand, von welcher der Eingriff vorgenommen wurde</a:documentation>
+        <ref name="wega_data.pointer"/>
+      </attribute>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-addSpan-hand-hand-reference-constraint-10">
+        <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:*[@hand]">
+          <sch:assert test="id(substring(@hand,2)) or starts-with(@hand, 'wega:')">There must be an element with the xml:id = "<sch:value-of select="substring(@hand,2)"/>" which is the target of this @hand.</sch:assert>
+        </sch:rule>
       </pattern>
       <attribute name="spanTo">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">zeigt das Ende eines Bereichs auf, dass vom Element, welches dieses Attribut trägt, eingeleitet wird.</a:documentation>
         <ref name="wega_data.pointer"/>
       </attribute>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-addSpan-spanTo-spanTo-7-constraint-7">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-addSpan-spanTo-spanTo-7-constraint-11">
         <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:*[@spanTo]">
           <sch:assert test="id(substring(@spanTo,2)) and following::*[@xml:id=substring(current()/@spanTo,2)]">
                                     The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow the current element <sch:name/>
                                 </sch:assert>
         </sch:rule>
       </pattern>
-      <attribute name="hand">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">bezeichnet die Schreiberhand, von welcher der Eingriff vorgenommen wurde</a:documentation>
-        <ref name="wega_data.pointer"/>
-      </attribute>
       <empty/>
     </element>
   </define>
@@ -4685,7 +4728,7 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
           <ref name="wega_add"/>
         </oneOrMore>
       </interleave>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-subst-substContents1-constraint-12">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-subst-substContents1-constraint-16">
         <rule context="tei:subst">
           <assert xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" test="child::tei:add and child::tei:del"><name/> must have at least one child add and at least one child del</assert>
         </rule>
@@ -5334,7 +5377,7 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
       </attribute>
     </optional>
   </define>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-att.wega.rend-underline-n-constraint-10">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-att.wega.rend-underline-n-constraint-14">
     <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="*:hi[@n] | *:rend[@n]">
       <sch:report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</sch:report>
     </sch:rule>
@@ -5474,12 +5517,12 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
       <ref name="wega_TEI"/>
     </choice>
   </start>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-whitespaceOnlyContent-constraint-8">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-whitespaceOnlyContent-constraint-12">
     <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type='part')] | tei:placeName | tei:title">
       <sch:report test="normalize-space(.) = ''"><sch:name/> has whitespace only content</sch:report>
     </sch:rule>
   </pattern>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-elementStartsWithWhitespace-constraint-9">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaLetters-elementStartsWithWhitespace-constraint-13">
     <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
       <sch:report test="matches(.,'^\s')">whitespace at the beginning of element <sch:name/>
          </sch:report>

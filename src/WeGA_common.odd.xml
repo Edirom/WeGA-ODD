@@ -408,7 +408,7 @@
                         </valItem>
                     </valList>
                 </attDef>
-                <attDef ident="n" mode="add" usage="mwa">
+                <attDef ident="n" mode="add" usage="opt">
                     <gloss versionDate="2013-11-11" xml:lang="en">number</gloss>
                     <desc versionDate="2014-06-16" xml:lang="en">gives a number for the ammount of underlinings (i.e. only applicable with hi@rend='underline').</desc>
                     <gloss versionDate="2013-11-11" xml:lang="de">Zahl</gloss>
@@ -432,7 +432,7 @@
             <desc versionDate="2013-11-11" xml:lang="en">provides attributes for use on metadata elements describing the status of a document.</desc>
             <desc versionDate="2013-11-11" xml:lang="de">stellt Attribute für den Gebrauch von Metadaten-Elementen, die den Status eines Dokuments beschreiben.</desc>
             <attList>
-                <attDef ident="status" mode="add" usage="mwa">
+                <attDef ident="status" mode="add" usage="rec">
                     <desc versionDate="2013-11-11" xml:lang="en">describes the status of a document either currently or, when associated with a dated element, at the time indicated.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">beschreibt entweder den aktuellen Status eines Dokuments oder den Zeitpunkt zu dem ein veraltetes Element zugeordnet wurde.</desc>
                     <valList type="closed" mode="replace">
@@ -464,6 +464,27 @@
             <desc versionDate="2013-11-11" xml:lang="de">stellt Attribute für die Normalisierung von Elementen, die Daten, Zeiten oder datierbare Ereignisse enthalten.</desc>
             <attList>
                 <attDef ident="period" mode="delete"/>
+            </attList>
+        </classSpec>
+        
+        <classSpec type="atts" ident="att.transcriptional" module="tei" mode="change">
+            <desc versionDate="2007-09-03" xml:lang="en">provides attributes specific to elements encoding authorial or scribal intervention in a text when transcribing manuscript or similar sources.</desc>
+            <desc versionDate="2013-11-11" xml:lang="de">Stellt Attribute zur Verfügung, die eine genaue Beschreibung auktorialer oder fremder Eingriffe in den Text ermöglichen.</desc>
+            <attList>
+                <attDef ident="status" mode="delete"/>
+                <attDef ident="cause" mode="delete"/>
+                <attDef ident="seq" mode="delete"/>
+                <attDef ident="hand" mode="change">
+                    <desc versionDate="2007-09-03" xml:lang="en">indicates the hand of the agent which made the intervention.</desc>
+                    <desc versionDate="2013-11-11" xml:lang="de">bezeichnet die Schreiberhand, von welcher der Eingriff vorgenommen wurde</desc>
+                    <constraintSpec scheme="isoschematron" ident="hand-reference">
+                        <constraint>
+                            <sch:rule context="tei:*[@hand]">
+                                <sch:assert test="id(substring(@hand,2)) or starts-with(@hand, 'wega:')">There must be an element with the xml:id = "<sch:value-of select="substring(@hand,2)"/>" which is the target of this @hand.</sch:assert>
+                            </sch:rule>
+                        </constraint>
+                    </constraintSpec>
+                </attDef>
             </attList>
         </classSpec>
         
@@ -537,7 +558,7 @@
                 <rng:ref name="macro.phraseSeq"/>
             </content>
             <attList>
-                <attDef ident="key" mode="add" usage="mwa">
+                <attDef ident="key" mode="add" usage="opt">
                     <desc versionDate="2013-11-11" xml:lang="en">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">bietet mittels eines codierten Wertes in einer beliebigen Form ein extern definiertes Mittel zur Identifizierung einer Einheit (oder mehrerer Einheiten).</desc>
                     <datatype>
@@ -586,7 +607,7 @@
                 <memberOf key="att.typed" mode="delete"/>
             </classes>
             <attList>
-                <attDef ident="type" mode="add" usage="mwa">
+                <attDef ident="type" mode="add" usage="opt">
                     <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</desc>
                     <valList type="closed">
@@ -638,7 +659,7 @@
                     <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.</desc>
                 </attDef>-->
                 <attRef class="att.global" name="xml:id"/>
-                <attDef ident="type" mode="replace" usage="mwa">
+                <attDef ident="type" mode="replace" usage="opt">
                     <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</desc>
                     <valList type="closed">
@@ -719,7 +740,7 @@
                 </attDef>-->
                 <!--<attDef ident="n" mode="add" usage="mwa"/>-->
                 <attRef class="att.global" name="n"/>
-                <attDef ident="type" mode="add" usage="rwa">
+                <attDef ident="type" mode="add" usage="opt">
                     <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</desc>
                     <valList type="closed">
@@ -743,7 +764,7 @@
                         </valItem>
                     </valList>
                 </attDef>
-                <attDef ident="calendar" mode="replace" usage="mwa">
+                <attDef ident="calendar" mode="replace" usage="opt">
                     <desc versionDate="2013-11-11" xml:lang="en">indicates the system or calendar to which the date represented by the content of this element belongs.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">zeigt das System oder den Kalender auf, zu dem das dargestellte Datum des Elements gehört.</desc>
                     <valList type="closed">
@@ -863,7 +884,7 @@
             </classes>
             <attList>
                 <attDef ident="cRef" mode="delete"/>
-                <attDef ident="type" mode="add" usage="mwa">
+                <attDef ident="type" mode="add" usage="opt">
                     <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</desc>
                     <valList type="closed">
@@ -896,7 +917,7 @@
                 <memberOf key="att.global" mode="delete"/>
             </classes>
             <attList>
-                <attDef ident="n" mode="add" usage="mwa">
+                <attDef ident="n" mode="add" usage="opt">
                     <gloss versionDate="2013-11-11" xml:lang="en">number</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">gives a number (or other label) for an element, which is not necessarily unique within the document.</desc>
                     <gloss versionDate="2013-11-11" xml:lang="en">Nummer</gloss>
@@ -928,7 +949,7 @@
                 <memberOf key="att.global" mode="delete"/>
             </classes>
             <attList>
-                <attDef ident="key" mode="add" usage="mwa">
+                <attDef ident="key" mode="add" usage="opt">
                     <desc versionDate="2013-11-11" xml:lang="en">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">bietet mittels eines codierten Wertes in einer beliebigen Form ein extern definiertes Mittel zur Identifizierung einer Einheit (oder mehrerer Einheiten).</desc>
                     <datatype>
@@ -950,9 +971,16 @@
                     <datatype>
                         <rng:ref name="data.pointer"/>
                     </datatype>
+                    <constraintSpec scheme="isoschematron" ident="sameAs-reference">
+                        <constraint>
+                            <sch:rule context="tei:*[@sameAs]">
+                                <sch:assert test="id(substring(@sameAs,2)) or starts-with(@sameAs, 'wega:')">There must be an element with the xml:id = "<sch:value-of select="substring(@sameAs,2)"/>" which is the target of this @sameAs.</sch:assert>
+                            </sch:rule>
+                        </constraint>
+                    </constraintSpec>
                 </attDef>
                 <attRef class="att.responsibility" name="cert"/>
-                <attDef ident="role" mode="add" usage="mwa">
+                <attDef ident="role" mode="add" usage="rec">
                     <desc versionDate="2013-11-11" xml:lang="en">may be used to specify further information about the entity referenced by this name, for example the occupation of a person, or the status of a place.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">kann verwendet werden, um weitere Informationen, die über die Einheit unter diesem Namen referenziert werden, anzugeben, z. B. der Beruf einer Person, oder der Status eines Ortes.</desc>
                     <valList type="closed">
@@ -978,7 +1006,7 @@
                 <memberOf key="att.global" mode="delete"/>
             </classes>
             <attList>
-                <attDef ident="key" mode="add" usage="mwa">
+                <attDef ident="key" mode="add" usage="opt">
                     <desc versionDate="2013-11-11" xml:lang="en">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">bietet mittels eines codierten Wertes in einer beliebigen Form ein extern definiertes Mittel zur Identifizierung einer Einheit (oder mehrerer Einheiten).</desc>
                     <datatype>
@@ -1055,7 +1083,7 @@
                 </constraint>
             </constraintSpec>
             <attList>
-                <attDef ident="key" mode="add" usage="mwa">
+                <attDef ident="key" mode="add" usage="opt">
                     <desc versionDate="2013-11-11" xml:lang="en">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">bietet mittels eines codierten Wertes in einer beliebigen Form ein extern definiertes Mittel zur Identifizierung einer Einheit (oder mehrerer Einheiten).</desc>
                     <datatype>
@@ -1217,7 +1245,6 @@
                 <memberOf key="att.global" mode="delete"/>
                 <memberOf key="att.dimensions" mode="delete"/>
                 <memberOf key="att.ranging" mode="delete"/>
-                <memberOf key="att.transcriptional" mode="delete"/>
                 <memberOf key="att.editLike" mode="delete"/>    
                 <memberOf key="att.responsibility" mode="delete"/>
                 <memberOf key="att.typed" mode="delete"/>
@@ -1249,13 +1276,6 @@
                         </valItem>
                     </valList>
                 </attDef>
-                <attDef ident="hand" mode="add" usage="mwa">
-                    <desc versionDate="2013-11-11" xml:lang="en">signifies the hand of the agent which made the intervention.</desc>
-                    <desc versionDate="2013-11-11" xml:lang="de">bezeichnet die Schreiberhand, von welcher der Eingriff vorgenommen wurde</desc>
-                    <datatype>
-                        <rng:ref name="data.pointer"/>
-                    </datatype>
-                </attDef>
             </attList>
         </elementSpec>
         
@@ -1268,20 +1288,12 @@
                 <memberOf key="att.global" mode="delete"/>
                 <memberOf key="att.dimensions" mode="delete"/>
                 <memberOf key="att.ranging" mode="delete"/>
-                <memberOf key="att.transcriptional" mode="delete"/>
                 <memberOf key="att.placement" mode="delete"/>
                 <memberOf key="att.editLike" mode="delete"/>
                 <memberOf key="att.responsibility" mode="delete"/>
                 <memberOf key="att.typed" mode="delete"/>
             </classes>
             <attList>
-                <attDef ident="hand" mode="add" usage="mwa">
-                    <desc versionDate="2013-11-11" xml:lang="en">signifies the hand of the agent which made the intervention.</desc>
-                    <desc versionDate="2013-11-11" xml:lang="de">bezeichnet die Schreiberhand, von welcher der Eingriff vorgenommen wurde</desc>
-                    <datatype>
-                        <rng:ref name="data.pointer"/>
-                    </datatype>
-                </attDef>
                 <attDef ident="place" mode="add" usage="req">
                     <desc versionDate="2013-11-11" xml:lang="en">specifies where this item is placed.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">spezifiert wo das Element angebracht ist.</desc>
@@ -1328,7 +1340,7 @@
                 <memberOf key="model.damagePart" mode="add"/>
             </classes>
             <attList>
-                <attDef ident="unit" mode="add" usage="rwa">
+                <attDef ident="unit" mode="add" usage="rec">
                     <desc versionDate="2013-11-11" xml:lang="en">names the unit used for the measurement</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">nennt die für die Messung verwendete Einheit</desc>
                     <valList type="closed">
@@ -1337,14 +1349,14 @@
                         <valItem ident="lines"/>
                     </valList>
                 </attDef>
-                <attDef ident="quantity" mode="add" usage="rwa">
+                <attDef ident="quantity" mode="add" usage="rec">
                     <desc versionDate="2013-11-11" xml:lang="en">specifies the length in the units specified.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">gibt die Länge der angegebenen Einheit an.</desc>
                     <datatype>
                         <rng:ref name="data.count"/>
                     </datatype>
                 </attDef>
-                <attDef ident="reason" mode="change" usage="mwa">
+                <attDef ident="reason" mode="change" usage="rec">
                     <desc versionDate="2013-11-11" xml:lang="en">gives the reason for omission</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">gibt eine Begründung für die Auslassung</desc>
                     <valList type="closed" mode="replace">
@@ -1359,7 +1371,6 @@
                     </valList>
                 </attDef>
                 <attDef ident="agent" mode="delete"/>
-                <attDef ident="hand" mode="delete"/>
             </attList>
         </elementSpec>
         
@@ -1469,7 +1480,7 @@
                 <attDef ident="reason" mode="delete"/>
                 <attDef ident="hand" mode="delete"/>
                 <attDef ident="agent" mode="delete"/>
-                <attDef ident="resp" mode="add" usage="mwa">
+                <attDef ident="resp" mode="add" usage="rec">
                     <gloss versionDate="2013-11-11" xml:lang="en">responsible party</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">indicates the agency responsible for the intervention or interpretation, for example an editor or transcriber.</desc>
                     <gloss versionDate="2013-11-11" xml:lang="de">verantwortliche Institution</gloss>
@@ -1588,6 +1599,13 @@
                     <datatype>
                         <rng:ref name="data.pointer"/>
                     </datatype>
+                    <constraintSpec scheme="isoschematron" ident="facs-reference">
+                        <constraint>
+                            <sch:rule context="tei:*[@facs]">
+                                <sch:assert test="id(substring(@facs,2)) or starts-with(@facs, 'wega:')">There must be an element with the xml:id = "<sch:value-of select="substring(@facs,2)"/>" which is the target of this @facs.</sch:assert>
+                            </sch:rule>
+                        </constraint>
+                    </constraintSpec>
                 </attDef>
                 <attDef ident="n" mode="add" usage="opt">
                     <gloss versionDate="2013-11-11" xml:lang="en">number</gloss>
@@ -1625,7 +1643,7 @@
                         </valItem>
                     </valList>
                 </attDef>
-                <attDef ident="rend" mode="add" usage="mwa"><!-- noch zu diskutieren -->
+                <attDef ident="rend" mode="add" usage="opt"><!-- noch zu diskutieren -->
                     <gloss versionDate="2013-11-11" xml:lang="en">rendition</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">indicates how the element in question was rendered or presented in the source text.</desc>
                     <gloss versionDate="2013-11-11" xml:lang="de">Ausgabe</gloss>
@@ -1866,7 +1884,7 @@
                         <rng:data type="ID"/>
                     </datatype>
                 </attDef>
-                <attDef ident="scribe" mode="add" usage="mwa">
+                <attDef ident="scribe" mode="add" usage="rec">
                     <desc versionDate="2013-11-11" xml:lang="en">gives a name or other identifier for the scribe believed to be responsible for this hand.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">gibt dem Schreiber, von dem geglaubt wird für diese Hand verwantwortlich zu sein, einen Namen oder eine andere Bezeichnung.</desc>
                     <datatype>
@@ -2012,7 +2030,7 @@
                 <memberOf key="att.typed" mode="delete"/>
             </classes>
             <attList>
-                <attDef ident="key" mode="add" usage="mwa">
+                <attDef ident="key" mode="add" usage="rec">
                     <desc versionDate="2013-11-11" xml:lang="en">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">bietet mittels eines codierten Wertes in einer beliebigen Form ein extern definiertes Mittel zur Identifizierung einer Einheit (oder mehrerer Einheiten).</desc>
                     <datatype>
@@ -2068,7 +2086,7 @@
             </constraintSpec>-->
             <attList>
                 <attRef class="att.responsibility" name="cert"/>
-                <attDef ident="type" mode="replace" usage="mwa">
+                <attDef ident="type" mode="replace" usage="opt">
                     <desc versionDate="2013-11-11" xml:lang="en">categorisation of varying localities.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">Kategorisierung der verschiedenen Lokalitäten.</desc>
                     <valList type="closed">
@@ -2259,7 +2277,7 @@
                 </constraint>
             </constraintSpec>
             <attList>
-                <attDef ident="type" mode="replace" usage="mwa">
+                <attDef ident="type" mode="replace" usage="opt">
                     <desc versionDate="2013-11-11" xml:lang="en">allows content categorization of the text passage.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">erlaubt die inhaltliche Kategorisierung der Textstelle.</desc>
                     <valList type="closed">
@@ -2350,7 +2368,7 @@
                         </egXML>
                     </exemplum>
                 </attDef>
-                <attDef ident="subtype" mode="replace" usage="mwa">
+                <attDef ident="subtype" mode="replace" usage="rec">
                     <desc versionDate="2013-11-11" xml:lang="en">provides a sub-categorization of the element, if needed.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">liefert, falls erfordlerich, eine Unterkategorisierung des Elements.</desc>
                     <valList type="closed">
@@ -2372,7 +2390,7 @@
                         </valItem>
                     </valList>
                 </attDef>
-                <attDef ident="rend" mode="add" usage="mwa">
+                <attDef ident="rend" mode="add" usage="opt">
                     <gloss versionDate="2013-11-11" xml:lang="en">rendition</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">assigns alignment of text in the source.</desc>
                     <gloss versionDate="2013-11-11" xml:lang="de">Ausgabe</gloss>
@@ -2384,7 +2402,7 @@
                         <valItem ident="center"/>
                     </valList>
                 </attDef>
-                <attDef ident="corresp" mode="add" usage="mwa">
+                <attDef ident="corresp" mode="add" usage="opt">
                     <gloss versionDate="2013-11-11" xml:lang="en">corresponds</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">points to elements that correspond to the current element in some way.</desc>
                     <gloss versionDate="2013-11-11" xml:lang="de">entspricht</gloss>
@@ -2402,7 +2420,7 @@
                         <rng:data type="ID"/>
                     </datatype>
                 </attDef>
-                <attDef ident="notInvolved" mode="add" usage="mwa">
+                <attDef ident="notInvolved" mode="add" usage="opt">
                     <gloss versionDate="2013-11-11" xml:lang="en">not involved</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">keys of non-participating persons, works etc.</desc>
                     <gloss versionDate="2013-11-11" xml:lang="de">unbeteiligt</gloss>
@@ -2456,7 +2474,6 @@
             <desc versionDate="2013-11-11" xml:lang="de">markiert den Beginn einer längeren Sequenz von Text, die von einem Autor, Schreiber, Kommentator oder Korrektor hinzugefügt wurde.</desc>
             <classes mode="change">
                 <memberOf key="att.global" mode="delete"/>
-                <memberOf key="att.transcriptional" mode="delete"/>
                 <memberOf key="att.typed" mode="delete"/>
                 <memberOf key="att.placement" mode="delete"/>
             </classes>
@@ -2479,13 +2496,7 @@
                         </constraint>
                     </constraintSpec>
                 </attDef>
-                <attDef ident="hand" mode="add" usage="req">
-                    <desc versionDate="2013-11-11" xml:lang="en">signifies the hand of the agent which made the intervention.</desc>
-                    <desc versionDate="2013-11-11" xml:lang="de">bezeichnet die Schreiberhand, von welcher der Eingriff vorgenommen wurde</desc>
-                    <datatype>
-                        <rng:ref name="data.pointer"/>
-                    </datatype>
-                </attDef>
+                <attDef ident="hand" mode="change" usage="req"/>
             </attList>
         </elementSpec>
         
@@ -2613,7 +2624,7 @@
             </classes>
             <attList>
                 <attDef ident="reason" mode="delete"/>
-                <attDef ident="resp" mode="add" usage="mwa">
+                <attDef ident="resp" mode="add" usage="rec">
                     <gloss versionDate="2013-11-11" xml:lang="en">responsible party</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">indicates the agency responsible for the intervention or interpretation, for example an editor or transcriber.</desc>
                     <gloss versionDate="2013-11-11" xml:lang="de">verantwortliche Institution</gloss>
@@ -2816,7 +2827,7 @@
                 </rng:optional>
             </content>
             <attList>
-                <attDef ident="rend" mode="add" usage="mwa">
+                <attDef ident="rend" mode="add" usage="opt">
                     <gloss versionDate="2013-11-11" xml:lang="en">rendition</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">WeGA: tradition of the text: without any add on = autograph (original handwriting); alternative information within <att>rend</att> is 'draft', 'copy', 'autograph_copy' and 'authorized_copy'.</desc>
                     <gloss versionDate="2013-11-11" xml:lang="de">Ausgabe</gloss>
