@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0"
+    xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>Hoftheater roles ODD</title>
+                <author>Kristina Richts</author>
+                <funder><ref target="http://www.dfg.de">Deutsche Forschungsgemeinschaft</ref></funder>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <orgName>Musikwissenschaftliches Seminar Detmold/Paderborn</orgName>
+                    <address>
+                        <addrLine>Gartenstr. 20</addrLine>
+                        <addrLine>32756 Detmold</addrLine>
+                        <addrLine>Germany</addrLine>
+                    </address>
+                </publisher>
+                <availability status="restricted">
+                    <p>This work is licensed under a <ref type="license" target="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License (CC BY 3.0)</ref>.</p>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <p>Written from scratch (with a lot of help from tei-c.org).</p>
+            </sourceDesc>
+        </fileDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div>
+                <head>ODD file for roles at the Detmold court theatre</head>
+            </div>
+            
+            <div>
+                <schemaSpec ident="wegaPersons" xml:lang="en" start="person">
+                    <moduleRef key="core" include="addrLine address date head hi item list note p ref rs"/>
+                    <moduleRef key="tei"/>
+                    <moduleRef key="header" include="idno"/>
+                    <moduleRef key="namesdates" include="addName affiliation birth country death event forename genName geogName nameLink occupation orgName persName person placeName region residence roleName settlement sex surname"/>
+                    
+                    <specGrpRef target="WeGA_common.odd.xml#wega-patterns"/>
+                    <specGrpRef target="WeGA_common.odd.xml#wega-lists"/>
+                    <specGrpRef target="WeGA_common.odd.xml#wega-element-additions"/>
+                    <specGrpRef target="WeGA_common.odd.xml#wega-common-constraints"/>
+                    <specGrpRef target="WeGA_common.odd.xml#wega-common-atts"/>
+                    <specGrpRef target="WeGA_common.odd.xml#wega-tei-atts"/>
+                    <specGrpRef target="WeGA_common.odd.xml#wega-core"/>
+                    <specGrpRef target="WeGA_common.odd.xml#wega-header"/>
+                    <specGrpRef target="WeGA_common.odd.xml#wega-namesdates"/>
+
+                    <macroSpec ident="macro.persNameContent">
+                        <content>
+                            <rng:interleave>
+                                <rng:oneOrMore>
+                                    <rng:text/>
+                                </rng:oneOrMore>
+                                <rng:zeroOrMore>
+                                    <rng:ref name="surname"/>
+                                </rng:zeroOrMore>
+                                <rng:zeroOrMore>
+                                    <rng:ref name="forename"/>
+                                </rng:zeroOrMore>
+                                <rng:zeroOrMore>
+                                    <rng:ref name="nameLink"/>
+                                </rng:zeroOrMore>
+                                <rng:zeroOrMore>
+                                    <rng:ref name="genName"/>
+                                </rng:zeroOrMore>
+                                <rng:zeroOrMore>
+                                    <rng:ref name="roleName"/>
+                                </rng:zeroOrMore>
+                                <rng:zeroOrMore>
+                                    <rng:ref name="addName"/>
+                                </rng:zeroOrMore>
+                            </rng:interleave>
+                        </content>
+                    </macroSpec>
+
+                    <elementSpec ident="person" mode="change" module="namesdates">
+                        <desc versionDate="2013-11-11" xml:lang="en">provides information about an identifiable individual, for example a participant in a language interaction, or a person referred to in a historical source.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">liefert Informationen über ein identifizierbares Individuum, beispielsweise ein Teilnehmer einer Sprachinteraktion, oder eine Person, auf die in einer historischen Quelle verwiesen wird.</desc>
+                        <classes mode="change">
+                            <memberOf mode="delete" key="att.global.linking"/>
+                            <memberOf mode="delete" key="att.global"/>
+                            <memberOf mode="delete" key="att.editLike"/>
+                            <memberOf key="att.duration" mode="delete"/>
+                            <memberOf key="att.datable" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                            <memberOf key="att.docStatus" mode="add"/>
+                        </classes>
+                        <content>
+                            <rng:choice>
+                                <!--  Dubletten  -->
+                                <rng:element name="ref">
+                                    <rng:attribute name="type">
+                                        <rng:choice>
+                                            <rng:value>duplicate</rng:value>
+                                            <rng:value>deletion</rng:value>
+                                        </rng:choice>
+                                    </rng:attribute>
+                                    <rng:attribute name="target">
+                                        <rng:ref name="key.person.pattern"/>
+                                    </rng:attribute>
+                                    <rng:empty/>
+                                </rng:element>
+                                <!-- ordentlicher Eintrag -->
+                                <rng:group>
+                                    <rng:zeroOrMore>
+                                        <rng:ref name="idno"/>
+                                    </rng:zeroOrMore>
+                                    <rng:element name="persName">
+                                        <rng:ref name="macro.persNameContent"/>
+                                        <rng:attribute name="type">
+                                            <rng:value>reg</rng:value>
+                                        </rng:attribute>
+                                        <rng:optional>
+                                            <rng:attribute name="xml:lang">
+                                                <rng:ref name="data.language"/>
+                                            </rng:attribute>
+                                        </rng:optional>
+                                    </rng:element>
+                                    <rng:optional>
+                                        <rng:element name="persName">
+                                            <rng:ref name="macro.persNameContent"/>
+                                            <rng:attribute name="type">
+                                                <rng:value>full</rng:value>
+                                            </rng:attribute>
+                                            <rng:optional>
+                                                <rng:attribute name="xml:lang">
+                                                  <rng:ref name="data.language"/>
+                                                </rng:attribute>
+                                            </rng:optional>
+                                        </rng:element>
+                                    </rng:optional>
+                                    <rng:optional>
+                                        <rng:element name="persName">
+                                            <rng:ref name="macro.persNameContent"/>
+                                            <rng:attribute name="type">
+                                                <rng:value>real</rng:value>
+                                            </rng:attribute>
+                                            <rng:optional>
+                                                <rng:attribute name="xml:lang">
+                                                  <rng:ref name="data.language"/>
+                                                </rng:attribute>
+                                            </rng:optional>
+                                        </rng:element>
+                                    </rng:optional>
+                                    <rng:zeroOrMore>
+                                        <rng:element name="persName">
+                                            <rng:ref name="macro.persNameContent"/>
+                                            <rng:attribute name="type">
+                                                <rng:choice>
+                                                  <rng:value>alt</rng:value>
+                                                  <rng:value>pseud</rng:value>
+                                                </rng:choice>
+                                            </rng:attribute>
+                                            <rng:optional>
+                                                <rng:attribute name="xml:lang">
+                                                  <rng:ref name="data.language"/>
+                                                </rng:attribute>
+                                            </rng:optional>
+                                            <rng:optional>
+                                                <rng:attribute name="from">
+                                                  <rng:choice>
+                                                  <rng:data type="date"/>
+                                                  <rng:data type="gYear"/>
+                                                  </rng:choice>
+                                                </rng:attribute>
+                                            </rng:optional>
+                                            <rng:optional>
+                                                <rng:attribute name="to">
+                                                  <rng:choice>
+                                                  <rng:data type="date"/>
+                                                  <rng:data type="gYear"/>
+                                                  </rng:choice>
+                                                </rng:attribute>
+                                            </rng:optional>
+                                            <rng:optional>
+                                                <rng:attribute name="subtype">
+                                                  <rng:choice>
+                                                  <rng:value>birth</rng:value>
+                                                  <rng:value>married</rng:value>
+                                                  <rng:value>role</rng:value>
+                                                  </rng:choice>
+                                                </rng:attribute>
+                                            </rng:optional>
+                                        </rng:element>
+                                    </rng:zeroOrMore>
+                                    <rng:interleave>
+                                        <rng:optional>
+                                            <rng:ref name="birth"/>
+                                        </rng:optional>
+                                        <rng:optional>
+                                            <rng:ref name="death"/>
+                                        </rng:optional>
+                                        <rng:ref name="sex"/>
+                                        <rng:optional>
+                                            <rng:element name="note">
+                                                <rng:ref name="macro.specialPara"/>
+                                                <rng:attribute name="type">
+                                                  <rng:value>bioSummary</rng:value>
+                                                </rng:attribute>
+                                            </rng:element>
+                                        </rng:optional>
+                                        <rng:zeroOrMore>
+                                            <rng:ref name="event"/>
+                                        </rng:zeroOrMore>
+                                        <rng:optional>
+                                            <rng:element name="figure">
+                                                <rng:ref name="head"/>
+                                                <rng:ref name="graphic"/>
+                                                <rng:attribute name="n">
+                                                  <rng:value>reg</rng:value>
+                                                </rng:attribute>
+                                            </rng:element>
+                                            <rng:zeroOrMore>
+                                                <rng:element name="figure">
+                                                  <rng:ref name="head"/>
+                                                  <rng:ref name="graphic"/>
+                                                </rng:element>
+                                            </rng:zeroOrMore>
+                                        </rng:optional>
+                                    </rng:interleave>
+                                </rng:group>
+                            </rng:choice>
+                        </content>
+                        <constraintSpec scheme="isoschematron" ident="personHeuristics1">
+                            <desc versionDate="2014-04-16" xml:lang="en">Check for birth dates that are <emph>after</emph> death dates (for dates AD).</desc>
+                            <desc versionDate="2014-04-16" xml:lang="de">Test auf Geburtsdaten, die <emph>nach</emph> dem Todesdatum liegen (für Daten nach Christi Geburt).</desc>
+                            <constraint>
+                                <!--<sch:report test="count(./tei:persName[@subtype='birth']) > 1"
+                                    >Mehrere Geburtsnamen gefunden</sch:report>-->
+                                <!-- für Lebensdaten nach Christi Geburt -->
+                                <sch:report
+                                    test="./tei:birth/tei:date/(@when, @notBefore, @notAfter) > ./tei:death/tei:date/(@when, @notBefore, @notAfter) and not(./tei:death/tei:date/(@when, @notBefore, @notAfter)[starts-with(., '-')])"
+                                    >Geburtsdatum nach Todesdatum</sch:report>
+                                <!--<sch:report
+                                    test="./tei:death/tei:date/@notBefore > ./tei:death/tei:date/@notAfter"
+                                    >Datumsangabe notBefore nach notAfter</sch:report>-->
+                                <!--<sch:report
+                                    test=".//(tei:persName, tei:workName, tei:surname, tei:forename, tei:hi, tei:rs, tei:event, tei:note)[normalize-space(.) = '']"
+                                    >Leeres Element gefunden</sch:report>-->
+                            </constraint>
+                        </constraintSpec>
+                        <constraintSpec scheme="isoschematron" ident="personHeuristics2">
+                            <desc versionDate="2014-04-16" xml:lang="en">Check for birth dates that are <emph>after</emph> death dates (for dates BC).</desc>
+                            <desc versionDate="2014-04-16" xml:lang="de">Test auf Geburtsdaten, die <emph>nach</emph> dem Todesdatum liegen (für Daten vor Christi Geburt).</desc>
+                            <constraint>
+                                <!--<sch:report test="count(./tei:persName[@subtype='birth']) > 1"
+                                    >Mehrere Geburtsnamen gefunden</sch:report>-->
+                                <!-- für Lebensdaten vor Christi Geburt -->
+                                <sch:report
+                                    test="./tei:death/tei:date/(@when, @notBefore, @notAfter) > ./tei:birth/tei:date/(@when, @notBefore, @notAfter) and ./tei:death/tei:date/(@when, @notBefore, @notAfter)[starts-with(., '-')]"
+                                    >Geburtsdatum nach Todesdatum</sch:report>
+                                <!--<sch:report
+                                    test="./tei:death/tei:date/@notBefore > ./tei:death/tei:date/@notAfter"
+                                    >Datumsangabe notBefore nach notAfter</sch:report>-->
+                                <!--<sch:report
+                                    test=".//(tei:persName, tei:workName, tei:surname, tei:forename, tei:hi, tei:rs, tei:event, tei:note)[normalize-space(.) = '']"
+                                    >Leeres Element gefunden</sch:report>-->
+                            </constraint>
+                        </constraintSpec>
+                    </elementSpec>
+
+                    <elementSpec ident="surname" mode="change" module="namesdates">
+                        <desc versionDate="2013-11-11" xml:lang="en">contains a family (inherited) name, as opposed to a given, baptismal, or nick name.</desc>
+                        <desc versionDate="2014-03-12" xml:lang="de">enthält einen (vererbten) Familiennamen, im Gegensatz zu einem festgelegten, Tauf- oder Spitznamen.</desc>
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.personal" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                        </classes>
+                    </elementSpec>
+                    
+                    <elementSpec ident="forename" mode="change" module="namesdates">
+                        <desc versionDate="2014-03-12" xml:lang="en">contains a forename, given or baptismal name.</desc>
+                        <desc versionDate="2014-03-12" xml:lang="de">enthält einen Vornamen.</desc>
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                            <memberOf key="att.personal" mode="delete"/>
+                        </classes>
+                        <constraintSpec scheme="isoschematron" ident="whitespace-between-forenames">
+                            <desc versionDate="2014-04-16" xml:lang="en">Warnings for missing whitespace between forenames.</desc>
+                            <desc versionDate="2014-04-16" xml:lang="de">Warnung vor fehlendem Leerraum zwischen Vornamen.</desc>
+                            <constraint>
+                                <sch:report
+                                    test="following-sibling::tei:forename and not(following-sibling::node()[1] instance of text())"
+                                    >Fehlender Leerraum zwischen Vornamen</sch:report>
+                            </constraint>
+                        </constraintSpec>
+                        <attList>
+                            <attDef ident="full" mode="add">
+                                <valList type="closed">
+                                    <valItem ident="abb">
+                                        <gloss versionDate="2014-03-12" xml:lang="en">abbreviated</gloss>
+                                        <gloss versionDate="2014-03-12" xml:lang="de">abgekürzt</gloss>
+                                        <desc versionDate="2014-03-12" xml:lang="en">the name component is given in an abbreviated form.</desc>
+                                        <desc versionDate="2014-03-12" xml:lang="de">Der Namensbestandteil ist (in irgendeiner Form) abgekürzt.</desc>
+                                    </valItem>
+                                    <valItem ident="init">
+                                        <gloss versionDate="2014-03-12" xml:lang="en">initial letter</gloss>
+                                        <gloss versionDate="2014-03-12" xml:lang="de">Initiale</gloss>
+                                        <desc versionDate="2014-03-12" xml:lang="en">the name component is indicated only by one initial.</desc>
+                                        <desc versionDate="2014-03-12" xml:lang="de">Der Namensbestandteil ist nur durch eine Initiale gekennzeichnet.</desc>
+                                    </valItem>
+                                </valList>
+                            </attDef>
+                            <attDef ident="cert" mode="add">
+                                <valList type="closed">
+                                    <valItem ident="high"/>
+                                    <valItem ident="medium"/>
+                                    <valItem ident="low"/>
+                                </valList>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+
+                    <elementSpec ident="addName" mode="change">
+                        <gloss versionDate="2013-11-11" xml:lang="en">additional name</gloss>
+                        <desc versionDate="2013-11-11" xml:lang="en">contains an additional name component, such as a nickname, epithet, or alias, or any other descriptive phrase used within a personal name.</desc>
+                        <gloss versionDate="2013-11-11" xml:lang="en">hinzugefügter Name</gloss>
+                        <desc versionDate="2013-11-11" xml:lang="de">enthält einen zusätzlichen Komponenten zum Namen, wie etwa einen Spitznamen, Epitheton, ein Alias oder jegliche andere beschreibende Phrase, die innerhalb eines personenbezogenen Namens verwendet wird.</desc>
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.personal" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                        </classes>
+                        <attList>
+                            <attDef ident="type" mode="add" usage="req">
+                                <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
+                                <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</desc>
+                                <valList type="closed">
+                                    <valItem ident="nick">
+                                        <gloss versionDate="2013-11-11" xml:lang="de">nickname</gloss>
+                                        <desc versionDate="2013-11-11" xml:lang="de">nickname</desc>
+                                        <gloss versionDate="2013-11-11" xml:lang="de">nickname</gloss>
+                                        <desc versionDate="2013-11-11" xml:lang="de">Spitzname</desc>
+                                    </valItem>
+                                    <valItem ident="epithet">
+                                        <gloss versionDate="2013-11-11" xml:lang="de">epithet</gloss>
+                                        <desc versionDate="2013-11-11" xml:lang="de">addings to names like 'der Starke', 'ohne Land' etc.</desc>
+                                        <gloss versionDate="2013-11-11" xml:lang="de">Epitheton</gloss>
+                                        <desc versionDate="2013-11-11" xml:lang="de">Namenszusätze wie "der Starke", "ohne Land" usw.</desc>
+                                    </valItem>
+                                </valList>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+                    
+                    <elementSpec ident="sex" mode="change">
+                        <desc versionDate="2013-11-11" xml:lang="en">specifies the sex of a role.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">gibt das Geschlecht einer Rolle an.</desc>
+                        <classes mode="change">
+                            <memberOf key="att.editLike" mode="delete"/>
+                            <memberOf key="att.datable" mode="delete"/>
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:choice>
+                                <rng:value>f</rng:value>
+                                <rng:value>m</rng:value>
+                                <rng:value>unknown</rng:value>
+                            </rng:choice>
+                        </content>
+                    </elementSpec>
+                    
+                    <!-- <classSpec type="model" ident="model.personPart" module="tei" mode="change"/>-->
+                    <elementSpec ident="bibl" mode="delete"/>
+                    <elementSpec ident="add" mode="delete"/>
+                    <elementSpec ident="cb" mode="delete"/>
+                    <elementSpec ident="del" mode="delete"/>
+                    <elementSpec ident="gap" mode="delete"/>
+                </schemaSpec>
+            </div>
+        </body>
+    </text>
+</TEI>
