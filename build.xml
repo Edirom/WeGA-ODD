@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." name="WeGA-ODD" default="tei">
+    
+    <!-- import default properties from file -->
+    <property file="local.build.properties"/>
+    <property file="build.properties"/>
+    
+    <condition property="lang" value="${lang}" else="de">
+        <isset property="lang"/>
+    </condition>
+    
+    <target name="tei" depends="biblio,diaries,generic,letters,news,persons,places,var,writings"/>
+    
+    <target name="init">
+        <mkdir dir="${build.dir}"/>
+    </target>
+    
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+    
+    <target name="biblio" depends="init">
+        <antcall target="process-tei">
+            <param name="inputFile" value="${basedir}/src/WeGA_biblio.odd.xml"/>
+            <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaBiblio.rng"/>
+            <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaBiblio.isosch"/>
+        </antcall>
+    </target>
+    
+    <target name="diaries" depends="init">
+        <antcall target="process-tei">
+            <param name="inputFile" value="${basedir}/src/WeGA_diaries.odd.xml"/>
+            <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaDiaries.rng"/>
+            <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaDiaries.isosch"/>
+        </antcall>
+    </target>
+    
+    <target name="generic" depends="init">
+        <antcall target="process-tei">
+            <param name="inputFile" value="${basedir}/src/WeGA_generic.odd.xml"/>
+            <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaGeneric.rng"/>
+            <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaGeneric.isosch"/>
+        </antcall>
+    </target>
+    
+    <target name="letters" depends="init">
+        <antcall target="process-tei">
+            <param name="inputFile" value="${basedir}/src/WeGA_letters.odd.xml"/>
+            <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaLetters.rng"/>
+            <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaLetters.isosch"/>
+        </antcall>
+    </target>
+    
+    <target name="news" depends="init">
+        <antcall target="process-tei">
+            <param name="inputFile" value="${basedir}/src/WeGA_news.odd.xml"/>
+            <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaNews.rng"/>
+            <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaNews.isosch"/>
+        </antcall>
+    </target>
+    
+    <target name="persons" depends="init">
+        <antcall target="process-tei">
+            <param name="inputFile" value="${basedir}/src/WeGA_persons.odd.xml"/>
+            <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaPersons.rng"/>
+            <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaPersons.isosch"/>
+        </antcall>
+    </target>
+    
+    <target name="places" depends="init">
+        <antcall target="process-tei">
+            <param name="inputFile" value="${basedir}/src/WeGA_places.odd.xml"/>
+            <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaPlaces.rng"/>
+            <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaPlaces.isosch"/>
+        </antcall>
+    </target>
+    
+    <target name="var" depends="init">
+        <antcall target="process-tei">
+            <param name="inputFile" value="${basedir}/src/WeGA_var.odd.xml"/>
+            <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaVar.rng"/>
+            <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaVar.isosch"/>
+        </antcall>
+    </target>
+    
+    <target name="writings" depends="init">
+        <antcall target="process-tei">
+            <param name="inputFile" value="${basedir}/src/WeGA_writings.odd.xml"/>
+            <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaWritings.rng"/>
+            <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaWritings.isosch"/>
+        </antcall>
+    </target>
+    
+    <target name="process-tei">
+        <basename property="inputFile.basename" file="${inputFile}" suffix=".xml"/>
+        <sequential>
+            <echo>Expanding ODD file</echo>
+            <xslt force="yes" style="${stylesheets.dir}/odds/odd2odd.xsl" 
+                in="${inputFile}" out="${build.dir}/${inputFile.basename}.processed">
+                <factory name="net.sf.saxon.TransformerFactoryImpl">
+                    <attribute name="http://saxon.sf.net/feature/xinclude-aware" value="true"/>
+                </factory>
+                <param name="lang" expression="${lang}" if="lang"/>
+                <param name="defaultSource" expression="${tei.source}" if="tei.source"/>
+            </xslt>
+            
+            <echo>Creating RelaxNG schema</echo>
+            <xslt force="yes" style="${stylesheets.dir}/profiles/default/relaxng/to.xsl" 
+                in="${build.dir}/${inputFile.basename}.processed" out="${outputFileRNG}">
+                <factory name="net.sf.saxon.TransformerFactoryImpl">
+                    <attribute name="http://saxon.sf.net/feature/xinclude-aware" value="true"/>
+                </factory>
+                <param name="inputDir" expression="${basedir}/"/>
+                <!-- supply name of language-->
+                <param name="lang" expression="${lang}" if="lang"/>
+                <param name="doclang" expression="${lang}" if="lang"/>
+                <param name="documentationLanguage" expression="${lang}" if="lang"/>
+                <!-- emit some diagnostics"-->
+                <param name="debug" expression="${debug}" if="debug"/>
+                <!-- be verbose-->
+                <param name="verbose" expression="${verbose}" if="verbose"/>
+            </xslt>
+            
+            <echo>Extracting Schematron rules</echo>
+            <xslt processor="trax" force="yes" 
+                style="${stylesheets.dir}/profiles/default/schematron/to.xsl" 
+                in="${build.dir}/${inputFile.basename}.processed" out="${outputFileSchematron}">
+                <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+            </xslt>
+        </sequential>
+    </target>
+    
+</project>
