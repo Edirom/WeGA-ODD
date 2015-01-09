@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project basedir="." name="WeGA-ODD" default="tei">
+<project basedir="." name="WeGA-ODD" default="all">
     
     <!-- import default properties from file -->
     <property file="local.build.properties"/>
@@ -10,6 +10,8 @@
     </condition>
     
     <target name="tei" depends="biblio,diaries,generic,letters,news,persons,places,var,writings"/>
+    <target name="mei" depends="works"/>
+    <target name="all" depends="tei,mei"/>
     
     <target name="init">
         <mkdir dir="${build.dir}"/>
@@ -20,7 +22,7 @@
     </target>
     
     <target name="biblio" depends="init">
-        <antcall target="process-tei">
+        <antcall target="process">
             <param name="inputFile" value="${basedir}/src/WeGA_biblio.odd.xml"/>
             <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaBiblio.rng"/>
             <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaBiblio.isosch"/>
@@ -28,7 +30,7 @@
     </target>
     
     <target name="diaries" depends="init">
-        <antcall target="process-tei">
+        <antcall target="process">
             <param name="inputFile" value="${basedir}/src/WeGA_diaries.odd.xml"/>
             <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaDiaries.rng"/>
             <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaDiaries.isosch"/>
@@ -36,7 +38,7 @@
     </target>
     
     <target name="generic" depends="init">
-        <antcall target="process-tei">
+        <antcall target="process">
             <param name="inputFile" value="${basedir}/src/WeGA_generic.odd.xml"/>
             <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaGeneric.rng"/>
             <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaGeneric.isosch"/>
@@ -44,7 +46,7 @@
     </target>
     
     <target name="letters" depends="init">
-        <antcall target="process-tei">
+        <antcall target="process">
             <param name="inputFile" value="${basedir}/src/WeGA_letters.odd.xml"/>
             <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaLetters.rng"/>
             <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaLetters.isosch"/>
@@ -52,7 +54,7 @@
     </target>
     
     <target name="news" depends="init">
-        <antcall target="process-tei">
+        <antcall target="process">
             <param name="inputFile" value="${basedir}/src/WeGA_news.odd.xml"/>
             <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaNews.rng"/>
             <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaNews.isosch"/>
@@ -60,7 +62,7 @@
     </target>
     
     <target name="persons" depends="init">
-        <antcall target="process-tei">
+        <antcall target="process">
             <param name="inputFile" value="${basedir}/src/WeGA_persons.odd.xml"/>
             <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaPersons.rng"/>
             <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaPersons.isosch"/>
@@ -68,7 +70,7 @@
     </target>
     
     <target name="places" depends="init">
-        <antcall target="process-tei">
+        <antcall target="process">
             <param name="inputFile" value="${basedir}/src/WeGA_places.odd.xml"/>
             <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaPlaces.rng"/>
             <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaPlaces.isosch"/>
@@ -76,23 +78,36 @@
     </target>
     
     <target name="var" depends="init">
-        <antcall target="process-tei">
+        <antcall target="process">
             <param name="inputFile" value="${basedir}/src/WeGA_var.odd.xml"/>
             <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaVar.rng"/>
             <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaVar.isosch"/>
         </antcall>
     </target>
     
+    <target name="works" depends="init">
+        <antcall target="process">
+            <param name="inputFile" value="${basedir}/src/WeGA_works.odd.xml"/>
+            <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaWorks.rng"/>
+            <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaWorks.isosch"/>
+            <param name="source" value="${mei.source}"/>
+        </antcall>
+    </target>
+    
     <target name="writings" depends="init">
-        <antcall target="process-tei">
+        <antcall target="process">
             <param name="inputFile" value="${basedir}/src/WeGA_writings.odd.xml"/>
             <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaWritings.rng"/>
             <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaWritings.isosch"/>
         </antcall>
     </target>
     
-    <target name="process-tei">
+    <target name="process">
         <basename property="inputFile.basename" file="${inputFile}" suffix=".xml"/>
+        <!-- TEI is considered default source -->
+        <condition property="source" value="${source}" else="${tei.source}">
+            <isset property="source"/>
+        </condition>
         <sequential>
             <echo>Expanding ODD file</echo>
             <xslt force="yes" style="${stylesheets.dir}/odds/odd2odd.xsl" 
@@ -101,7 +116,7 @@
                     <attribute name="http://saxon.sf.net/feature/xinclude-aware" value="true"/>
                 </factory>
                 <param name="lang" expression="${lang}" if="lang"/>
-                <param name="defaultSource" expression="${tei.source}" if="tei.source"/>
+                <param name="defaultSource" expression="${source}"/>
             </xslt>
             
             <echo>Creating RelaxNG schema</echo>
