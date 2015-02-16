@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2015-02-16T10:39:18Z. 
+Schema generated from ODD source 2015-02-16T10:41:06Z. 
 Edition: 2013 Release
 Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -161,6 +161,32 @@ Edition Location: http://www.tei-c.org/Vault/P5//
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">between and across staves as necessary</a:documentation>
       <value>takt</value>
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">short line above staff or through top line</a:documentation>
+    </choice>
+  </define>
+  <define name="data.BARRENDITION">
+    <choice>
+      <value>dashed</value>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">dashed line (Unicode 1D104)</a:documentation>
+      <value>dotted</value>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">dotted line</a:documentation>
+      <value>dbl</value>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Unicode 1D101)</a:documentation>
+      <value>dbldashed</value>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">double dashed line</a:documentation>
+      <value>dbldotted</value>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">double dotted line</a:documentation>
+      <value>end</value>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Unicode 1D102)</a:documentation>
+      <value>invis</value>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">bar line not rendered</a:documentation>
+      <value>rptstart</value>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">repeat start (Unicode 1D106)</a:documentation>
+      <value>rptboth</value>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">repeat start and end</a:documentation>
+      <value>rptend</value>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">repeat end (Unicode 1D107)</a:documentation>
+      <value>single</value>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Unicode 1D100)</a:documentation>
     </choice>
   </define>
   <define name="data.BEAM">
@@ -1700,6 +1726,17 @@ Edition Location: http://www.tei-c.org/Vault/P5//
       </attribute>
     </optional>
   </define>
+  <define name="att.joined.attributes">
+    <ref name="att.joined.attribute.join"/>
+  </define>
+  <define name="att.joined.attribute.join">
+    <optional>
+      <attribute name="join">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">used for linking visually separate entities that form a single logical entity, for example, multiple slurs broken across a system break that form a single musical phrase. Also used to indicate a measure which metrically completes the current one. Record the identifiers of the separately encoded components, excluding the one carrying the attribute.</a:documentation>
+        <ref name="data.URIS"/>
+      </attribute>
+    </optional>
+  </define>
   <define name="att.keySigDefault.log.attributes">
     <ref name="att.keySigDefault.log.attribute.key.accid"/>
     <ref name="att.keySigDefault.log.attribute.key.mode"/>
@@ -1887,6 +1924,33 @@ Edition Location: http://www.tei-c.org/Vault/P5//
       </attribute>
     </optional>
   </define>
+  <define name="att.measure.anl.attributes">
+    <ref name="att.joined.attributes"/>
+  </define>
+  <define name="att.measure.ges.attributes">
+    <ref name="att.timestamp.performed.attributes"/>
+  </define>
+  <define name="att.measure.log.attributes">
+    <ref name="att.meterconformance.bar.attributes"/>
+    <ref name="att.measure.log.attribute.left"/>
+    <ref name="att.measure.log.attribute.right"/>
+  </define>
+  <define name="att.measure.log.attribute.left">
+    <optional>
+      <attribute name="left">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the visual rendition of the left bar line. It is present here only for facilitation of translation from legacy encodings which use it. Usually, it can be safely ignored.</a:documentation>
+        <ref name="data.BARRENDITION"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.measure.log.attribute.right">
+    <optional>
+      <attribute name="right">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the function of the right bar line and is structurally important.</a:documentation>
+        <ref name="data.BARRENDITION"/>
+      </attribute>
+    </optional>
+  </define>
   <define name="att.measurement.attributes">
     <ref name="att.measurement.attribute.unit"/>
   </define>
@@ -1961,6 +2025,26 @@ Edition Location: http://www.tei-c.org/Vault/P5//
           <value>o</value>
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">overfull; i.e., too many beats.</a:documentation>
         </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.meterconformance.bar.attributes">
+    <ref name="att.meterconformance.bar.attribute.metcon"/>
+    <ref name="att.meterconformance.bar.attribute.control"/>
+  </define>
+  <define name="att.meterconformance.bar.attribute.metcon">
+    <optional>
+      <attribute name="metcon">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the relationship between the content of a measure and the prevailing meter.</a:documentation>
+        <ref name="data.BOOLEAN"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.meterconformance.bar.attribute.control">
+    <optional>
+      <attribute name="control">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates whether or not a bar line is "controlling"; that is, if it indicates a point of alignment across all the parts. Bar lines within a score are usually controlling; that is, they "line up". Bar lines within parts may or may not be controlling. When applied to &lt;measure&gt;, this attribute indicates the nature of the right barline but not the left.</a:documentation>
+        <ref name="data.BOOLEAN"/>
       </attribute>
     </optional>
   </define>
@@ -3337,6 +3421,17 @@ Edition Location: http://www.tei-c.org/Vault/P5//
           <value>preserve</value>
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">instructs the application to maintain white space "as-is", suggesting that it might have meaning.</a:documentation>
         </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.width.attributes">
+    <ref name="att.width.attribute.width"/>
+  </define>
+  <define name="att.width.attribute.width">
+    <optional>
+      <attribute name="width">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">measurement of the horizontal dimension of an entity. The width attribute may be used to capture measure width data for interchange with music printing systems that utilize this information for printing. On &lt;barLine&gt; the width attribute captures the width of the preceding measure.</a:documentation>
+        <ref name="data.MEASUREMENT"/>
       </attribute>
     </optional>
   </define>
@@ -6189,6 +6284,11 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
       </attribute>
     </optional>
   </define>
+  <define name="att.measure.vis.attributes">
+    <ref name="att.barplacement.attributes"/>
+    <ref name="att.measurement.attributes"/>
+    <ref name="att.width.attributes"/>
+  </define>
   <define name="att.note.ges.cmn.attributes">
     <ref name="att.graced.attributes"/>
     <ref name="att.note.ges.cmn.attribute.gliss"/>
@@ -6331,6 +6431,40 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
       <ref name="model.ornamentLike.cmn"/>
     </choice>
   </define>
+  <define name="model.controleventLike.cmn_alternation">
+    <choice>
+      <ref name="hairpin"/>
+      <ref name="model.ornamentLike.cmn_alternation"/>
+    </choice>
+  </define>
+  <define name="model.controleventLike.cmn_sequence">
+    <ref name="hairpin"/>
+    <ref name="model.ornamentLike.cmn_sequence"/>
+  </define>
+  <define name="model.controleventLike.cmn_sequenceOptional">
+    <optional>
+      <ref name="hairpin"/>
+    </optional>
+    <optional>
+      <ref name="model.ornamentLike.cmn_sequenceOptional"/>
+    </optional>
+  </define>
+  <define name="model.controleventLike.cmn_sequenceOptionalRepeatable">
+    <zeroOrMore>
+      <ref name="hairpin"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="model.ornamentLike.cmn_sequenceOptionalRepeatable"/>
+    </zeroOrMore>
+  </define>
+  <define name="model.controleventLike.cmn_sequenceRepeatable">
+    <oneOrMore>
+      <ref name="hairpin"/>
+    </oneOrMore>
+    <oneOrMore>
+      <ref name="model.ornamentLike.cmn_sequenceRepeatable"/>
+    </oneOrMore>
+  </define>
   <define name="model.eventLike.cmn">
     <notAllowed/>
   </define>
@@ -6373,22 +6507,40 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
     </choice>
   </define>
   <define name="model.measureLike">
-    <notAllowed/>
+    <choice>
+      <ref name="measure"/>
+    </choice>
   </define>
   <define name="model.measureLike_alternation">
-    <notAllowed/>
+    <choice>
+      <ref name="measure"/>
+    </choice>
   </define>
   <define name="model.measureLike_sequence">
-    <empty/>
+    <ref name="measure"/>
   </define>
   <define name="model.measureLike_sequenceOptional">
-    <empty/>
+    <optional>
+      <ref name="measure"/>
+    </optional>
   </define>
   <define name="model.measureLike_sequenceOptionalRepeatable">
-    <empty/>
+    <zeroOrMore>
+      <ref name="measure"/>
+    </zeroOrMore>
   </define>
   <define name="model.measureLike_sequenceRepeatable">
-    <notAllowed/>
+    <oneOrMore>
+      <ref name="measure"/>
+    </oneOrMore>
+  </define>
+  <define name="model.measurePart">
+    <choice>
+      <ref name="model.controleventLike"/>
+      <ref name="model.staffLike"/>
+      <ref name="model.ossiaLike"/>
+      <ref name="model.lyricsLike"/>
+    </choice>
   </define>
   <define name="model.ossiaLike">
     <notAllowed/>
@@ -6415,6 +6567,30 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
       <ref name="att.hairpin.vis.attributes"/>
       <ref name="att.hairpin.ges.attributes"/>
       <ref name="att.hairpin.anl.attributes"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="measure">
+    <element name="measure">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Unit of musical time consisting of a fixed number of note-values of a given type, as determined by the prevailing meter, and delimited in musical notation by two bar lines. </a:documentation>
+      <zeroOrMore>
+        <choice>
+          <ref name="model.milestoneLike.music"/>
+          <ref name="model.staffDefLike"/>
+          <ref name="model.annotLike"/>
+          <ref name="model.editLike"/>
+          <ref name="model.transcriptionLike"/>
+          <ref name="model.measurePart"/>
+        </choice>
+      </zeroOrMore>
+      <ref name="att.common.attributes"/>
+      <ref name="att.declaring.attributes"/>
+      <ref name="att.typed.attributes"/>
+      <ref name="att.pointing.attributes"/>
+      <ref name="att.measure.log.attributes"/>
+      <ref name="att.measure.vis.attributes"/>
+      <ref name="att.measure.ges.attributes"/>
+      <ref name="att.measure.anl.attributes"/>
       <empty/>
     </element>
   </define>
