@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2015-02-16T10:44:12Z. 
+Schema generated from ODD source 2015-02-16T10:45:26Z. 
 Edition: 2013 Release
 Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -6203,6 +6203,20 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
       <empty/>
     </element>
   </define>
+  <define name="att.beam.anl.attributes">
+    <empty/>
+  </define>
+  <define name="att.beam.ges.attributes">
+    <empty/>
+  </define>
+  <define name="att.beam.log.attributes">
+    <ref name="att.event.attributes"/>
+    <ref name="att.beamedwith.attributes"/>
+  </define>
+  <define name="att.beam.vis.attributes">
+    <ref name="att.color.attributes"/>
+    <ref name="att.beamrend.attributes"/>
+  </define>
   <define name="att.beamed.attributes">
     <ref name="att.beamed.attribute.beam"/>
   </define>
@@ -6211,6 +6225,17 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
       <attribute name="beam">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates that this event is "under a beam".</a:documentation>
         <ref name="data.BEAMS"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.beamedwith.attributes">
+    <ref name="att.beamedwith.attribute.beam.with"/>
+  </define>
+  <define name="att.beamedwith.attribute.beam.with">
+    <optional>
+      <attribute name="beam.with">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">In the case of cross-staff beams, the beam.with attribute is used to indicate which staff the beam is connected to; that is, the staff above or the staff below.</a:documentation>
+        <ref name="data.OTHERSTAFF"/>
       </attribute>
     </optional>
   </define>
@@ -6231,6 +6256,35 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
       <attribute name="beam.rests">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates whether automatically-drawn beams should include rests shorter than a quarter note duration.</a:documentation>
         <ref name="data.BOOLEAN"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.beamrend.attributes">
+    <ref name="att.beamrend.attribute.rend"/>
+    <ref name="att.beamrend.attribute.slope"/>
+  </define>
+  <define name="att.beamrend.attribute.rend">
+    <optional>
+      <attribute name="rend">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">captures whether a beam is "feathered" and in which direction.</a:documentation>
+        <choice>
+          <value>acc</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(accelerando) indicates that the secondary beams get progressively closer together toward the end of the beam.</a:documentation>
+          <value>mixed</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(mixed acc and rit) for beams that are "feathered" in both directions.</a:documentation>
+          <value>rit</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(ritardando) means that the secondary beams become progressively more distance toward the end of the beam.</a:documentation>
+          <value>norm</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(normal) indicates that the secondary beams are equidistant along the course of the beam.</a:documentation>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.beamrend.attribute.slope">
+    <optional>
+      <attribute name="slope">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">records the slope of the beam.</a:documentation>
+        <data type="decimal"/>
       </attribute>
     </optional>
   </define>
@@ -6581,22 +6635,32 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
     </oneOrMore>
   </define>
   <define name="model.eventLike.cmn">
-    <notAllowed/>
+    <choice>
+      <ref name="beam"/>
+    </choice>
   </define>
   <define name="model.eventLike.cmn_alternation">
-    <notAllowed/>
+    <choice>
+      <ref name="beam"/>
+    </choice>
   </define>
   <define name="model.eventLike.cmn_sequence">
-    <empty/>
+    <ref name="beam"/>
   </define>
   <define name="model.eventLike.cmn_sequenceOptional">
-    <empty/>
+    <optional>
+      <ref name="beam"/>
+    </optional>
   </define>
   <define name="model.eventLike.cmn_sequenceOptionalRepeatable">
-    <empty/>
+    <zeroOrMore>
+      <ref name="beam"/>
+    </zeroOrMore>
   </define>
   <define name="model.eventLike.cmn_sequenceRepeatable">
-    <notAllowed/>
+    <oneOrMore>
+      <ref name="beam"/>
+    </oneOrMore>
   </define>
   <define name="model.eventLike.measureFilling">
     <choice>
@@ -6675,11 +6739,35 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
       <ref name="model.measureLike"/>
     </choice>
   </define>
+  <define name="beam">
+    <element name="beam">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A container for a series of explicitly beamed events that begins and ends entirely within a measure. </a:documentation>
+      <zeroOrMore>
+        <choice>
+          <ref name="model.eventLike"/>
+          <ref name="model.editLike"/>
+          <ref name="model.transcriptionLike"/>
+        </choice>
+      </zeroOrMore>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-beam-When_not_copyof_beam_content-constraint-29">
+        <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:beam[not(@copyof)]">
+          <sch:assert test="count(descendant::*[local-name()='note' or local-name()='rest' or               local-name()='chord' or local-name()='space']) &gt; 1">A beam without a copyof
+              attribute must have at least 2 note, rest, chord, or space descendants.</sch:assert>
+        </sch:rule>
+      </pattern>
+      <ref name="att.common.attributes"/>
+      <ref name="att.beam.log.attributes"/>
+      <ref name="att.beam.vis.attributes"/>
+      <ref name="att.beam.ges.attributes"/>
+      <ref name="att.beam.anl.attributes"/>
+      <empty/>
+    </element>
+  </define>
   <define name="hairpin">
     <element name="hairpin">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Indicates continuous dynamics expressed on the score as wedge-shaped graphics, e.g. &lt; and &gt;. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-hairpin-Start-_and_end-type_attributes_required_on_some_control_events-constraint-29">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-hairpin-Start-_and_end-type_attributes_required_on_some_control_events-constraint-30">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:hairpin">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -6735,7 +6823,7 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
     <element name="slur">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Indication of 1) a "unified melodic idea" or 2) performance technique. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-slur-Start-_and_end-type_attributes_required_on_some_control_events-constraint-30">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-slur-Start-_and_end-type_attributes_required_on_some_control_events-constraint-31">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:slur">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -6889,7 +6977,7 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
     <element name="trill">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Rapid alternation of a note with one (usually at the interval of a second) above. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-trill-Start-type_attributes_required_on_some_control_events-constraint-31">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-trill-Start-type_attributes_required_on_some_control_events-constraint-32">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:trill">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -6907,7 +6995,7 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
     <element name="turn">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An ornament consisting of four notes — the upper neighbor of the written note, the written note, the lower neighbor, and the written note. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-turn-Start-type_attributes_required_on_some_control_events-constraint-32">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-turn-Start-type_attributes_required_on_some_control_events-constraint-33">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:turn">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -7297,7 +7385,7 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
       </attribute>
     </optional>
   </define>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.wega.rend-underline-n-constraint-33">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.wega.rend-underline-n-constraint-34">
     <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="*:hi[@n] | *:rend[@n]">
       <sch:report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</sch:report>
     </sch:rule>
