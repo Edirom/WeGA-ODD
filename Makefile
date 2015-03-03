@@ -54,6 +54,9 @@ works:
 generic:
 	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} src/WeGA_generic.odd.xml ${TARGET_DIR}
 
+characters:
+	${ROMA} --xsl=${TEI_XSL} --localsource=${TEI_SOURCE} ${ROMAOPTS} src/WeGA_characters.odd.xml ${TARGET_DIR}
+	
 clean:
 	echo "cleaning up"
 	#rm -rf ${TARGET_DIR}/src

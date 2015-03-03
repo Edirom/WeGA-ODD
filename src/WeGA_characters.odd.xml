@@ -61,9 +61,6 @@
                                     <rng:text/>
                                 </rng:oneOrMore>
                                 <rng:zeroOrMore>
-                                    <rng:ref name="characterName"/>
-                                </rng:zeroOrMore>
-                                <rng:zeroOrMore>
                                     <rng:ref name="surname"/>
                                 </rng:zeroOrMore>
                                 <rng:zeroOrMore>
@@ -85,7 +82,7 @@
                         </content>
                     </macroSpec>
 
-                    <elementSpec ident="person" mode="change" module="namesdates">
+                    <elementSpec ident="character" mode="add">
                         <desc versionDate="2013-11-11" xml:lang="en">provides information about an identifiable individual, for example a participant in a language interaction, or a person referred to in a historical source.</desc>
                         <desc versionDate="2013-11-11" xml:lang="de">liefert Informationen über ein identifizierbares Individuum, beispielsweise ein Teilnehmer einer Sprachinteraktion, oder eine Person, auf die in einer historischen Quelle verwiesen wird.</desc>
                         <classes mode="change">
@@ -108,7 +105,7 @@
                                         </rng:choice>
                                     </rng:attribute>
                                     <rng:attribute name="target">
-                                        <rng:ref name="key.person.pattern"/>
+                                        <rng:ref name="key.characters.pattern"/>
                                     </rng:attribute>
                                     <rng:empty/>
                                 </rng:element>
@@ -117,7 +114,7 @@
                                     <rng:zeroOrMore>
                                         <rng:ref name="idno"/>
                                     </rng:zeroOrMore>
-                                    <rng:element name="persName">
+                                    <rng:element name="characterName">
                                         <rng:ref name="macro.persNameContent"/>
                                         <rng:attribute name="type">
                                             <rng:value>reg</rng:value>
@@ -128,39 +125,14 @@
                                             </rng:attribute>
                                         </rng:optional>
                                     </rng:element>
-                                    <rng:optional>
-                                        <rng:element name="persName">
-                                            <rng:ref name="macro.persNameContent"/>
-                                            <rng:attribute name="type">
-                                                <rng:value>full</rng:value>
-                                            </rng:attribute>
-                                            <rng:optional>
-                                                <rng:attribute name="xml:lang">
-                                                  <rng:ref name="data.language"/>
-                                                </rng:attribute>
-                                            </rng:optional>
-                                        </rng:element>
-                                    </rng:optional>
-                                    <rng:optional>
-                                        <rng:element name="persName">
-                                            <rng:ref name="macro.persNameContent"/>
-                                            <rng:attribute name="type">
-                                                <rng:value>real</rng:value>
-                                            </rng:attribute>
-                                            <rng:optional>
-                                                <rng:attribute name="xml:lang">
-                                                  <rng:ref name="data.language"/>
-                                                </rng:attribute>
-                                            </rng:optional>
-                                        </rng:element>
-                                    </rng:optional>
+                                    
+                                    
                                     <rng:zeroOrMore>
-                                        <rng:element name="persName">
+                                        <rng:element name="characterName">
                                             <rng:ref name="macro.persNameContent"/>
                                             <rng:attribute name="type">
                                                 <rng:choice>
                                                   <rng:value>alt</rng:value>
-                                                  <rng:value>pseud</rng:value>
                                                 </rng:choice>
                                             </rng:attribute>
                                             <rng:optional>
@@ -168,61 +140,10 @@
                                                   <rng:ref name="data.language"/>
                                                 </rng:attribute>
                                             </rng:optional>
-                                            <rng:optional>
-                                                <rng:attribute name="from">
-                                                  <rng:choice>
-                                                  <rng:data type="date"/>
-                                                  <rng:data type="gYear"/>
-                                                  </rng:choice>
-                                                </rng:attribute>
-                                            </rng:optional>
-                                            <rng:optional>
-                                                <rng:attribute name="to">
-                                                  <rng:choice>
-                                                  <rng:data type="date"/>
-                                                  <rng:data type="gYear"/>
-                                                  </rng:choice>
-                                                </rng:attribute>
-                                            </rng:optional>
-                                            <rng:optional>
-                                                <rng:attribute name="subtype">
-                                                  <rng:choice>
-                                                  <rng:value>birth</rng:value>
-                                                  <rng:value>married</rng:value>
-                                                  <rng:value>role</rng:value>
-                                                  </rng:choice>
-                                                </rng:attribute>
-                                            </rng:optional>
                                         </rng:element>
                                     </rng:zeroOrMore>
                                     <rng:interleave>
-                                        <rng:optional>
-                                            <rng:ref name="birth"/>
-                                        </rng:optional>
-                                        <rng:optional>
-                                            <rng:ref name="death"/>
-                                        </rng:optional>
                                         <rng:ref name="sex"/>
-                                        <rng:zeroOrMore>
-                                            <rng:ref name="occupation"/>
-                                        </rng:zeroOrMore>
-                                        <rng:zeroOrMore>
-                                            <rng:ref name="residence"/>
-                                        </rng:zeroOrMore>
-                                        <rng:zeroOrMore>
-                                            <rng:ref name="affiliation"/>
-                                        </rng:zeroOrMore>
-                                        <rng:optional>
-                                            <rng:element name="note">
-                                                <rng:ref name="macro.specialPara"/>
-                                                <rng:attribute name="type">
-                                                  <rng:value>bioSummary</rng:value>
-                                                </rng:attribute>
-                                            </rng:element>
-                                        </rng:optional>
-                                        <rng:zeroOrMore>
-                                            <rng:ref name="event"/>
-                                        </rng:zeroOrMore>
                                         <rng:optional>
                                             <rng:element name="figure">
                                                 <rng:ref name="head"/>
@@ -240,107 +161,8 @@
                                         </rng:optional>
                                     </rng:interleave>
                                 </rng:group>
-                                <!--<rng:oneOrMore>
-                                    <rng:ref name="model.personPart"/>
-                                    </rng:oneOrMore>-->
-                                <!--<rng:group>
-                                    <rng:ref name="model.personHead"/>
-                                    <rng:ref name="model.personPart"/>
-                                    </rng:group>-->
                             </rng:choice>
                         </content>
-                        <constraintSpec scheme="isoschematron" ident="personHeuristics1">
-                            <desc versionDate="2014-04-16" xml:lang="en">Check for birth dates that are <emph>after</emph> death dates (for dates AD).</desc>
-                            <desc versionDate="2014-04-16" xml:lang="de">Test auf Geburtsdaten, die <emph>nach</emph> dem Todesdatum liegen (für Daten nach Christi Geburt).</desc>
-                            <constraint>
-                                <!--<sch:report test="count(./tei:persName[@subtype='birth']) > 1"
-                                    >Mehrere Geburtsnamen gefunden</sch:report>-->
-                                <!-- für Lebensdaten nach Christi Geburt -->
-                                <sch:report
-                                    test="./tei:birth/tei:date/(@when, @notBefore, @notAfter) > ./tei:death/tei:date/(@when, @notBefore, @notAfter) and not(./tei:death/tei:date/(@when, @notBefore, @notAfter)[starts-with(., '-')])"
-                                    >Geburtsdatum nach Todesdatum</sch:report>
-                                <!--<sch:report
-                                    test="./tei:death/tei:date/@notBefore > ./tei:death/tei:date/@notAfter"
-                                    >Datumsangabe notBefore nach notAfter</sch:report>-->
-                                <!--<sch:report
-                                    test=".//(tei:persName, tei:workName, tei:surname, tei:forename, tei:hi, tei:rs, tei:event, tei:note)[normalize-space(.) = '']"
-                                    >Leeres Element gefunden</sch:report>-->
-                            </constraint>
-                        </constraintSpec>
-                        <constraintSpec scheme="isoschematron" ident="personHeuristics2">
-                            <desc versionDate="2014-04-16" xml:lang="en">Check for birth dates that are <emph>after</emph> death dates (for dates BC).</desc>
-                            <desc versionDate="2014-04-16" xml:lang="de">Test auf Geburtsdaten, die <emph>nach</emph> dem Todesdatum liegen (für Daten vor Christi Geburt).</desc>
-                            <constraint>
-                                <!--<sch:report test="count(./tei:persName[@subtype='birth']) > 1"
-                                    >Mehrere Geburtsnamen gefunden</sch:report>-->
-                                <!-- für Lebensdaten vor Christi Geburt -->
-                                <sch:report
-                                    test="./tei:death/tei:date/(@when, @notBefore, @notAfter) > ./tei:birth/tei:date/(@when, @notBefore, @notAfter) and ./tei:death/tei:date/(@when, @notBefore, @notAfter)[starts-with(., '-')]"
-                                    >Geburtsdatum nach Todesdatum</sch:report>
-                                <!--<sch:report
-                                    test="./tei:death/tei:date/@notBefore > ./tei:death/tei:date/@notAfter"
-                                    >Datumsangabe notBefore nach notAfter</sch:report>-->
-                                <!--<sch:report
-                                    test=".//(tei:persName, tei:workName, tei:surname, tei:forename, tei:hi, tei:rs, tei:event, tei:note)[normalize-space(.) = '']"
-                                    >Leeres Element gefunden</sch:report>-->
-                            </constraint>
-                        </constraintSpec>
-                        <attList>
-                            <attDef ident="source" mode="add" usage="req">
-                                <desc versionDate="2013-11-11" xml:lang="en">contains a list of one or more pointers indicating sources supporting the given intervention or interpretation.</desc>
-                                <desc versionDate="2013-11-11" xml:lang="en">enthält eine Liste von einem oder mehreren Pointer, die die vorliegende Intervention oder Interpretation einer Quelle unterstützen.</desc>
-                                <valList type="closed">
-                                    <valItem ident="WeGA">
-                                        <desc versionDate="2013-11-11" xml:lang="en">persons from the database of the Carl-Maria-von-Weber-Gesamtausgabe (WeGA).</desc>
-                                        <desc versionDate="2013-11-11" xml:lang="de">Personen aus dem Datenbestand der Carl-Maria-von-Weber-Gesamtausgabe (WeGA).</desc>
-                                    </valItem>
-                                    <valItem ident="SchEnd">
-                                        <desc versionDate="2013-11-11" xml:lang="en">B. Appel: <hi rend="italic">Schumann in Endenich</hi>.</desc>
-                                        <desc versionDate="2013-11-11" xml:lang="de">B. Appel: <hi rend="italic">Schumann in Endenich</hi>.</desc>
-                                    </valItem>
-                                    <valItem ident="MB">
-                                        <desc versionDate="2013-11-11" xml:lang="en">Meyerbeer letter edition</desc>
-                                        <desc versionDate="2013-11-11" xml:lang="de">Meyerbeer Briefausgabe</desc>
-                                    </valItem>
-                                    <valItem ident="BGA">
-                                        <desc versionDate="2013-11-11" xml:lang="en">letters of Beethoven</desc>
-                                        <desc versionDate="2013-11-11" xml:lang="de">Briefe Beethovens</desc>
-                                    </valItem>
-                                    <valItem ident="LoB">
-                                        <desc versionDate="2013-11-11" xml:lang="en">Lortzing letter edition</desc>
-                                        <desc versionDate="2013-11-11" xml:lang="de">Lortzing Briefausgabe</desc>
-                                    </valItem>
-                                    <valItem ident="HoB">
-                                        <desc versionDate="2013-11-11" xml:lang="en">E.T.A. Hoffmann letter edition</desc>
-                                        <desc versionDate="2013-11-11" xml:lang="de">E.T.A. Hoffmann-Briefausgabe</desc>
-                                    </valItem>
-                                    <valItem ident="SchTb">
-                                        <desc versionDate="2013-11-11" xml:lang="en">diary of Schumann</desc>
-                                        <desc versionDate="2013-11-11" xml:lang="de">Schumanns Tagebuch</desc>
-                                    </valItem>
-                                    <valItem ident="Bach">
-                                        <desc versionDate="2013-11-11" xml:lang="en">U. Wolf: collection of names from the Bach institute</desc>
-                                        <desc versionDate="2013-11-11" xml:lang="de">U. Wolf: Namenssammlung des Bach-Instituts</desc>
-                                    </valItem>
-                                    <valItem ident="Wies">
-                                        <desc versionDate="2013-11-11" xml:lang="en">Chr. Wiesenfeldt: names of 700 cellists from the 19th century</desc>
-                                        <desc versionDate="2013-11-11" xml:lang="de">Chr. Wiesenfeldt: Namen von 700 Violoncellisten des 19. Jahrhunderts</desc>
-                                    </valItem>
-                                </valList>
-                            </attDef>
-                            <attDef ident="xml:id" mode="add" usage="req">
-                                <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
-                                <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
-                                <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
-                                <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element mit dem Attribut.</desc>
-                                <datatype>
-                                    <rng:ref name="key.person.pattern"/>
-                                </datatype>
-                            </attDef>
-                            <attDef ident="role" mode="delete"/>
-                            <attDef ident="age" mode="delete"/>
-                            <attDef ident="sex" mode="delete"/>
-                        </attList>
                     </elementSpec>
 
                     <elementSpec ident="surname" mode="change" module="namesdates">
@@ -443,233 +265,6 @@
                                 <rng:value>m</rng:value>
                                 <rng:value>unknown</rng:value>
                             </rng:choice>
-                        </content>
-                    </elementSpec>
-
-                    <elementSpec ident="birth" mode="change">
-                        <gloss versionDate="2013-11-11" xml:lang="en">birth</gloss>
-                        <desc versionDate="2013-11-11" xml:lang="en">contains information about a person's birth, such as its date and place.</desc>
-                        <gloss versionDate="2013-11-11" xml:lang="en">Geburt</gloss>
-                        <desc versionDate="2013-11-11" xml:lang="de">enthält Informationen über die Geburt einer Person, wie etwa das Datum und der Ort.</desc>
-                        <classes mode="change">
-                            <memberOf key="att.editLike" mode="delete"/>
-                            <memberOf key="att.datable" mode="delete"/>
-                            <memberOf key="att.global" mode="delete"/>
-                            <memberOf key="att.naming" mode="delete"/>
-                        </classes>
-                        <content>
-                            <rng:zeroOrMore>
-                                <rng:ref name="date"/>
-                            </rng:zeroOrMore>
-                            <rng:zeroOrMore>
-                                <rng:ref name="placeName"/>
-                            </rng:zeroOrMore>
-                        </content>
-                    </elementSpec>
-
-                    <elementSpec ident="death" mode="change">
-                        <gloss versionDate="2013-11-11" xml:lang="en">death</gloss>
-                        <desc versionDate="2013-11-11" xml:lang="en">contains information about a person's death, such as its date and place.</desc>
-                        <gloss versionDate="2013-11-11" xml:lang="en">Tod</gloss>
-                        <desc versionDate="2013-11-11" xml:lang="en">Enthält Informationen über den Tod einer Person, wie etwa das Datum und der Ort.</desc>
-                        <classes mode="change">
-                            <memberOf key="att.editLike" mode="delete"/>
-                            <memberOf key="att.datable" mode="delete"/>
-                            <memberOf key="att.global" mode="delete"/>
-                            <memberOf key="att.naming" mode="delete"/>
-                        </classes>
-                        <content>
-                            <rng:zeroOrMore>
-                                <rng:ref name="date"/>
-                            </rng:zeroOrMore>
-                            <rng:zeroOrMore>
-                                <rng:ref name="placeName"/>
-                            </rng:zeroOrMore>
-                        </content>
-                    </elementSpec>
-
-                    <elementSpec ident="occupation" mode="change">
-                        <desc versionDate="2013-11-11" xml:lang="en">contains an informal description of a person's trade, profession or occupation.</desc>
-                        <desc versionDate="2013-11-11" xml:lang="de">enthält eine formlose Beschreibung des Handwerks, des Berufs oder der Beschäftigung einer Person.</desc>
-                        <classes mode="change">
-                            <memberOf key="att.editLike" mode="delete"/>
-                            <memberOf key="att.datable" mode="delete"/>
-                            <memberOf key="att.global" mode="delete"/>
-                            <memberOf key="att.naming" mode="delete"/>
-                            <memberOf key="att.datable.w3c" mode="add"/>
-                        </classes>
-                        <attList>
-                            <attDef ident="code" mode="delete"/>
-                            <attDef ident="scheme" mode="delete"/>
-                            <attDef ident="cert" mode="add">
-                                <gloss versionDate="2013-11-11" xml:lang="en">certainty</gloss>
-                                <desc versionDate="2013-11-11" xml:lang="en">signifies the degree of certainty associated with the intervention or interpretation.</desc>
-                                <gloss versionDate="2013-11-11" xml:lang="de">Sicherheit</gloss>
-                                <desc versionDate="2013-11-11" xml:lang="de">besagt den Grad der Sicherheit, mit der die Intervention oder Interpretation verbunden ist.</desc>
-                                <datatype>
-                                    <rng:ref name="data.certainty"/>
-                                </datatype>
-                            </attDef>
-                        </attList>
-                    </elementSpec>
-
-                    <elementSpec ident="affiliation" mode="change" module="namesdates">
-                        <gloss versionDate="2013-11-11" xml:lang="en">affiliation</gloss>
-                        <desc versionDate="2013-11-11" xml:lang="en">contains an informal description of a person's present or past affiliation with some organization, for example an employer or sponsor.</desc>
-                        <gloss versionDate="2013-11-11" xml:lang="en">Mitgliedschaft</gloss>
-                        <desc versionDate="2013-11-11" xml:lang="en">enthält eine formlose Beschreibung der momenanten oder vergangenen Mitgliedschaft einer Person in einer Organisation, beispielsweise ein Arbeitgeber oder Förderer.</desc>
-                        <classes mode="change">
-                            <memberOf key="att.editLike" mode="delete"/>
-                            <memberOf key="att.datable" mode="delete"/>
-                            <memberOf key="att.global" mode="delete"/>
-                            <memberOf key="att.naming" mode="delete"/>
-                            <memberOf key="att.datable.w3c" mode="add"/>
-                        </classes>
-                        <content>
-                            <rng:choice>
-                                <rng:interleave>
-                                    <rng:optional>
-                                        <rng:text/>
-                                    </rng:optional>
-                                    <rng:optional>
-                                        <rng:ref name="note"/>
-                                    </rng:optional>
-                                </rng:interleave>
-                                <rng:group>
-                                    <rng:ref name="orgName"/>
-                                    <rng:optional>
-                                        <rng:ref name="address"/>
-                                    </rng:optional>
-                                </rng:group>
-                            </rng:choice>
-                        </content>
-                        <attList>
-                            <attDef ident="key" mode="add">
-                                <desc versionDate="2013-11-11" xml:lang="en">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</desc>
-                                <desc versionDate="2013-11-11" xml:lang="de">bietet mittels eines codierten Wertes in einer beliebigen Form ein extern definiertes Mittel zur Identifizierung einer Einheit (oder mehrerer Einheiten).</desc>
-                                <valList type="closed">
-                                    <valItem ident="quartetMember">
-                                        <desc versionDate="2013-11-11" xml:lang="en">a member ot the quartet.</desc>
-                                        <desc versionDate="2013-11-11" xml:lang="de">Mitglied eines Quartets.</desc>
-                                    </valItem>
-                                </valList>
-                            </attDef>
-                            <attDef ident="cert" mode="add">
-                                <gloss versionDate="2013-11-11" xml:lang="en">certainty</gloss>
-                                <desc versionDate="2013-11-11" xml:lang="en">signifies the degree of certainty associated with the intervention or interpretation.</desc>
-                                <gloss versionDate="2013-11-11" xml:lang="de">Sicherheit</gloss>
-                                <desc versionDate="2013-11-11" xml:lang="de">besagt den Grad der Sicherheit, mit der die Intervention oder Interpretation verbunden ist.</desc>
-                                <datatype>
-                                    <rng:ref name="data.certainty"/>
-                                </datatype>
-                            </attDef>
-                        </attList>
-                    </elementSpec>
-
-                    <elementSpec ident="residence" mode="change">
-                        <gloss versionDate="2013-11-11" xml:lang="en">residence</gloss>
-                        <desc versionDate="2013-11-11" xml:lang="en">describes a person's present or past places of residence.</desc>
-                        <gloss versionDate="2013-11-11" xml:lang="en">Aufenthaltsort</gloss>
-                        <desc versionDate="2013-11-11" xml:lang="en">beschreibt den momentanen oder vergangene Aufenthaltsort(e) einer Person.</desc>
-                        <classes mode="change">
-                            <memberOf key="att.editLike" mode="delete"/>
-                            <memberOf key="att.datable" mode="delete"/>
-                            <memberOf key="att.global" mode="delete"/>
-                            <memberOf key="att.naming" mode="delete"/>
-                            <memberOf key="att.datable.w3c" mode="add"/>
-                        </classes>
-                        <content>
-                            <rng:choice>
-                                <rng:ref name="settlement"/>
-                                <rng:ref name="region"/>
-                                <rng:ref name="country"/>
-                            </rng:choice>
-                        </content>
-                        <attList>
-                            <attDef ident="cert" mode="add">
-                                <gloss versionDate="2013-11-11" xml:lang="en">certainty</gloss>
-                                <desc versionDate="2013-11-11" xml:lang="en">signifies the degree of certainty associated with the intervention or interpretation.</desc>
-                                <gloss versionDate="2013-11-11" xml:lang="de">Sicherheit</gloss>
-                                <desc versionDate="2013-11-11" xml:lang="de">besagt den Grad der Sicherheit, mit der die Intervention oder Interpretation verbunden ist.</desc>
-                                <datatype>
-                                    <rng:ref name="data.certainty"/>
-                                </datatype>
-                            </attDef>
-                        </attList>
-                    </elementSpec>
-
-                    <elementSpec ident="event" mode="change" module="namesdates">
-                        <gloss versionDate="2013-11-11" xml:lang="en">event</gloss>
-                        <desc versionDate="2013-11-11" xml:lang="en">contains data relating to any kind of significant event associated with a person, place, or organization.</desc>
-                        <gloss versionDate="2013-11-11" xml:lang="en">Ereignis</gloss>
-                        <desc versionDate="2013-11-11" xml:lang="en">enthält Daten, die zu irgendeinem signifkanten Ereignis, das mit eienr Person, einem Ort oder eine Organisation assoziiert werden kann, zugeordnet werden.</desc>
-                        <classes mode="change">
-                            <memberOf mode="delete" key="att.global"/>
-                            <memberOf mode="delete" key="att.editLike"/>
-                            <memberOf key="att.datable" mode="delete"/>
-                            <memberOf key="att.typed" mode="delete"/>
-                            <memberOf key="att.naming" mode="delete"/>
-                            <memberOf key="att.datable.w3c" mode="add"/>
-                        </classes>
-                        <content>
-                            <rng:ref name="head"/>
-                            <rng:choice>
-                                <rng:ref name="p"/>
-                                <rng:ref name="list"/>
-                            </rng:choice>
-                            <rng:interleave>
-                                <rng:zeroOrMore>
-                                    <rng:ref name="p"/>
-                                </rng:zeroOrMore>
-                                <rng:zeroOrMore>
-                                    <rng:ref name="list"/>
-                                </rng:zeroOrMore>
-                            </rng:interleave>
-                        </content>
-                        <attList>
-                            <attDef ident="type" mode="add" usage="opt">
-                                <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
-                                <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</desc>
-                                <valList type="closed">
-                                    <valItem ident="studentOf">
-                                        <desc versionDate="2013-11-11" xml:lang="en">student.</desc>
-                                        <desc versionDate="2013-11-11" xml:lang="de">Schüler.</desc>
-                                    </valItem>
-                                    <valItem ident="profOf">
-                                        <desc versionDate="2013-11-11" xml:lang="en">prof.</desc>
-                                        <desc versionDate="2013-11-11" xml:lang="de">Prof.</desc>
-                                    </valItem>
-                                </valList>
-                            </attDef>
-                            <attDef ident="status" mode="add" usage="opt">
-                                <desc versionDate="2013-11-11" xml:lang="en">describes the status of a document either currently or, when associated with a dated element, at the time indicated.</desc>
-                                <desc versionDate="2013-11-11" xml:lang="de">beschreibt entweder den aktuellen Status eines Dokuments oder den Zeitpunkt zu dem ein veraltetes Element zugeordnet wurde.</desc>
-                                <valList type="closed">
-                                    <valItem ident="restricted"/>
-                                </valList>
-                            </attDef>
-                            <attDef ident="cert" mode="add" usage="opt">
-                                <gloss versionDate="2013-11-11" xml:lang="en">certainty</gloss>
-                                <desc versionDate="2013-11-11" xml:lang="en">signifies the degree of certainty associated with the intervention or interpretation.</desc>
-                                <gloss versionDate="2013-11-11" xml:lang="de">Sicherheit</gloss>
-                                <desc versionDate="2013-11-11" xml:lang="de">besagt den Grad der Sicherheit, mit der die Intervention oder Interpretation verbunden ist.</desc>
-                                <datatype>
-                                    <rng:ref name="data.certainty"/>
-                                </datatype>
-                            </attDef>
-                        </attList>
-                    </elementSpec>
-                    
-                    <elementSpec ident="address" mode="change" module="core">
-                        <desc versionDate="2013-11-11" xml:lang="en">contains a postal address, for example of a publisher, an organization, or an individual.</desc>
-                        <desc versionDate="2013-11-11" xml:lang="de">enthält eine postalische Adresse, beispielsweise die eines Verlages, einer Organisation oder eines Einzelnen.</desc>
-                        <classes mode="change">
-                            <memberOf mode="delete" key="att.global"/>
-                        </classes>
-                        <content>
-                            <rng:oneOrMore>
-                                <rng:ref name="addrLine"/>
-                            </rng:oneOrMore>
                         </content>
                     </elementSpec>
                     
