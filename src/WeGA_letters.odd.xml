@@ -43,12 +43,12 @@
             
             <div>
                 <schemaSpec ident="wegaLetters" xml:lang="en" start="TEI" prefix="wega_">
-                    <moduleRef key="core" include="abbr add addrLine address analytic author bibl biblScope biblStruct choice corr date del editor expan gap graphic head hi imprint item l label lb lg list listBibl milestone monogr name note num p pb postCode ptr pubPlace publisher q quote ref resp respStmt rs series sic street title unclear"/>
+                    <moduleRef key="core" include="abbr add addrLine address analytic author bibl biblScope biblStruct choice corr date del desc editor expan gap graphic head hi imprint item l label lb lg list listBibl milestone monogr name note num p pb postCode ptr pubPlace publisher q quote ref resp respStmt rs series sic street title unclear"/>
                     <moduleRef key="tei"/>
                     <moduleRef key="header" include="availability change edition editionStmt editorialDecl encodingDesc extent fileDesc funder handNote idno keywords langUsage language notesStmt profileDesc projectDesc publicationStmt revisionDesc seriesStmt sourceDesc teiHeader textClass titleStmt"/>
                     <moduleRef key="textstructure" include="TEI body byline closer dateline div floatingText opener postscript salute signed text"/>
                     <moduleRef key="namesdates" include="country geogName orgName persName placeName region settlement"/>
-                    <moduleRef key="figures" include="cell figDesc figure row table"/>
+                    <moduleRef key="figures" include="cell figDesc figure notatedMusic row table"/>
                     <moduleRef key="transcr" include="addSpan damage facsimile handNotes handShift space subst supplied"/>
                     <moduleRef key="msdescription" include="accMat acquisition additional altIdentifier collection history incipit msDesc msIdentifier origin physDesc provenance repository"/>
                     <moduleRef key="linking" include="anchor seg"/>
@@ -77,6 +77,7 @@
                     <specGrpRef target="WeGA_common.odd.xml#wega-linking"/>
                     <specGrpRef target="WeGA_common.odd.xml#wega-textcrit"/>
                     <specGrpRef target="WeGA_common.odd.xml#wega-gaiji"/>
+                    <specGrpRef target="WeGA_common.odd.xml#wega-tei-macros"/>
 
                     <elementSpec ident="correspDesc" mode="add" ns="http://www.tei-c.org/ns/1.0"
                         module="correspondence">
@@ -92,7 +93,7 @@
                             </rng:oneOrMore>
                         </content>
                         <attList>
-                            <attDef ident="n" mode="add" usage="mwa">
+                            <attDef ident="n" mode="add" usage="opt">
                                 <gloss versionDate="2013-11-11" xml:lang="en">number</gloss>
                                 <desc versionDate="2013-11-11" xml:lang="en">gives a number (or other label) for an element, which is not necessarily unique within the document.</desc>
                                 <gloss versionDate="2013-11-11" xml:lang="en">Nummer</gloss>
@@ -176,6 +177,11 @@
                                 </rng:choice>
                             </rng:oneOrMore>
                         </content>
+                        <constraintSpec scheme="isoschematron" ident="sender-author-key">
+                            <constraint>
+                                <sch:report test="./tei:*[@key] and not(ancestor::tei:fileDesc/tei:titleStmt/tei:author/@key)">When a sender @key is given then there should most probably be a @key for author, as well</sch:report>
+                            </constraint>
+                        </constraintSpec>
                     </elementSpec>
 
                     <elementSpec ident="placeSender" ns="http://www.tei-c.org/ns/1.0" mode="add"
@@ -552,7 +558,7 @@
                                     <rng:ref name="data.pointer"/>
                                 </datatype>
                             </attDef>
-                            <attDef ident="rend" mode="add" usage="mwa">
+                            <attDef ident="rend" mode="add" usage="opt">
                                 <gloss versionDate="2013-11-11" xml:lang="en">rendition</gloss>
                                 <desc versionDate="2013-11-11" xml:lang="en">specifies the text alignment in the source.</desc>
                                 <gloss versionDate="2013-11-11" xml:lang="de">Ausgabe</gloss>
@@ -608,7 +614,7 @@
                             <memberOf key="att.global" mode="delete"/>
                         </classes>
                         <attList>
-                            <attDef ident="rend" mode="add" usage="mwa">
+                            <attDef ident="rend" mode="add" usage="opt">
                                 <gloss versionDate="2013-11-11" xml:lang="en">rendition</gloss>
                                 <desc versionDate="2013-11-11" xml:lang="en">indicates how the element in question was rendered or presented in the source text.</desc>
                                 <gloss versionDate="2013-11-11" xml:lang="de">Ausgabe</gloss>
@@ -685,7 +691,7 @@
                             <memberOf key="att.global" mode="delete"/>
                         </classes>
                         <attList>
-                            <attDef ident="rend" mode="add" usage="mwa">
+                            <attDef ident="rend" mode="add" usage="opt">
                                 <gloss versionDate="2013-11-11" xml:lang="en">rendition</gloss>
                                 <desc versionDate="2013-11-11" xml:lang="en">specifies the text alignment in the source.</desc>
                                 <gloss versionDate="2013-11-11" xml:lang="de">Ausgabe</gloss>
@@ -739,7 +745,7 @@
                                     </valItem>
                                 </valList>
                             </attDef>
-                            <attDef ident="n" mode="add" usage="mwa">
+                            <attDef ident="n" mode="add" usage="opt">
                                 <gloss versionDate="2013-11-11" xml:lang="en">number</gloss>
                                 <desc versionDate="2013-11-11" xml:lang="en">gives a number (or other label) for an element, which is not necessarily unique within the document.</desc>
                                 <gloss versionDate="2013-11-11" xml:lang="en">Nummer</gloss>
@@ -763,7 +769,7 @@
                             <memberOf key="att.global" mode="delete"/>
                         </classes>
                         <attList>
-                            <attDef ident="rend" mode="add" usage="mwa">
+                            <attDef ident="rend" mode="add" usage="opt">
                                 <gloss versionDate="2013-11-11" xml:lang="en">rendition</gloss>
                                 <desc versionDate="2013-11-11" xml:lang="en">specifies the text alignment in the source.</desc>
                                 <gloss versionDate="2013-11-11" xml:lang="de">Ausgabe</gloss>
@@ -789,6 +795,21 @@
                                 <signed>Millionen Bußen, Dein Carl</signed>
                             </egXML>
                         </exemplum>
+                    </elementSpec>
+                    
+                    <elementSpec ident="address" module="core" mode="change">
+                        <constraintSpec scheme="isoschematron" ident="address-placement">
+                            <constraint>
+                                <sch:report test="ancestor::tei:opener">Putting <sch:name/> in the opener is most probably an error and should be put in a separate div of type=address</sch:report>
+                            </constraint>
+                        </constraintSpec>
+                    </elementSpec>
+                    
+                    <elementSpec ident="funder" module="header" mode="change">
+                        <content>
+                            <rng:ref name="name"/>
+                            <rng:ref name="address"/>
+                        </content>
                     </elementSpec>
 
                     <!--       note fehlt     -->
