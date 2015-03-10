@@ -286,6 +286,13 @@
                                     >Leeres Element gefunden</sch:report>-->
                             </constraint>
                         </constraintSpec>
+                        <constraintSpec scheme="isoschematron" ident="enforceWhitespace">
+                            <constraint>
+                                <sch:rule context="tei:persName[@type][./*]">
+                                    <sch:assert test="every $x in ./*[following-sibling::*] satisfies $x[following-sibling::node()[1] instance of text()]">Child elements of persName should be separated with whitespace.</sch:assert>
+                                </sch:rule>
+                            </constraint>
+                        </constraintSpec>
                         <attList>
                             <attDef ident="source" mode="add" usage="req">
                                 <desc versionDate="2013-11-11" xml:lang="en">contains a list of one or more pointers indicating sources supporting the given intervention or interpretation.</desc>
@@ -362,15 +369,6 @@
                             <memberOf key="att.typed" mode="delete"/>
                             <memberOf key="att.personal" mode="delete"/>
                         </classes>
-                        <constraintSpec scheme="isoschematron" ident="whitespace-between-forenames">
-                            <desc versionDate="2014-04-16" xml:lang="en">Warnings for missing whitespace between forenames.</desc>
-                            <desc versionDate="2014-04-16" xml:lang="de">Warnung vor fehlendem Leerraum zwischen Vornamen.</desc>
-                            <constraint>
-                                <sch:report
-                                    test="following-sibling::tei:forename and not(following-sibling::node()[1] instance of text())"
-                                    >Fehlender Leerraum zwischen Vornamen</sch:report>
-                            </constraint>
-                        </constraintSpec>
                         <attList>
                             <attDef ident="full" mode="add">
                                 <valList type="closed">
