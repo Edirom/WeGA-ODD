@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2015-03-25T10:20:10Z. 
+Schema generated from ODD source 2015-03-25T10:26:39Z. 
 Edition: 2013 Release
 Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -6328,6 +6328,35 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
       <ref name="data.BEATRPT.REND"/>
     </attribute>
   </define>
+  <define name="att.bTrem.anl.attributes">
+    <empty/>
+  </define>
+  <define name="att.bTrem.ges.attributes">
+    <ref name="att.tremmeasured.attributes"/>
+  </define>
+  <define name="att.bTrem.log.attributes">
+    <ref name="att.event.attributes"/>
+    <ref name="att.augmentdots.attributes"/>
+    <ref name="att.duration.musical.attributes"/>
+    <ref name="att.numbered.attributes"/>
+    <ref name="att.bTrem.log.attribute.form"/>
+  </define>
+  <define name="att.bTrem.log.attribute.form">
+    <optional>
+      <attribute name="form">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">describes the style of the tremolo.</a:documentation>
+        <choice>
+          <value>meas</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">measured tremolo.</a:documentation>
+          <value>unmeas</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">unmeasured tremolo.</a:documentation>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.bTrem.vis.attributes">
+    <ref name="att.numberplacement.attributes"/>
+  </define>
   <define name="att.chord.ges.cmn.attributes">
     <ref name="att.graced.attributes"/>
   </define>
@@ -6500,6 +6529,37 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
   <define name="att.note.vis.cmn.attributes">
     <ref name="att.beamsecondary.attributes"/>
   </define>
+  <define name="att.numbered.attributes">
+    <ref name="att.numbered.attribute.num"/>
+  </define>
+  <define name="att.numbered.attribute.num">
+    <optional>
+      <attribute name="num">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">records a number or count accompanying a notational feature.</a:documentation>
+        <data type="positiveInteger"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.numberplacement.attributes">
+    <ref name="att.numberplacement.attribute.num.place"/>
+    <ref name="att.numberplacement.attribute.num.visible"/>
+  </define>
+  <define name="att.numberplacement.attribute.num.place">
+    <optional>
+      <attribute name="num.place">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">states where the tuplet number will be placed in relation to the note heads.</a:documentation>
+        <ref name="data.PLACE"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.numberplacement.attribute.num.visible">
+    <optional>
+      <attribute name="num.visible">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">determines if the tuplet number is visible.</a:documentation>
+        <ref name="data.BOOLEAN"/>
+      </attribute>
+    </optional>
+  </define>
   <define name="att.pianopedals.attributes">
     <ref name="att.pianopedals.attribute.pedal.style"/>
   </define>
@@ -6658,6 +6718,17 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
       </attribute>
     </optional>
   </define>
+  <define name="att.tremmeasured.attributes">
+    <ref name="att.tremmeasured.attribute.measperf"/>
+  </define>
+  <define name="att.tremmeasured.attribute.measperf">
+    <optional>
+      <attribute name="measperf">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the performed duration of an individual note in a measured tremolo.</a:documentation>
+        <ref name="data.DURATION.cmn"/>
+      </attribute>
+    </optional>
+  </define>
   <define name="model.controleventLike.cmn">
     <choice>
       <ref name="hairpin"/>
@@ -6726,6 +6797,7 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
     <choice>
       <ref name="beam"/>
       <ref name="beatRpt"/>
+      <ref name="bTrem"/>
       <ref name="halfmRpt"/>
     </choice>
   </define>
@@ -6733,12 +6805,14 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
     <choice>
       <ref name="beam"/>
       <ref name="beatRpt"/>
+      <ref name="bTrem"/>
       <ref name="halfmRpt"/>
     </choice>
   </define>
   <define name="model.eventLike.cmn_sequence">
     <ref name="beam"/>
     <ref name="beatRpt"/>
+    <ref name="bTrem"/>
     <ref name="halfmRpt"/>
   </define>
   <define name="model.eventLike.cmn_sequenceOptional">
@@ -6747,6 +6821,9 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
     </optional>
     <optional>
       <ref name="beatRpt"/>
+    </optional>
+    <optional>
+      <ref name="bTrem"/>
     </optional>
     <optional>
       <ref name="halfmRpt"/>
@@ -6760,6 +6837,9 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
       <ref name="beatRpt"/>
     </zeroOrMore>
     <zeroOrMore>
+      <ref name="bTrem"/>
+    </zeroOrMore>
+    <zeroOrMore>
       <ref name="halfmRpt"/>
     </zeroOrMore>
   </define>
@@ -6769,6 +6849,9 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
     </oneOrMore>
     <oneOrMore>
       <ref name="beatRpt"/>
+    </oneOrMore>
+    <oneOrMore>
+      <ref name="bTrem"/>
     </oneOrMore>
     <oneOrMore>
       <ref name="halfmRpt"/>
@@ -6884,6 +6967,21 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
       <ref name="att.beatRpt.vis.attributes"/>
       <ref name="att.beatRpt.ges.attributes"/>
       <ref name="att.beatRpt.anl.attributes"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="bTrem">
+    <element name="bTrem">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(bowed tremolo) – A rapid alternation on a single pitch or chord.</a:documentation>
+      <choice>
+        <ref name="chord"/>
+        <ref name="note"/>
+      </choice>
+      <ref name="att.common.attributes"/>
+      <ref name="att.bTrem.log.attributes"/>
+      <ref name="att.bTrem.vis.attributes"/>
+      <ref name="att.bTrem.ges.attributes"/>
+      <ref name="att.bTrem.anl.attributes"/>
       <empty/>
     </element>
   </define>
