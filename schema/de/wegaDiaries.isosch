@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2014-12-17T11:07:11.199+01:00 by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2015-04-13T11:15:21Z by 'extract-isosch.xsl'. -->
 
-<!-- ********************* -->
-<!-- namespaces, declared: -->
-<!-- ********************* -->
+   <!-- ********************* -->
+   <!-- namespaces, declared: -->
+   <!-- ********************* -->
 
 
-<!-- ********************* -->
-<!-- namespaces, implicit: -->
-<!-- ********************* -->
-<ns prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
+   <!-- ********************* -->
+   <!-- namespaces, implicit: -->
+   <!-- ********************* -->
+   <ns prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
 
    <!-- ************ -->
-<!-- constraints: -->
-<!-- ************ -->
-<pattern id="wegaDiaries-att.datable-calendar-constraint-calendar-1">
+   <!-- constraints: -->
+   <!-- ************ -->
+   <pattern id="wegaDiaries-att.datable-calendar-constraint-calendar-1">
           <rule context="tei:*[@calendar]">
             <assert test="string-length(.) gt 0">
 @calendar indicates the system or calendar to which the date represented by the content of this element
@@ -41,49 +41,54 @@ The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the 
                                 <assert test="id(substring(@hand,2)) or starts-with(@hand, 'wega:')">There must be an element with the xml:id = "<value-of select="substring(@hand,2)"/>" which is the target of this @hand.</assert>
                             </rule>
                         </pattern>
-   <pattern id="wegaDiaries-rs-constraint-rs-typeNkey-5">
+   <pattern id="wegaDiaries-gap-constraint-gap-unit-quantity-5">
+      <rule context="tei:gap">
+                    <report test="(@unit and not(@quantity)) or (@quantity and not(@unit))">@unit and @quantity must both be given!</report>
+                </rule>
+   </pattern>
+   <pattern id="wegaDiaries-rs-constraint-rs-typeNkey-6">
                     <rule context="tei:rs[@type][@key]">
                         <assert test="                             (matches(@key, '^A00\d{4}$') and @type='person') or                             (matches(@key, '^A02\d{4}$') and @type='work') or                             (matches(@key, '^A03\d{4}$') and @type='writing') or                             (matches(@key, '^A04\d{4}$') and @type='letter') or                             (matches(@key, '^A06\d{4}$') and @type='diaryDay') or                             (matches(@key, '^(A00\d{4}\s)*A00\d{4}$') and @type='persons') or                             (matches(@key, '^(A02\d{4}\s)*A02\d{4}$') and @type='works') or                             (matches(@key, '^(A03\d{4}\s)*A03\d{4}$') and @type='writings') or                             (matches(@key, '^(A04\d{4}\s)*A04\d{4}$') and @type='letters') or                             (matches(@key, '^(A05\d{4}\s)*A05\d{4}$') and @type='news') or                             (matches(@key, '^(A06\d{4}\s)*A06\d{4}$') and @type='diaryDays') or                             (matches(@key, '^(A11\d{4}\s)*A11\d{4}$') and @type='biblio')">Type mismatch: The value for @type must be in accordance with the given ID in @key</assert>
                     </rule>
                 </pattern>
-   <pattern id="wegaDiaries-date-constraint-dateHeuristics1-6">
+   <pattern id="wegaDiaries-date-constraint-dateHeuristics1-7">
       <rule context="tei:date">
                     <report test="(@notBefore gt @notAfter) and not(starts-with(@notBefore, '-'))">value of notBefore greater than notAfter</report>
                 </rule>
    </pattern>
-   <pattern id="wegaDiaries-date-constraint-dateHeuristics2-7">
+   <pattern id="wegaDiaries-date-constraint-dateHeuristics2-8">
       <rule context="tei:date">
                     <report test="(@notBefore lt @notAfter) and starts-with(@notBefore, '-')">value of notBefore smaller than notAfter</report>
                 </rule>
    </pattern>
-   <pattern id="wegaDiaries-date-constraint-dateHeuristics3-8">
+   <pattern id="wegaDiaries-date-constraint-dateHeuristics3-9">
       <rule context="tei:date">
                     <report test="(@from or @to) and (@when or @notAfter or @notBefore)">cooccurence of date and duration attributes</report>
                 </rule>
    </pattern>
-   <pattern id="wegaDiaries-date-constraint-dateHeuristics4-9">
+   <pattern id="wegaDiaries-date-constraint-dateHeuristics4-10">
       <rule context="tei:date">
                     <report test="@when and (@notAfter or @notBefore)">cooccurence of exact and uncertain date attributes</report>
                 </rule>
    </pattern>
-   <pattern id="wegaDiaries-date-constraint-dateHeuristics5-10">
+   <pattern id="wegaDiaries-date-constraint-dateHeuristics5-11">
       <rule context="tei:date">
                     <assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</assert>
                 </rule>
    </pattern>
-   <pattern id="wegaDiaries-ref-constraint-refAtts-11">
+   <pattern id="wegaDiaries-ref-constraint-refAtts-12">
       <rule context="tei:ref">
          <report test="@target and @cRef">Only one of the
 	attributes @target' and @cRef' may be supplied on <name/>
          </report>
       </rule>
    </pattern>
-   <pattern id="wegaDiaries-pb-facs-constraint-facs-reference-12">
+   <pattern id="wegaDiaries-pb-facs-constraint-facs-reference-13">
                             <rule context="tei:*[@facs]">
                                 <assert test="id(substring(@facs,2)) or starts-with(@facs, 'wega:')">There must be an element with the xml:id = "<value-of select="substring(@facs,2)"/>" which is the target of this @facs.</assert>
                             </rule>
                         </pattern>
-   <pattern id="wegaDiaries-title-constraint-duplicate-title-13">
+   <pattern id="wegaDiaries-title-constraint-duplicate-title-14">
                     <rule context="tei:title[following-sibling::tei:title]">
                         <let name="level" value="@level"/>
                         <let name="type" value="string(@type)"/> 
@@ -91,41 +96,41 @@ The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the 
                         <report test="following-sibling::tei:title[@level = $level][string(@xml:lang) = $lang][string(@type) = $type]">Following title without differing @type or xml:lang attribute</report>
                     </rule>
                 </pattern>
-   <pattern id="wegaDiaries-title-constraint-punctuation-mark-14">
+   <pattern id="wegaDiaries-title-constraint-punctuation-mark-15">
       <rule context="tei:title">
                     <report test="matches(normalize-space(self::tei:title), '[\.,;]$') and not(matches(normalize-space(self::tei:title), '((\p{Lu})|(\setc)|(\sal)|([\s\.]a)|(\sBl)|(\sAufl))\.$'))">Found a non-valid punctuation mark at the end of <name/> 
          </report>
                 </rule>
    </pattern>
-   <pattern id="wegaDiaries-subst-constraint-substContents1-15">
+   <pattern id="wegaDiaries-subst-constraint-substContents1-16">
       <rule context="tei:subst">
          <assert test="child::tei:add and child::tei:del">
             <name/> must have at least one child add and at least one child del</assert>
       </rule>
    </pattern>
-   <pattern id="wegaDiaries-seg-constraint-activeOrPassivePerformance-16">
+   <pattern id="wegaDiaries-seg-constraint-activeOrPassivePerformance-17">
       <rule context="tei:seg">
                     <report test="./@subtype = ('active', 'passive') and not(./@type = 'performance')">if @subtype contains 'active' or 'passive' @type has to be 'performance'</report>
                 </rule>
    </pattern>
-   <pattern id="wegaDiaries-seg-constraint-AddresseeOrSenderCorrespondence-17">
+   <pattern id="wegaDiaries-seg-constraint-AddresseeOrSenderCorrespondence-18">
       <rule context="tei:seg">
                     <report test="./@subtype = ('sender', 'addressee') and not(./@type = 'correspondence')">if @subtype contains 'sender' or 'addressee' @type has to be 'correspondence'</report>
                 </rule>
    </pattern>
-   <pattern id="wegaDiaries-constraint-whitespaceOnlyContent-18">
+   <pattern id="wegaDiaries-constraint-whitespaceOnlyContent-19">
                 <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type='part')] | tei:placeName | tei:title">
                     <report test="normalize-space(.) = ''">
             <name/> has whitespace only content</report>
                 </rule>
             </pattern>
-   <pattern id="wegaDiaries-constraint-elementStartsWithWhitespace-19">
+   <pattern id="wegaDiaries-constraint-elementStartsWithWhitespace-20">
                 <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
                     <report test="matches(.,'^\s')">whitespace at the beginning of element <name/>
          </report>
                 </rule>
             </pattern>
-   <pattern id="wegaDiaries-att.wega.rend-constraint-underline-n-20">
+   <pattern id="wegaDiaries-att.wega.rend-constraint-underline-n-21">
                     <rule context="*:hi[@n] | *:rend[@n]">
                         <report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</report>
                     </rule>
