@@ -1896,6 +1896,34 @@
                 </constraint>
             </constraintSpec>
         </elementSpec>
+       
+       <elementSpec ident="ptr" mode="change" module="core">
+          <desc versionDate="2015-04-15" xml:lang="de">wird benutzt um auf ein folgendes <gi>note</gi> zu zeigen und somit den Beginn des zu kommentierenden Bereichs zu markieren</desc>
+          <desc versionDate="2015-04-15" xml:lang="en">is used to point at a following <gi>note</gi> thus marking the beginning of the to be annotated section</desc>
+          <classes mode="change">
+             <memberOf key="att.global" mode="delete"/>
+             <memberOf key="att.internetMedia" mode="delete"/>
+             <memberOf key="att.declaring" mode="delete"/>
+             <memberOf key="att.cReferencing" mode="delete"/>
+          </classes>
+          <constraintSpec ident="ptr-target" scheme="isoschematron">
+             <desc>The @target attribute must point to a note element following the
+                current element</desc>
+             <constraint>
+                <sch:assert test="following::tei:note[@xml:id=substring(current()/@target,2)]">
+                   The element indicated by @target (<sch:value-of select="@target"/>) must follow the current element <sch:name/>
+                </sch:assert>
+             </constraint>
+          </constraintSpec>
+          <attList>
+             <attDef ident="subtype" mode="delete"/>
+             <attDef ident="type" mode="change" usage="opt">
+                <valList mode="replace" type="closed">
+                   <valItem ident="start"/>
+                </valList>
+             </attDef>
+          </attList>
+       </elementSpec>
     </specGrp>
     
     <specGrp xml:id="wega-header">
