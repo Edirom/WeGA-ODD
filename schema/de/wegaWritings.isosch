@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2015-04-13T11:15:30Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2015-04-15T20:33:55Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -38,45 +38,47 @@ The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the 
                   </assert>
           </rule>
         </pattern>
-   <pattern id="wegaWritings-att.transcriptional-hand-constraint-hand-reference-4">
-                            <rule context="tei:*[@hand]">
-                                <assert test="id(substring(@hand,2)) or starts-with(@hand, 'wega:')">There must be an element with the xml:id = "<value-of select="substring(@hand,2)"/>" which is the target of this @hand.</assert>
-                            </rule>
-                        </pattern>
-   <pattern id="wegaWritings-gap-constraint-gap-unit-quantity-5">
+   <pattern id="wegaWritings-gap-constraint-gap-unit-quantity-4">
       <rule context="tei:gap">
                     <report test="(@unit and not(@quantity)) or (@quantity and not(@unit))">@unit and @quantity must both be given!</report>
                 </rule>
    </pattern>
-   <pattern id="wegaWritings-rs-constraint-rs-typeNkey-6">
+   <pattern id="wegaWritings-rs-constraint-rs-typeNkey-5">
                     <rule context="tei:rs[@type][@key]">
                         <assert test="                             (matches(@key, '^A00\d{4}$') and @type='person') or                             (matches(@key, '^A02\d{4}$') and @type='work') or                             (matches(@key, '^A03\d{4}$') and @type='writing') or                             (matches(@key, '^A04\d{4}$') and @type='letter') or                             (matches(@key, '^A06\d{4}$') and @type='diaryDay') or                             (matches(@key, '^(A00\d{4}\s)*A00\d{4}$') and @type='persons') or                             (matches(@key, '^(A02\d{4}\s)*A02\d{4}$') and @type='works') or                             (matches(@key, '^(A03\d{4}\s)*A03\d{4}$') and @type='writings') or                             (matches(@key, '^(A04\d{4}\s)*A04\d{4}$') and @type='letters') or                             (matches(@key, '^(A05\d{4}\s)*A05\d{4}$') and @type='news') or                             (matches(@key, '^(A06\d{4}\s)*A06\d{4}$') and @type='diaryDays') or                             (matches(@key, '^(A11\d{4}\s)*A11\d{4}$') and @type='biblio')">Type mismatch: The value for @type must be in accordance with the given ID in @key</assert>
                     </rule>
                 </pattern>
-   <pattern id="wegaWritings-date-constraint-dateHeuristics1-7">
+   <pattern id="wegaWritings-date-constraint-dateHeuristics1-6">
       <rule context="tei:date">
                     <report test="(@notBefore gt @notAfter) and not(starts-with(@notBefore, '-'))">value of notBefore greater than notAfter</report>
                 </rule>
    </pattern>
-   <pattern id="wegaWritings-date-constraint-dateHeuristics2-8">
+   <pattern id="wegaWritings-date-constraint-dateHeuristics2-7">
       <rule context="tei:date">
                     <report test="(@notBefore lt @notAfter) and starts-with(@notBefore, '-')">value of notBefore smaller than notAfter</report>
                 </rule>
    </pattern>
-   <pattern id="wegaWritings-date-constraint-dateHeuristics3-9">
+   <pattern id="wegaWritings-date-constraint-dateHeuristics3-8">
       <rule context="tei:date">
                     <report test="(@from or @to) and (@when or @notAfter or @notBefore)">cooccurence of date and duration attributes</report>
                 </rule>
    </pattern>
-   <pattern id="wegaWritings-date-constraint-dateHeuristics4-10">
+   <pattern id="wegaWritings-date-constraint-dateHeuristics4-9">
       <rule context="tei:date">
                     <report test="@when and (@notAfter or @notBefore)">cooccurence of exact and uncertain date attributes</report>
                 </rule>
    </pattern>
-   <pattern id="wegaWritings-date-constraint-dateHeuristics5-11">
+   <pattern id="wegaWritings-date-constraint-dateHeuristics5-10">
       <rule context="tei:date">
                     <assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</assert>
                 </rule>
+   </pattern>
+   <pattern id="wegaWritings-ptr-constraint-ptr-target-11">
+      <rule context="tei:ptr">
+                <assert test="following::tei:note[@xml:id=substring(current()/@target,2)]">
+                   The element indicated by @target (<value-of select="@target"/>) must follow the current element <name/>
+                </assert>
+             </rule>
    </pattern>
    <pattern id="wegaWritings-ptr-constraint-ptrAtts-12">
       <rule context="tei:ptr">

@@ -3,7 +3,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2015-04-13T11:15:40Z. .
+Schema generated from ODD source 2015-04-15T22:04:36Z. .
 TEI Edition: Version 2.7.0. Last updated on
 	16th September 2014, revision 13036
 TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
@@ -685,10 +685,6 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
                   </sch:assert>
           </sch:rule>
    </pattern>
-   <define name="att.transcriptional.attributes">
-      <ref name="att.editLike.attributes"/>
-      <ref name="att.transcriptional.attribute.hand"/>
-   </define>
    <define name="att.transcriptional.attribute.hand">
       <optional>
          <attribute name="hand">
@@ -1121,6 +1117,7 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
    <define name="model.global.edit">
       <choice>
          <ref name="gap"/>
+         <ref name="addSpan"/>
          <ref name="space"/>
       </choice>
    </define>
@@ -1620,22 +1617,27 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
       <element name="add">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(addition) contains letters, words, or phrases inserted in the source text by an author, scribe, annotator, or corrector. [3.4.3. ]</a:documentation>
          <ref name="macro.paraContent"/>
-         <ref name="att.transcriptional.attributes"/>
          <attribute name="place">
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies where this item is placed.</a:documentation>
-            <choice>
-               <value>above</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">insertion above the line.</a:documentation>
-               <value>below</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">insertion below the line.</a:documentation>
-               <value>inline</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">insertion inline.</a:documentation>
-               <value>margin</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">insertion at margin.</a:documentation>
-               <value>mixed</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-            </choice>
+            <list>
+               <oneOrMore>
+                  <choice>
+                     <value>above</value>
+                     <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">insertion above the line.</a:documentation>
+                     <value>below</value>
+                     <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">insertion below the line.</a:documentation>
+                     <value>inline</value>
+                     <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">insertion inline.</a:documentation>
+                     <value>margin</value>
+                     <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">insertion at margin.</a:documentation>
+                     <value>mixed</value>
+                     <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+                  </choice>
+               </oneOrMore>
+            </list>
          </attribute>
+         <ref name="att.global.attribute.xmlid"/>
+         <ref name="att.transcriptional.attribute.hand"/>
          <empty/>
       </element>
    </define>
@@ -1643,7 +1645,6 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
       <element name="del">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(deletion) contains a letter, word, or passage deleted, marked as deleted, or otherwise indicated as superfluous or spurious in the copy text by an author, scribe, annotator, or corrector. [3.4.3. ]</a:documentation>
          <ref name="macro.paraContent"/>
-         <ref name="att.transcriptional.attributes"/>
          <attribute name="rend">
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(rendition) indicates how the element in question was rendered or presented in the source text.</a:documentation>
             <choice>
@@ -1655,6 +1656,8 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(covered) The deleted word (or the deleted character) is repaid by shaving or other means.</a:documentation>
             </choice>
          </attribute>
+         <ref name="att.global.attribute.xmlid"/>
+         <ref name="att.transcriptional.attribute.hand"/>
          <empty/>
       </element>
    </define>
@@ -2286,6 +2289,88 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
          </attribute>
       </optional>
    </define>
+   <define name="addSpan">
+      <element name="addSpan">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(added span of text) marks the beginning of a longer sequence of text added by an author, scribe, annotator or corrector. [11.3.1.4. ]</a:documentation>
+         <empty/>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaDiaries-addSpan-spanTo-constraint-8">
+            <rule context="tei:addSpan">
+               <sch:assert xmlns="http://www.tei-c.org/ns/1.0"
+                           xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                           xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                           xmlns:s="http://www.ascc.net/xml/schematron"
+                           xmlns:xi="http://www.w3.org/2001/XInclude"
+                           test="@spanTo">The @spanTo attribute of <sch:name/> is required.</sch:assert>
+            </rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaDiaries-addSpan-spanTo_fr-constraint-9">
+            <rule context="tei:addSpan">
+               <sch:assert xmlns="http://www.tei-c.org/ns/1.0"
+                           xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                           xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                           xmlns:s="http://www.ascc.net/xml/schematron"
+                           xmlns:xi="http://www.w3.org/2001/XInclude"
+                           test="@spanTo">L'attribut spanTo est requis.</sch:assert>
+            </rule>
+         </pattern>
+         <ref name="att.editLike.attribute.evidence"/>
+         <ref name="att.editLike.attribute.instant"/>
+         <ref name="att.dimensions.attribute.unit"/>
+         <ref name="att.dimensions.attribute.quantity"/>
+         <ref name="att.dimensions.attribute.extent"/>
+         <ref name="att.dimensions.attribute.precision"/>
+         <ref name="att.dimensions.attribute.scope"/>
+         <ref name="att.ranging.attribute.atLeast"/>
+         <ref name="att.ranging.attribute.atMost"/>
+         <ref name="att.ranging.attribute.min"/>
+         <ref name="att.ranging.attribute.max"/>
+         <ref name="att.ranging.attribute.confidence"/>
+         <ref name="att.responsibility.attribute.cert"/>
+         <ref name="att.responsibility.attribute.resp"/>
+         <ref name="att.source.attribute.source"/>
+         <attribute name="hand">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the hand of the agent which made the intervention.</a:documentation>
+            <ref name="data.pointer"/>
+         </attribute>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaDiaries-addSpan-hand-hand-reference-constraint-8">
+            <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
+                      xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:xi="http://www.w3.org/2001/XInclude"
+                      context="tei:*[@hand]">
+                                <sch:assert test="id(substring(@hand,2)) or starts-with(@hand, 'wega:')">There must be an element with the xml:id = "<sch:value-of select="substring(@hand,2)"/>" which is the target of this @hand.</sch:assert>
+                            </sch:rule>
+         </pattern>
+         <attribute name="spanTo">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the end of a span initiated by the element bearing this attribute.</a:documentation>
+            <ref name="data.pointer"/>
+         </attribute> 
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaDiaries-addSpan-spanTo-spanTo-7-constraint-9">
+            <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
+                      xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:xi="http://www.w3.org/2001/XInclude"
+                      context="tei:*[@spanTo]">
+                                <sch:assert test="id(substring(@spanTo,2)) and following::*[@xml:id=substring(current()/@spanTo,2)]">
+                                    The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow the current element <sch:name/>
+                                </sch:assert>
+                            </sch:rule>
+         </pattern>
+         <empty/>
+      </element>
+   </define>
    <define name="damage">
       <element name="damage">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains an area of damage to the text witness. [11.3.3.1. ]</a:documentation>
@@ -2347,7 +2432,7 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
             </oneOrMore>
          </interleave>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaDiaries-subst-substContents1-constraint-8">
+                  id="wegaDiaries-subst-substContents1-constraint-12">
             <rule context="tei:subst">
                <assert xmlns:rng="http://relaxng.org/ns/structure/1.0"
                        xmlns:sch="http://purl.oclc.org/dsdl/schematron"
@@ -2661,7 +2746,7 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaDiaries-att.wega.rend-underline-n-constraint-10">
+            id="wegaDiaries-att.wega.rend-underline-n-constraint-12">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
@@ -2680,7 +2765,7 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
       </choice>
    </start>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaDiaries-whitespaceOnlyContent-constraint-8">
+            id="wegaDiaries-whitespaceOnlyContent-constraint-10">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
@@ -2695,7 +2780,7 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
                 </sch:rule>
    </pattern>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaDiaries-elementStartsWithWhitespace-constraint-9">
+            id="wegaDiaries-elementStartsWithWhitespace-constraint-11">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
