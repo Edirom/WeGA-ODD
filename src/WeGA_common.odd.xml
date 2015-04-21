@@ -683,7 +683,7 @@
                 <constraint>
                     <sch:rule context="tei:title[following-sibling::tei:title]">
                         <sch:let name="level" value="@level"/>
-                        <sch:let name="type" value="string(@type)"/> <!-- use string values so comparing non-existing atrtibutes will return true -->
+                        <sch:let name="type" value="string(@type)"/> <!-- use string values so comparing non-existing attributes will return true -->
                         <sch:let name="lang" value="string(@xml:lang)"/>
                         <sch:report test="following-sibling::tei:title[@level = $level][string(@xml:lang) = $lang][string(@type) = $type]">Following title without differing @type or xml:lang attribute</sch:report>
                     </sch:rule>
@@ -2776,6 +2776,18 @@
     </specGrp>
     
     <specGrp xml:id="wega-textcrit">
+        <classSpec type="atts" ident="att.witnessed" mode="change" module="textcrit">
+            <constraintSpec scheme="isoschematron" ident="att-wit">
+                <constraint>
+                    <sch:rule context="tei:*[@wit]">
+                        <sch:let name="wit" value="@wit"/>
+                        <sch:assert test="preceding::tei:witness[@xml:id = substring($wit, 2)]">The @wit-attribute must point at some witness element</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+        </classSpec>
+        
+        
         <elementSpec ident="listWit" mode="change" module="textcrit">
             <gloss versionDate="2013-11-11" xml:lang="en">witness list</gloss>
             <desc versionDate="2013-11-11" xml:lang="en">lists definitions for all the witnesses referred to by a critical apparatus, optionally grouped hierarchically.</desc>
@@ -2869,7 +2881,9 @@
                 <memberOf key="att.textCritical" mode="delete"/>
             </classes>
             <attList>
-                <attRef class="att.responsibility" name="cert"/>
+                <!-- Do we need @cert? -->
+                <!--<attRef class="att.responsibility" name="cert"/>-->
+                <attDef ident="wit" mode="change" usage="req"/>
             </attList>
         </elementSpec>
         
@@ -2882,9 +2896,10 @@
                 <memberOf key="att.global" mode="delete"/>
                 <memberOf key="att.textCritical" mode="delete"/>
             </classes>
-            <attList>
+            <!-- Do we need this? -->
+            <!--<attList>
                 <attRef class="att.responsibility" name="cert"/>
-            </attList>
+            </attList>-->
         </elementSpec>
     </specGrp>
     
