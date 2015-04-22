@@ -3,7 +3,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2015-04-16T11:59:53Z. .
+Schema generated from ODD source 2015-04-21T17:39:24Z. .
 TEI Edition: Version 2.7.0. Last updated on
 	16th September 2014, revision 13036
 TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
@@ -2455,12 +2455,6 @@ Suggested values include: 1] page; 2] column; 3] line; 4] book; 5] poem; 6] cant
                </list>
             </attribute>
          </optional>
-         <optional>
-            <attribute name="hand">
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">in the case of text omitted from the transcription because of deliberate deletion by an identifiable hand, indicates the hand which made the deletion.</a:documentation>
-               <ref name="data.pointer"/>
-            </attribute>
-         </optional>
          <empty/>
       </element>
    </define>
@@ -3035,7 +3029,10 @@ attributes @target and @cRef may be supplied on <name/>.</report>
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Thematic comment) A synoptical comment that can be applied to several places within the edition.</a:documentation>
             </choice>
          </attribute>
-         <ref name="att.global.attribute.xmlid"/>
+         <attribute name="xml:id">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(identifier) provides a unique identifier for the element bearing the attribute.</a:documentation>
+            <data type="ID"/>
+         </attribute>
          <empty/>
       </element>
    </define>
@@ -5226,6 +5223,21 @@ Sample values include: 1] text; 2] corpus</a:documentation>
          </attribute>
       </optional>
    </define>
+   <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+            id="wegaGeneric-att.witnessed-att-wit-constraint-11">
+      <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
+                xmlns:mei="http://www.music-encoding.org/ns/mei"
+                xmlns="http://www.tei-c.org/ns/1.0"
+                xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                xmlns:s="http://www.ascc.net/xml/schematron"
+                xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                xmlns:xi="http://www.w3.org/2001/XInclude"
+                context="tei:*[@wit]">
+                        <sch:let name="wit" value="@wit"/>
+                        <sch:assert test="preceding::tei:witness[@xml:id = substring($wit, 2)]">The @wit-attribute must point at some witness element</sch:assert>
+                    </sch:rule>
+   </pattern>
    <define name="app">
       <element name="app">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(apparatus entry) contains one entry in a critical apparatus, with an optional lemma and usually one or more readings or notes on the relevant passage. [12.1.1. ]</a:documentation>
@@ -5251,7 +5263,6 @@ Sample values include: 1] text; 2] corpus</a:documentation>
             </choice>
          </zeroOrMore>
          <ref name="att.witnessed.attributes"/>
-         <ref name="att.responsibility.attribute.cert"/>
          <empty/>
       </element>
    </define>
@@ -5268,8 +5279,14 @@ Sample values include: 1] text; 2] corpus</a:documentation>
                <ref name="model.rdgPart"/>
             </choice>
          </zeroOrMore>
-         <ref name="att.witnessed.attributes"/>
-         <ref name="att.responsibility.attribute.cert"/>
+         <attribute name="wit">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(witness or witnesses) contains a space-delimited list of one or more pointers indicating the witnesses which attest to a given reading.</a:documentation>
+            <list>
+               <oneOrMore>
+                  <ref name="data.pointer"/>
+               </oneOrMore>
+            </list>
+         </attribute>
          <empty/>
       </element>
    </define>
@@ -5428,7 +5445,7 @@ Sample values include: 1] text; 2] corpus</a:documentation>
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaGeneric-att.wega.rend-underline-n-constraint-13">
+            id="wegaGeneric-att.wega.rend-underline-n-constraint-14">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns="http://www.tei-c.org/ns/1.0"
@@ -5447,7 +5464,7 @@ Sample values include: 1] text; 2] corpus</a:documentation>
       </choice>
    </start>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaGeneric-whitespaceOnlyContent-constraint-11">
+            id="wegaGeneric-whitespaceOnlyContent-constraint-12">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns="http://www.tei-c.org/ns/1.0"
@@ -5462,7 +5479,7 @@ Sample values include: 1] text; 2] corpus</a:documentation>
                 </sch:rule>
    </pattern>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaGeneric-elementStartsWithWhitespace-constraint-12">
+            id="wegaGeneric-elementStartsWithWhitespace-constraint-13">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns="http://www.tei-c.org/ns/1.0"
