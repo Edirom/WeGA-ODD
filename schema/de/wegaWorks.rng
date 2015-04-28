@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2015-03-25T11:02:44Z. 
+Schema generated from ODD source 2015-03-25T16:41:22Z. 
 Edition: 2013 Release
 Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -588,6 +588,12 @@ Edition Location: http://www.tei-c.org/Vault/P5//
       <value>cue</value>
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">reduced size</a:documentation>
     </choice>
+  </define>
+  <define name="data.SLASH">
+    <data type="positiveInteger">
+      <param name="minInclusive">1</param>
+      <param name="maxInclusive">6</param>
+    </data>
   </define>
   <define name="data.SLUR">
     <data type="token">
@@ -2811,6 +2817,17 @@ Edition Location: http://www.tei-c.org/Vault/P5//
       <attribute name="seq">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">used to assign a sequence number related to the order in which the encoded features carrying this attribute are believed to have occurred.</a:documentation>
         <data type="positiveInteger"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.slashcount.attributes">
+    <ref name="att.slashcount.attribute.slash"/>
+  </define>
+  <define name="att.slashcount.attribute.slash">
+    <optional>
+      <attribute name="slash">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the number of slashes present.</a:documentation>
+        <ref name="data.SLASH"/>
       </attribute>
     </optional>
   </define>
@@ -6392,6 +6409,34 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
       </attribute>
     </optional>
   </define>
+  <define name="att.fTrem.anl.attributes">
+    <empty/>
+  </define>
+  <define name="att.fTrem.ges.attributes">
+    <ref name="att.tremmeasured.attributes"/>
+  </define>
+  <define name="att.fTrem.log.attributes">
+    <ref name="att.event.attributes"/>
+    <ref name="att.augmentdots.attributes"/>
+    <ref name="att.duration.musical.attributes"/>
+    <ref name="att.fTrem.log.attribute.form"/>
+  </define>
+  <define name="att.fTrem.log.attribute.form">
+    <optional>
+      <attribute name="form">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">describes the style of the tremolo.</a:documentation>
+        <choice>
+          <value>meas</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">measured tremolo.</a:documentation>
+          <value>unmeas</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">unmeasured tremolo.</a:documentation>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.fTrem.vis.attributes">
+    <ref name="att.slashcount.attributes"/>
+  </define>
   <define name="att.graced.attributes">
     <ref name="att.graced.attribute.grace"/>
     <ref name="att.graced.attribute.grace.time"/>
@@ -6811,6 +6856,7 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
       <ref name="beam"/>
       <ref name="beatRpt"/>
       <ref name="bTrem"/>
+      <ref name="fTrem"/>
       <ref name="halfmRpt"/>
     </choice>
   </define>
@@ -6819,6 +6865,7 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
       <ref name="beam"/>
       <ref name="beatRpt"/>
       <ref name="bTrem"/>
+      <ref name="fTrem"/>
       <ref name="halfmRpt"/>
     </choice>
   </define>
@@ -6826,6 +6873,7 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
     <ref name="beam"/>
     <ref name="beatRpt"/>
     <ref name="bTrem"/>
+    <ref name="fTrem"/>
     <ref name="halfmRpt"/>
   </define>
   <define name="model.eventLike.cmn_sequenceOptional">
@@ -6837,6 +6885,9 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
     </optional>
     <optional>
       <ref name="bTrem"/>
+    </optional>
+    <optional>
+      <ref name="fTrem"/>
     </optional>
     <optional>
       <ref name="halfmRpt"/>
@@ -6853,6 +6904,9 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
       <ref name="bTrem"/>
     </zeroOrMore>
     <zeroOrMore>
+      <ref name="fTrem"/>
+    </zeroOrMore>
+    <zeroOrMore>
       <ref name="halfmRpt"/>
     </zeroOrMore>
   </define>
@@ -6865,6 +6919,9 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
     </oneOrMore>
     <oneOrMore>
       <ref name="bTrem"/>
+    </oneOrMore>
+    <oneOrMore>
+      <ref name="fTrem"/>
     </oneOrMore>
     <oneOrMore>
       <ref name="halfmRpt"/>
@@ -7007,6 +7064,33 @@ Empfohlene Werte sind: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:document
       <ref name="att.bTrem.vis.attributes"/>
       <ref name="att.bTrem.ges.attributes"/>
       <ref name="att.bTrem.anl.attributes"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="fTrem">
+    <element name="fTrem">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(fingered tremolo) – A rapid alternation between a pair of notes (or chords or perhaps between a note and a chord) that are (usually) farther apart than a major second.</a:documentation>
+      <choice>
+        <group>
+          <ref name="chord"/>
+          <choice>
+            <ref name="chord"/>
+            <ref name="note"/>
+          </choice>
+        </group>
+        <group>
+          <ref name="note"/>
+          <choice>
+            <ref name="chord"/>
+            <ref name="note"/>
+          </choice>
+        </group>
+      </choice>
+      <ref name="att.common.attributes"/>
+      <ref name="att.fTrem.log.attributes"/>
+      <ref name="att.fTrem.vis.attributes"/>
+      <ref name="att.fTrem.ges.attributes"/>
+      <ref name="att.fTrem.anl.attributes"/>
       <empty/>
     </element>
   </define>
