@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2015-03-25T16:41:39Z. 
+Schema generated from ODD source 2015-05-06T15:15:50Z. 
 Edition: 2013 Release
 Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -1689,6 +1689,26 @@ Edition Location: http://www.tei-c.org/Vault/P5//
       <attribute name="dur.ges">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">records performed duration information that differs from the written duration. Its value may be expressed in several forms; that is, ppq (MIDI clicks and MusicXML 'divisions'), Humdrum **recip values, beats, seconds, or mensural duration values.</a:documentation>
         <ref name="data.DURATION.gestural"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.duration.ratio.attributes">
+    <ref name="att.duration.ratio.attribute.num"/>
+    <ref name="att.duration.ratio.attribute.numbase"/>
+  </define>
+  <define name="att.duration.ratio.attribute.num">
+    <optional>
+      <attribute name="num">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">along with numbase, describes duration as a ratio. num is the first value in the ratio, while numbase is the second.</a:documentation>
+        <data type="positiveInteger"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.duration.ratio.attribute.numbase">
+    <optional>
+      <attribute name="numbase">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">along with num, describes duration as a ratio. num is the first value in the ratio, while numbase is the second.</a:documentation>
+        <data type="positiveInteger"/>
       </attribute>
     </optional>
   </define>
@@ -6788,6 +6808,65 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
       </attribute>
     </optional>
   </define>
+  <define name="att.tuplet.anl.attributes">
+    <empty/>
+  </define>
+  <define name="att.tuplet.ges.attributes">
+    <ref name="att.duration.performed.attributes"/>
+  </define>
+  <define name="att.tuplet.log.attributes">
+    <ref name="att.event.attributes"/>
+    <ref name="att.beamedwith.attributes"/>
+    <ref name="att.augmentdots.attributes"/>
+    <ref name="att.duration.additive.attributes"/>
+    <ref name="att.duration.ratio.attributes"/>
+    <ref name="att.startendid.attributes"/>
+  </define>
+  <define name="att.tuplet.vis.attributes">
+    <ref name="att.color.attributes"/>
+    <ref name="att.numberplacement.attributes"/>
+    <ref name="att.tuplet.vis.attribute.bracket.place"/>
+    <ref name="att.tuplet.vis.attribute.bracket.visible"/>
+    <ref name="att.tuplet.vis.attribute.dur.visible"/>
+    <ref name="att.tuplet.vis.attribute.num.format"/>
+  </define>
+  <define name="att.tuplet.vis.attribute.bracket.place">
+    <optional>
+      <attribute name="bracket.place">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">used to state where a tuplet bracket will be placed in relation to the note heads.</a:documentation>
+        <ref name="data.PLACE"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.tuplet.vis.attribute.bracket.visible">
+    <optional>
+      <attribute name="bracket.visible">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">states whether a bracket should be rendered with a tuplet.</a:documentation>
+        <ref name="data.BOOLEAN"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.tuplet.vis.attribute.dur.visible">
+    <optional>
+      <attribute name="dur.visible">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">determines if the tuplet duration is visible.</a:documentation>
+        <ref name="data.BOOLEAN"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.tuplet.vis.attribute.num.format">
+    <optional>
+      <attribute name="num.format">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">controls how the num:numbase ratio is to be displayed.</a:documentation>
+        <choice>
+          <value>count</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">only the num attribute is displayed, e.g., '7'.</a:documentation>
+          <value>ratio</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">both the num and numbase attributes are displayed, e.g., '7:4'.</a:documentation>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
   <define name="model.controleventLike.cmn">
     <choice>
       <ref name="hairpin"/>
@@ -6859,6 +6938,7 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
       <ref name="bTrem"/>
       <ref name="fTrem"/>
       <ref name="halfmRpt"/>
+      <ref name="tuplet"/>
     </choice>
   </define>
   <define name="model.eventLike.cmn_alternation">
@@ -6868,6 +6948,7 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
       <ref name="bTrem"/>
       <ref name="fTrem"/>
       <ref name="halfmRpt"/>
+      <ref name="tuplet"/>
     </choice>
   </define>
   <define name="model.eventLike.cmn_sequence">
@@ -6876,6 +6957,7 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
     <ref name="bTrem"/>
     <ref name="fTrem"/>
     <ref name="halfmRpt"/>
+    <ref name="tuplet"/>
   </define>
   <define name="model.eventLike.cmn_sequenceOptional">
     <optional>
@@ -6892,6 +6974,9 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
     </optional>
     <optional>
       <ref name="halfmRpt"/>
+    </optional>
+    <optional>
+      <ref name="tuplet"/>
     </optional>
   </define>
   <define name="model.eventLike.cmn_sequenceOptionalRepeatable">
@@ -6910,6 +6995,9 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
     <zeroOrMore>
       <ref name="halfmRpt"/>
     </zeroOrMore>
+    <zeroOrMore>
+      <ref name="tuplet"/>
+    </zeroOrMore>
   </define>
   <define name="model.eventLike.cmn_sequenceRepeatable">
     <oneOrMore>
@@ -6926,6 +7014,9 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
     </oneOrMore>
     <oneOrMore>
       <ref name="halfmRpt"/>
+    </oneOrMore>
+    <oneOrMore>
+      <ref name="tuplet"/>
     </oneOrMore>
   </define>
   <define name="model.eventLike.measureFilling">
@@ -7217,6 +7308,30 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
       <empty/>
     </element>
   </define>
+  <define name="tuplet">
+    <element name="tuplet">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A group of notes with "irregular" (sometimes called "irrational") rhythmic values, for example, three notes in the time normally occupied by two or nine in the time of five. </a:documentation>
+      <zeroOrMore>
+        <choice>
+          <ref name="model.eventLike"/>
+          <ref name="model.editLike"/>
+          <ref name="model.transcriptionLike"/>
+        </choice>
+      </zeroOrMore>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-33">
+        <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:tuplet[not(@copyof)]">
+          <sch:assert test="count(descendant::*[local-name()='note' or local-name()='rest' or               local-name()='chord']) &gt; 1">A tuplet without a copyof attribute must have at least
+              2 note, rest, or chord descendants.</sch:assert>
+        </sch:rule>
+      </pattern>
+      <ref name="att.common.attributes"/>
+      <ref name="att.tuplet.log.attributes"/>
+      <ref name="att.tuplet.vis.attributes"/>
+      <ref name="att.tuplet.ges.attributes"/>
+      <ref name="att.tuplet.anl.attributes"/>
+      <empty/>
+    </element>
+  </define>
   <define name="att.ornam.attributes">
     <ref name="att.ornam.attribute.ornam"/>
   </define>
@@ -7354,7 +7469,7 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
     <element name="trill">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Rapid alternation of a note with one (usually at the interval of a second) above. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-trill-Start-type_attributes_required_on_some_control_events-constraint-33">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-trill-Start-type_attributes_required_on_some_control_events-constraint-34">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:trill">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -7372,7 +7487,7 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
     <element name="turn">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An ornament consisting of four notes — the upper neighbor of the written note, the written note, the lower neighbor, and the written note. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-turn-Start-type_attributes_required_on_some_control_events-constraint-34">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-turn-Start-type_attributes_required_on_some_control_events-constraint-35">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:turn">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -7762,7 +7877,7 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
       </attribute>
     </optional>
   </define>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.wega.rend-underline-n-constraint-35">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.wega.rend-underline-n-constraint-36">
     <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="*:hi[@n] | *:rend[@n]">
       <sch:report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</sch:report>
     </sch:rule>
