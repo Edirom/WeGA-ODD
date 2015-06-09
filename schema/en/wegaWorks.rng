@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2015-05-08T20:29:51Z. 
+Schema generated from ODD source 2015-06-09T16:21:20Z. 
 Edition: 2013 Release
 Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -998,6 +998,9 @@ Edition Location: http://www.tei-c.org/Vault/P5//
       </optional>
       <optional>
         <ref name="extent"/>
+      </optional>
+      <optional>
+        <ref name="contents"/>
       </optional>
       <optional>
         <ref name="notesStmt"/>
@@ -5164,7 +5167,7 @@ Edition Location: http://www.tei-c.org/Vault/P5//
     </element>
   </define>
   <define name="titlePage">
-    <element name="titlePage">
+    <element name="titlePage" ns="http://www.music-encoding.org/ns/mei">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Contains a transcription of the title page of a text. </a:documentation>
       <oneOrMore>
         <choice>
@@ -5350,6 +5353,37 @@ Suggested values include: 1] gnd(Gemeinsame
       <ref name="att.common.attributes"/>
       <ref name="att.bibl.attributes"/>
       <ref name="att.lang.attributes"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="contentItem">
+    <element name="contentItem">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Contains a single entry within a content description element.</a:documentation>
+      <zeroOrMore>
+        <text/>
+      </zeroOrMore>
+      <ref name="att.bibl.attributes"/>
+      <ref name="att.common.attributes"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="contents">
+    <element name="contents">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Description of the material contained within a resource.</a:documentation>
+      <choice>
+        <optional>
+          <ref name="model.pLike"/>
+        </optional>
+        <oneOrMore>
+          <optional>
+            <ref name="model.labelLike"/>
+          </optional>
+          <ref name="contentItem"/>
+        </oneOrMore>
+      </choice>
+      <ref name="att.common.attributes"/>
+      <ref name="att.bibl.attributes"/>
+      <ref name="att.pointing.attributes"/>
       <empty/>
     </element>
   </define>
@@ -5679,12 +5713,11 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
     </element>
   </define>
   <define name="perfMedium">
-    <element name="perfMedium" ns="http://www.music-encoding.org/ns/mei">
+    <element name="perfMedium">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(performance medium) – Indicates the number and character of the performing forces used in a musical composition. </a:documentation>
       <optional>
         <ref name="instrumentation"/>
       </optional>
-      <ref name="att.canonical.attributes"/>
       <ref name="att.common.attributes"/>
       <ref name="att.bibl.attributes"/>
       <ref name="att.authorized.attributes"/>
@@ -5808,6 +5841,7 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
       <zeroOrMore>
         <choice>
           <ref name="model.identifierLike"/>
+          <ref name="contents"/>
           <ref name="seriesStmt"/>
         </choice>
       </zeroOrMore>
@@ -5826,6 +5860,9 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
         <ref name="titleStmt"/>
       </optional>
       <ref name="macro.bibldescPart"/>
+      <optional>
+        <ref name="contents"/>
+      </optional>
       <optional>
         <ref name="history"/>
       </optional>
