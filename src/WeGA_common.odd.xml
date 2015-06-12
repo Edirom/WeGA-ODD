@@ -201,7 +201,7 @@
         <macroSpec ident="pnd.pattern" mode="add">
             <content>
                 <rng:data type="string">
-                    <rng:param name="pattern">[0-9]{8,9}[0-9X]</rng:param>
+                    <rng:param name="pattern">[\-0-9]{8,9}[0-9X]</rng:param>
                 </rng:data>
             </content>
         </macroSpec>
@@ -1220,8 +1220,15 @@
             <!--<classes mode="change">
                 <memberOf key="model.personPart" mode="add"/>
                 </classes>-->
+            <constraintSpec scheme="isoschematron" ident="note-in-text">
+                <constraint>
+                    <sch:rule context="tei:note[not(parent::tei:org or parent::tei:person)]">
+                        <sch:assert test="@type and @resp and @xml:id">It is required to provide @type and @resp and @xml:id on note.</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
             <attList>
-                <attDef ident="type" mode="change" usage="req">
+                <attDef ident="type" mode="change">
                     <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</desc>
                     <valList type="closed" mode="replace">
@@ -1249,7 +1256,7 @@
                         </valItem>
                     </valList>
                 </attDef>
-                <attDef ident="resp" mode="change" usage="req">
+                <attDef ident="resp" mode="change">
                     <gloss versionDate="2013-11-11" xml:lang="en">responsible party</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">indicates the agency responsible for the intervention or interpretation, for example an editor or transcriber.</desc>
                     <gloss versionDate="2013-11-11" xml:lang="de">verantwortliche Institution</gloss>
@@ -1260,7 +1267,7 @@
                 </attDef>
                 <!--<attRef name="xml:id" class="att.global"/>-->
                 <!-- xml:id is required, doesn't work with attRef -->
-                <attDef ident="xml:id" mode="add" usage="req">
+                <attDef ident="xml:id" mode="add">
                     <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
                     <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
@@ -2349,6 +2356,55 @@
         <elementSpec ident="geogName" mode="change" module="namesdates">
             <desc versionDate="2013-11-11" xml:lang="en">marks a name associated with some geographical feature (e.g. seas, mountains). NB <emph>not</emph> some administrative unit.</desc>
             <desc versionDate="2013-11-11" xml:lang="de">markiert einen Namen, mit dem eine geographische Region assoziiert wird (z.B. Seen, Gebirge, aber keine Verwaltungseinheiten).</desc>
+        </elementSpec>
+        
+        <elementSpec ident="orgName" mode="change" module="namesdates">
+            <classes mode="change">
+                <memberOf key="att.datable" mode="delete"/>
+                <memberOf key="att.global" mode="delete"/>
+                <memberOf key="att.naming" mode="delete"/>
+                <memberOf key="att.typed" mode="delete"/>
+                <memberOf key="att.personal" mode="delete"/>
+                <memberOf key="att.canonical" mode="delete"/>
+                <memberOf key="att.editLike" mode="delete"/>
+            </classes>
+            <constraintSpec scheme="isoschematron" ident="parent-org">
+                <constraint>
+                    <sch:rule context="tei:orgName[parent::tei:org]">
+                        <sch:report test="@key or not(@type)">It is required to give the type ('alt' or 'reg') of the name while @key is forbiden here.</sch:report>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="isoschematron" ident="parent-org-reg">
+                <constraint>
+                    <sch:rule context="tei:orgName[parent::tei:org]">
+                        <sch:assert test="count(@type[.='reg']) eq 1">There must exactly be one name with @type='reg'.</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="isoschematron" ident="parent-not-org">
+                <constraint>
+                    <sch:rule context="tei:orgName[not(parent::tei:org)]">
+                        <sch:report test="@type">No @type attribute allowed here.</sch:report>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <attList>
+                <attDef ident="type" mode="add">
+                    <valList>
+                        <valItem ident="reg"/>
+                        <valItem ident="alt"/>
+                    </valList>
+                </attDef>
+                <attDef ident="key" mode="add">
+                    <desc versionDate="2013-11-11" xml:lang="en">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</desc>
+                    <desc versionDate="2013-11-11" xml:lang="de">bietet mittels eines codierten Wertes in einer beliebigen Form ein extern definiertes Mittel zur Identifizierung einer Einheit (oder mehrerer Einheiten).</desc>
+                    <datatype>
+                        <rng:ref name="key.org.pattern"/>
+                    </datatype>
+                </attDef>
+<!--                <attRef class="att.responsibility" name="cert"/>-->
+            </attList>
         </elementSpec>
     </specGrp>
     
