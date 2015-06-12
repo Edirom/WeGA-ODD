@@ -3,7 +3,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2015-06-12T13:55:38Z. .
+Schema generated from ODD source 2015-06-12T15:39:28Z. .
 TEI Edition: Version 2.7.0. Last updated on
 	16th September 2014, revision 13036
 TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
@@ -2433,12 +2433,26 @@ attributes @target and @cRef may be supplied on <name/>.</report>
                       xmlns:s="http://www.ascc.net/xml/schematron"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:xi="http://www.w3.org/2001/XInclude"
-                      context="tei:orgName[parent::tei:org]">
-                        <sch:assert test="count(@type[.='reg']) eq 1">There must exactly be one name with @type='reg'.</sch:assert>
+                      context="tei:orgName[parent::tei:org and not(preceding::tei:orgName)]">
+                        <sch:assert test="@type='reg'">There must exactly be one name with @type='reg'.</sch:assert>
                     </sch:rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaOrg-orgName-parent-not-org-constraint-10">
+                  id="wegaOrg-orgName-parent-org-reg-constraint-10">
+            <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
+                      xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:xi="http://www.w3.org/2001/XInclude"
+                      context="tei:orgName[parent::tei:org and preceding::tei:orgName]">
+                        <sch:report test="@type='reg'">Only the first name can be of @type='reg'. Following names are supposed to be alternative names, @type='alt'.</sch:report>
+                    </sch:rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaOrg-orgName-parent-not-org-constraint-11">
             <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -2454,7 +2468,12 @@ attributes @target and @cRef may be supplied on <name/>.</report>
          <optional>
             <attribute name="type">
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-               <text/>
+               <choice>
+                  <value>reg</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+                  <value>alt</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+               </choice>
             </attribute>
          </optional>
          <optional>
@@ -2688,7 +2707,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(beliebiges Segment) steht für eine beliebige Segmentierung des Textes unterhalb des ‘chunk’ Levels. [16.3.  6.2.  7.2.5. ]</a:documentation>
          <ref name="macro.paraContent"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaOrg-seg-activeOrPassivePerformance-constraint-13">
+                  id="wegaOrg-seg-activeOrPassivePerformance-constraint-14">
             <rule context="tei:seg">
                <sch:report xmlns:tei="http://www.tei-c.org/ns/1.0"
                            xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -2702,7 +2721,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
             </rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaOrg-seg-AddresseeOrSenderCorrespondence-constraint-14">
+                  id="wegaOrg-seg-AddresseeOrSenderCorrespondence-constraint-15">
             <rule context="tei:seg">
                <sch:report xmlns:tei="http://www.tei-c.org/ns/1.0"
                            xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -2906,7 +2925,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaOrg-att.wega.rend-underline-n-constraint-13">
+            id="wegaOrg-att.wega.rend-underline-n-constraint-14">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns="http://www.tei-c.org/ns/1.0"
@@ -2925,7 +2944,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
       </choice>
    </start>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaOrg-whitespaceOnlyContent-constraint-11">
+            id="wegaOrg-whitespaceOnlyContent-constraint-12">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns="http://www.tei-c.org/ns/1.0"
@@ -2940,7 +2959,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
                 </sch:rule>
    </pattern>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaOrg-elementStartsWithWhitespace-constraint-12">
+            id="wegaOrg-elementStartsWithWhitespace-constraint-13">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns="http://www.tei-c.org/ns/1.0"

@@ -2377,8 +2377,15 @@
             </constraintSpec>
             <constraintSpec scheme="isoschematron" ident="parent-org-reg">
                 <constraint>
-                    <sch:rule context="tei:orgName[parent::tei:org]">
-                        <sch:assert test="count(@type[.='reg']) eq 1">There must exactly be one name with @type='reg'.</sch:assert>
+                    <sch:rule context="tei:orgName[parent::tei:org and not(preceding::tei:orgName)]">
+                        <sch:assert test="@type='reg'">There must exactly be one name with @type='reg'.</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="isoschematron" ident="parent-org-reg">
+                <constraint>
+                    <sch:rule context="tei:orgName[parent::tei:org and preceding::tei:orgName]">
+                        <sch:report test="@type='reg'">Only the first name can be of @type='reg'. Following names are supposed to be alternative names, @type='alt'.</sch:report>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
@@ -2391,7 +2398,7 @@
             </constraintSpec>
             <attList>
                 <attDef ident="type" mode="add">
-                    <valList>
+                    <valList type="closed">
                         <valItem ident="reg"/>
                         <valItem ident="alt"/>
                     </valList>
