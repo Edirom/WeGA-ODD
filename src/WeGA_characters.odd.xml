@@ -60,32 +60,86 @@
                     <specGrpRef target="WeGA_common.odd.xml#wega-header"/>
                     <specGrpRef target="WeGA_common.odd.xml#wega-namesdates"/>
 
-                    <!--<macroSpec ident="macro.charactersContent">
+                    <macroSpec ident="macro.characterContent">
                         <content>
-                            <rng:interleave>
-                                <!-\-<rng:zeroOrMore>
-                                    <rng:ref name="surname"/>
-                                </rng:zeroOrMore>-\->
-                                <!-\-<rng:zeroOrMore>
-                                    <rng:ref name="forename"/>
-                                </rng:zeroOrMore>-\->
-                                <!-\-<rng:zeroOrMore>
-                                    <rng:ref name="nameLink"/>
-                                </rng:zeroOrMore>-\->
-                                <!-\-<rng:zeroOrMore>
-                                    <rng:ref name="genName"/>
-                                </rng:zeroOrMore>-\->
-                                <!-\-<rng:zeroOrMore>
-                                    <rng:ref name="roleName"/>
-                                </rng:zeroOrMore>-\->
-                                <!-\-<rng:zeroOrMore>
-                                    <rng:ref name="addName"/>
-                                </rng:zeroOrMore>-\->
-                            </rng:interleave>
+                            
+                                <rng:element name="ref">
+                                    <rng:attribute name="type">
+                                        <rng:choice>
+                                            <rng:value>roleWithin</rng:value>
+                                        </rng:choice>
+                                    </rng:attribute>
+                                    <rng:attribute name="target">
+                                        <rng:ref name="key.work.pattern"/>
+                                    </rng:attribute>
+                                    <rng:empty/>
+                                </rng:element>
+                            
+                                <rng:zeroOrMore>
+                                    <rng:ref name="idno"/>
+                                </rng:zeroOrMore>
+                                <rng:element name="characterName">
+                                    <rng:attribute name="type">
+                                        <rng:value>reg</rng:value>
+                                    </rng:attribute>
+                                    <rng:optional>
+                                        <rng:attribute name="xml:lang">
+                                            <rng:ref name="data.language"/>
+                                        </rng:attribute>
+                                    </rng:optional>
+                                    <rng:text/>
+                                </rng:element>
+                                
+                                <rng:zeroOrMore>
+                                    <rng:element name="characterName">
+                                        <rng:attribute name="type">
+                                            <rng:choice>
+                                                <rng:value>alt</rng:value>
+                                            </rng:choice>
+                                        </rng:attribute>
+                                        <rng:optional>
+                                            <rng:attribute name="xml:lang">
+                                                <rng:ref name="data.language"/>
+                                            </rng:attribute>
+                                        </rng:optional>
+                                        <rng:text/>
+                                    </rng:element>
+                                </rng:zeroOrMore>
+                                
+                                <rng:zeroOrMore>
+                                    <rng:ref name="characterDesc"/>
+                                </rng:zeroOrMore>
+                                
+                                <rng:interleave>
+                                    <rng:ref name="sex"/>
+                                    <rng:optional>
+                                        <rng:element name="figure">
+                                            <rng:ref name="head"/>
+                                            <rng:ref name="graphic"/>
+                                            <rng:attribute name="n">
+                                                <rng:value>reg</rng:value>
+                                            </rng:attribute>
+                                        </rng:element>
+                                        <rng:zeroOrMore>
+                                            <rng:element name="figure">
+                                                <rng:ref name="head"/>
+                                                <rng:ref name="graphic"/>
+                                            </rng:element>
+                                        </rng:zeroOrMore>
+                                    </rng:optional>
+                                </rng:interleave>
+                                
+                                <rng:zeroOrMore>
+                                    <rng:element name="actor">
+                                        <rng:ref name="macro.actorContent"/>
+                                    </rng:element>
+                                </rng:zeroOrMore>
+                            
+                            
                         </content>
-                    </macroSpec>-->
+                    </macroSpec>
                     
-                    <macroSpec ident="macro.characterNameContent">
+                    <!--<macroSpec ident="macro.characterDescContent">
                         <content>
                             <rng:interleave>
                                 <rng:zeroOrMore>
@@ -93,15 +147,19 @@
                                 </rng:zeroOrMore>
                             </rng:interleave>
                         </content>
-                    </macroSpec>
+                    </macroSpec>-->
+                    
+                    <!--<macroSpec ident="characterNameContent">
+                        <content>
+                            <rng:text/>
+                        </content>
+                    </macroSpec>-->
                     
                     <macroSpec ident="macro.actorContent">
                         <content>
-                            <rng:interleave>
-                                <rng:zeroOrMore>
-                                    <rng:ref name="persName"/>
-                                </rng:zeroOrMore>
-                            </rng:interleave>
+                            <rng:zeroOrMore>
+                                <rng:ref name="persName"/>
+                            </rng:zeroOrMore>
                         </content>
                     </macroSpec>
 
@@ -123,89 +181,14 @@
                             <memberOf key="att.docStatus" mode="add"/>
                         </classes>
                         <content>
-                            <rng:zeroOrMore>
-                                <rng:element name="ref">
-                                    <rng:attribute name="type">
-                                        <rng:choice>
-                                            <rng:value>roleWithin</rng:value>
-                                        </rng:choice>
-                                    </rng:attribute>
-                                    <rng:attribute name="target">
-                                        <rng:ref name="key.work.pattern"/>
-                                    </rng:attribute>
-                                    <rng:empty/>
-                                </rng:element>
-                                <rng:group>
-                                    <rng:zeroOrMore>
-                                        <rng:ref name="idno"/>
-                                    </rng:zeroOrMore>
-                                    <rng:element name="characterName">
-                                        <rng:ref name="macro.charactersContent"/>
-                                        <rng:attribute name="type">
-                                            <rng:value>reg</rng:value>
-                                        </rng:attribute>
-                                        <rng:optional>
-                                            <rng:attribute name="xml:lang">
-                                                <rng:ref name="data.language"/>
-                                            </rng:attribute>
-                                        </rng:optional>
-                                    </rng:element>
-
-                                    <rng:zeroOrMore>
-                                        <rng:element name="characterName">
-                                            <rng:ref name="macro.charactersContent"/>
-                                            <rng:attribute name="type">
-                                                <rng:choice>
-                                                  <rng:value>alt</rng:value>
-                                                </rng:choice>
-                                            </rng:attribute>
-                                            <rng:optional>
-                                                <rng:attribute name="xml:lang">
-                                                  <rng:ref name="data.language"/>
-                                                </rng:attribute>
-                                            </rng:optional>
-                                        </rng:element>
-                                    </rng:zeroOrMore>
-
-                                    <rng:zeroOrMore>
-                                        <rng:element name="characterDesc">
-                                            <rng:ref name="macro.characterNameContent"/>
-                                            <rng:optional>
-                                                <rng:element name="p"/>
-                                            </rng:optional>
-                                            <rng:optional>
-                                                <rng:element name="characterName"/>
-                                            </rng:optional>
-                                        </rng:element>
-                                    </rng:zeroOrMore>
-
-                                    <rng:interleave>
-                                        <rng:ref name="sex"/>
-                                        <rng:optional>
-                                            <rng:element name="figure">
-                                                <rng:ref name="head"/>
-                                                <rng:ref name="graphic"/>
-                                                <rng:attribute name="n">
-                                                  <rng:value>reg</rng:value>
-                                                </rng:attribute>
-                                            </rng:element>
-                                            <rng:zeroOrMore>
-                                                <rng:element name="figure">
-                                                  <rng:ref name="head"/>
-                                                  <rng:ref name="graphic"/>
-                                                </rng:element>
-                                            </rng:zeroOrMore>
-                                        </rng:optional>
-                                    </rng:interleave>
-
-                                    <rng:zeroOrMore>
-                                        <rng:element name="actor">
-                                            <rng:ref name="macro.actorContent"/>
-                                        </rng:element>
-                                    </rng:zeroOrMore>
-                                </rng:group>
-                            </rng:zeroOrMore>
+                            <rng:ref name="macro.characterContent"/>
                         </content>
+                    </elementSpec>
+                    
+                    <elementSpec ident="characterName" mode="add">
+                        <classes mode="change">
+                            <memberOf mode="add" key="att.canonical"/>
+                        </classes>
                     </elementSpec>
 
                     <elementSpec ident="surname" mode="change" module="namesdates">
@@ -220,8 +203,14 @@
                             <memberOf key="att.typed" mode="delete"/>
                         </classes>
                     </elementSpec>
+                    
+                    <elementSpec ident="characterDesc" mode="add">
+                        <content>
+                            <rng:ref name="model.pLike"/>
+                        </content>
+                    </elementSpec>
 
-                    <elementSpec ident="forename" mode="change" module="namesdates">
+                    <!--<elementSpec ident="forename" mode="change" module="namesdates">
                         <desc versionDate="2014-03-12" xml:lang="en">contains a forename, given or
                             baptismal name.</desc>
                         <desc versionDate="2014-03-12" xml:lang="de">enthält einen Vornamen.</desc>
@@ -276,9 +265,9 @@
                                 </valList>
                             </attDef>
                         </attList>
-                    </elementSpec>
+                    </elementSpec>-->
 
-                    <elementSpec ident="addName" mode="change">
+                    <!--<elementSpec ident="addName" mode="change">
                         <gloss versionDate="2013-11-11" xml:lang="en">additional name</gloss>
                         <desc versionDate="2013-11-11" xml:lang="en">contains an additional name
                             component, such as a nickname, epithet, or alias, or any other
@@ -324,7 +313,7 @@
                                 </valList>
                             </attDef>
                         </attList>
-                    </elementSpec>
+                    </elementSpec>-->
 
                     <elementSpec ident="sex" mode="change">
                         <desc versionDate="2013-11-11" xml:lang="en">specifies the sex of a

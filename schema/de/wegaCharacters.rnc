@@ -1,0 +1,1393 @@
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+namespace mei = "http://www.music-encoding.org/ns/mei"
+namespace rng = "http://relaxng.org/ns/structure/1.0"
+namespace s = "http://www.ascc.net/xml/schematron"
+namespace sch = "http://purl.oclc.org/dsdl/schematron"
+default namespace tei = "http://www.tei-c.org/ns/1.0"
+namespace xi = "http://www.w3.org/2001/XInclude"
+namespace xlink = "http://www.w3.org/1999/xlink"
+
+# Schema generated from ODD source 2015-07-02T12:36:16Z. 
+# Edition: Version 2.7.0. Last updated on
+#	16th September 2014, revision 13036
+# Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
+#
+
+# This work is licensed under a Creative Commons Attribution 3.0 Unported License (CC BY 3.0).
+
+sch:ns [ prefix = "tei" uri = "http://www.tei-c.org/ns/1.0" ]
+macro.paraContent =
+  (text | model.gLike | model.phrase | model.inter | model.global)*
+macro.phraseSeq = (text | model.gLike | model.phrase | model.global)*
+macro.specialPara =
+  (text
+   | model.gLike
+   | model.phrase
+   | model.inter
+   | model.divPart
+   | model.global)*
+data.certainty = "high" | "medium" | "low" | "unknown"
+data.probability = xsd:double { minInclusive = "0" maxInclusive = "1" }
+data.numeric =
+  xsd:double
+  | xsd:token { pattern = "(\-?[\d]+/\-?[\d]+)" }
+  | xsd:decimal
+data.count = xsd:nonNegativeInteger
+data.temporal.w3c = wega.data.temporal.iso
+data.xTruthValue = xsd:boolean | "unknown" | "inapplicable"
+data.language = xsd:language | ""
+data.pointer = xsd:anyURI
+data.word = xsd:token { pattern = "(\p{L}|\p{N}|\p{P}|\p{S})+" }
+data.sex = data.word
+data.text = xsd:string
+data.name = xsd:Name
+data.enumerated = data.name
+key.person.pattern = xsd:string { pattern = "H00\d{4}" }
+key.persons.pattern = xsd:string { pattern = "(H00\d{4}\s)*H00\d{4}" }
+key.work.pattern = xsd:string { pattern = "H02\d{4}" }
+key.works.pattern = xsd:string { pattern = "(H02\d{4}\s)*H02\d{4}" }
+key.biblio.pattern = xsd:string { pattern = "H11\d{4}" }
+pnd.pattern = xsd:string { pattern = "[0-9]{8,9}[0-9X]" }
+viaf.pattern = xsd:string { pattern = "[0-9]{6,8}" }
+wega.pattern = xsd:string { pattern = "A00\d{4}" }
+staffSignatures.list =
+  
+  ## Peter Stadler
+  "PS"
+  | 
+    ## Joachim Veit
+    "JV"
+  | 
+    ## Kristina Richts
+    "KR"
+  | 
+    ## Irmlind Capelle
+    "IC"
+wega.data.temporal.iso = xsd:date | xsd:gYear | xsd:gYearMonth
+macro.characterContent =
+  element ref {
+    attribute type { "roleWithin" },
+    attribute target { key.work.pattern },
+    empty
+  },
+  idno*,
+  element characterName {
+    attribute type { "reg" },
+    attribute xml:lang { data.language }?,
+    text
+  },
+  element characterName {
+    attribute type { "alt" },
+    attribute xml:lang { data.language }?,
+    text
+  }*,
+  characterDesc*,
+  (sex
+   & (element figure {
+        head,
+        attribute n { "reg" }
+      },
+      element figure { head }*)?),
+  element actor { macro.actorContent }*
+macro.actorContent = persName*
+att.canonical.attributes =
+  att.canonical.attribute.key, att.canonical.attribute.ref
+att.canonical.attribute.key =
+  
+  ## provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.
+  attribute key { data.text }?
+att.canonical.attribute.ref =
+  
+  ## (reference) provides an explicit means of locating a full definition for the entity being named by means of one or more URIs.
+  attribute ref {
+    list { data.pointer+ }
+  }?
+att.ranging.attributes =
+  att.ranging.attribute.atLeast,
+  att.ranging.attribute.atMost,
+  att.ranging.attribute.min,
+  att.ranging.attribute.max,
+  att.ranging.attribute.confidence
+att.ranging.attribute.atLeast =
+  
+  ## gives a minimum estimated value for the approximate measurement.
+  attribute atLeast { data.numeric }?
+att.ranging.attribute.atMost =
+  
+  ## gives a maximum estimated value for the approximate measurement.
+  attribute atMost { data.numeric }?
+att.ranging.attribute.min =
+  
+  ## where the measurement summarizes more than one observation or a range, supplies the minimum value observed.
+  attribute min { data.numeric }?
+att.ranging.attribute.max =
+  
+  ## where the measurement summarizes more than one observation or a range, supplies the maximum value observed.
+  attribute max { data.numeric }?
+att.ranging.attribute.confidence =
+  
+  ## specifies the degree of statistical confidence (between zero and one) that a value falls within the range specified by min and max, or the proportion of observed values that fall within that range.
+  attribute confidence { data.probability }?
+att.dimensions.attributes =
+  att.ranging.attributes,
+  att.dimensions.attribute.unit,
+  att.dimensions.attribute.quantity,
+  att.dimensions.attribute.extent,
+  att.dimensions.attribute.precision,
+  att.dimensions.attribute.scope
+att.dimensions.attribute.unit =
+  
+  ## names the unit used for the measurement
+  ## Empfohlene Werte sind: 1] cm(centimetres) ; 2] mm(millimetres) ; 3] in(inches) ; 4] lines; 5] chars(characters) 
+  attribute unit {
+    
+    ## (centimetres) 
+    "cm"
+    | 
+      ## (millimetres) 
+      "mm"
+    | 
+      ## (inches) 
+      "in"
+    | 
+      ## lines of text
+      "lines"
+    | 
+      ## (characters) characters of text
+      "chars"
+    | xsd:Name
+  }?
+att.dimensions.attribute.quantity =
+  
+  ## specifies the length in the units specified
+  attribute quantity { data.numeric }?
+att.dimensions.attribute.extent =
+  
+  ## indicates the size of the object concerned using a project-specific vocabulary combining quantity and units in a single string of words.
+  attribute extent { data.text }?
+att.dimensions.attribute.precision =
+  
+  ## characterizes the precision of the values specified by the other attributes.
+  attribute precision { data.certainty }?
+att.dimensions.attribute.scope =
+  
+  ## where the measurement summarizes more than one observation, specifies the applicability of this measurement.
+  ## Beispielwerte sind etwa: 1] all; 2] most; 3] range
+  attribute scope { data.enumerated }?
+att.datable.w3c.attributes =
+  att.datable.w3c.attribute.when,
+  att.datable.w3c.attribute.notBefore,
+  att.datable.w3c.attribute.notAfter,
+  att.datable.w3c.attribute.from,
+  att.datable.w3c.attribute.to
+att.datable.w3c.attribute.when =
+  
+  ## supplies the value of the date or time in a standard form, e.g. yyyy-mm-dd.
+  attribute when { data.temporal.w3c }?
+att.datable.w3c.attribute.notBefore =
+  
+  ## specifies the earliest possible date for the event in standard form, e.g. yyyy-mm-dd.
+  attribute notBefore { data.temporal.w3c }?
+att.datable.w3c.attribute.notAfter =
+  
+  ## specifies the latest possible date for the event in standard form, e.g. yyyy-mm-dd.
+  attribute notAfter { data.temporal.w3c }?
+att.datable.w3c.attribute.from =
+  
+  ## indicates the starting point of the period in standard form, e.g. yyyy-mm-dd.
+  attribute from { data.temporal.w3c }?
+att.datable.w3c.attribute.to =
+  
+  ## indicates the ending point of the period in standard form, e.g. yyyy-mm-dd.
+  attribute to { data.temporal.w3c }?
+att.datable.attributes =
+  att.datable.w3c.attributes, att.datable.attribute.calendar
+att.datable.attribute.calendar =
+  
+  ## indicates the system or calendar to which the date represented by the content of this element belongs.
+  attribute calendar { data.pointer }?
+sch:pattern [
+  id = "wegaCharacters-att.datable-calendar-calendar-constraint-1"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context = "tei:*[@calendar]"
+    "\x{a}" ~
+    "            "
+    sch:assert [
+      test = "string-length(.) gt 0"
+      "\x{a}" ~
+      "@calendar indicates the system or calendar to which the date represented by the content of this element\x{a}" ~
+      "belongs, but this "
+      sch:name [ ]
+      " element has no textual content."
+    ]
+    "\x{a}" ~
+    "          "
+  ]
+  "\x{a}" ~
+  "   "
+]
+att.fragmentable.attributes = att.fragmentable.attribute.part
+att.fragmentable.attribute.part =
+  
+  ## specifies whether or not its parent element is fragmented in some way, typically by some other overlapping structure: for example a speech which is divided between two or more verse stanzas, a paragraph which is split across a page division, a verse line which is divided between two speakers.
+  [ a:defaultValue = "N" ]
+  attribute part {
+    
+    ## (yes) the element is fragmented in some (unspecified) respect
+    "Y"
+    | 
+      ## (no) either the element is not fragmented, or no claim is made as to its completeness.
+      "N"
+    | 
+      ## (initial) this is the initial part of a fragmented element
+      "I"
+    | 
+      ## (medial) this is a medial part of a fragmented element
+      "M"
+    | 
+      ## (final) this is the final part of a fragmented element
+      "F"
+  }?
+att.docStatus.attributes = att.docStatus.attribute.status
+att.docStatus.attribute.status =
+  
+  ## beschreibt entweder den aktuellen Status eines Dokuments oder den Zeitpunkt zu dem ein veraltetes Element zugeordnet wurde.
+  attribute status {
+    
+    ## (Kategorie "rot") unterste Kategorie, d.h. die Dokumente sind noch im Rohzustand.
+    "proposed"
+    | 
+      ## (Kategorie "gelb") mittlere Kategorie für Dokumente, die schon eine gewisse Auszeichnungstiefe besitzen.
+      "candidate"
+    | 
+      ## (Kategorie "grün") freigegebene Dokumente, die den aktuellen Auszeichnungsvorgaben entsprechen sowie kontrolliert und durchgesehen wurden.
+      "approved"
+  }?
+att.responsibility.attributes =
+  att.source.attributes,
+  att.responsibility.attribute.cert,
+  att.responsibility.attribute.resp
+att.responsibility.attribute.cert =
+  
+  ## (certainty) signifies the degree of certainty associated with the intervention or interpretation.
+  attribute cert { data.certainty }?
+att.responsibility.attribute.resp =
+  
+  ## (responsible party) indicates the agency responsible for the intervention or interpretation, for example an editor or transcriber.
+  attribute resp {
+    list { data.pointer+ }
+  }?
+att.editLike.attributes =
+  att.dimensions.attributes,
+  att.responsibility.attributes,
+  att.editLike.attribute.evidence,
+  att.editLike.attribute.instant
+att.editLike.attribute.evidence =
+  
+  ## indicates the nature of the evidence supporting the reliability or accuracy of the intervention or interpretation.
+  ## Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture
+  attribute evidence {
+    list {
+      (
+       ## there is internal evidence to support the intervention.
+       "internal"
+       | 
+         ## there is external evidence to support the intervention.
+         "external"
+       | 
+         ## the intervention or interpretation has been made by the editor, cataloguer, or scholar on the basis of their expertise.
+         "conjecture"
+       | xsd:Name)+
+    }
+  }?
+att.editLike.attribute.instant =
+  
+  ## indicates whether this is an instant revision or not.
+  [ a:defaultValue = "false" ] attribute instant { data.xTruthValue }?
+att.global.attributes =
+  att.global.attribute.xmlid,
+  att.global.attribute.n,
+  att.global.attribute.xmllang,
+  att.global.attribute.rend,
+  att.global.attribute.style,
+  att.global.attribute.rendition,
+  att.global.attribute.xmlbase,
+  att.global.attribute.xmlspace
+att.global.attribute.xmlid =
+  
+  ## (identifier) provides a unique identifier for the element bearing the attribute.
+  attribute xml:id { xsd:ID }?
+att.global.attribute.n =
+  
+  ## (number) gives a number (or other label) for an element, which is not necessarily unique within the document.
+  attribute n { data.text }?
+att.global.attribute.xmllang =
+  
+  ## (language) indicates the language of the element content using a tag generated according to BCP 47.
+  attribute xml:lang { data.language }?
+att.global.attribute.rend =
+  
+  ## (rendition) indicates how the element in question was rendered or presented in the source text.
+  attribute rend {
+    list { data.word+ }
+  }?
+att.global.attribute.style =
+  
+  ## contains an expression in some formal style definition language which defines the rendering or presentation used for this element in the source text
+  attribute style { data.text }?
+att.global.attribute.rendition =
+  
+  ## points to a description of the rendering or presentation used for this element in the source text.
+  attribute rendition {
+    list { data.pointer+ }
+  }?
+att.global.attribute.xmlbase =
+  
+  ## provides a base URI reference with which applications can resolve relative URI references into absolute URI references.
+  attribute xml:base { data.pointer }?
+att.global.attribute.xmlspace =
+  
+  ## signals an intention about how white space should be managed by applications.
+  attribute xml:space {
+    
+    ## signals that the application's default white-space processing modes are acceptable
+    "default"
+    | 
+      ## indicates the intent that applications preserve all white space
+      "preserve"
+  }?
+att.internetMedia.attributes = att.internetMedia.attribute.mimeType
+att.internetMedia.attribute.mimeType =
+  
+  ## (MIME media type) specifies the applicable multimedia internet mail extension (MIME) media type
+  attribute mimeType {
+    list { data.word+ }
+  }?
+att.naming.attributes =
+  att.canonical.attributes,
+  att.naming.attribute.role,
+  att.naming.attribute.nymRef
+att.naming.attribute.role =
+  
+  ## may be used to specify further information about the entity referenced by this name in the form of a set of whitespace-separated values, for example the occupation of a person, or the status of a place.
+  attribute role {
+    list { data.enumerated+ }
+  }?
+att.naming.attribute.nymRef =
+  
+  ## (reference to the canonical name) provides a means of locating the canonical form (nym) of the names associated with the object named by the element bearing it.
+  attribute nymRef {
+    list { data.pointer+ }
+  }?
+att.typed.attributes =
+  att.typed.attribute.type, att.typed.attribute.subtype
+att.typed.attribute.type =
+  
+  ## characterizes the element in some sense, using any convenient classification scheme or typology.
+  attribute type { data.enumerated }?
+att.typed.attribute.subtype =
+  
+  ## provides a sub-categorization of the element, if needed
+  attribute subtype { data.enumerated }?
+sch:pattern [
+  id = "wegaCharacters-att.typed-subtypeTyped-constraint-2"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context = "*[@subtype]"
+    "\x{a}" ~
+    "        "
+    sch:assert [
+      test = "@type"
+      "The "
+      sch:name [ ]
+      " element should not be categorized in detail with @subtype\x{a}" ~
+      " unless also categorized in general with @type"
+    ]
+    "\x{a}" ~
+    "      "
+  ]
+  "\x{a}" ~
+  "   "
+]
+att.pointing.attribute.targetLang =
+  
+  ## specifies the language of the content to be found at the destination referenced by target, using a language tag generated according to BCP 47.
+  attribute targetLang { data.language }?
+sch:pattern [
+  id = "wegaCharacters-att.pointing-targetLang-targetLang-constraint-3"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context = "tei:*[not(self::tei:schemaSpec)][@targetLang]"
+    "\x{a}" ~
+    "            "
+    sch:assert [
+      test = "count(@target)"
+      "@targetLang can only be used if @target is specified."
+    ]
+    "\x{a}" ~
+    "          "
+  ]
+  "\x{a}" ~
+  "   "
+]
+att.pointing.attribute.evaluate =
+  
+  ## specifies the intended meaning when the target of a pointer is itself a pointer.
+  attribute evaluate {
+    
+    ## if the element pointed to is itself a pointer, then the target of that pointer will be taken, and so on, until an element is found which is not a pointer.
+    "all"
+    | 
+      ## if the element pointed to is itself a pointer, then its target (whether a pointer or not) is taken as the target of this pointer.
+      "one"
+    | 
+      ## no further evaluation of targets is carried out beyond that needed to find the element specified in the pointer's target.
+      "none"
+  }?
+model.nameLike.agent = orgName | persName | characterName
+model.nameLike.agent_alternation = orgName | persName | characterName
+model.nameLike.agent_sequence = orgName, persName, characterName
+model.nameLike.agent_sequenceOptional =
+  orgName?, persName?, characterName?
+model.nameLike.agent_sequenceOptionalRepeatable =
+  orgName*, persName*, characterName*
+model.nameLike.agent_sequenceRepeatable =
+  orgName+, persName+, characterName+
+model.segLike = notAllowed
+model.hiLike = hi
+model.hiLike_alternation = hi
+model.hiLike_sequence = hi
+model.hiLike_sequenceOptional = hi?
+model.hiLike_sequenceOptionalRepeatable = hi*
+model.hiLike_sequenceRepeatable = hi+
+model.emphLike = notAllowed
+model.emphLike_alternation = notAllowed
+model.emphLike_sequence = empty
+model.emphLike_sequenceOptional = empty
+model.emphLike_sequenceOptionalRepeatable = empty
+model.emphLike_sequenceRepeatable = notAllowed
+model.highlighted = model.hiLike | model.emphLike
+model.dateLike = date
+model.dateLike_alternation = date
+model.dateLike_sequence = date
+model.dateLike_sequenceOptional = date?
+model.dateLike_sequenceOptionalRepeatable = date*
+model.dateLike_sequenceRepeatable = date+
+model.measureLike = notAllowed
+model.measureLike_alternation = notAllowed
+model.measureLike_sequence = empty
+model.measureLike_sequenceOptional = empty
+model.measureLike_sequenceOptionalRepeatable = empty
+model.measureLike_sequenceRepeatable = notAllowed
+model.egLike = notAllowed
+model.graphicLike = notAllowed
+model.offsetLike = notAllowed
+model.offsetLike_alternation = notAllowed
+model.offsetLike_sequence = empty
+model.offsetLike_sequenceOptional = empty
+model.offsetLike_sequenceOptionalRepeatable = empty
+model.offsetLike_sequenceRepeatable = notAllowed
+model.pPart.msdesc = notAllowed
+model.pPart.editorial = notAllowed
+model.pPart.editorial_alternation = notAllowed
+model.pPart.editorial_sequence = empty
+model.pPart.editorial_sequenceOptional = empty
+model.pPart.editorial_sequenceOptionalRepeatable = empty
+model.pPart.editorial_sequenceRepeatable = notAllowed
+model.pPart.transcriptional = notAllowed
+model.pPart.transcriptional_alternation = notAllowed
+model.pPart.transcriptional_sequence = empty
+model.pPart.transcriptional_sequenceOptional = empty
+model.pPart.transcriptional_sequenceOptionalRepeatable = empty
+model.pPart.transcriptional_sequenceRepeatable = notAllowed
+model.pPart.edit = model.pPart.editorial | model.pPart.transcriptional
+model.ptrLike = ref
+model.lPart = notAllowed
+model.global.meta = notAllowed
+model.milestoneLike = notAllowed
+model.gLike = notAllowed
+model.oddDecl = notAllowed
+model.phrase.xml = notAllowed
+model.specDescLike = notAllowed
+model.biblLike = notAllowed
+model.labelLike = notAllowed
+model.listLike = \list
+model.noteLike = note | footNote
+model.lLike = notAllowed
+model.pLike = p
+model.stageLike = notAllowed
+model.global.edit = notAllowed
+model.divPart = model.lLike | model.pLike
+model.persStateLike = persName | sex
+model.persEventLike = notAllowed
+model.placeNamePart = placeName | geogName
+model.placeNamePart_alternation = placeName | geogName
+model.placeNamePart_sequence = placeName, geogName
+model.placeNamePart_sequenceOptional = placeName?, geogName?
+model.placeNamePart_sequenceOptionalRepeatable = placeName*, geogName*
+model.placeNamePart_sequenceRepeatable = placeName+, geogName+
+model.placeStateLike = model.placeNamePart
+model.placeStateLike_alternation = model.placeNamePart_alternation
+model.placeStateLike_sequence = model.placeNamePart_sequence
+model.placeStateLike_sequenceOptional =
+  model.placeNamePart_sequenceOptional?
+model.placeStateLike_sequenceOptionalRepeatable =
+  model.placeNamePart_sequenceOptionalRepeatable*
+model.placeStateLike_sequenceRepeatable =
+  model.placeNamePart_sequenceRepeatable+
+model.quoteLike = notAllowed
+model.quoteLike_alternation = notAllowed
+model.quoteLike_sequence = empty
+model.quoteLike_sequenceOptional = empty
+model.quoteLike_sequenceOptionalRepeatable = empty
+model.quoteLike_sequenceRepeatable = notAllowed
+model.qLike = model.quoteLike
+model.addressLike = address
+model.addressLike_alternation = address
+model.addressLike_sequence = address
+model.addressLike_sequenceOptional = address?
+model.addressLike_sequenceOptionalRepeatable = address*
+model.addressLike_sequenceRepeatable = address+
+model.nameLike =
+  model.nameLike.agent
+  | model.offsetLike
+  | model.placeStateLike
+  | rs
+  | idno
+  | model.persNamePart
+  | workName
+model.nameLike_alternation =
+  model.nameLike.agent_alternation
+  | model.offsetLike_alternation
+  | model.placeStateLike_alternation
+  | rs
+  | idno
+  | model.persNamePart_alternation
+  | workName
+model.nameLike_sequence =
+  model.nameLike.agent_sequence,
+  model.offsetLike_sequence,
+  model.placeStateLike_sequence,
+  rs,
+  idno,
+  model.persNamePart_sequence,
+  workName
+model.nameLike_sequenceOptional =
+  model.nameLike.agent_sequenceOptional?,
+  model.offsetLike_sequenceOptional?,
+  model.placeStateLike_sequenceOptional?,
+  rs?,
+  idno?,
+  model.persNamePart_sequenceOptional?,
+  workName?
+model.nameLike_sequenceOptionalRepeatable =
+  model.nameLike.agent_sequenceOptionalRepeatable*,
+  model.offsetLike_sequenceOptionalRepeatable*,
+  model.placeStateLike_sequenceOptionalRepeatable*,
+  rs*,
+  idno*,
+  model.persNamePart_sequenceOptionalRepeatable*,
+  workName*
+model.nameLike_sequenceRepeatable =
+  model.nameLike.agent_sequenceRepeatable+,
+  model.offsetLike_sequenceRepeatable+,
+  model.placeStateLike_sequenceRepeatable+,
+  rs+,
+  idno+,
+  model.persNamePart_sequenceRepeatable+,
+  workName+
+model.global =
+  model.global.meta
+  | model.milestoneLike
+  | model.noteLike
+  | model.global.edit
+model.addrPart = model.nameLike | addrLine
+model.pPart.data =
+  model.dateLike
+  | model.measureLike
+  | model.addressLike
+  | model.nameLike
+model.inter =
+  model.egLike
+  | model.oddDecl
+  | model.biblLike
+  | model.labelLike
+  | model.listLike
+  | model.stageLike
+  | model.qLike
+model.phrase =
+  model.segLike
+  | model.highlighted
+  | model.graphicLike
+  | model.pPart.msdesc
+  | model.pPart.edit
+  | model.ptrLike
+  | model.lPart
+  | model.phrase.xml
+  | model.specDescLike
+  | model.pPart.data
+att.source.attributes = att.source.attribute.source
+att.source.attribute.source =
+  
+  ## provides a pointer to the bibliographical source from which a quotation or citation is drawn.
+  attribute source {
+    list { data.pointer+ }
+  }?
+att.personal.attributes =
+  att.naming.attributes,
+  att.personal.attribute.full,
+  att.personal.attribute.sort
+att.personal.attribute.full =
+  
+  ## indicates whether the name component is given in full, as an abbreviation or simply as an initial.
+  [ a:defaultValue = "yes" ]
+  attribute full {
+    
+    ## the name component is spelled out in full.
+    "yes"
+    | 
+      ## (abbreviated) the name component is given in an abbreviated form.
+      "abb"
+    | 
+      ## (initial letter) the name component is indicated only by one initial.
+      "init"
+  }?
+att.personal.attribute.sort =
+  
+  ## specifies the sort order of the name component in relation to others within the name.
+  attribute sort { data.count }?
+p =
+  
+  ## (Absatz) markiert einen Absatz in Prosa-Form. [3.1.  7.2.5. ]
+  element p {
+    macro.paraContent,
+    att.fragmentable.attributes,
+    
+    ## (numberNummer) gibt dem Element eine Nummer (oder eine andere Bezeichnung), die nicht unbedingt eindeutig im Dokument ist.
+    attribute n {
+      
+      ## markiert den (logischen) ersten Absatz eines Textbereichs.
+      "1"
+    }?,
+    
+    ## (Ausgabe) gibt an, wie das fragliche Element ausgegeben wurde oder im Quelltext präsentiert ist.
+    attribute rend {
+      
+      ## markiert einen Paragraph, der inline liegt
+      "inline"
+    }?,
+    
+    ## (Bezeichner) liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.
+    attribute xml:id { xsd:ID }?,
+    empty
+  }
+hi =
+  
+  ## (hervorgehoben) markiert ein Wort oder eine Phrase als grafisch deutlich vom umgebenden Text abgehoben, aus Gründen über die keine Angaben gemacht werden können. [3.3.2.2.  3.3.2. ]
+  element hi {
+    macro.paraContent,
+    att.wega.rend.attributes,
+    
+    ## (identifierBezeichner) liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.
+    attribute xml:id { xsd:ID }?,
+    empty
+  }
+rs =
+  
+  ## (referenzierende Zeichenkette) bezeichnet ein oder mehrere Objekt(e) vom Typ Person, Werk, Tagebucheintrag, usw. [13.2.1.  3.5.1. ]
+  element rs {
+    macro.phraseSeq
+    >> sch:pattern [
+         id = "wegaCharacters-rs-rs-typeNkey-constraint-4"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "tei:rs[@type][@key]"
+           "\x{a}" ~
+           "                        "
+           sch:assert [
+             test =
+               "                             (matches(@key, '^A00\d{4}$') and @type='person') or                             (matches(@key, '^A02\d{4}$') and @type='work') or                             (matches(@key, '^A03\d{4}$') and @type='writing') or                             (matches(@key, '^A04\d{4}$') and @type='letter') or                             (matches(@key, '^A06\d{4}$') and @type='diaryDay') or                             (matches(@key, '^(A00\d{4}\s)*A00\d{4}$') and @type='persons') or                             (matches(@key, '^(A02\d{4}\s)*A02\d{4}$') and @type='works') or                             (matches(@key, '^(A03\d{4}\s)*A03\d{4}$') and @type='writings') or                             (matches(@key, '^(A04\d{4}\s)*A04\d{4}$') and @type='letters') or                             (matches(@key, '^(A05\d{4}\s)*A05\d{4}$') and @type='news') or                             (matches(@key, '^(A06\d{4}\s)*A06\d{4}$') and @type='diaryDays') or                             (matches(@key, '^(A11\d{4}\s)*A11\d{4}$') and @type='biblio')"
+             "Type mismatch: The value for @type must be in accordance with the given ID in @key"
+           ]
+           "\x{a}" ~
+           "                    "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.typed.attribute.subtype,
+    
+    ## charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.
+    attribute type {
+      
+      ## markiert eine nicht explizit beim Namen genannte Person.
+      "person"
+      | 
+        ## markiert mehrere nicht explizit beim Namen genannte Personen.
+        "persons"
+      | 
+        ## markiert einen Brief, der nicht explizit betitelt ist.
+        "letter"
+      | 
+        ## markiert mehrere Briefe, die nicht explizit betitelt sind.
+        "letters"
+      | 
+        ## markiert einen Tagebuch-Eintrag, der nicht explizit genannt ist.
+        "diaryDay"
+      | 
+        ## markiert mehrere Tagebuch-Einträge, die nicht explizit genannt sind.
+        "diaryDays"
+      | 
+        ## markiert eine Komposition, die nicht explizit genannt wird.
+        "work"
+      | 
+        ## markiert mehrere Kompositionen, die nicht explizit genannt werden.
+        "works"
+      | 
+        ## markiert ein Schriftstück, das nicht explizit genannt wird.
+        "writing"
+      | 
+        ## markiert mehrere Schriftstücke, die nicht explizit genannt werden.
+        "writings"
+      | 
+        ## markiert News, die nicht explizit genannt werden.
+        "news"
+      | 
+        ## markiert bibliographische Eintäge, die nicht explizit genannt werden.
+        "biblio"
+    },
+    
+    ## bietet mittels eines codierten Wertes in einer beliebigen Form ein extern definiertes Mittel zur Identifizierung einer Einheit (oder mehrerer Einheiten).
+    attribute key {
+      key.person.pattern
+      | key.persons.pattern
+      | key.work.pattern
+      | key.works.pattern
+      | key.biblio.pattern
+    }?,
+    att.responsibility.attribute.cert,
+    empty
+  }
+address =
+  
+  ## contains a postal address, for example of a publisher, an organization, or an individual. [3.5.2.  2.2.4.  3.11.2.4. ]
+  element address {
+    (model.global*, (model.addrPart, model.global*)+),
+    att.global.attributes,
+    empty
+  }
+addrLine =
+  
+  ## (Adresszeile) enthält eine postalische Adresse. [3.5.2.  2.2.4.  3.11.2.4. ]
+  element addrLine {
+    macro.phraseSeq,
+    
+    ## (numberNummer) gibt dem Element eine Nummer (oder eine andere Bezeichnung), die nicht unbedingt eindeutig im Dokument ist.
+    attribute n {
+      
+      ## Telefonnummer des entsprechenden Korrespondenten in der Adresszeile.
+      "telephone"
+      | 
+        ## Email-Adresse des entsprechenden Korrespondenten in der Adresszeile.
+        "email"
+      | 
+        ## Fax-Nummer des entsprechenden Korrespondenten in der Adresszeile
+        "fax"
+    }?,
+    empty
+  }
+date =
+  
+  ## enthält ein Datum in einem beliebigen Format. [3.5.4.  2.2.4.  2.5.  3.11.2.4.  15.2.3.  13.3.6. ]
+  element date {
+    ((text | model.gLike | model.phrase | model.global)*)
+    >> sch:pattern [
+         id = "wegaCharacters-date-dateHeuristics1-constraint-1"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "tei:date"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test =
+               "(@notBefore gt @notAfter) and not(starts-with(@notBefore, '-'))"
+             "value of notBefore greater than notAfter"
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> sch:pattern [
+         id = "wegaCharacters-date-dateHeuristics2-constraint-2"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "tei:date"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test =
+               "(@notBefore lt @notAfter) and starts-with(@notBefore, '-')"
+             "value of notBefore smaller than notAfter"
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> sch:pattern [
+         id = "wegaCharacters-date-dateHeuristics3-constraint-3"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "tei:date"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test =
+               "(@from or @to) and (@when or @notAfter or @notBefore)"
+             "cooccurence of date and duration attributes"
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> sch:pattern [
+         id = "wegaCharacters-date-dateHeuristics4-constraint-4"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "tei:date"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test = "@when and (@notAfter or @notBefore)"
+             "cooccurence of exact and uncertain date attributes"
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> sch:pattern [
+         id = "wegaCharacters-date-dateHeuristics5-constraint-5"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "tei:date"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test =
+               "@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text"
+             "tei:date benötigt ein Attribut @when, @notBefore o.ä."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.responsibility.attributes,
+    att.datable.w3c.attribute.when,
+    att.datable.w3c.attribute.notBefore,
+    att.datable.w3c.attribute.notAfter,
+    att.datable.w3c.attribute.from,
+    att.datable.w3c.attribute.to,
+    
+    ## zeigt das System oder den Kalender auf, zu dem das dargestellte Datum des Elements gehört.
+    attribute calendar {
+      
+      ## Identifiziert das markierte Datum als Angabe nach dem Julianischen Kalender. Der normalisierte Wert im when muss aber nach dem Standard, ergo dem Gregorianischen Kalender angegeben werden.
+      "Julian"
+    }?,
+    
+    ## charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.
+    attribute type {
+      
+      ## (Taufe) Identifiziert das markierte Datum als Taufdatum.
+      "baptism"
+      | 
+        ## (Beerdigung) Identifiziert das markierte Datum als Begräbnisdatum.
+        "funeral"
+      | 
+        ## (Aufführung) Identifiziert das markierte Datum als Aufführungsdatum.
+        "performance"
+    }?,
+    att.global.attribute.xmlid,
+    att.global.attribute.n,
+    empty
+  }
+ref =
+  
+  ## (Quellenangabe) definiert eine Quellenangabe an einer anderen Stelle, die womöglich durch zusätzlichen Text oder Kommentare modifizert wurde. [3.6.  16.1. ]
+  element ref {
+    macro.paraContent
+    >> sch:pattern [
+         id = "wegaCharacters-ref-refAtts-constraint-5"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "tei:ref"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test = "@target and @cRef"
+             "Only one of the\x{a}" ~
+             "	attributes @target' and @cRef' may be supplied on "
+             sch:name [ ]
+             "\x{a}" ~
+             "               "
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.internetMedia.attributes,
+    
+    ## charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.
+    attribute type {
+      
+      ## markiert das Zeichen der Fußnote im Text
+      "footnoteAnchor"
+      | 
+        ## Markiert eine Passage im Text, die auf eine externe Quelle im Internet verweist.
+        "hyperLink"
+    }?,
+    
+    ## spezifiziert das Ziel der Referenz in dem eine oder mehrere URI-Referenzen aufgeführt werden.
+    attribute target { data.pointer },
+    empty
+  }
+\list =
+  
+  ## (Liste) enthält eine Menge von Elementen, die als Liste organisiert sind. [3.7. ]
+  element list {
+    head*,
+    ((item, note?, model.milestoneLike?)+ | item+)
+    >> sch:pattern [
+         id = "wegaCharacters-list-gloss-list-constraint-6"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "tei:list"
+           "\x{a}" ~
+           "               "
+           sch:report [
+             test = "./tei:label and not(@type='gloss')"
+             "Labels are only allowed in lists of type='gloss'"
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.typed.attribute.subtype,
+    
+    ## charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.
+    attribute type {
+      
+      ## die Listenelemente erscheinen ohne typographische Markierung (z.B. Strichpunkte, Aufzählungszeichen)
+      "simple"
+      | 
+        ## die Liste stellt ein Glossar dar, wobei jedem item (die Definition) ein label (der zu definierende Ausdruck) vorausgeht.
+        "gloss"
+      | 
+        ## die Listenelemente sind mit einem Aufzählungszeichen präfigiert
+        "ordered"
+    }?,
+    empty
+  }
+item =
+  
+  ## contains one component of a list. [3.7.  2.5. ]
+  element item { macro.specialPara, att.global.attributes, empty }
+head =
+  
+  ## (Überschrift) enthält jede Art von Überschrift, beispielsweise den Titel eines Abschnitts oder die Überschrift einer Liste, eines Glossar, einer Manuskriptbeschreibung, usw. [4.2.1. ]
+  element head {
+    (text
+     | model.gLike
+     | model.phrase
+     | model.inter
+     | model.lLike
+     | model.global)*,
+    
+    ## charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.
+    attribute type {
+      
+      ## markiert einen Untertitel
+      "sub"
+    }?,
+    empty
+  }
+note =
+  
+  ## enthält eine Notiz oder eine Anmerkung/Annotation. [3.8.1.  2.2.6.  3.11.2.8.  9.3.5.4. ]
+  element note {
+    macro.specialPara,
+    att.pointing.attribute.targetLang,
+    att.pointing.attribute.evaluate,
+    att.responsibility.attribute.cert,
+    att.source.attribute.source,
+    att.typed.attribute.subtype,
+    
+    ## (verantwortliche Institution) indiziert die verantwortliche Institution, die für die Intervention oder Interpretation verantwortlich ist, wie zum Beispiel ein Editor oder ein Umkodierer.
+    attribute resp { staffSignatures.list },
+    
+    ## charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.
+    attribute type {
+      
+      ## (Stellenkommentar) 
+      "commentary"
+      | 
+        ## (Worterklärungen/Begriffserläuterungen) die Worte sollen zwischen pointer und note stehen, damit eine Markierung möglich ist.
+        "definition"
+      | 
+        ## (Textkonstitution) Bemerkungen zu Varianten, Schreibkorrekturen oder sonstigem, was im Brief nicht mit app oder subst etc. codiert werden kann.
+        "textConst"
+      | 
+        ## (Themenkommentar) Stellenübergreifender Kommentar.
+        "thematicCom"
+    },
+    
+    ## (Bezeichner) liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.
+    attribute xml:id { xsd:ID },
+    
+    ## beschreibt entweder den aktuellen Status eines Dokuments oder den Zeitpunkt zu dem ein veraltetes Element zugeordnet wurde.
+    attribute status {
+      
+      ## nur für den internen Gebrauch.
+      "restricted"
+    }?,
+    empty
+  }
+idno =
+  
+  ## (Bezeichner) lieferte jegliche Form eines Bezeichners in einer standardisierten Form, der benutzt werden kann um Objekte zu identifiziert, wie etwa ein bibliographisches Element, eine Organisation, usw. [2.2.4.  2.2.5.  3.11.2.4. ]
+  element idno {
+    (pnd.pattern | viaf.pattern | wega.pattern),
+    
+    ## charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.
+    attribute type {
+      
+      ## (Gemeinsame
+      ##                                             Normdatei) 
+      "gnd"
+      | 
+        ## ('Virtual
+        ##                                             International Authority File') 
+        "viaf"
+      | 
+        ## ('Weber
+        ##                                             Gesamtausgabe') 
+        "wega"
+    },
+    empty
+  }
+model.persNamePart =
+  surname | forename | genName | nameLink | addName | roleName
+model.persNamePart_alternation =
+  surname | forename | genName | nameLink | addName | roleName
+model.persNamePart_sequence =
+  surname, forename, genName, nameLink, addName, roleName
+model.persNamePart_sequenceOptional =
+  surname?, forename?, genName?, nameLink?, addName?, roleName?
+model.persNamePart_sequenceOptionalRepeatable =
+  surname*, forename*, genName*, nameLink*, addName*, roleName*
+model.persNamePart_sequenceRepeatable =
+  surname+, forename+, genName+, nameLink+, addName+, roleName+
+orgName =
+  
+  ## (organization name) contains an organizational name. [13.2.2. ]
+  element orgName {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.datable.attributes,
+    att.editLike.attributes,
+    att.personal.attributes,
+    att.typed.attributes,
+    empty
+  }
+persName =
+  
+  ## (Personenname) enthält einen Eigennamen oder ein Nominalphrase im Bezug auf eine Person, möglicherweise einschließlich einer oder mehrerer Vornamen, Nachnamen, Höflichkeitsformen, hinzugefügten Namen, usw. [13.2.1. ]
+  element persName {
+    macro.phraseSeq,
+    
+    ## bietet mittels eines codierten Wertes in einer beliebigen Form ein extern definiertes Mittel zur Identifizierung einer Einheit (oder mehrerer Einheiten).
+    attribute key { key.person.pattern }?,
+    att.responsibility.attribute.cert,
+    empty
+  }
+surname =
+  
+  ## enthält einen (vererbten) Familiennamen, im Gegensatz zu einem festgelegten, Tauf- oder Spitznamen. [13.2.1. ]
+  element surname { macro.phraseSeq }
+forename =
+  
+  ## contains a forename, given or baptismal name. [13.2.1. ]
+  element forename {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.personal.attributes,
+    att.typed.attributes,
+    empty
+  }
+genName =
+  
+  ## (generational name component) contains a name component used to distinguish otherwise similar names on the basis of the relative ages or generations of the persons named. [13.2.1. ]
+  element genName {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.personal.attributes,
+    att.typed.attributes,
+    empty
+  }
+nameLink =
+  
+  ## (name link) contains a connecting phrase or link used within a name but not regarded as part of it, such as van der or of. [13.2.1. ]
+  element nameLink {
+    macro.phraseSeq, att.global.attributes, att.typed.attributes, empty
+  }
+addName =
+  
+  ## (additional name) contains an additional name component, such as a nickname, epithet, or alias, or any other descriptive phrase used within a personal name. [13.2.1. ]
+  element addName {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.personal.attributes,
+    att.typed.attributes,
+    empty
+  }
+roleName =
+  
+  ## contains a name component which indicates that the referent has a particular role or position in society, such as an official title or rank. [13.2.1. ]
+  element roleName {
+    macro.phraseSeq,
+    att.global.attributes,
+    att.personal.attributes,
+    att.typed.attributes,
+    empty
+  }
+placeName =
+  
+  ## enthält einen absoluten oder relativen Ortsnamen. [13.2.3. ]
+  element placeName {
+    (model.placeNamePart
+     | model.milestoneLike
+     | model.ptrLike
+     | hi
+     | text)+,
+    att.personal.attributes,
+    
+    ## Kategorisierung der verschiedenen Lokalitäten.
+    attribute type {
+      
+      ## beschreibt Lokalitäten, in denen (musikalische) Stücke jeder Art aufgeführt werden (z.B. Amphitheater, Opern, Festsäle).
+      "theatre"
+      | 
+        ## beschreibt alle Lokalitäten, auf die keine andere Kategorie zutrifft (z.B. Bad, Buchhandlung, Büro).
+        "building"
+      | 
+        ## beschreibt Lokalitäten, in denen man Essen und Trinken zu sich nehmen kann (z.B. Schänken, Wirtshäuser, Kneipen).
+        "hospitality"
+      | 
+        ## beschreibt Lokalitäten, die für religiöse Zwecke genutzt werden (z.B. Kirchen, Kloster).
+        "sacral-building"
+      | 
+        ## beschreibt Lokalitäten, die als offizielle Administrationsgebäude genutzt werden (z.B. Rathaus, Schloss, Residenz, Polizeistation, Zollamt).
+        "administrative-building"
+      | 
+        ## beschreibt Lokalitäten, in denen (Kunst-) Ausstellungen stattfinden (z.B. Museen, Gallerien).
+        "art-building"
+      | 
+        ## beschreibt Lokalitäten, die zum Verkauf von Waren, Güter oder Dienstleistungen genutzt werden (z.B. Supermarkt, Laden).
+        "shop"
+      | 
+        ## beschreibt eine Straße oder den Straßennamen.
+        "street"
+      | 
+        ## beschreibt einen botanischen Garten oder einen Tiergarten, oder andere Grünflächen.
+        "park"
+    }?,
+    att.responsibility.attribute.cert,
+    empty
+  }
+geogName =
+  
+  ## (geographical name) markiert einen Namen, mit dem eine geographische Region assoziiert wird (z.B. Seen, Gebirge, aber keine Verwaltungseinheiten). [13.2.3. ]
+  element geogName {
+    macro.phraseSeq,
+    att.datable.attributes,
+    att.editLike.attributes,
+    att.global.attributes,
+    att.naming.attributes,
+    att.typed.attributes,
+    empty
+  }
+sex =
+  
+  ## gibt das Geschlecht einer Person an. [13.3.2.1. ]
+  element sex {
+    ("f" | "m" | "unknown"),
+    
+    ## supplies a coded value for sex
+    attribute value {
+      list { data.sex+ }
+    }?,
+    empty
+  }
+workName =
+  
+  ## Name des Werkes (z.B. Komposition)
+  element workName {
+    macro.phraseSeq,
+    
+    ## bietet mittels eines codierten Wertes in einer beliebigen Form ein extern definiertes Mittel zur Identifizierung einer Einheit (oder mehrerer Einheiten).
+    attribute key { key.work.pattern | key.works.pattern }?,
+    att.responsibility.attribute.cert,
+    empty
+  }
+footNote =
+  
+  ## Spezielles Element für die Transkription einer Fußnote (die nicht unbedingt als solche dargestellt werden)
+  element footNote {
+    macro.specialPara,
+    
+    ## (Bezeichner) liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.
+    attribute xml:id { xsd:ID },
+    empty
+  }
+att.wega.rend.attributes =
+  att.wega.rend.attribute.rend, att.wega.rend.attribute.n
+att.wega.rend.attribute.rend =
+  
+  ## (graphische Darstellung) gibt an, wie das fragliche Element in der Vorlage graphisch dargestellt ist.
+  attribute rend {
+    
+    ## Schriftart: latintype.
+    "latintype"
+    | 
+      ## Schriftart: antiqua.
+      "antiqua"
+    | 
+      ## hochgestelltes Zeichen.
+      "superscript"
+    | 
+      ## tiefgestelltes Zeichen.
+      "subscript"
+    | 
+      ## kursive Schriftlage.
+      "italic"
+    | 
+      ## gesperrte Schriftbreite.
+      "spaced_out"
+    | 
+      ## fette Schriftstärke.
+      "bold"
+    | 
+      ## unterstrichener Text.
+      "underline"
+    | 
+      ## Kapitälchen.
+      "small-caps"
+  }
+att.wega.rend.attribute.n =
+  
+  ## (Zahl) gibt die Anzahl der Unterstreichungen an (d.h., @n kann nur in Kombination mit hi@rend='underline' auftreten).
+  attribute n { data.count }?
+sch:pattern [
+  id = "wegaCharacters-att.wega.rend-underline-n-constraint-7"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context = "*:hi[@n] | *:rend[@n]"
+    "\x{a}" ~
+    "                        "
+    sch:report [
+      test = "@rend ne 'underline'"
+      "The @n-attribute is only supported in combination with @rend='underline'"
+    ]
+    "\x{a}" ~
+    "                    "
+  ]
+  "\x{a}" ~
+  "   "
+]
+character =
+  
+  ## liefert Informationen über ein identifizierbares Individuum, beispielsweise ein Teilnehmer einer Sprachinteraktion, oder eine Person, auf die in einer historischen Quelle verwiesen wird.
+  element character {
+    macro.characterContent,
+    att.global.attributes,
+    att.editLike.attributes,
+    att.datable.attributes,
+    att.typed.attributes,
+    att.docStatus.attributes,
+    empty
+  }
+characterDesc =
+  
+  ##
+  element characterDesc { model.pLike }
+start = character
+sch:pattern [
+  id = "wegaCharacters-whitespaceOnlyContent-constraint-5"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context =
+      "tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type='part')] | tei:placeName | tei:title"
+    "\x{a}" ~
+    "                    "
+    sch:report [
+      test = "normalize-space(.) = ''"
+      "\x{a}" ~
+      "            "
+      sch:name [ ]
+      " has whitespace only content"
+    ]
+    "\x{a}" ~
+    "                "
+  ]
+  "\x{a}" ~
+  "   "
+]
+sch:pattern [
+  id = "wegaCharacters-elementStartsWithWhitespace-constraint-6"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context =
+      "tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]"
+    "\x{a}" ~
+    "                    "
+    sch:report [
+      test = "matches(.,'^\s')"
+      "whitespace at the beginning of element "
+      sch:name [ ]
+      "\x{a}" ~
+      "         "
+    ]
+    "\x{a}" ~
+    "                "
+  ]
+  "\x{a}" ~
+  "   "
+]
