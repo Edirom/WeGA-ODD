@@ -3,7 +3,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2015-06-10T14:31:10Z. .
+Schema generated from ODD source 2015-08-12T16:56:43Z. .
 TEI Edition: Version 2.7.0. Last updated on
 	16th September 2014, revision 13036
 TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
@@ -2825,6 +2825,8 @@ attributes @target and @cRef may be supplied on <name/>.</report>
       <element name="label">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Kennzeichnung) enthält die Definition eines Glossareintrags oder auch andere Kennzeichnungen von Textabschnitten. [3.7. ]</a:documentation>
          <ref name="macro.phraseSeq"/>
+         <ref name="att.global.attribute.xmlid"/>
+         <empty/>
       </element>
    </define>
    <define name="head">
@@ -2857,27 +2859,47 @@ attributes @target and @cRef may be supplied on <name/>.</report>
       <element name="note">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">enthält eine Notiz oder eine Anmerkung/Annotation. [3.8.1.  2.2.6.  3.11.2.8.  9.3.5.4. ]</a:documentation>
          <ref name="macro.specialPara"/>
-         <attribute name="resp">
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(verantwortliche Institution) indiziert die verantwortliche Institution, die für die Intervention oder Interpretation verantwortlich ist, wie zum Beispiel ein Editor oder ein Umkodierer.</a:documentation>
-            <ref name="staffSignatures.list"/>
-         </attribute>
-         <attribute name="type">
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</a:documentation>
-            <choice>
-               <value>commentary</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Stellenkommentar) </a:documentation>
-               <value>definition</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Worterklärungen/Begriffserläuterungen) die Worte sollen zwischen pointer und note stehen, damit eine Markierung möglich ist.</a:documentation>
-               <value>textConst</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Textkonstitution) Bemerkungen zu Varianten, Schreibkorrekturen oder sonstigem, was im Brief nicht mit app oder subst etc. codiert werden kann.</a:documentation>
-               <value>thematicCom</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Themenkommentar) Stellenübergreifender Kommentar.</a:documentation>
-            </choice>
-         </attribute>
-         <attribute name="xml:id">
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Bezeichner) liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.</a:documentation>
-            <data type="ID"/>
-         </attribute>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaWritings-note-note-in-text-constraint-5">
+            <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
+                      xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:xi="http://www.w3.org/2001/XInclude"
+                      context="tei:note[not(parent::tei:org or parent::tei:person)]">
+                        <sch:assert test="@type and @resp and @xml:id">It is required to provide @type and @resp and @xml:id on note.</sch:assert>
+                    </sch:rule>
+         </pattern>
+         <optional>
+            <attribute name="resp">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(verantwortliche Institution) indiziert die verantwortliche Institution, die für die Intervention oder Interpretation verantwortlich ist, wie zum Beispiel ein Editor oder ein Umkodierer.</a:documentation>
+               <ref name="staffSignatures.list"/>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="type">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</a:documentation>
+               <choice>
+                  <value>commentary</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Stellenkommentar) </a:documentation>
+                  <value>definition</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Worterklärungen/Begriffserläuterungen) die Worte sollen zwischen pointer und note stehen, damit eine Markierung möglich ist.</a:documentation>
+                  <value>textConst</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Textkonstitution) Bemerkungen zu Varianten, Schreibkorrekturen oder sonstigem, was im Brief nicht mit app oder subst etc. codiert werden kann.</a:documentation>
+                  <value>thematicCom</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Themenkommentar) Stellenübergreifender Kommentar.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="xml:id">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Bezeichner) liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.</a:documentation>
+               <data type="ID"/>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>
@@ -2886,7 +2908,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Abbildung) bestimmt den Ort einer Abbildung, Illustration o.ä. [3.9. ]</a:documentation>
          <empty/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWritings-graphic-graphic-url-check-constraint-7">
+                  id="wegaWritings-graphic-graphic-url-check-constraint-8">
             <rule context="tei:graphic">
                <sch:assert xmlns:tei="http://www.tei-c.org/ns/1.0"
                            xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -2931,7 +2953,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
             </attribute>
          </optional>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWritings-pb-facs-facs-reference-constraint-5">
+                  id="wegaWritings-pb-facs-facs-reference-constraint-6">
             <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -3142,7 +3164,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
             </attribute>
          </optional>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWritings-author-sameAs-sameAs-reference-constraint-6">
+                  id="wegaWritings-author-sameAs-sameAs-reference-constraint-7">
             <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -3230,7 +3252,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">enthält einen Titel für jede Art von Arbeit. [3.11.2.2.  2.2.1.  2.2.5. ]</a:documentation>
          <ref name="macro.paraContent"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWritings-title-duplicate-title-constraint-7">
+                  id="wegaWritings-title-duplicate-title-constraint-8">
             <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -3461,7 +3483,7 @@ relatedItem element must be empty</sch:report>
             </rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWritings-relatedItem-targetorcontent1-constraint-10">
+                  id="wegaWritings-relatedItem-targetorcontent1-constraint-11">
             <rule context="tei:relatedItem">
                <sch:assert xmlns="http://www.tei-c.org/ns/1.0"
                            xmlns:rng="http://relaxng.org/ns/structure/1.0"
@@ -3528,7 +3550,7 @@ relatedItem element must be empty</sch:report>
             </zeroOrMore>
          </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWritings-lg-atleast1oflggapl-constraint-11">
+                  id="wegaWritings-lg-atleast1oflggapl-constraint-12">
             <rule context="tei:lg">
                <sch:assert xmlns="http://www.tei-c.org/ns/1.0"
                            xmlns:rng="http://relaxng.org/ns/structure/1.0"
@@ -3594,7 +3616,7 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
             </oneOrMore>
          </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWritings-fileDesc-missing-writings-title-constraint-12">
+                  id="wegaWritings-fileDesc-missing-writings-title-constraint-13">
             <rule context="tei:fileDesc">
                <sch:assert xmlns="http://www.tei-c.org/ns/1.0"
                            xmlns:rng="http://relaxng.org/ns/structure/1.0"
@@ -4564,7 +4586,7 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
             </oneOrMore>
          </interleave>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWritings-subst-substContents1-constraint-13">
+                  id="wegaWritings-subst-substContents1-constraint-14">
             <rule context="tei:subst">
                <assert xmlns:rng="http://relaxng.org/ns/structure/1.0"
                        xmlns:sch="http://purl.oclc.org/dsdl/schematron"
@@ -4872,7 +4894,7 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWritings-att.witnessed-att-wit-constraint-8">
+            id="wegaWritings-att.witnessed-att-wit-constraint-9">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns="http://www.tei-c.org/ns/1.0"
@@ -5085,7 +5107,7 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWritings-att.wega.rend-underline-n-constraint-11">
+            id="wegaWritings-att.wega.rend-underline-n-constraint-12">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns="http://www.tei-c.org/ns/1.0"
@@ -5104,7 +5126,7 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
       </choice>
    </start>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWritings-whitespaceOnlyContent-constraint-9">
+            id="wegaWritings-whitespaceOnlyContent-constraint-10">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns="http://www.tei-c.org/ns/1.0"
@@ -5119,7 +5141,7 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
                 </sch:rule>
    </pattern>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWritings-elementStartsWithWhitespace-constraint-10">
+            id="wegaWritings-elementStartsWithWhitespace-constraint-11">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns="http://www.tei-c.org/ns/1.0"
