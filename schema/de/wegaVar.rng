@@ -3,7 +3,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2015-08-26T14:51:59Z. .
+Schema generated from ODD source 2015-09-04T09:58:10Z. .
 TEI Edition: Version 2.7.0. Last updated on
 	16th September 2014, revision 13036
 TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
@@ -1435,29 +1435,41 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
    <define name="model.biblLike">
       <choice>
          <ref name="bibl"/>
+         <ref name="listBibl"/>
       </choice>
    </define>
    <define name="model.biblLike_alternation">
       <choice>
          <ref name="bibl"/>
+         <ref name="listBibl"/>
       </choice>
    </define>
    <define name="model.biblLike_sequence">
       <ref name="bibl"/>
+      <ref name="listBibl"/>
    </define>
    <define name="model.biblLike_sequenceOptional">
       <optional>
          <ref name="bibl"/>
+      </optional>
+      <optional>
+         <ref name="listBibl"/>
       </optional>
    </define>
    <define name="model.biblLike_sequenceOptionalRepeatable">
       <zeroOrMore>
          <ref name="bibl"/>
       </zeroOrMore>
+      <zeroOrMore>
+         <ref name="listBibl"/>
+      </zeroOrMore>
    </define>
    <define name="model.biblLike_sequenceRepeatable">
       <oneOrMore>
          <ref name="bibl"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="listBibl"/>
       </oneOrMore>
    </define>
    <define name="model.headLike">
@@ -1900,6 +1912,15 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
          <ref name="model.divTopPart"/>
       </choice>
    </define>
+   <define name="model.frontPart.drama">
+      <notAllowed/>
+   </define>
+   <define name="model.pLike.front">
+      <choice>
+         <ref name="head"/>
+         <ref name="byline"/>
+      </choice>
+   </define>
    <define name="model.divBottomPart">
       <choice>
          <ref name="signed"/>
@@ -2066,6 +2087,12 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
          <ref name="availability"/>
       </choice>
    </define>
+   <define name="model.frontPart">
+      <choice>
+         <ref name="model.frontPart.drama"/>
+         <ref name="divGen"/>
+      </choice>
+   </define>
    <define name="model.pPart.data">
       <choice>
          <ref name="model.dateLike"/>
@@ -2125,6 +2152,9 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
       <choice>
          <ref name="divGen"/>
       </choice>
+   </define>
+   <define name="model.div1Like">
+      <notAllowed/>
    </define>
    <define name="model.teiHeaderPart">
       <choice>
@@ -3112,6 +3142,25 @@ attributes @target and @cRef may be supplied on <name/>.</report>
          <empty/>
       </element>
    </define>
+   <define name="listBibl">
+      <element name="listBibl">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Liste von bibliographischen Nachweisen) enthält eine Liste von bibliographischen Zitationen jeglicher Art. [3.11.1.  2.2.7.  15.3.2. ]</a:documentation>
+         <group>
+            <zeroOrMore>
+               <ref name="model.headLike"/>
+            </zeroOrMore>
+            <oneOrMore>
+               <choice>
+                  <ref name="model.biblLike"/>
+                  <ref name="model.milestoneLike"/>
+               </choice>
+            </oneOrMore>
+            <zeroOrMore>
+               <empty/>
+            </zeroOrMore>
+         </group>
+      </element>
+   </define>
    <define name="divGen">
       <element name="divGen">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Automatisch generierter Textabschnitt) bezeichnet die Position, an welcher ein automatisch generierter Textabschnitt erscheinen soll. [3.8.2. ]</a:documentation>
@@ -3395,6 +3444,7 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
             <ref name="model.sourceDescPart"/>
          </optional>
          <choice>
+            <ref name="listBibl"/>
             <ref name="p"/>
          </choice>
       </element>
@@ -3601,6 +3651,9 @@ Beispielwerte sind etwa: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5
       <element name="text">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">enthält einen einzelnen Text jeglicher Art, ob einheitlich oder zusammengesetzt, beispielsweise ein Gedicht, ein Drama, eine Sammlung von Aufätzen, ein Roman, ein Wörterbuch, oder eine Sammlung. [4.  15.1. ]</a:documentation>
          <ref name="body"/>
+         <optional>
+            <ref name="back"/>
+         </optional>
       </element>
    </define>
    <define name="body">
@@ -3701,7 +3754,9 @@ Beispielwerte sind etwa: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5
                   <value>abstract</value>
                   <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Abstract) Kurze Zusammenfassung am Anfang eines Kapitels/Abschnitts.</a:documentation>
                   <value>faqitem</value>
-                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Frequently Asked QuestionFrequently Asked Question) short question with answer.Kurze Frage mit Antwort.</a:documentation>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Frequently Asked Question) Kurze Frage mit Antwort.</a:documentation>
+                  <value>bibliography</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Bibliographie) Eine Liste mit verwandter Literatur</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -3730,6 +3785,68 @@ Beispielwerte sind etwa: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Signatur) enthält die abschließende Grußformel o.Ä. die ein Vorwort, eine Widmung oder einen anderen Abschnitt des Textes beendet. [4.2.2. ]</a:documentation>
          <ref name="macro.paraContent"/>
          <ref name="att.global.attributes"/>
+         <empty/>
+      </element>
+   </define>
+   <define name="back">
+      <element name="back">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">( Nachspann (back)) enthält Anhänge jeglicher Art, die auf den Hauptteil eines Textes folgen [4.7.  4. ]</a:documentation>
+         <group>
+            <zeroOrMore>
+               <choice>
+                  <ref name="model.frontPart"/>
+                  <ref name="model.pLike.front"/>
+                  <ref name="model.pLike"/>
+                  <ref name="model.listLike"/>
+                  <ref name="model.global"/>
+               </choice>
+            </zeroOrMore>
+            <group>
+               <optional>
+                  <choice>
+                     <group>
+                        <group>
+                           <ref name="model.div1Like"/>
+                        </group>
+                        <zeroOrMore>
+                           <choice>
+                              <ref name="model.frontPart"/>
+                              <ref name="model.div1Like"/>
+                              <ref name="model.global"/>
+                           </choice>
+                        </zeroOrMore>
+                     </group>
+                     <group>
+                        <group>
+                           <ref name="model.divLike"/>
+                        </group>
+                        <zeroOrMore>
+                           <choice>
+                              <ref name="model.frontPart"/>
+                              <ref name="model.divLike"/>
+                              <ref name="model.global"/>
+                           </choice>
+                        </zeroOrMore>
+                     </group>
+                  </choice>
+               </optional>
+            </group>
+            <group>
+               <optional>
+                  <group>
+                     <ref name="model.divBottomPart"/>
+                  </group>
+                  <zeroOrMore>
+                     <choice>
+                        <ref name="model.divBottomPart"/>
+                        <ref name="model.global"/>
+                     </choice>
+                  </zeroOrMore>
+               </optional>
+            </group>
+         </group>
+         <ref name="att.global.attributes"/>
+         <ref name="att.declaring.attributes"/>
          <empty/>
       </element>
    </define>
