@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2015-09-15T14:45:59Z. 
+Schema generated from ODD source 2015-09-15T15:32:18Z. 
 Edition: 2013 Release
 Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -6992,12 +6992,31 @@ Empfohlene Werte sind: 1] ms; 2] pr</a:documentation>
       </attribute>
     </optional>
   </define>
+  <define name="att.tupletSpan.anl.attributes">
+    <ref name="att.tuplet.anl.attributes"/>
+  </define>
+  <define name="att.tupletSpan.ges.attributes">
+    <ref name="att.tuplet.ges.attributes"/>
+  </define>
+  <define name="att.tupletSpan.log.attributes">
+    <ref name="att.controlevent.attributes"/>
+    <ref name="att.beamedwith.attributes"/>
+    <ref name="att.augmentdots.attributes"/>
+    <ref name="att.duration.additive.attributes"/>
+    <ref name="att.duration.ratio.attributes"/>
+    <ref name="att.startendid.attributes"/>
+    <ref name="att.timestamp2.musical.attributes"/>
+  </define>
+  <define name="att.tupletSpan.vis.attributes">
+    <ref name="att.tuplet.vis.attributes"/>
+  </define>
   <define name="model.controleventLike.cmn">
     <choice>
       <ref name="fermata"/>
       <ref name="hairpin"/>
       <ref name="slur"/>
       <ref name="tie"/>
+      <ref name="tupletSpan"/>
       <ref name="model.ornamentLike.cmn"/>
     </choice>
   </define>
@@ -7007,6 +7026,7 @@ Empfohlene Werte sind: 1] ms; 2] pr</a:documentation>
       <ref name="hairpin"/>
       <ref name="slur"/>
       <ref name="tie"/>
+      <ref name="tupletSpan"/>
       <ref name="model.ornamentLike.cmn_alternation"/>
     </choice>
   </define>
@@ -7015,6 +7035,7 @@ Empfohlene Werte sind: 1] ms; 2] pr</a:documentation>
     <ref name="hairpin"/>
     <ref name="slur"/>
     <ref name="tie"/>
+    <ref name="tupletSpan"/>
     <ref name="model.ornamentLike.cmn_sequence"/>
   </define>
   <define name="model.controleventLike.cmn_sequenceOptional">
@@ -7029,6 +7050,9 @@ Empfohlene Werte sind: 1] ms; 2] pr</a:documentation>
     </optional>
     <optional>
       <ref name="tie"/>
+    </optional>
+    <optional>
+      <ref name="tupletSpan"/>
     </optional>
     <optional>
       <ref name="model.ornamentLike.cmn_sequenceOptional"/>
@@ -7048,6 +7072,9 @@ Empfohlene Werte sind: 1] ms; 2] pr</a:documentation>
       <ref name="tie"/>
     </zeroOrMore>
     <zeroOrMore>
+      <ref name="tupletSpan"/>
+    </zeroOrMore>
+    <zeroOrMore>
       <ref name="model.ornamentLike.cmn_sequenceOptionalRepeatable"/>
     </zeroOrMore>
   </define>
@@ -7063,6 +7090,9 @@ Empfohlene Werte sind: 1] ms; 2] pr</a:documentation>
     </oneOrMore>
     <oneOrMore>
       <ref name="tie"/>
+    </oneOrMore>
+    <oneOrMore>
+      <ref name="tupletSpan"/>
     </oneOrMore>
     <oneOrMore>
       <ref name="model.ornamentLike.cmn_sequenceRepeatable"/>
@@ -7487,6 +7517,26 @@ Empfohlene Werte sind: 1] ms; 2] pr</a:documentation>
       <empty/>
     </element>
   </define>
+  <define name="tupletSpan">
+    <element name="tupletSpan">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(tuplet span) – Alternative element for encoding tuplets, especially useful for tuplets that extend across bar lines. </a:documentation>
+      <empty/>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tupletSpan-Start-_and_end-type_attributes_required_on_some_control_events-constraint-35">
+        <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:tupletSpan">
+          <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
+          <sch:assert test="@dur or @dur.ges or @endid or @tstamp2">Must have one of the
+              attributes: dur, dur.ges, endid, or tstamp2</sch:assert>
+        </sch:rule>
+      </pattern>
+      <ref name="att.common.attributes"/>
+      <ref name="att.tupletSpan.log.attributes"/>
+      <ref name="att.tupletSpan.vis.attributes"/>
+      <ref name="att.tupletSpan.ges.attributes"/>
+      <ref name="att.tupletSpan.anl.attributes"/>
+      <empty/>
+    </element>
+  </define>
   <define name="att.ornam.attributes">
     <ref name="att.ornam.attribute.ornam"/>
   </define>
@@ -7624,7 +7674,7 @@ Empfohlene Werte sind: 1] ms; 2] pr</a:documentation>
     <element name="trill">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Rapid alternation of a note with one (usually at the interval of a second) above. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-trill-Start-type_attributes_required_on_some_control_events-constraint-35">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-trill-Start-type_attributes_required_on_some_control_events-constraint-36">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:trill">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -7642,7 +7692,7 @@ Empfohlene Werte sind: 1] ms; 2] pr</a:documentation>
     <element name="turn">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An ornament consisting of four notes — the upper neighbor of the written note, the written note, the lower neighbor, and the written note. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-turn-Start-type_attributes_required_on_some_control_events-constraint-36">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-turn-Start-type_attributes_required_on_some_control_events-constraint-37">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:turn">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -8032,7 +8082,7 @@ Empfohlene Werte sind: 1] ms; 2] pr</a:documentation>
       </attribute>
     </optional>
   </define>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.wega.rend-underline-n-constraint-37">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.wega.rend-underline-n-constraint-38">
     <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="*:hi[@n] | *:rend[@n]">
       <sch:report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</sch:report>
     </sch:rule>
