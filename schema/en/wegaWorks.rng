@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2015-09-14T16:15:00Z. 
+Schema generated from ODD source 2015-09-14T16:31:53Z. 
 Edition: 2013 Release
 Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -6511,6 +6511,51 @@ Suggested values include: 1] ms; 2] pr</a:documentation>
       </attribute>
     </optional>
   </define>
+  <define name="att.fermata.anl.attributes">
+    <empty/>
+  </define>
+  <define name="att.fermata.ges.attributes">
+    <ref name="att.duration.performed.attributes"/>
+  </define>
+  <define name="att.fermata.log.attributes">
+    <ref name="att.controlevent.attributes"/>
+    <ref name="att.startendid.attributes"/>
+  </define>
+  <define name="att.fermata.vis.attributes">
+    <ref name="att.altsym.attributes"/>
+    <ref name="att.color.attributes"/>
+    <ref name="att.placement.attributes"/>
+    <ref name="att.visualoffset.attributes"/>
+    <ref name="att.xy.attributes"/>
+    <ref name="att.fermata.vis.attribute.form"/>
+    <ref name="att.fermata.vis.attribute.shape"/>
+  </define>
+  <define name="att.fermata.vis.attribute.form">
+    <optional>
+      <attribute name="form">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">describes the visual appearance of the fermata; that is, whether it occurs as upright or inverted.</a:documentation>
+        <choice>
+          <value>inv</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">inverted, i.e., curve or bracket below the dot.</a:documentation>
+          <value>norm</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">upright; i.e., curve or bracket above the dot.</a:documentation>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.fermata.vis.attribute.shape">
+    <optional>
+      <attribute name="shape">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">describes the visual appearance of the fermata; that is, whether it has a curved or square shape.</a:documentation>
+        <choice>
+          <value>curved</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">a curve above or below the dot.</a:documentation>
+          <value>square</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">a bracket above or below the dot.</a:documentation>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
   <define name="att.fTrem.anl.attributes">
     <empty/>
   </define>
@@ -6950,6 +6995,7 @@ Suggested values include: 1] ms; 2] pr</a:documentation>
   </define>
   <define name="model.controleventLike.cmn">
     <choice>
+      <ref name="fermata"/>
       <ref name="hairpin"/>
       <ref name="slur"/>
       <ref name="tie"/>
@@ -6958,6 +7004,7 @@ Suggested values include: 1] ms; 2] pr</a:documentation>
   </define>
   <define name="model.controleventLike.cmn_alternation">
     <choice>
+      <ref name="fermata"/>
       <ref name="hairpin"/>
       <ref name="slur"/>
       <ref name="tie"/>
@@ -6965,12 +7012,16 @@ Suggested values include: 1] ms; 2] pr</a:documentation>
     </choice>
   </define>
   <define name="model.controleventLike.cmn_sequence">
+    <ref name="fermata"/>
     <ref name="hairpin"/>
     <ref name="slur"/>
     <ref name="tie"/>
     <ref name="model.ornamentLike.cmn_sequence"/>
   </define>
   <define name="model.controleventLike.cmn_sequenceOptional">
+    <optional>
+      <ref name="fermata"/>
+    </optional>
     <optional>
       <ref name="hairpin"/>
     </optional>
@@ -6986,6 +7037,9 @@ Suggested values include: 1] ms; 2] pr</a:documentation>
   </define>
   <define name="model.controleventLike.cmn_sequenceOptionalRepeatable">
     <zeroOrMore>
+      <ref name="fermata"/>
+    </zeroOrMore>
+    <zeroOrMore>
       <ref name="hairpin"/>
     </zeroOrMore>
     <zeroOrMore>
@@ -6999,6 +7053,9 @@ Suggested values include: 1] ms; 2] pr</a:documentation>
     </zeroOrMore>
   </define>
   <define name="model.controleventLike.cmn_sequenceRepeatable">
+    <oneOrMore>
+      <ref name="fermata"/>
+    </oneOrMore>
     <oneOrMore>
       <ref name="hairpin"/>
     </oneOrMore>
@@ -7240,6 +7297,24 @@ Suggested values include: 1] ms; 2] pr</a:documentation>
       <empty/>
     </element>
   </define>
+  <define name="fermata">
+    <element name="fermata">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An indication placed over a note or rest to indicate that it should be held longer than its written value. May also occur over a bar line to indicate the end of a phrase or section. Sometimes called a 'hold' or 'pause'. </a:documentation>
+      <empty/>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-fermata-Start-type_attributes_required_on_some_control_events-constraint-30">
+        <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:fermata">
+          <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
+        </sch:rule>
+      </pattern>
+      <ref name="att.common.attributes"/>
+      <ref name="att.fermata.log.attributes"/>
+      <ref name="att.fermata.vis.attributes"/>
+      <ref name="att.fermata.ges.attributes"/>
+      <ref name="att.fermata.anl.attributes"/>
+      <empty/>
+    </element>
+  </define>
   <define name="fTrem">
     <element name="fTrem">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(fingered tremolo) – A rapid alternation between a pair of notes (or chords or perhaps between a note and a chord) that are (usually) farther apart than a major second.</a:documentation>
@@ -7271,7 +7346,7 @@ Suggested values include: 1] ms; 2] pr</a:documentation>
     <element name="hairpin">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Indicates continuous dynamics expressed on the score as wedge-shaped graphics, e.g. &lt; and &gt;. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-hairpin-Start-_and_end-type_attributes_required_on_some_control_events-constraint-30">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-hairpin-Start-_and_end-type_attributes_required_on_some_control_events-constraint-31">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:hairpin">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -7351,7 +7426,7 @@ Suggested values include: 1] ms; 2] pr</a:documentation>
     <element name="slur">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Indication of 1) a "unified melodic idea" or 2) performance technique. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-slur-Start-_and_end-type_attributes_required_on_some_control_events-constraint-31">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-slur-Start-_and_end-type_attributes_required_on_some_control_events-constraint-32">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:slur">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -7372,7 +7447,7 @@ Suggested values include: 1] ms; 2] pr</a:documentation>
     <element name="tie">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An indication that two notes of the same pitch form a single note with their combined rhythmic values. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tie-Start-_and_end-type_attributes_required_on_some_control_events-constraint-32">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tie-Start-_and_end-type_attributes_required_on_some_control_events-constraint-33">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:tie">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -7399,7 +7474,7 @@ Suggested values include: 1] ms; 2] pr</a:documentation>
           <ref name="model.transcriptionLike"/>
         </choice>
       </zeroOrMore>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-33">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-34">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:tuplet[not(@copyof)]">
           <sch:assert test="count(descendant::*[local-name()='note' or local-name()='rest' or               local-name()='chord']) &gt; 1">A tuplet without a copyof attribute must have at least
               2 note, rest, or chord descendants.</sch:assert>
@@ -7550,7 +7625,7 @@ Suggested values include: 1] ms; 2] pr</a:documentation>
     <element name="trill">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Rapid alternation of a note with one (usually at the interval of a second) above. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-trill-Start-type_attributes_required_on_some_control_events-constraint-34">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-trill-Start-type_attributes_required_on_some_control_events-constraint-35">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:trill">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -7568,7 +7643,7 @@ Suggested values include: 1] ms; 2] pr</a:documentation>
     <element name="turn">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An ornament consisting of four notes — the upper neighbor of the written note, the written note, the lower neighbor, and the written note. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-turn-Start-type_attributes_required_on_some_control_events-constraint-35">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-turn-Start-type_attributes_required_on_some_control_events-constraint-36">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:turn">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -7958,7 +8033,7 @@ Suggested values include: 1] ms; 2] pr</a:documentation>
       </attribute>
     </optional>
   </define>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.wega.rend-underline-n-constraint-36">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.wega.rend-underline-n-constraint-37">
     <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="*:hi[@n] | *:rend[@n]">
       <sch:report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</sch:report>
     </sch:rule>
