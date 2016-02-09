@@ -266,6 +266,22 @@
                 </rng:choice>
             </content>
         </macroSpec>
+        
+        <macroSpec ident="thematicCom.pattern" mode="add">
+            <content>
+                <rng:data type="string">
+                    <rng:param name="pattern">A074\d{3}</rng:param>
+                </rng:data>
+            </content>
+        </macroSpec>
+        
+        <macroSpec ident="thematicCom.target" mode="add">
+            <content>
+                <rng:data type="string">
+                    <rng:param name="pattern">wega:A074\d{3}</rng:param>
+                </rng:data>
+            </content>
+        </macroSpec>
     </specGrp>
     <specGrp xml:id="wega-lists">
         <!-- Don't forget to modify the appropriate section in subversionUsers.xml -->
@@ -565,7 +581,7 @@
             <desc versionDate="2014-03-05" xml:lang="en">Warnings for elements with whitespace only.</desc>
             <desc versionDate="2014-03-05" xml:lang="de">Warnung vor leeren (bzw. whitespace-only) Elementen.</desc>
             <constraint>
-                <sch:rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type='part')] | tei:placeName | tei:title">
+                <sch:rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('part', 'thematicCom'))] | tei:placeName | tei:title">
                     <sch:report test="normalize-space(.) = ''"><sch:name/> has whitespace only content</sch:report>
                 </sch:rule>
             </constraint>
@@ -575,7 +591,7 @@
             <desc versionDate="2014-03-05" xml:lang="de">Warnung vor Leerzeichen am Beginn eines Elements.</desc>
             <constraint>
                 <sch:rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
-                    <sch:report test="matches(.,'^\s')">whitespace at the beginning of element <sch:name/></sch:report>
+                    <sch:report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <sch:name/></sch:report>
                 </sch:rule>
             </constraint>
         </constraintSpec>
@@ -1233,6 +1249,21 @@
                     </sch:rule>
                 </constraint>
             </constraintSpec>
+            <constraintSpec scheme="isoschematron" ident="thematicCom-target">
+                <constraint>
+                    <sch:rule context="tei:note[@type='thematicCom' or @target]">
+                        <sch:assert test="@type='thematicCom' and @target">You need to provide thematic commentary targets (Only @type='thematicCom' and @target go together!).</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <!-- Constraint für editorial etc. im Text -->
+            <constraintSpec scheme="isoschematron" ident="notesStmt-notes">
+                <constraint>
+                    <sch:rule context="tei:note[parent::tei:notesStmt]">
+                        <sch:assert test="@type=('editorial', 'summary', 'thematicCom')">Within the notesStmt only 'editorial', 'summary', or 'thematicCom' are allowed for @type on note.</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
             <attList>
                 <attDef ident="type" mode="change">
                     <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
@@ -1260,6 +1291,24 @@
                             <gloss versionDate="2013-11-11" xml:lang="de">Themenkommentar</gloss>
                             <desc versionDate="2013-11-11" xml:lang="de">Stellenübergreifender Kommentar.</desc>
                         </valItem>
+                        <valItem ident="summary">
+                            <!--<gloss versionDate="2016-02-09" xml:lang="en"></gloss>-->
+                            <desc versionDate="2016-02-09" xml:lang="en">A summary of the content of the text (only applicable in the <gi>notesStmt</gi>).</desc>
+                            <gloss versionDate="2016-02-09" xml:lang="de">Zusammenfassung</gloss>
+                            <desc versionDate="2016-02-09" xml:lang="de">Eine Zusammenfassung des Texts (nur anwendbar im <gi>notesStmt</gi>).</desc>
+                        </valItem>
+                        <valItem ident="editorial">
+                            <!--<gloss versionDate="2016-02-09" xml:lang="en"></gloss>-->
+                            <desc versionDate="2016-02-09" xml:lang="en">Some general remark about the file (only applicable in the <gi>notesStmt</gi>).</desc>
+                            <gloss versionDate="2016-02-09" xml:lang="de">Generalkommentar</gloss>
+                            <desc versionDate="2016-02-09" xml:lang="de">Ein Generalkommentar zur vorliegenden Datei (nur anwendbar im <gi>notesStmt</gi>).</desc>
+                        </valItem>
+                        <valItem ident="part">
+                            <!--<gloss versionDate="2016-02-09" xml:lang="en"></gloss>-->
+                            <desc versionDate="2016-02-09" xml:lang="en">Some general remark about the file (only applicable in the <gi>notesStmt</gi>).</desc>
+                            <gloss versionDate="2016-02-09" xml:lang="de">Generalkommentar</gloss>
+                            <desc versionDate="2016-02-09" xml:lang="de">Ein Generalkommentar zur vorliegenden Datei (nur anwendbar im <gi>notesStmt</gi>).</desc>
+                        </valItem>
                     </valList>
                 </attDef>
                 <attDef ident="resp" mode="change">
@@ -1271,15 +1320,13 @@
                         <rng:ref name="staffSignatures.list"/>
                     </datatype>
                 </attDef>
-                <!--<attRef name="xml:id" class="att.global"/>-->
-                <!-- xml:id is required, doesn't work with attRef -->
-                <attDef ident="xml:id" mode="add">
-                    <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.</desc>
-                    <datatype>
-                        <rng:data type="ID"/>
+                <attRef name="xmlid" class="att.global"/>
+                <attRef name="xmllang" class="att.global"/>
+                <attDef ident="target" mode="change">
+                    <gloss versionDate="2016-02-08" xml:lang="de">Verweisziele</gloss>
+                    <desc versionDate="2016-02-08" xml:lang="de">Nimmt die URIs (in der Form "wega:A07xxxx") der zu verknüpfenden Themenkommentare auf (nur möglich in Verbindung mit <att>type</att>="thematicCom")</desc>
+                    <datatype maxOccurs="unbounded">
+                        <rng:ref name="thematicCom.target"/>
                     </datatype>
                 </attDef>
                 <!-- Interne Kommentare in dieser Form ?! -->
@@ -1294,7 +1341,6 @@
                     </valList>
                 </attDef>-->
                 <attDef ident="anchored" mode="delete"/>
-                <attDef ident="target" mode="delete"/>
                 <attDef ident="targetEnd" mode="delete"/>
                 <attDef ident="cert" mode="delete"/>
                 <attDef ident="subtype" mode="delete"/>
@@ -2129,6 +2175,17 @@
                     </valList>
                 </attDef>
             </attList>-->
+        </elementSpec>
+        
+        <elementSpec ident="notesStmt" module="header" mode="change">
+            <content>
+                <elementRef key="note" maxOccurs="unbounded"/>
+            </content>
+            <constraintSpec scheme="isoschematron" ident="count-notes">
+                <constraint>
+                    <sch:report test="count(tei:note/@type) ne count(distinct-values(tei:note/@type))">Only one summary, editorial and thematicCom are allowed within notesStmt.</sch:report>
+                </constraint>
+            </constraintSpec>
         </elementSpec>
     </specGrp>
     
