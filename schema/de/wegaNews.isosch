@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2015-08-26T14:51:49Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2016-02-10T14:51:42Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -85,12 +85,22 @@ The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the 
                         <assert test="@type and @resp and @xml:id">It is required to provide @type and @resp and @xml:id on note.</assert>
                     </rule>
                 </pattern>
-   <pattern id="wegaNews-author-sameAs-constraint-sameAs-reference-13">
+   <pattern id="wegaNews-note-constraint-thematicCom-target-13">
+                    <rule context="tei:note[@type='thematicCom' or @target]">
+                        <assert test="@type='thematicCom' and @target">You need to provide thematic commentary targets (Only @type='thematicCom' and @target go together!).</assert>
+                    </rule>
+                </pattern>
+   <pattern id="wegaNews-note-constraint-notesStmt-notes-14">
+                    <rule context="tei:note[parent::tei:notesStmt]">
+                        <assert test="@type=('editorial', 'summary', 'thematicCom', 'part')">Within the notesStmt only 'editorial', 'summary', 'part' or 'thematicCom' are allowed for @type on note.</assert>
+                    </rule>
+                </pattern>
+   <pattern id="wegaNews-author-sameAs-constraint-sameAs-reference-15">
                             <rule context="tei:*[@sameAs]">
                                 <assert test="id(substring(@sameAs,2)) or starts-with(@sameAs, 'wega:')">There must be an element with the xml:id = "<value-of select="substring(@sameAs,2)"/>" which is the target of this @sameAs.</assert>
                             </rule>
                         </pattern>
-   <pattern id="wegaNews-title-constraint-duplicate-title-14">
+   <pattern id="wegaNews-title-constraint-duplicate-title-16">
                     <rule context="tei:title[following-sibling::tei:title]">
                         <let name="level" value="@level"/>
                         <let name="type" value="string(@type)"/> 
@@ -98,25 +108,25 @@ The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the 
                         <report test="following-sibling::tei:title[@level = $level][string(@xml:lang) = $lang][string(@type) = $type]">Following title without differing @type or xml:lang attribute</report>
                     </rule>
                 </pattern>
-   <pattern id="wegaNews-title-constraint-punctuation-mark-15">
+   <pattern id="wegaNews-title-constraint-punctuation-mark-17">
       <rule context="tei:title">
                     <report test="matches(normalize-space(self::tei:title), '[\.,;]$') and not(matches(normalize-space(self::tei:title), '((\p{Lu})|(\setc)|(\sal)|([\s\.]a)|(\sBl)|(\sAufl))\.$'))">Found a non-valid punctuation mark at the end of <name/> 
          </report>
                 </rule>
    </pattern>
-   <pattern id="wegaNews-constraint-whitespaceOnlyContent-18">
-                <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type='part')] | tei:placeName | tei:title">
+   <pattern id="wegaNews-constraint-whitespaceOnlyContent-20">
+                <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('part', 'thematicCom'))] | tei:placeName | tei:title">
                     <report test="normalize-space(.) = ''">
             <name/> has whitespace only content</report>
                 </rule>
             </pattern>
-   <pattern id="wegaNews-constraint-elementStartsWithWhitespace-19">
+   <pattern id="wegaNews-constraint-elementStartsWithWhitespace-21">
                 <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
-                    <report test="matches(.,'^\s')">whitespace at the beginning of element <name/>
+                    <report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <name/>
          </report>
                 </rule>
             </pattern>
-   <pattern id="wegaNews-att.wega.rend-constraint-underline-n-20">
+   <pattern id="wegaNews-att.wega.rend-constraint-underline-n-22">
                     <rule context="*:hi[@n] | *:rend[@n]">
                         <report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</report>
                     </rule>

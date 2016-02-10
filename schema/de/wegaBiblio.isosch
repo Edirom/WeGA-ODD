@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2015-08-26T14:51:31Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2016-02-10T14:51:39Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -71,27 +71,37 @@ belongs, but this <name/> element has no textual content.</assert>
                         <assert test="@type and @resp and @xml:id">It is required to provide @type and @resp and @xml:id on note.</assert>
                     </rule>
                 </pattern>
-   <pattern id="wegaBiblio-analytic-constraint-analyticTitle-11">
+   <pattern id="wegaBiblio-note-constraint-thematicCom-target-11">
+                    <rule context="tei:note[@type='thematicCom' or @target]">
+                        <assert test="@type='thematicCom' and @target">You need to provide thematic commentary targets (Only @type='thematicCom' and @target go together!).</assert>
+                    </rule>
+                </pattern>
+   <pattern id="wegaBiblio-note-constraint-notesStmt-notes-12">
+                    <rule context="tei:note[parent::tei:notesStmt]">
+                        <assert test="@type=('editorial', 'summary', 'thematicCom', 'part')">Within the notesStmt only 'editorial', 'summary', 'part' or 'thematicCom' are allowed for @type on note.</assert>
+                    </rule>
+                </pattern>
+   <pattern id="wegaBiblio-analytic-constraint-analyticTitle-13">
       <rule context="tei:analytic">
                     <report test="tei:title/@level and not(tei:title/@level='a')">a title within analytic must have a @level='a'</report>
                 </rule>
    </pattern>
-   <pattern id="wegaBiblio-monogr-constraint-monogrTitle-12">
+   <pattern id="wegaBiblio-monogr-constraint-monogrTitle-14">
       <rule context="tei:monogr">
                     <report test="tei:title/@level and not(tei:title/@level=('j','m','u'))">a title within monogr must have a @level='j|m'</report>
                 </rule>
    </pattern>
-   <pattern id="wegaBiblio-series-constraint-seriesTitle-13">
+   <pattern id="wegaBiblio-series-constraint-seriesTitle-15">
       <rule context="tei:series">
                     <report test="tei:title/@level and not(tei:title/@level='s')">a title within series must have a @level='s'</report>
                 </rule>
    </pattern>
-   <pattern id="wegaBiblio-author-sameAs-constraint-sameAs-reference-14">
+   <pattern id="wegaBiblio-author-sameAs-constraint-sameAs-reference-16">
                             <rule context="tei:*[@sameAs]">
                                 <assert test="id(substring(@sameAs,2)) or starts-with(@sameAs, 'wega:')">There must be an element with the xml:id = "<value-of select="substring(@sameAs,2)"/>" which is the target of this @sameAs.</assert>
                             </rule>
                         </pattern>
-   <pattern id="wegaBiblio-title-constraint-duplicate-title-15">
+   <pattern id="wegaBiblio-title-constraint-duplicate-title-17">
                     <rule context="tei:title[following-sibling::tei:title]">
                         <let name="level" value="@level"/>
                         <let name="type" value="string(@type)"/> 
@@ -99,30 +109,30 @@ belongs, but this <name/> element has no textual content.</assert>
                         <report test="following-sibling::tei:title[@level = $level][string(@xml:lang) = $lang][string(@type) = $type]">Following title without differing @type or xml:lang attribute</report>
                     </rule>
                 </pattern>
-   <pattern id="wegaBiblio-title-constraint-punctuation-mark-16">
+   <pattern id="wegaBiblio-title-constraint-punctuation-mark-18">
       <rule context="tei:title">
                     <report test="matches(normalize-space(self::tei:title), '[\.,;]$') and not(matches(normalize-space(self::tei:title), '((\p{Lu})|(\setc)|(\sal)|([\s\.]a)|(\sBl)|(\sAufl))\.$'))">Found a non-valid punctuation mark at the end of <name/> 
          </report>
                 </rule>
    </pattern>
-   <pattern id="wegaBiblio-imprint-constraint-duplicate-biblScope-type-17">
+   <pattern id="wegaBiblio-imprint-constraint-duplicate-biblScope-type-19">
       <rule context="tei:imprint">
                     <report test="count(distinct-values(tei:biblScope/@type)) ne count(tei:biblScope/@type)">duplicate value for biblScope</report>
                 </rule>
    </pattern>
-   <pattern id="wegaBiblio-constraint-whitespaceOnlyContent-18">
-                <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type='part')] | tei:placeName | tei:title">
+   <pattern id="wegaBiblio-constraint-whitespaceOnlyContent-20">
+                <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('part', 'thematicCom'))] | tei:placeName | tei:title">
                     <report test="normalize-space(.) = ''">
             <name/> has whitespace only content</report>
                 </rule>
             </pattern>
-   <pattern id="wegaBiblio-constraint-elementStartsWithWhitespace-19">
+   <pattern id="wegaBiblio-constraint-elementStartsWithWhitespace-21">
                 <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
-                    <report test="matches(.,'^\s')">whitespace at the beginning of element <name/>
+                    <report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <name/>
          </report>
                 </rule>
             </pattern>
-   <pattern id="wegaBiblio-att.wega.rend-constraint-underline-n-20">
+   <pattern id="wegaBiblio-att.wega.rend-constraint-underline-n-22">
                     <rule context="*:hi[@n] | *:rend[@n]">
                         <report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</report>
                     </rule>

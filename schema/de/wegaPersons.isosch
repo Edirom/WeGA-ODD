@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2015-08-26T14:51:55Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2016-02-10T14:51:43Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -76,27 +76,37 @@ belongs, but this <name/> element has no textual content.</assert>
                         <assert test="@type and @resp and @xml:id">It is required to provide @type and @resp and @xml:id on note.</assert>
                     </rule>
                 </pattern>
-   <pattern id="wegaPersons-orgName-constraint-parent-org-12">
+   <pattern id="wegaPersons-note-constraint-thematicCom-target-12">
+                    <rule context="tei:note[@type='thematicCom' or @target]">
+                        <assert test="@type='thematicCom' and @target">You need to provide thematic commentary targets (Only @type='thematicCom' and @target go together!).</assert>
+                    </rule>
+                </pattern>
+   <pattern id="wegaPersons-note-constraint-notesStmt-notes-13">
+                    <rule context="tei:note[parent::tei:notesStmt]">
+                        <assert test="@type=('editorial', 'summary', 'thematicCom', 'part')">Within the notesStmt only 'editorial', 'summary', 'part' or 'thematicCom' are allowed for @type on note.</assert>
+                    </rule>
+                </pattern>
+   <pattern id="wegaPersons-orgName-constraint-parent-org-14">
                     <rule context="tei:orgName[parent::tei:org]">
                         <report test="@key or not(@type)">It is required to give the type ('alt' or 'reg') of the name while @key is forbiden here.</report>
                     </rule>
                 </pattern>
-   <pattern id="wegaPersons-orgName-constraint-parent-org-reg-13">
+   <pattern id="wegaPersons-orgName-constraint-parent-org-reg-15">
                     <rule context="tei:orgName[parent::tei:org and not(preceding::tei:orgName)]">
                         <assert test="@type='reg'">There must exactly be one name with @type='reg'.</assert>
                     </rule>
                 </pattern>
-   <pattern id="wegaPersons-orgName-constraint-parent-org-reg-14">
+   <pattern id="wegaPersons-orgName-constraint-parent-org-reg-16">
                     <rule context="tei:orgName[parent::tei:org and preceding::tei:orgName]">
                         <report test="@type='reg'">Only the first name can be of @type='reg'. Following names are supposed to be alternative names, @type='alt'.</report>
                     </rule>
                 </pattern>
-   <pattern id="wegaPersons-orgName-constraint-parent-not-org-15">
+   <pattern id="wegaPersons-orgName-constraint-parent-not-org-17">
                     <rule context="tei:orgName[not(parent::tei:org)]">
                         <report test="@type">No @type attribute allowed here.</report>
                     </rule>
                 </pattern>
-   <pattern id="wegaPersons-person-constraint-personHeuristics1-16">
+   <pattern id="wegaPersons-person-constraint-personHeuristics1-18">
       <rule context="tei:person">
                                 
                                 
@@ -105,7 +115,7 @@ belongs, but this <name/> element has no textual content.</assert>
                                 
                             </rule>
    </pattern>
-   <pattern id="wegaPersons-person-constraint-personHeuristics2-17">
+   <pattern id="wegaPersons-person-constraint-personHeuristics2-19">
       <rule context="tei:person">
                                 
                                 
@@ -114,24 +124,24 @@ belongs, but this <name/> element has no textual content.</assert>
                                 
                             </rule>
    </pattern>
-   <pattern id="wegaPersons-person-constraint-enforceWhitespace-18">
+   <pattern id="wegaPersons-person-constraint-enforceWhitespace-20">
                                 <rule context="tei:persName[@type][./*]">
                                     <assert test="every $x in ./*[following-sibling::*] satisfies $x[following-sibling::node()[1] instance of text()]">Child elements of persName should be separated with whitespace.</assert>
                                 </rule>
                             </pattern>
-   <pattern id="wegaPersons-constraint-whitespaceOnlyContent-19">
-                <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type='part')] | tei:placeName | tei:title">
+   <pattern id="wegaPersons-constraint-whitespaceOnlyContent-21">
+                <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('part', 'thematicCom'))] | tei:placeName | tei:title">
                     <report test="normalize-space(.) = ''">
             <name/> has whitespace only content</report>
                 </rule>
             </pattern>
-   <pattern id="wegaPersons-constraint-elementStartsWithWhitespace-20">
+   <pattern id="wegaPersons-constraint-elementStartsWithWhitespace-22">
                 <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
-                    <report test="matches(.,'^\s')">whitespace at the beginning of element <name/>
+                    <report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <name/>
          </report>
                 </rule>
             </pattern>
-   <pattern id="wegaPersons-att.wega.rend-constraint-underline-n-21">
+   <pattern id="wegaPersons-att.wega.rend-constraint-underline-n-23">
                     <rule context="*:hi[@n] | *:rend[@n]">
                         <report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</report>
                     </rule>

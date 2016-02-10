@@ -1234,14 +1234,11 @@
             <desc versionDate="2013-11-11" xml:lang="en">contains a note or annotation.</desc>
             <desc versionDate="2013-11-11" xml:lang="de">enthält eine Notiz oder eine Anmerkung/Annotation.</desc>
             <classes mode="change">
-                <memberOf key="att.global" mode="delete"/>
+<!--                <memberOf key="att.global" mode="delete"/>-->
                 <memberOf key="att.placement" mode="delete"/>
                 <memberOf key="model.correspDescPart"/>
                 <!--<memberOf key="att.responsibility" mode="delete"/>-->
             </classes>
-            <!--<classes mode="change">
-                <memberOf key="model.personPart" mode="add"/>
-                </classes>-->
             <constraintSpec scheme="isoschematron" ident="note-in-text">
                 <constraint>
                     <sch:rule context="tei:note[not(parent::tei:org or parent::tei:person or parent::tei:notesStmt or parent::tei:biblStruct or parent::tei:imprint)]">
@@ -1256,11 +1253,10 @@
                     </sch:rule>
                 </constraint>
             </constraintSpec>
-            <!-- Constraint für editorial etc. im Text -->
             <constraintSpec scheme="isoschematron" ident="notesStmt-notes">
                 <constraint>
                     <sch:rule context="tei:note[parent::tei:notesStmt]">
-                        <sch:assert test="@type=('editorial', 'summary', 'thematicCom')">Within the notesStmt only 'editorial', 'summary', or 'thematicCom' are allowed for @type on note.</sch:assert>
+                        <sch:assert test="@type=('editorial', 'summary', 'thematicCom', 'part')">Within the notesStmt only 'editorial', 'summary', 'part' or 'thematicCom' are allowed for @type on note.</sch:assert>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
@@ -1305,9 +1301,9 @@
                         </valItem>
                         <valItem ident="part">
                             <!--<gloss versionDate="2016-02-09" xml:lang="en"></gloss>-->
-                            <desc versionDate="2016-02-09" xml:lang="en">Some general remark about the file (only applicable in the <gi>notesStmt</gi>).</desc>
-                            <gloss versionDate="2016-02-09" xml:lang="de">Generalkommentar</gloss>
-                            <desc versionDate="2016-02-09" xml:lang="de">Ein Generalkommentar zur vorliegenden Datei (nur anwendbar im <gi>notesStmt</gi>).</desc>
+                            <desc versionDate="2016-02-09" xml:lang="en">Wrapper for pointers to related parts, e.g. drafts of letters (only applicable in the <gi>notesStmt</gi>).</desc>
+                            <gloss versionDate="2016-02-09" xml:lang="de">Teil</gloss>
+                            <desc versionDate="2016-02-09" xml:lang="de">Wrapper für Links zu in Beziehung stehenden anderen Teilen, z.B. Entwürfe bei Briefen oder Fortführungen bei Schriften (nur anwendbar im <gi>notesStmt</gi>).</desc>
                         </valItem>
                     </valList>
                 </attDef>
@@ -1320,8 +1316,7 @@
                         <rng:ref name="staffSignatures.list"/>
                     </datatype>
                 </attDef>
-                <attRef name="xmlid" class="att.global"/>
-                <attRef name="xmllang" class="att.global"/>
+<!--                <attRef name="xmllang" class="att.global"/>-->
                 <attDef ident="target" mode="change">
                     <gloss versionDate="2016-02-08" xml:lang="de">Verweisziele</gloss>
                     <desc versionDate="2016-02-08" xml:lang="de">Nimmt die URIs (in der Form "wega:A07xxxx") der zu verknüpfenden Themenkommentare auf (nur möglich in Verbindung mit <att>type</att>="thematicCom")</desc>
@@ -1345,6 +1340,8 @@
                 <attDef ident="cert" mode="delete"/>
                 <attDef ident="subtype" mode="delete"/>
                 <attDef ident="source" mode="delete"/>
+                <attDef ident="xml:base" mode="delete"/>
+                <attDef ident="xml:space" mode="delete"/>
             </attList>
         </elementSpec>
         
@@ -2183,7 +2180,7 @@
             </content>
             <constraintSpec scheme="isoschematron" ident="count-notes">
                 <constraint>
-                    <sch:report test="count(tei:note/@type) ne count(distinct-values(tei:note/@type))">Only one summary, editorial and thematicCom are allowed within notesStmt.</sch:report>
+                    <sch:report test="count(tei:note/@type) ne count(distinct-values(tei:note/concat(@type, @xml:lang, @n)))">Only one summary, editorial and thematicCom are allowed within notesStmt.</sch:report>
                 </constraint>
             </constraintSpec>
         </elementSpec>

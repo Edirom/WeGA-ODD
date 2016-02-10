@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2015-08-26T14:51:52Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2016-02-10T14:51:42Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -103,12 +103,22 @@ attributes @target and @cRef may be supplied on <name/>.</report>
                         <assert test="@type and @resp and @xml:id">It is required to provide @type and @resp and @xml:id on note.</assert>
                     </rule>
                 </pattern>
-   <pattern id="wegaOrg-author-sameAs-constraint-sameAs-reference-16">
+   <pattern id="wegaOrg-note-constraint-thematicCom-target-16">
+                    <rule context="tei:note[@type='thematicCom' or @target]">
+                        <assert test="@type='thematicCom' and @target">You need to provide thematic commentary targets (Only @type='thematicCom' and @target go together!).</assert>
+                    </rule>
+                </pattern>
+   <pattern id="wegaOrg-note-constraint-notesStmt-notes-17">
+                    <rule context="tei:note[parent::tei:notesStmt]">
+                        <assert test="@type=('editorial', 'summary', 'thematicCom', 'part')">Within the notesStmt only 'editorial', 'summary', 'part' or 'thematicCom' are allowed for @type on note.</assert>
+                    </rule>
+                </pattern>
+   <pattern id="wegaOrg-author-sameAs-constraint-sameAs-reference-18">
                             <rule context="tei:*[@sameAs]">
                                 <assert test="id(substring(@sameAs,2)) or starts-with(@sameAs, 'wega:')">There must be an element with the xml:id = "<value-of select="substring(@sameAs,2)"/>" which is the target of this @sameAs.</assert>
                             </rule>
                         </pattern>
-   <pattern id="wegaOrg-title-constraint-duplicate-title-17">
+   <pattern id="wegaOrg-title-constraint-duplicate-title-19">
                     <rule context="tei:title[following-sibling::tei:title]">
                         <let name="level" value="@level"/>
                         <let name="type" value="string(@type)"/> 
@@ -116,65 +126,65 @@ attributes @target and @cRef may be supplied on <name/>.</report>
                         <report test="following-sibling::tei:title[@level = $level][string(@xml:lang) = $lang][string(@type) = $type]">Following title without differing @type or xml:lang attribute</report>
                     </rule>
                 </pattern>
-   <pattern id="wegaOrg-title-constraint-punctuation-mark-18">
+   <pattern id="wegaOrg-title-constraint-punctuation-mark-20">
       <rule context="tei:title">
                     <report test="matches(normalize-space(self::tei:title), '[\.,;]$') and not(matches(normalize-space(self::tei:title), '((\p{Lu})|(\setc)|(\sal)|([\s\.]a)|(\sBl)|(\sAufl))\.$'))">Found a non-valid punctuation mark at the end of <name/> 
          </report>
                 </rule>
    </pattern>
-   <pattern id="wegaOrg-orgName-constraint-parent-org-19">
+   <pattern id="wegaOrg-orgName-constraint-parent-org-21">
                     <rule context="tei:orgName[parent::tei:org]">
                         <report test="@key or not(@type)">It is required to give the type ('alt' or 'reg') of the name while @key is forbiden here.</report>
                     </rule>
                 </pattern>
-   <pattern id="wegaOrg-orgName-constraint-parent-org-reg-20">
+   <pattern id="wegaOrg-orgName-constraint-parent-org-reg-22">
                     <rule context="tei:orgName[parent::tei:org and not(preceding::tei:orgName)]">
                         <assert test="@type='reg'">There must exactly be one name with @type='reg'.</assert>
                     </rule>
                 </pattern>
-   <pattern id="wegaOrg-orgName-constraint-parent-org-reg-21">
+   <pattern id="wegaOrg-orgName-constraint-parent-org-reg-23">
                     <rule context="tei:orgName[parent::tei:org and preceding::tei:orgName]">
                         <report test="@type='reg'">Only the first name can be of @type='reg'. Following names are supposed to be alternative names, @type='alt'.</report>
                     </rule>
                 </pattern>
-   <pattern id="wegaOrg-orgName-constraint-parent-not-org-22">
+   <pattern id="wegaOrg-orgName-constraint-parent-not-org-24">
                     <rule context="tei:orgName[not(parent::tei:org)]">
                         <report test="@type">No @type attribute allowed here.</report>
                     </rule>
                 </pattern>
-   <pattern id="wegaOrg-event-constraint-org-events-23">
+   <pattern id="wegaOrg-event-constraint-org-events-25">
       <rule context="tei:event">
                                 <assert test="tei:label=('Beginn der Tätigkeit', 'Einstellung der Tätigkeit')">label for event should be 'Beginn der Tätigkeit' or 'Einstellung der Tätigkeit'.</assert>
                             </rule>
    </pattern>
-   <pattern id="wegaOrg-state-constraint-org-states-24">
+   <pattern id="wegaOrg-state-constraint-org-states-26">
       <rule context="tei:state">
                                <assert test="tei:label=('Ort', 'Art der Institution')">label for state should be 'Ort' or 'Art der Institution'.</assert>
                            </rule>
    </pattern>
-   <pattern id="wegaOrg-seg-constraint-activeOrPassivePerformance-25">
+   <pattern id="wegaOrg-seg-constraint-activeOrPassivePerformance-27">
       <rule context="tei:seg">
                     <report test="./@subtype = ('active', 'passive') and not(./@type = 'performance')">if @subtype contains 'active' or 'passive' @type has to be 'performance'</report>
                 </rule>
    </pattern>
-   <pattern id="wegaOrg-seg-constraint-AddresseeOrSenderCorrespondence-26">
+   <pattern id="wegaOrg-seg-constraint-AddresseeOrSenderCorrespondence-28">
       <rule context="tei:seg">
                     <report test="./@subtype = ('sender', 'addressee') and not(./@type = 'correspondence')">if @subtype contains 'sender' or 'addressee' @type has to be 'correspondence'</report>
                 </rule>
    </pattern>
-   <pattern id="wegaOrg-constraint-whitespaceOnlyContent-27">
-                <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type='part')] | tei:placeName | tei:title">
+   <pattern id="wegaOrg-constraint-whitespaceOnlyContent-29">
+                <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('part', 'thematicCom'))] | tei:placeName | tei:title">
                     <report test="normalize-space(.) = ''">
             <name/> has whitespace only content</report>
                 </rule>
             </pattern>
-   <pattern id="wegaOrg-constraint-elementStartsWithWhitespace-28">
+   <pattern id="wegaOrg-constraint-elementStartsWithWhitespace-30">
                 <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
-                    <report test="matches(.,'^\s')">whitespace at the beginning of element <name/>
+                    <report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <name/>
          </report>
                 </rule>
             </pattern>
-   <pattern id="wegaOrg-att.wega.rend-constraint-underline-n-29">
+   <pattern id="wegaOrg-att.wega.rend-constraint-underline-n-31">
                     <rule context="*:hi[@n] | *:rend[@n]">
                         <report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</report>
                     </rule>
