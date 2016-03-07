@@ -3,7 +3,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2016-02-25T12:34:32Z. .
+Schema generated from ODD source 2016-03-07T14:09:35Z. .
 TEI Edition: Version 2.7.0. Last updated on
 	16th September 2014, revision 13036
 TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
@@ -934,13 +934,28 @@ belongs, but this <sch:name/> element has no textual content.</sch:assert>
       <element name="placeName">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">enthält einen absoluten oder relativen Ortsnamen. [13.2.3. ]</a:documentation>
          <text/>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-placeName-count-modern-names-constraint-3">
+            <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:xi="http://www.w3.org/2001/XInclude"
+                      context="tei:placeName[@type='modern']">
+                                    <sch:let name="lang" value="string(@xml:lang)"/> 
+                                    <sch:report test="following-sibling::tei:placeName[@type='modern'][string(@xml:lang)=$lang]">Only one modern name per xml:lang allowed.</sch:report>
+                                </sch:rule>
+         </pattern>
          <attribute name="type">
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</a:documentation>
             <choice>
                <value>reg</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(regulär) </a:documentation>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(regulär) die Ansetzungsform der WeGA basierend auf der historischen Bezeichnung Webers.</a:documentation>
                <value>alt</value>
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Alternative) </a:documentation>
+               <value>modern</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">die atuelle, verwaltungssprachliche Namensform.</a:documentation>
             </choice>
          </attribute>
          <ref name="att.global.attribute.xmllang"/>
@@ -1007,7 +1022,7 @@ belongs, but this <sch:name/> element has no textual content.</sch:assert>
                            xmlns:s="http://www.ascc.net/xml/schematron"
                            xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                            xmlns:xi="http://www.w3.org/2001/XInclude"
-                           test="tei:placeName[1][@type='reg'] and count(./tei:placeName[@type='reg']) = 1">tei:place muss (genau) ein placeName@type="reg" enthalten</sch:assert>
+                           test="(tei:placeName[1][@type='reg'] and count(./tei:placeName[@type='reg']) = 1) or tei:ref">tei:place muss (genau) ein placeName@type="reg" enthalten</sch:assert>
             </rule>
          </pattern>
          <attribute name="xml:id">
@@ -1023,7 +1038,7 @@ belongs, but this <sch:name/> element has no textual content.</sch:assert>
       </choice>
    </start>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaPlaces-whitespaceOnlyContent-constraint-3">
+            id="wegaPlaces-whitespaceOnlyContent-constraint-4">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns="http://www.tei-c.org/ns/1.0"
@@ -1038,7 +1053,7 @@ belongs, but this <sch:name/> element has no textual content.</sch:assert>
                 </sch:rule>
    </pattern>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaPlaces-elementStartsWithWhitespace-constraint-4">
+            id="wegaPlaces-elementStartsWithWhitespace-constraint-5">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns="http://www.tei-c.org/ns/1.0"

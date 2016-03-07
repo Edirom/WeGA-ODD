@@ -93,7 +93,7 @@
                             <desc versionDate="2013-11-11" xml:lang="en"></desc>
                             <desc  versionDate="2013-11-11" xml:lang="de"></desc>
                             <constraint>
-                                <sch:assert test="tei:placeName[1][@type='reg'] and count(./tei:placeName[@type='reg']) = 1">tei:place muss (genau) ein placeName@type="reg" enthalten</sch:assert>
+                                <sch:assert test="(tei:placeName[1][@type='reg'] and count(./tei:placeName[@type='reg']) = 1) or tei:ref">tei:place muss (genau) ein placeName@type="reg" enthalten</sch:assert>
                             </constraint>
                         </constraintSpec>
                         <attList>
@@ -128,6 +128,14 @@
                         <content>
                             <rng:text/>
                         </content>
+                        <constraintSpec scheme="isoschematron" ident="count-modern-names">
+                            <constraint>
+                                <sch:rule context="tei:placeName[@type='modern']">
+                                    <sch:let name="lang" value="string(@xml:lang)"/> <!-- use string values so comparing non-existing attributes will return true -->
+                                    <sch:report test="following-sibling::tei:placeName[@type='modern'][string(@xml:lang)=$lang]">Only one modern name per xml:lang allowed.</sch:report>
+                                </sch:rule>
+                            </constraint>
+                        </constraintSpec>
                         <attList>
                             <attDef ident="type" mode="add" usage="req">
                                 <desc versionDate="2014-01-08" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
@@ -136,10 +144,16 @@
                                     <valItem ident="reg">
                                         <gloss versionDate="2013-11-11" xml:lang="en">regular</gloss>
                                         <gloss versionDate="2013-11-11" xml:lang="de">regulär</gloss>
+                                        <desc versionDate="2016-03-07" xml:lang="en">the canonical name of the WeGA, i.e. the historic version known by Weber.</desc>
+                                        <desc versionDate="2016-03-07" xml:lang="de">die Ansetzungsform der WeGA basierend auf der historischen Bezeichnung Webers.</desc>
                                     </valItem>
                                     <valItem ident="alt">
                                         <gloss versionDate="2014-01-08" xml:lang="en">alternative</gloss>
                                         <gloss versionDate="2014-01-08" xml:lang="de">Alternative</gloss>
+                                    </valItem>
+                                    <valItem ident="modern">
+                                        <desc versionDate="2016-03-07" xml:lang="en">the current, official version of the name.</desc>
+                                        <desc versionDate="2016-03-07" xml:lang="de">die atuelle, verwaltungssprachliche Namensform.</desc>
                                     </valItem>
                                 </valList>
                             </attDef>
