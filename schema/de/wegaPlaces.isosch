@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2016-03-07T14:09:35Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2016-04-25T15:24:24Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -16,37 +16,51 @@
    <!-- ************ -->
    <!-- constraints: -->
    <!-- ************ -->
-   <pattern id="wegaPlaces-att.datable-calendar-constraint-calendar-1">
+   <pattern id="wegaPlaces-att.datable.w3c-constraint-att-datable-w3c-when-1">
+      <rule context="tei:*[@when]">
+        <report test="@notBefore|@notAfter|@from|@to" role="nonfatal">The @when attribute cannot be used with any other att.datable.w3c attributes.</report>
+      </rule>
+    </pattern>
+   <pattern id="wegaPlaces-att.datable.w3c-constraint-att-datable-w3c-from-2">
+      <rule context="tei:*[@from]">
+        <report test="@notBefore" role="nonfatal">The @from and @notBefore attributes cannot be used together.</report>
+      </rule>
+    </pattern>
+   <pattern id="wegaPlaces-att.datable.w3c-constraint-att-datable-w3c-to-3">
+      <rule context="tei:*[@to]">
+        <report test="@notAfter" role="nonfatal">The @to and @notAfter attributes cannot be used together.</report>
+      </rule>
+    </pattern>
+   <pattern id="wegaPlaces-att.datable-calendar-constraint-calendar-4">
           <rule context="tei:*[@calendar]">
             <assert test="string-length(.) gt 0">
 @calendar indicates the system or calendar to which the date represented by the content of this element
 belongs, but this <name/> element has no textual content.</assert>
           </rule>
         </pattern>
-   <pattern id="wegaPlaces-att.typed-constraint-subtypeTyped-2">
-      <rule context="*[@subtype]">
-        <assert test="@type">The <name/> element should not be categorized in detail with @subtype
- unless also categorized in general with @type</assert>
+   <pattern id="wegaPlaces-att.typed-constraint-subtypeTyped-5">
+      <rule context="tei:*[@subtype]">
+        <assert test="@type">The <name/> element should not be categorized in detail with @subtype unless also categorized in general with @type</assert>
       </rule>
     </pattern>
-   <pattern id="wegaPlaces-placeName-constraint-count-modern-names-3">
+   <pattern id="wegaPlaces-placeName-constraint-count-modern-names-6">
                                 <rule context="tei:placeName[@type='modern']">
                                     <let name="lang" value="string(@xml:lang)"/> 
                                     <report test="following-sibling::tei:placeName[@type='modern'][string(@xml:lang)=$lang]">Only one modern name per xml:lang allowed.</report>
                                 </rule>
                             </pattern>
-   <pattern id="wegaPlaces-place-constraint-placeName_reg-4">
+   <pattern id="wegaPlaces-place-constraint-placeName_reg-7">
       <rule context="tei:place">
                                 <assert test="(tei:placeName[1][@type='reg'] and count(./tei:placeName[@type='reg']) = 1) or tei:ref">tei:place muss (genau) ein placeName@type="reg" enthalten</assert>
                             </rule>
    </pattern>
-   <pattern id="wegaPlaces-constraint-whitespaceOnlyContent-5">
+   <pattern id="wegaPlaces-constraint-whitespaceOnlyContent-8">
                 <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('part', 'thematicCom'))] | tei:placeName | tei:title | tei:seg">
                     <report test="normalize-space(.) = ''">
             <name/> has whitespace only content</report>
                 </rule>
             </pattern>
-   <pattern id="wegaPlaces-constraint-elementStartsWithWhitespace-6">
+   <pattern id="wegaPlaces-constraint-elementStartsWithWhitespace-9">
                 <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
                     <report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <name/>
          </report>

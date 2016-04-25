@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2016-02-25T12:34:32Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2016-04-25T15:24:23Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -16,97 +16,140 @@
    <!-- ************ -->
    <!-- constraints: -->
    <!-- ************ -->
-   <pattern id="wegaPersons-att.datable-calendar-constraint-calendar-1">
+   <pattern id="wegaPersons-att.written-hand-constraint-hand-reference-1">
+                            <rule context="tei:*[@hand]">
+                                <assert test="id(substring(@hand,2)) or starts-with(@hand, 'wega:')">There must be an element with the xml:id = "<value-of select="substring(@hand,2)"/>" which is the target of this @hand.</assert>
+                            </rule>
+                        </pattern>
+   <pattern id="wegaPersons-att.datable.w3c-constraint-att-datable-w3c-when-2">
+      <rule context="tei:*[@when]">
+        <report test="@notBefore|@notAfter|@from|@to" role="nonfatal">The @when attribute cannot be used with any other att.datable.w3c attributes.</report>
+      </rule>
+    </pattern>
+   <pattern id="wegaPersons-att.datable.w3c-constraint-att-datable-w3c-from-3">
+      <rule context="tei:*[@from]">
+        <report test="@notBefore" role="nonfatal">The @from and @notBefore attributes cannot be used together.</report>
+      </rule>
+    </pattern>
+   <pattern id="wegaPersons-att.datable.w3c-constraint-att-datable-w3c-to-4">
+      <rule context="tei:*[@to]">
+        <report test="@notAfter" role="nonfatal">The @to and @notAfter attributes cannot be used together.</report>
+      </rule>
+    </pattern>
+   <pattern id="wegaPersons-att.datable-calendar-constraint-calendar-5">
           <rule context="tei:*[@calendar]">
             <assert test="string-length(.) gt 0">
 @calendar indicates the system or calendar to which the date represented by the content of this element
 belongs, but this <name/> element has no textual content.</assert>
           </rule>
         </pattern>
-   <pattern id="wegaPersons-att.typed-constraint-subtypeTyped-2">
-      <rule context="*[@subtype]">
-        <assert test="@type">The <name/> element should not be categorized in detail with @subtype
- unless also categorized in general with @type</assert>
+   <pattern id="wegaPersons-att.typed-constraint-subtypeTyped-6">
+      <rule context="tei:*[@subtype]">
+        <assert test="@type">The <name/> element should not be categorized in detail with @subtype unless also categorized in general with @type</assert>
       </rule>
     </pattern>
-   <pattern id="wegaPersons-rs-constraint-rs-typeNkey-3">
+   <pattern id="wegaPersons-p-constraint-abstractModel-p-7">
+      <rule context="tei:p">
+                    <report test="(ancestor::tei:p or ancestor::tei:ab)                          and not(parent::tei:exemplum                         |parent::tei:item                         |parent::tei:note                         |parent::tei:q                         |parent::tei:quote                         |parent::tei:remarks                         |parent::tei:said                         |parent::tei:sp                         |parent::tei:stage                         |parent::tei:cell                         |parent::tei:figure                         |parent::tei:footNote)">
+                        Abstract model violation: Paragraphs may not contain other paragraphs or ab elements.
+                    </report>
+                </rule>
+   </pattern>
+   <pattern id="wegaPersons-p-constraint-abstractModel-structure-l-8">
+      <rule context="tei:p">
+         <report test="ancestor::tei:l[not(.//tei:note//tei:p[. = current()])]">
+        Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab.
+      </report>
+      </rule>
+   </pattern>
+   <pattern id="wegaPersons-rs-constraint-rs-typeNkey-9">
                     <rule context="tei:rs[@type][@key]">
                         <assert test="                             (matches(@key, '^A00[0-9A-F]{4}$') and @type='person') or                             (matches(@key, '^A02\d{4}$') and @type='work') or                             (matches(@key, '^A03\d{4}$') and @type='writing') or                             (matches(@key, '^A04\d{4}$') and @type='letter') or                             (matches(@key, '^A06\d{4}$') and @type='diaryDay') or                             (matches(@key, '^(A00[0-9A-F]{4}\s)*A00[0-9A-F]{4}$') and @type='persons') or                             (matches(@key, '^(A02\d{4}\s)*A02\d{4}$') and @type='works') or                             (matches(@key, '^(A03\d{4}\s)*A03\d{4}$') and @type='writings') or                             (matches(@key, '^(A04\d{4}\s)*A04\d{4}$') and @type='letters') or                             (matches(@key, '^(A05\d{4}\s)*A05\d{4}$') and @type='news') or                             (matches(@key, '^(A06\d{4}\s)*A06\d{4}$') and @type='diaryDays') or                             (matches(@key, '^A08\d{4}$') and @type='org') or                             (matches(@key, '^(A11\d{4}\s)*A11\d{4}$') and @type='biblio')">Type mismatch: The value for @type must be in accordance with the given ID in @key</assert>
                     </rule>
                 </pattern>
-   <pattern id="wegaPersons-date-constraint-dateHeuristics1-4">
+   <pattern id="wegaPersons-date-constraint-dateHeuristics1-10">
       <rule context="tei:date">
                     <report test="(@notBefore gt @notAfter) and not(starts-with(@notBefore, '-'))">value of notBefore greater than notAfter</report>
                 </rule>
    </pattern>
-   <pattern id="wegaPersons-date-constraint-dateHeuristics2-5">
+   <pattern id="wegaPersons-date-constraint-dateHeuristics2-11">
       <rule context="tei:date">
                     <report test="(@notBefore lt @notAfter) and starts-with(@notBefore, '-')">value of notBefore smaller than notAfter</report>
                 </rule>
    </pattern>
-   <pattern id="wegaPersons-date-constraint-dateHeuristics3-6">
+   <pattern id="wegaPersons-date-constraint-dateHeuristics3-12">
       <rule context="tei:date">
                     <report test="(@from or @to) and (@when or @notAfter or @notBefore)">cooccurence of date and duration attributes</report>
                 </rule>
    </pattern>
-   <pattern id="wegaPersons-date-constraint-dateHeuristics4-7">
+   <pattern id="wegaPersons-date-constraint-dateHeuristics4-13">
       <rule context="tei:date">
                     <report test="@when and (@notAfter or @notBefore)">cooccurence of exact and uncertain date attributes</report>
                 </rule>
    </pattern>
-   <pattern id="wegaPersons-date-constraint-dateHeuristics5-8">
+   <pattern id="wegaPersons-date-constraint-dateHeuristics5-14">
       <rule context="tei:date">
                     <assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</assert>
                 </rule>
    </pattern>
-   <pattern id="wegaPersons-ref-constraint-refAtts-9">
+   <pattern id="wegaPersons-ref-constraint-prev-next-correspContext-15">
+      <rule context="tei:ref">
+                    <report test="@type=('previous', 'next') and not(parent::tei:correspContext)">previous and next are only used within the correspContext element.</report>
+                </rule>
+   </pattern>
+   <pattern id="wegaPersons-ref-constraint-refAtts-16">
       <rule context="tei:ref">
          <report test="@target and @cRef">Only one of the
 	attributes @target' and @cRef' may be supplied on <name/>
          </report>
       </rule>
    </pattern>
-   <pattern id="wegaPersons-list-constraint-gloss-list-10">
+   <pattern id="wegaPersons-list-constraint-gloss-list-17">
       <rule context="tei:list">
                     <report test="./tei:label and not(@type='gloss')">Labels are only allowed in lists of type='gloss'</report>
                 </rule>
    </pattern>
-   <pattern id="wegaPersons-note-constraint-note-in-text-11">
+   <pattern id="wegaPersons-list-constraint-gloss-list-must-have-labels-18">
+      <rule context="tei:list[@type='gloss']">
+	        <assert test="tei:label">The content of a "gloss" list should include a sequence of one or more pairs of a label element followed by an item element</assert>
+      </rule>
+    </pattern>
+   <pattern id="wegaPersons-note-constraint-note-in-text-19">
                     <rule context="tei:note[not(parent::tei:org or parent::tei:person or parent::tei:notesStmt or parent::tei:biblStruct or parent::tei:imprint)]">
                         <assert test="@type and @resp and @xml:id">It is required to provide @type and @resp and @xml:id on note.</assert>
                     </rule>
                 </pattern>
-   <pattern id="wegaPersons-note-constraint-thematicCom-target-12">
+   <pattern id="wegaPersons-note-constraint-thematicCom-target-20">
                     <rule context="tei:note[@type='thematicCom' or @target]">
                         <assert test="@type='thematicCom' and @target">You need to provide thematic commentary targets (Only @type='thematicCom' and @target go together!).</assert>
                     </rule>
                 </pattern>
-   <pattern id="wegaPersons-note-constraint-notesStmt-notes-13">
+   <pattern id="wegaPersons-note-constraint-notesStmt-notes-21">
                     <rule context="tei:note[parent::tei:notesStmt]">
-                        <assert test="@type=('editorial', 'summary', 'thematicCom', 'part')">Within the notesStmt only 'editorial', 'summary', 'part' or 'thematicCom' are allowed for @type on note.</assert>
+                        <assert test="@type=('editorial', 'summary', 'thematicCom', 'part', 'incipit')">Within the notesStmt only 'editorial', 'summary', 'part' or 'thematicCom' are allowed for @type on note.</assert>
                     </rule>
                 </pattern>
-   <pattern id="wegaPersons-orgName-constraint-parent-org-14">
+   <pattern id="wegaPersons-orgName-constraint-parent-org-22">
                     <rule context="tei:orgName[parent::tei:org]">
                         <report test="@key or not(@type)">It is required to give the type ('alt' or 'reg') of the name while @key is forbiden here.</report>
                     </rule>
                 </pattern>
-   <pattern id="wegaPersons-orgName-constraint-parent-org-reg-15">
+   <pattern id="wegaPersons-orgName-constraint-parent-org-reg-23">
                     <rule context="tei:orgName[parent::tei:org and not(preceding::tei:orgName)]">
                         <assert test="@type='reg'">There must exactly be one name with @type='reg'.</assert>
                     </rule>
                 </pattern>
-   <pattern id="wegaPersons-orgName-constraint-parent-org-reg-16">
+   <pattern id="wegaPersons-orgName-constraint-parent-org-reg-24">
                     <rule context="tei:orgName[parent::tei:org and preceding::tei:orgName]">
                         <report test="@type='reg'">Only the first name can be of @type='reg'. Following names are supposed to be alternative names, @type='alt'.</report>
                     </rule>
                 </pattern>
-   <pattern id="wegaPersons-orgName-constraint-parent-not-org-17">
+   <pattern id="wegaPersons-orgName-constraint-parent-not-org-25">
                     <rule context="tei:orgName[not(parent::tei:org)]">
                         <report test="@type">No @type attribute allowed here.</report>
                     </rule>
                 </pattern>
-   <pattern id="wegaPersons-person-constraint-personHeuristics1-18">
+   <pattern id="wegaPersons-person-constraint-personHeuristics1-26">
       <rule context="tei:person">
                                 
                                 
@@ -115,7 +158,7 @@ belongs, but this <name/> element has no textual content.</assert>
                                 
                             </rule>
    </pattern>
-   <pattern id="wegaPersons-person-constraint-personHeuristics2-19">
+   <pattern id="wegaPersons-person-constraint-personHeuristics2-27">
       <rule context="tei:person">
                                 
                                 
@@ -124,24 +167,24 @@ belongs, but this <name/> element has no textual content.</assert>
                                 
                             </rule>
    </pattern>
-   <pattern id="wegaPersons-person-constraint-enforceWhitespace-20">
+   <pattern id="wegaPersons-person-constraint-enforceWhitespace-28">
                                 <rule context="tei:persName[@type][./*]">
                                     <assert test="every $x in ./*[following-sibling::*] satisfies $x[following-sibling::node()[1] instance of text()]">Child elements of persName should be separated with whitespace.</assert>
                                 </rule>
                             </pattern>
-   <pattern id="wegaPersons-constraint-whitespaceOnlyContent-21">
+   <pattern id="wegaPersons-constraint-whitespaceOnlyContent-29">
                 <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('part', 'thematicCom'))] | tei:placeName | tei:title | tei:seg">
                     <report test="normalize-space(.) = ''">
             <name/> has whitespace only content</report>
                 </rule>
             </pattern>
-   <pattern id="wegaPersons-constraint-elementStartsWithWhitespace-22">
+   <pattern id="wegaPersons-constraint-elementStartsWithWhitespace-30">
                 <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
                     <report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <name/>
          </report>
                 </rule>
             </pattern>
-   <pattern id="wegaPersons-att.wega.rend-constraint-underline-n-23">
+   <pattern id="wegaPersons-att.wega.rend-constraint-underline-n-31">
                     <rule context="*:hi[@n] | *:rend[@n]">
                         <report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</report>
                     </rule>
