@@ -499,6 +499,11 @@
                 <attDef ident="status" mode="delete"/>
                 <attDef ident="cause" mode="delete"/>
                 <attDef ident="seq" mode="delete"/>
+            </attList>
+        </classSpec>
+        
+        <classSpec type="atts" ident="att.written" module="tei" mode="change">
+            <attList>
                 <attDef ident="hand" mode="change">
                     <desc versionDate="2007-09-03" xml:lang="en">indicates the hand of the agent which made the intervention.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">bezeichnet die Schreiberhand, von welcher der Eingriff vorgenommen wurde</desc>
@@ -531,11 +536,19 @@
         </classSpec>
         
         <classSpec type="atts" ident="att.global" module="tei" mode="change">
+            <!--<classes mode="change">
+                <memberOf key="att.global.responsibility" mode="delete"/>
+            </classes>-->
+            <attList>
+                <attDef ident="xml:base" mode="delete"/>
+                <attDef ident="xml:space" mode="delete"/>
+            </attList>
+        </classSpec>
+        
+        <classSpec type="atts" ident="att.global.rendition" module="tei" mode="change">
             <attList>
                 <attDef ident="style" mode="delete"/>
                 <attDef ident="rendition" mode="delete"/>
-                <attDef ident="xml:base" mode="delete"/>
-                <attDef ident="xml:space" mode="delete"/>
             </attList>
         </classSpec>
         
@@ -618,7 +631,7 @@
                         <rng:ref name="data.word"/>
                     </datatype>
                 </attDef>-->
-                <attRef class="att.responsibility" name="cert"/>
+                <attRef class="att.global.responsibility" name="cert"/>
             </attList>
         </elementSpec>
         
@@ -642,7 +655,7 @@
                         </rng:choice>
                     </datatype>
                 </attDef>
-                <attRef class="att.responsibility" name="cert"/>
+                <attRef class="att.global.responsibility" name="cert"/>
             </attList>
         </elementSpec>
         
@@ -748,7 +761,7 @@
                 <memberOf key="att.global" mode="delete"/>
                 <memberOf key="att.editLike" mode="delete"/>
                 <memberOf key="att.typed" mode="delete"/>
-                <memberOf key="att.responsibility" mode="add"/>
+                <memberOf key="att.global.responsibility" mode="add"/>
             </classes>
             <constraintSpec scheme="isoschematron" ident="dateHeuristics1">
                 <desc versionDate="2013-11-11" xml:lang="en">checks for the existence of an <att>notBefore</att> with a <emph>larger</emph> value than its corresponding <att>notAfter</att> (for dates AC)</desc>
@@ -945,6 +958,11 @@
                 <memberOf key="att.typed" mode="delete"/>
                 <memberOf key="att.declaring" mode="delete"/>
             </classes>
+            <constraintSpec scheme="isoschematron" ident="prev-next-correspContext">
+                <constraint>
+                    <sch:report test="@type=('previous', 'next') and not(parent::tei:correspContext)">previous and next are only used within the correspContext element.</sch:report>
+                </constraint>
+            </constraintSpec>
             <attList>
                 <attDef ident="cRef" mode="delete"/>
                 <attDef ident="type" mode="add" usage="opt">
@@ -952,12 +970,20 @@
                     <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</desc>
                     <valList type="closed">
                         <valItem ident="footnoteAnchor">
-                            <desc versionDate="2013-11-11" xml:lang="en">Marks the footnote sign within the text</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">markiert das Zeichen der Fußnote im Text</desc>
+                            <desc versionDate="2013-11-11" xml:lang="en">Marks the footnote sign within the text.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="de">markiert das Zeichen der Fußnote im Text.</desc>
                         </valItem>
                         <valItem ident="hyperLink">
-                            <desc versionDate="2013-11-11" xml:lang="en">Marks some passage within the text that acts as a hyperlink to an external resource on the internet</desc>
+                            <desc versionDate="2013-11-11" xml:lang="en">Marks some passage within the text that acts as a hyperlink to an external resource on the internet.</desc>
                             <desc versionDate="2014-06-28" xml:lang="de">Markiert eine Passage im Text, die auf eine externe Quelle im Internet verweist.</desc>
+                        </valItem>
+                        <valItem ident="previous">
+                            <desc versionDate="2016-04-24" xml:lang="en">Marks the (or a) preceding letter in the <gi>correspContext</gi> element.</desc>
+                            <desc versionDate="2016-04-24" xml:lang="de">Markiert den (oder einen) vorausgehenden Brief innerhalb des <gi>correspContext</gi>-Elements. </desc>
+                        </valItem>
+                        <valItem ident="next">
+                            <desc versionDate="2016-04-24" xml:lang="en">Marks the (or a) following letter in the <gi>correspContext</gi> element.</desc>
+                            <desc versionDate="2016-04-24" xml:lang="de">Markiert den (oder einen) nachfolgenden Brief innerhalb des <gi>correspContext</gi>-Elements. </desc>
                         </valItem>
                     </valList>
                 </attDef>
@@ -1042,7 +1068,7 @@
                         </constraint>
                     </constraintSpec>
                 </attDef>
-                <attRef class="att.responsibility" name="cert"/>
+                <attRef class="att.global.responsibility" name="cert"/>
                 <attDef ident="role" mode="add" usage="rec">
                     <desc versionDate="2013-11-11" xml:lang="en">may be used to specify further information about the entity referenced by this name, for example the occupation of a person, or the status of a place.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">kann verwendet werden, um weitere Informationen, die über die Einheit unter diesem Namen referenziert werden, anzugeben, z. B. der Beruf einer Person, oder der Status eines Ortes.</desc>
@@ -1119,7 +1145,6 @@
                 <memberOf key="att.global" mode="delete"/>
                 <memberOf key="att.canonical" mode="delete"/>
                 <memberOf key="att.naming" mode="delete"/>
-                <memberOf key="att.responsibility" mode="delete"/>
                 <memberOf key="att.source" mode="delete"/>
             </classes>
             <constraintSpec scheme="isoschematron" ident="rs-typeNkey">
@@ -1226,7 +1251,7 @@
                         </valItem>
                     </valList>
                 </attDef>
-                <attRef class="att.responsibility" name="cert"/>
+                <attRef class="att.global.responsibility" name="cert"/>
             </attList>
         </elementSpec>
         
@@ -1237,7 +1262,6 @@
 <!--                <memberOf key="att.global" mode="delete"/>-->
                 <memberOf key="att.placement" mode="delete"/>
                 <memberOf key="model.correspDescPart"/>
-                <!--<memberOf key="att.responsibility" mode="delete"/>-->
             </classes>
             <constraintSpec scheme="isoschematron" ident="note-in-text">
                 <constraint>
@@ -1256,7 +1280,7 @@
             <constraintSpec scheme="isoschematron" ident="notesStmt-notes">
                 <constraint>
                     <sch:rule context="tei:note[parent::tei:notesStmt]">
-                        <sch:assert test="@type=('editorial', 'summary', 'thematicCom', 'part')">Within the notesStmt only 'editorial', 'summary', 'part' or 'thematicCom' are allowed for @type on note.</sch:assert>
+                        <sch:assert test="@type=('editorial', 'summary', 'thematicCom', 'part', 'incipit')">Within the notesStmt only 'editorial', 'summary', 'part' or 'thematicCom' are allowed for @type on note.</sch:assert>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
@@ -1298,6 +1322,11 @@
                             <desc versionDate="2016-02-09" xml:lang="en">Some general remark about the file (only applicable in the <gi>notesStmt</gi>).</desc>
                             <gloss versionDate="2016-02-09" xml:lang="de">Generalkommentar</gloss>
                             <desc versionDate="2016-02-09" xml:lang="de">Ein Generalkommentar zur vorliegenden Datei (nur anwendbar im <gi>notesStmt</gi>).</desc>
+                        </valItem>
+                        <valItem ident="incipit">
+                            <desc versionDate="2016-04-23" xml:lang="en">The text incipit of the letter (or other piece of correspondence).</desc>
+                            <gloss versionDate="2016-04-23" xml:lang="de">Incipit</gloss>
+                            <desc versionDate="2016-04-23" xml:lang="de">Das Textincipit des Briefs (oder anderer Korrespondenzmaterialien)</desc>
                         </valItem>
                         <valItem ident="part">
                             <!--<gloss versionDate="2016-02-09" xml:lang="en"></gloss>-->
@@ -1359,13 +1388,12 @@
                 <memberOf key="att.transcriptional" mode="delete"/>
                 <!--<memberOf key="att.editLike" mode="delete"/>
                 <memberOf key="att.dimensions" mode="delete"/>
-                <memberOf key="att.ranging" mode="delete"/>
-                <memberOf key="att.responsibility" mode="delete"/>-->
+                <memberOf key="att.ranging" mode="delete"/>-->
                 <memberOf key="att.typed" mode="delete"/>
             </classes>
             <attList>
                <attRef name="xml:id" class="att.global"/>
-               <attRef name="hand" class="att.transcriptional"/>
+               <attRef name="hand" class="att.written"/>
                 <attDef ident="rend" mode="add" usage="req">
                     <gloss versionDate="2013-11-11" xml:lang="en">rendition</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">indicates how the element in question was rendered or presented in the source text.</desc>
@@ -1407,7 +1435,7 @@
             </classes>
             <attList>
                <attRef name="xml:id" class="att.global"/>
-               <attRef name="hand" class="att.transcriptional"/>
+               <attRef name="hand" class="att.written"/>
                 <attDef ident="place" mode="change" usage="req">
                     <desc versionDate="2013-11-11" xml:lang="en">specifies where this item is placed.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">spezifiert wo das Element angebracht ist.</desc>
@@ -1449,7 +1477,6 @@
                 <memberOf key="att.transcriptional" mode="delete"/>
                 <memberOf key="att.placement" mode="delete"/>
                 <memberOf key="att.editLike" mode="delete"/>
-                <memberOf key="att.responsibility" mode="delete"/>
                 <memberOf key="att.duration" mode="delete"/>
                 <memberOf key="model.damagePart" mode="add"/>
             </classes>
@@ -1535,7 +1562,6 @@
             <desc versionDate="2013-11-11" xml:lang="de">enthält Text, obwohl dieser anscheinend nicht korrekt oder ungenau wiedergegeben wird.</desc>
             <classes mode="change">
                 <memberOf key="att.global" mode="delete"/>
-                <memberOf key="att.responsibility" mode="delete"/>
             </classes>
         </elementSpec>
         
@@ -1549,7 +1575,6 @@
                 <memberOf key="att.ranging" mode="delete"/>
                 <memberOf key="att.dimensions" mode="delete"/>
                 <memberOf key="att.editLike" mode="delete"/>
-                <memberOf key="att.responsibility" mode="delete"/>
                 <memberOf key="att.typed" mode="delete"/>
                 <memberOf key="model.pPart.transcriptional" mode="delete"/>
             </classes>
@@ -1562,7 +1587,6 @@
             <desc versionDate="2013-11-11" xml:lang="de">enthält eine Abkürzung von jeglicher Art.</desc>
             <classes mode="change">
                 <memberOf key="att.global" mode="delete"/>
-                <memberOf key="att.responsibility" mode="delete"/>
                 <memberOf key="model.pPart.editorial" mode="delete"/>
             </classes>
             <attList>
@@ -1580,7 +1604,6 @@
                 <memberOf key="att.ranging" mode="delete"/>
                 <memberOf key="att.dimensions" mode="delete"/>
                 <memberOf key="att.editLike" mode="delete"/>
-                <memberOf key="att.responsibility" mode="delete"/>
                 <memberOf key="model.pPart.editorial" mode="delete"/>
             </classes>
         </elementSpec>
@@ -1593,7 +1616,6 @@
                 <memberOf key="att.dimensions" mode="delete"/>
                 <memberOf key="att.ranging" mode="delete"/>
                 <memberOf key="att.editLike" mode="delete"/>
-                <memberOf key="att.responsibility" mode="delete"/>
                 <memberOf key="model.damagePart" mode="add"/>
             </classes>
             <attList>
@@ -1609,7 +1631,7 @@
                         <rng:ref name="staffSignatures.list"/>
                     </datatype>
                 </attDef>
-                <attRef class="att.responsibility" name="cert"/>
+                <attRef class="att.global.responsibility" name="cert"/>
             </attList>
         </elementSpec>
         
@@ -2171,7 +2193,7 @@
             </content>
             <constraintSpec scheme="isoschematron" ident="count-notes">
                 <constraint>
-                    <sch:report test="count(tei:note/@type) ne count(distinct-values(tei:note/concat(@type, @xml:lang, @n)))">Only one summary, editorial and thematicCom are allowed within notesStmt.</sch:report>
+                    <sch:report test="count(tei:note/@type) ne count(distinct-values(tei:note/concat(@type, @xml:lang, @n)))">Only one summary, incipit, editorial and thematicCom are allowed within notesStmt.</sch:report>
                 </constraint>
             </constraintSpec>
         </elementSpec>
@@ -2198,7 +2220,7 @@
                         <rng:ref name="key.person.pattern"/>
                     </datatype>
                 </attDef>
-                <attRef class="att.responsibility" name="cert"/>
+                <attRef class="att.global.responsibility" name="cert"/>
             </attList>
         </elementSpec>
         
@@ -2247,7 +2269,7 @@
                 </constraint>
             </constraintSpec>-->
             <attList>
-                <attRef class="att.responsibility" name="cert"/>
+                <attRef class="att.global.responsibility" name="cert"/>
                 <attDef ident="type" mode="replace" usage="opt">
                     <desc versionDate="2013-11-11" xml:lang="en">categorisation of varying localities.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">Kategorisierung der verschiedenen Lokalitäten.</desc>
@@ -2464,7 +2486,6 @@
                         <rng:ref name="key.org.pattern"/>
                     </datatype>
                 </attDef>
-<!--                <attRef class="att.responsibility" name="cert"/>-->
             </attList>
         </elementSpec>
     </specGrp>
@@ -2478,7 +2499,6 @@
             <classes mode="change">
                 <memberOf key="att.global" mode="delete"/>
                 <memberOf key="att.segLike" mode="delete"/>
-                <memberOf key="att.responsibility" mode="delete"/>
             </classes>
             <constraintSpec scheme="isoschematron" ident="activeOrPassivePerformance">
                 <constraint>
@@ -2762,7 +2782,6 @@
                 <memberOf key="att.ranging" mode="delete"/>
                 <memberOf key="att.transcriptional" mode="delete"/>
                 <memberOf key="att.editLike" mode="delete"/>
-                <memberOf key="att.responsibility" mode="delete"/>
             </classes>
             <content>
                 <rng:interleave>
@@ -2837,7 +2856,6 @@
                 <memberOf key="att.dimensions" mode="delete"/>
                 <memberOf key="att.ranging" mode="delete"/>
                 <memberOf key="att.editLike" mode="delete"/>
-                <memberOf key="att.responsibility" mode="delete"/>
                 <memberOf key="model.damagePart" mode="add"/>
             </classes>
             <attList>
@@ -3008,7 +3026,6 @@
             </classes>
             <attList>
                 <!-- Do we need @cert? -->
-                <!--<attRef class="att.responsibility" name="cert"/>-->
                 <attDef ident="wit" mode="change" usage="req"/>
             </attList>
         </elementSpec>
@@ -3022,10 +3039,6 @@
                 <memberOf key="att.global" mode="delete"/>
                 <memberOf key="att.textCritical" mode="delete"/>
             </classes>
-            <!-- Do we need this? -->
-            <!--<attList>
-                <attRef class="att.responsibility" name="cert"/>
-            </attList>-->
         </elementSpec>
     </specGrp>
     
