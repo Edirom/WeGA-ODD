@@ -166,13 +166,21 @@
             </content>
         </macroSpec>
         
-       <macroSpec ident="key.org.pattern" mode="add">
+        <macroSpec ident="key.org.pattern" mode="add">
           <content>
              <rng:data type="string">
                 <rng:param name="pattern">A08\d{4}</rng:param>
              </rng:data>
           </content>
-       </macroSpec>
+        </macroSpec>
+        
+        <macroSpec ident="key.orgs.pattern" mode="add">
+            <content>
+                <rng:data type="string">
+                    <rng:param name="pattern">(A08\d{4}\s)*A08\d{4}</rng:param>
+                </rng:data>
+            </content>
+        </macroSpec>
        
         <macroSpec ident="key.biblio.pattern" mode="add">
             <content>
@@ -1043,7 +1051,10 @@
                     <desc versionDate="2013-11-11" xml:lang="en">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">bietet mittels eines codierten Wertes in einer beliebigen Form ein extern definiertes Mittel zur Identifizierung einer Einheit (oder mehrerer Einheiten).</desc>
                     <datatype>
-                        <rng:ref name="key.person.pattern"/>
+                        <rng:choice>
+                            <rng:ref name="key.person.pattern"/>
+                            <rng:ref name="key.org.pattern"/>
+                        </rng:choice>
                     </datatype>
                 </attDef>
                 <attDef ident="xml:id" mode="add" usage="opt">
@@ -1167,6 +1178,7 @@
                             (matches(@key, '^(A05\d{4}\s)*A05\d{4}$') and @type='news') or
                             (matches(@key, '^(A06\d{4}\s)*A06\d{4}$') and @type='diaryDays') or
                             (matches(@key, '^A08\d{4}$') and @type='org') or
+                            (matches(@key, '^(A08\d{4}\s)*A08\d{4}$') and @type='orgs') or
                             (matches(@key, '^(A11\d{4}\s)*A11\d{4}$') and @type='biblio')"
                             >Type mismatch: The value for @type must be in accordance with the given ID in @key</sch:assert>
                     </sch:rule>
@@ -1191,6 +1203,7 @@
                             <rng:ref name="key.newsPl.pattern"/>
                             <rng:ref name="key.biblio.pattern"/>
                             <rng:ref name="key.org.pattern"/>
+                            <rng:ref name="key.orgs.pattern"/>
                         </rng:choice>
                     </datatype>
                 </attDef>
@@ -1247,8 +1260,12 @@
                             <desc versionDate="2013-11-11" xml:lang="de">markiert bibliographische Eintäge, die nicht explizit genannt werden.</desc>
                         </valItem>
                         <valItem ident="org">
-                            <desc versionDate="2013-11-11" xml:lang="en">marks an organization that is not explicitly mentioned.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">markiert Organisationen, die nicht explizit genannt werden.</desc>
+                            <desc versionDate="2016-05-20" xml:lang="en">marks an organization that is not explicitly mentioned.</desc>
+                            <desc versionDate="2016-05-20" xml:lang="de">markiert eine Organisation, die nicht explizit genannt wird.</desc>
+                        </valItem>
+                        <valItem ident="orgs">
+                            <desc versionDate="2016-05-20" xml:lang="en">marks organizations that are not explicitly mentioned.</desc>
+                            <desc versionDate="2016-05-20" xml:lang="de">markiert Organisationen, die nicht explizit genannt werden.</desc>
                         </valItem>
                     </valList>
                 </attDef>
