@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2016-05-20T16:15:19Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2016-05-23T15:40:12Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -150,61 +150,81 @@ The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the 
          </report>
                 </rule>
    </pattern>
-   <pattern id="wegaDiaries-addSpan-constraint-spanTo-25">
+   <pattern id="wegaDiaries-orgName-constraint-parent-org-25">
+                    <rule context="tei:orgName[parent::tei:org]">
+                        <report test="@key or not(@type)">It is required to give the type ('alt' or 'reg') of the name while @key is forbiden here.</report>
+                    </rule>
+                </pattern>
+   <pattern id="wegaDiaries-orgName-constraint-parent-org-reg-26">
+                    <rule context="tei:orgName[parent::tei:org and not(preceding::tei:orgName)]">
+                        <assert test="@type='reg'">There must exactly be one name with @type='reg'.</assert>
+                    </rule>
+                </pattern>
+   <pattern id="wegaDiaries-orgName-constraint-parent-org-reg-27">
+                    <rule context="tei:orgName[parent::tei:org and preceding::tei:orgName]">
+                        <report test="@type='reg'">Only the first name can be of @type='reg'. Following names are supposed to be alternative names, @type='alt'.</report>
+                    </rule>
+                </pattern>
+   <pattern id="wegaDiaries-orgName-constraint-parent-not-org-28">
+                    <rule context="tei:orgName[not(parent::tei:org)]">
+                        <report test="@type">No @type attribute allowed here.</report>
+                    </rule>
+                </pattern>
+   <pattern id="wegaDiaries-addSpan-constraint-spanTo-29">
       <rule context="tei:addSpan">
          <assert test="@spanTo">The @spanTo attribute of <name/> is required.</assert>
       </rule>
    </pattern>
-   <pattern id="wegaDiaries-addSpan-spanTo-constraint-spanTo-7-27">
+   <pattern id="wegaDiaries-addSpan-spanTo-constraint-spanTo-7-31">
                             <rule context="tei:*[@spanTo]">
                                 <assert test="id(substring(@spanTo,2)) and following::*[@xml:id=substring(current()/@spanTo,2)]">
                                     The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the current element <name/>
                                 </assert>
                             </rule>
                         </pattern>
-   <pattern id="wegaDiaries-subst-constraint-substContents1-28">
+   <pattern id="wegaDiaries-subst-constraint-substContents1-32">
       <rule context="tei:subst">
          <assert test="child::tei:add and child::tei:del">
             <name/> must have at least one child add and at least one child del</assert>
       </rule>
    </pattern>
-   <pattern id="wegaDiaries-ab-constraint-abstractModel-structure-p-29">
+   <pattern id="wegaDiaries-ab-constraint-abstractModel-structure-p-33">
       <rule context="tei:ab">
          <report test="(ancestor::tei:p or ancestor::tei:ab)          and not(parent::tei:exemplum         |parent::tei:item         |parent::tei:note         |parent::tei:q         |parent::tei:quote         |parent::tei:remarks         |parent::tei:said         |parent::tei:sp         |parent::tei:stage         |parent::tei:cell         |parent::tei:figure)">
         Abstract model violation: ab may not contain paragraphs or other ab elements.
       </report>
       </rule>
    </pattern>
-   <pattern id="wegaDiaries-ab-constraint-abstractModel-structure-l-30">
+   <pattern id="wegaDiaries-ab-constraint-abstractModel-structure-l-34">
       <rule context="tei:ab">
          <report test="ancestor::tei:l or ancestor::tei:lg">
         Abstract model violation: Lines may not contain higher-level divisions such as p or ab.
       </report>
       </rule>
    </pattern>
-   <pattern id="wegaDiaries-seg-constraint-activeOrPassivePerformance-31">
+   <pattern id="wegaDiaries-seg-constraint-activeOrPassivePerformance-35">
       <rule context="tei:seg">
                     <report test="./@subtype = ('active', 'passive') and not(./@type = 'performance')">if @subtype contains 'active' or 'passive' @type has to be 'performance'</report>
                 </rule>
    </pattern>
-   <pattern id="wegaDiaries-seg-constraint-AddresseeOrSenderCorrespondence-32">
+   <pattern id="wegaDiaries-seg-constraint-AddresseeOrSenderCorrespondence-36">
       <rule context="tei:seg">
                     <report test="./@subtype = ('sender', 'addressee') and not(./@type = 'correspondence')">if @subtype contains 'sender' or 'addressee' @type has to be 'correspondence'</report>
                 </rule>
    </pattern>
-   <pattern id="wegaDiaries-constraint-whitespaceOnlyContent-33">
+   <pattern id="wegaDiaries-constraint-whitespaceOnlyContent-37">
                 <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('part', 'thematicCom'))] | tei:placeName | tei:title | tei:seg">
                     <report test="normalize-space(.) = ''">
             <name/> has whitespace only content</report>
                 </rule>
             </pattern>
-   <pattern id="wegaDiaries-constraint-elementStartsWithWhitespace-34">
+   <pattern id="wegaDiaries-constraint-elementStartsWithWhitespace-38">
                 <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
                     <report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <name/>
          </report>
                 </rule>
             </pattern>
-   <pattern id="wegaDiaries-att.wega.rend-constraint-underline-n-35">
+   <pattern id="wegaDiaries-att.wega.rend-constraint-underline-n-39">
                     <rule context="*:hi[@n] | *:rend[@n]">
                         <report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</report>
                     </rule>

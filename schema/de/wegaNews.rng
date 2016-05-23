@@ -3,7 +3,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2016-05-20T16:15:25Z. .
+Schema generated from ODD source 2016-05-23T15:40:17Z. .
 TEI Edition: Version 3.0.0. Last updated on
 	29th March 2016, revision 89ba24e
 TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 3.0.0/
@@ -666,21 +666,27 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
    </pattern>
    <define name="model.nameLike.agent">
       <choice>
+         <ref name="orgName"/>
          <ref name="persName"/>
          <ref name="characterName"/>
       </choice>
    </define>
    <define name="model.nameLike.agent_alternation">
       <choice>
+         <ref name="orgName"/>
          <ref name="persName"/>
          <ref name="characterName"/>
       </choice>
    </define>
    <define name="model.nameLike.agent_sequence">
+      <ref name="orgName"/>
       <ref name="persName"/>
       <ref name="characterName"/>
    </define>
    <define name="model.nameLike.agent_sequenceOptional">
+      <optional>
+         <ref name="orgName"/>
+      </optional>
       <optional>
          <ref name="persName"/>
       </optional>
@@ -690,6 +696,9 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
    </define>
    <define name="model.nameLike.agent_sequenceOptionalRepeatable">
       <zeroOrMore>
+         <ref name="orgName"/>
+      </zeroOrMore>
+      <zeroOrMore>
          <ref name="persName"/>
       </zeroOrMore>
       <zeroOrMore>
@@ -697,6 +706,9 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
       </zeroOrMore>
    </define>
    <define name="model.nameLike.agent_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="orgName"/>
+      </oneOrMore>
       <oneOrMore>
          <ref name="persName"/>
       </oneOrMore>
@@ -2596,6 +2608,86 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
    <define name="model.persNamePart_sequenceRepeatable">
       <notAllowed/>
    </define>
+   <define name="orgName">
+      <element name="orgName">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(organization name) contains an organizational name. [13.2.2. Organizational Names]</a:documentation>
+         <ref name="macro.phraseSeq"/>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaNews-orgName-parent-org-constraint-15">
+            <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
+                      xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:xi="http://www.w3.org/2001/XInclude"
+                      context="tei:orgName[parent::tei:org]">
+                        <sch:report test="@key or not(@type)">It is required to give the type ('alt' or 'reg') of the name while @key is forbiden here.</sch:report>
+                    </sch:rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaNews-orgName-parent-org-reg-constraint-16">
+            <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
+                      xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:xi="http://www.w3.org/2001/XInclude"
+                      context="tei:orgName[parent::tei:org and not(preceding::tei:orgName)]">
+                        <sch:assert test="@type='reg'">There must exactly be one name with @type='reg'.</sch:assert>
+                    </sch:rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaNews-orgName-parent-org-reg-constraint-17">
+            <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
+                      xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:xi="http://www.w3.org/2001/XInclude"
+                      context="tei:orgName[parent::tei:org and preceding::tei:orgName]">
+                        <sch:report test="@type='reg'">Only the first name can be of @type='reg'. Following names are supposed to be alternative names, @type='alt'.</sch:report>
+                    </sch:rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaNews-orgName-parent-not-org-constraint-18">
+            <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
+                      xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:xi="http://www.w3.org/2001/XInclude"
+                      context="tei:orgName[not(parent::tei:org)]">
+                        <sch:report test="@type">No @type attribute allowed here.</sch:report>
+                    </sch:rule>
+         </pattern>
+         <optional>
+            <attribute name="type">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+               <choice>
+                  <value>reg</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+                  <value>alt</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="key">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">bietet mittels eines codierten Wertes in einer beliebigen Form ein extern definiertes Mittel zur Identifizierung einer Einheit (oder mehrerer Einheiten).</a:documentation>
+               <ref name="key.org.pattern"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
    <define name="persName">
       <element name="persName">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Personenname) enthält einen Eigennamen oder ein Nominalphrase im Bezug auf eine Person, möglicherweise einschließlich einer oder mehrerer Vornamen, Nachnamen, Höflichkeitsformen, hinzugefügten Namen, usw. [13.2.1. Personal Names]</a:documentation>
@@ -2742,7 +2834,7 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaNews-att.wega.rend-underline-n-constraint-17">
+            id="wegaNews-att.wega.rend-underline-n-constraint-21">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
@@ -2761,7 +2853,7 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
       </choice>
    </start>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaNews-whitespaceOnlyContent-constraint-15">
+            id="wegaNews-whitespaceOnlyContent-constraint-19">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
@@ -2776,7 +2868,7 @@ Beispielwerte sind etwa: 1] text; 2] corpus</a:documentation>
                 </sch:rule>
    </pattern>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaNews-elementStartsWithWhitespace-constraint-16">
+            id="wegaNews-elementStartsWithWhitespace-constraint-20">
       <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"

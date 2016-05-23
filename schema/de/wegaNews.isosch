@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2016-05-20T16:15:25Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2016-05-23T15:40:17Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -171,19 +171,39 @@ The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the 
       </report>
       </rule>
    </pattern>
-   <pattern id="wegaNews-constraint-whitespaceOnlyContent-30">
+   <pattern id="wegaNews-orgName-constraint-parent-org-30">
+                    <rule context="tei:orgName[parent::tei:org]">
+                        <report test="@key or not(@type)">It is required to give the type ('alt' or 'reg') of the name while @key is forbiden here.</report>
+                    </rule>
+                </pattern>
+   <pattern id="wegaNews-orgName-constraint-parent-org-reg-31">
+                    <rule context="tei:orgName[parent::tei:org and not(preceding::tei:orgName)]">
+                        <assert test="@type='reg'">There must exactly be one name with @type='reg'.</assert>
+                    </rule>
+                </pattern>
+   <pattern id="wegaNews-orgName-constraint-parent-org-reg-32">
+                    <rule context="tei:orgName[parent::tei:org and preceding::tei:orgName]">
+                        <report test="@type='reg'">Only the first name can be of @type='reg'. Following names are supposed to be alternative names, @type='alt'.</report>
+                    </rule>
+                </pattern>
+   <pattern id="wegaNews-orgName-constraint-parent-not-org-33">
+                    <rule context="tei:orgName[not(parent::tei:org)]">
+                        <report test="@type">No @type attribute allowed here.</report>
+                    </rule>
+                </pattern>
+   <pattern id="wegaNews-constraint-whitespaceOnlyContent-34">
                 <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('part', 'thematicCom'))] | tei:placeName | tei:title | tei:seg">
                     <report test="normalize-space(.) = ''">
             <name/> has whitespace only content</report>
                 </rule>
             </pattern>
-   <pattern id="wegaNews-constraint-elementStartsWithWhitespace-31">
+   <pattern id="wegaNews-constraint-elementStartsWithWhitespace-35">
                 <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
                     <report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <name/>
          </report>
                 </rule>
             </pattern>
-   <pattern id="wegaNews-att.wega.rend-constraint-underline-n-32">
+   <pattern id="wegaNews-att.wega.rend-constraint-underline-n-36">
                     <rule context="*:hi[@n] | *:rend[@n]">
                         <report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</report>
                     </rule>
