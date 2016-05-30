@@ -3,7 +3,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2016-05-20T16:15:40Z. .
+Schema generated from ODD source 2016-05-30T14:44:22Z. .
 TEI Edition: Version 3.0.0. Last updated on
 	29th March 2016, revision 89ba24e
 TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 3.0.0/
@@ -2371,12 +2371,6 @@ Suggested values include: 1] volume; 2] issue; 3] page; 4] line; 5] chapter; 6] 
    <define name="wega_model.divGenLike">
       <notAllowed/>
    </define>
-   <define name="wega_model.teiHeaderPart">
-      <choice>
-         <ref name="wega_encodingDesc"/>
-         <ref name="wega_profileDesc"/>
-      </choice>
-   </define>
    <define name="wega_model.sourceDescPart">
       <notAllowed/>
    </define>
@@ -2388,14 +2382,6 @@ Suggested values include: 1] volume; 2] issue; 3] page; 4] line; 5] chapter; 6] 
    </define>
    <define name="wega_model.editorialDeclPart">
       <notAllowed/>
-   </define>
-   <define name="wega_model.profileDescPart">
-      <choice>
-         <ref name="wega_langUsage"/>
-         <ref name="wega_textClass"/>
-         <ref name="wega_correspDesc"/>
-         <ref name="wega_handNotes"/>
-      </choice>
    </define>
    <define name="wega_model.correspActionPart">
       <choice>
@@ -4248,18 +4234,11 @@ Elements 7.2.5. Speech Contents]</a:documentation>
       <element name="teiHeader">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(TEI header) supplies descriptive and declarative metadata associated with a digital resource or set of resources. [2.1.1. The TEI Header and Its Components 15.1. Varieties of Composite Text]</a:documentation>
          <group>
-            <ref name="wega_fileDesc"/>
-      
-            <zeroOrMore>
-               <ref name="wega_model.teiHeaderPart"/>
-            </zeroOrMore>
-      
-      
-            <optional>
-               <ref name="wega_revisionDesc"/>
-            </optional>
-      
-         </group>
+                                <ref name="wega_fileDesc"/>
+                                <ref name="wega_encodingDesc"/>
+                                <ref name="wega_profileDesc"/>
+                                <ref name="wega_revisionDesc"/>
+                            </group>
          <ref name="wega_att.global.attributes"/>
          <optional>
             <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
@@ -4533,9 +4512,20 @@ Sample values include: 1] text; 2] corpus</a:documentation>
    <define name="wega_profileDesc">
       <element name="profileDesc">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(text-profile description) provides a detailed description of non-bibliographic aspects of a text, specifically the languages and sublanguages used, the situation in which it was produced, the participants and their setting. [2.4. The Profile Description 2.1.1. The TEI Header and Its Components]</a:documentation>
-         <zeroOrMore>
-            <ref name="wega_model.profileDescPart"/>
-         </zeroOrMore>
+         <group>
+            <interleave>
+                                <ref name="wega_correspDesc"/>
+                                <optional>
+                  <ref name="wega_textClass"/>
+               </optional>
+                                <optional>
+                  <ref name="wega_langUsage"/>
+               </optional>
+                                <optional>
+                  <ref name="wega_handNotes"/>
+               </optional>
+                            </interleave>
+         </group>
          <ref name="wega_att.global.attributes"/>
          <empty/>
       </element>
