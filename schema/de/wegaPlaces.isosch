@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2016-05-31T16:44:52Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2016-06-03T16:50:26Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -49,18 +49,23 @@ belongs, but this <name/> element has no textual content.</assert>
                                     <report test="following-sibling::tei:placeName[@type='modern'][string(@xml:lang)=$lang]">Only one modern name per xml:lang allowed.</report>
                                 </rule>
                             </pattern>
-   <pattern id="wegaPlaces-place-constraint-placeName_reg-7">
+   <pattern id="wegaPlaces-geo-constraint-whitespace-separated-coordinates-7">
+      <rule context="tei:geo">
+                                <assert test="(count(tokenize(., '\s+')) eq 2) and matches(., '\d\s+\-?\d')">There must be two coordinates, separated with a whitespace only (no comma!)</assert>
+                            </rule>
+   </pattern>
+   <pattern id="wegaPlaces-place-constraint-placeName_reg-8">
       <rule context="tei:place">
                                 <assert test="(tei:placeName[1][@type='reg'] and count(./tei:placeName[@type='reg']) = 1) or tei:ref">tei:place muss (genau) ein placeName@type="reg" enthalten</assert>
                             </rule>
    </pattern>
-   <pattern id="wegaPlaces-constraint-whitespaceOnlyContent-8">
+   <pattern id="wegaPlaces-constraint-whitespaceOnlyContent-9">
                 <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('part', 'thematicCom'))] | tei:placeName | tei:title | tei:seg | tei:item[not(@* or *)]">
                     <report test="normalize-space(.) = ''">
             <name/> has whitespace only content</report>
                 </rule>
             </pattern>
-   <pattern id="wegaPlaces-constraint-elementStartsWithWhitespace-9">
+   <pattern id="wegaPlaces-constraint-elementStartsWithWhitespace-10">
                 <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
                     <report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <name/>
          </report>
