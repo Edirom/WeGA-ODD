@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0"
          xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:tei="http://www.tei-c.org/ns/1.0"
-         xmlns:teix="http://www.tei-c.org/ns/Examples"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.music-encoding.org/ns/mei"><!--
-Schema generated from ODD source 2016-01-07T10:12:12Z. .
+Schema generated from ODD source 2016-09-05T16:55:36Z. .
 TEI Edition: 2013 Release
 TEI Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -3561,8 +3559,24 @@ TEI Edition Location: http://www.tei-c.org/Vault/P5//
    <define name="mei">
       <element name="mei" ns="http://www.music-encoding.org/ns/mei">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">enthält ein einzelenes MEI-konformes Dokument, dass aus einem MEI header und muskialischem Text, entweder alleinstehend oder als Teil eines meiCorpus Elements, besteht.</a:documentation>
-         <ref name="meiHead"/>
-         <ref name="music"/>
+         <choice>
+            <group>
+               <ref name="meiHead"/>
+               <ref name="music"/>
+            </group>
+            <element name="ref">
+               <attribute name="type">
+                  <choice>
+                     <value>duplicate</value>
+                     <value>deletion</value>
+                  </choice>
+               </attribute>
+               <attribute name="target">
+                  <ref name="key.work.pattern"/>
+               </attribute>
+               <empty/>
+            </element>
+         </choice>
          <ns xmlns="http://purl.oclc.org/dsdl/schematron"
              prefix="mei"
              uri="http://www.music-encoding.org/ns/mei"/>
@@ -7263,7 +7277,8 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
             id="wegaWorks-att.wega.rend-underline-n-constraint-36">
-      <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+      <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
+                xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:rng="http://relaxng.org/ns/structure/1.0"
                 xmlns:sch="http://purl.oclc.org/dsdl/schematron"
