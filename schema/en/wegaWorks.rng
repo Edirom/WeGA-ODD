@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0"
          xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:tei="http://www.tei-c.org/ns/1.0"
-         xmlns:teix="http://www.tei-c.org/ns/Examples"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.music-encoding.org/ns/mei"><!--
-Schema generated from ODD source 2016-01-07T10:16:02Z. .
+Schema generated from ODD source 2016-10-18T11:21:08Z. .
 TEI Edition: 2013 Release
 TEI Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -532,6 +530,8 @@ TEI Edition Location: http://www.tei-c.org/Vault/P5//
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Scribe) A person who is an amanuensis and for a writer of manuscripts proper.</a:documentation>
          <value>trl</value>
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Translator) Use for a person or organization who renders a text from one language into another, or from an older form of a language into the modern form.</a:documentation>
+         <value>chr</value>
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Choreographer) A person responsible for creating or contributing to a work of movement.</a:documentation>
       </choice>
    </define>
    <define name="wega.data.temporal.iso">
@@ -3561,8 +3561,24 @@ TEI Edition Location: http://www.tei-c.org/Vault/P5//
    <define name="mei">
       <element name="mei" ns="http://www.music-encoding.org/ns/mei">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains a single MEI-conformant document, consisting of an MEI header and a musical text, either in isolation or as part of an meiCorpus element. </a:documentation>
-         <ref name="meiHead"/>
-         <ref name="music"/>
+         <choice>
+            <group>
+               <ref name="meiHead"/>
+               <ref name="music"/>
+            </group>
+            <element name="ref">
+               <attribute name="type">
+                  <choice>
+                     <value>duplicate</value>
+                     <value>deletion</value>
+                  </choice>
+               </attribute>
+               <attribute name="target">
+                  <ref name="key.work.pattern"/>
+               </attribute>
+               <empty/>
+            </element>
+         </choice>
          <ns xmlns="http://purl.oclc.org/dsdl/schematron"
              prefix="mei"
              uri="http://www.music-encoding.org/ns/mei"/>
@@ -7263,7 +7279,8 @@ Suggested values include: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichni
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
             id="wegaWorks-att.wega.rend-underline-n-constraint-36">
-      <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+      <sch:rule xmlns:tei="http://www.tei-c.org/ns/1.0"
+                xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:rng="http://relaxng.org/ns/structure/1.0"
                 xmlns:sch="http://purl.oclc.org/dsdl/schematron"
