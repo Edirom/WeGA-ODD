@@ -3,7 +3,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.music-encoding.org/ns/mei"><!--
-Schema generated from ODD source 2016-10-18T11:21:08Z. .
+Schema generated from ODD source 2016-10-19T17:40:06Z. .
 TEI Edition: 2013 Release
 TEI Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -4203,31 +4203,10 @@ Suggested values include: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichni
          <empty/>
       </element>
    </define>
-   <define name="classCode">
-      <element name="classCode">
-         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(classification code) – Holds a citation to the source of controlled-vocabulary terms used in the &lt;termList&gt; element; for example, Library of Congress Subject Headings (LCSH), Library of Congress Classification (LCC), Library of Congress Name Authority File (LCNAF), or other thesaurus or ontology. </a:documentation>
-         <zeroOrMore>
-            <choice>
-               <text/>
-               <ref name="model.lbLike"/>
-               <ref name="model.rendLike"/>
-            </choice>
-         </zeroOrMore>
-         <ref name="att.common.attributes"/>
-         <ref name="att.authorized.attributes"/>
-         <ref name="att.bibl.attributes"/>
-         <empty/>
-      </element>
-   </define>
    <define name="classification">
-      <element name="classification">
+      <element name="classification" ns="http://www.music-encoding.org/ns/mei">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Groups information which describes the nature or topic of an entity. </a:documentation>
-         <oneOrMore>
-            <choice>
-               <ref name="classCode"/>
-               <ref name="termList"/>
-            </choice>
-         </oneOrMore>
+         <ref name="termList"/>
          <ref name="att.common.attributes"/>
          <ref name="att.bibl.attributes"/>
          <ref name="att.datapointing.attributes"/>
@@ -4721,7 +4700,7 @@ Suggested values include: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichni
       </element>
    </define>
    <define name="term">
-      <element name="term">
+      <element name="term" ns="http://www.music-encoding.org/ns/mei">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Keyword or phrase which describes a resource. </a:documentation>
          <zeroOrMore>
             <choice>
@@ -4735,14 +4714,19 @@ Suggested values include: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichni
          <optional>
             <attribute name="classcode">
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains a reference to the controlled vocabulary from which the term is drawn. The value must match the value of an ID attribute on a classCode element given elsewhere in the document.</a:documentation>
-               <ref name="data.URI"/>
+               <choice>
+                  <value>http://d-nb.info/standards/elementset/gnd#MusicalWork</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(musical work) a subclass of 'work' according to the GND Ontology, see http://d-nb.info/standards/elementset/gnd#MusicalWork.</a:documentation>
+                  <value>http://d-nb.info/standards/elementset/gnd#Work</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(work) according to the GND Ontology, see http://d-nb.info/standards/elementset/gnd#Work.</a:documentation>
+               </choice>
             </attribute>
          </optional>
          <empty/>
       </element>
    </define>
    <define name="termList">
-      <element name="termList">
+      <element name="termList" ns="http://www.music-encoding.org/ns/mei">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Collection of text phrases which describe a resource.</a:documentation>
          <oneOrMore>
             <ref name="term"/>
