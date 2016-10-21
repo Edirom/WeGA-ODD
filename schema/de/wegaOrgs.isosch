@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2016-09-30T15:50:30Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2016-10-21T16:06:36Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -100,12 +100,13 @@ The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the 
                 </rule>
    </pattern>
    <pattern id="wegaOrg-ptr-constraint-ptr-target-16">
-      <rule context="tei:ptr">
-                <assert test="following::tei:note[@xml:id=substring(current()/@target,2)]">
-                   The element indicated by @target (<value-of select="@target"/>) must follow the current element <name/>
-                </assert>
-             </rule>
-   </pattern>
+                 <rule context="tei:ptr[not(starts-with(@target, 'http'))]">
+                    <assert test="following::tei:note[@xml:id=substring(current()/@target,2)]">
+                       The note element indicated by @target (<value-of select="@target"/>) must follow the current element <name/>. 
+                        Otherwise the target must be some external URL prefixed with 'http'.
+                    </assert>
+                 </rule>
+             </pattern>
    <pattern id="wegaOrg-ptr-constraint-duplicate-ptr-17">
       <rule context="tei:ptr">
                 <report test="following::tei:ptr[@target=current()/@target]">

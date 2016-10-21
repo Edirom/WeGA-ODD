@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2016-09-30T15:50:28Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2016-10-21T16:06:33Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -112,12 +112,13 @@ The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the 
                 </rule>
    </pattern>
    <pattern id="wegaLetters-ptr-constraint-ptr-target-18">
-      <rule context="tei:ptr">
-                <assert test="following::tei:note[@xml:id=substring(current()/@target,2)]">
-                   The element indicated by @target (<value-of select="@target"/>) must follow the current element <name/>
-                </assert>
-             </rule>
-   </pattern>
+                 <rule context="tei:ptr[not(starts-with(@target, 'http'))]">
+                    <assert test="following::tei:note[@xml:id=substring(current()/@target,2)]">
+                       The note element indicated by @target (<value-of select="@target"/>) must follow the current element <name/>. 
+                        Otherwise the target must be some external URL prefixed with 'http'.
+                    </assert>
+                 </rule>
+             </pattern>
    <pattern id="wegaLetters-ptr-constraint-duplicate-ptr-19">
       <rule context="tei:ptr">
                 <report test="following::tei:ptr[@target=current()/@target]">
@@ -247,11 +248,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
                     <report test="count(tei:note/@type) ne count(distinct-values(tei:note/concat(@type, @xml:lang, @n)))">Only one summary, incipit, editorial and thematicCom are allowed within notesStmt.</report>
                 </rule>
    </pattern>
-      
-      
-    
-      
-    <pattern id="wegaLetters-div-constraint-abstractModel-structure-l-44">
+   <pattern id="wegaLetters-div-constraint-abstractModel-structure-l-44">
       <rule context="tei:div">
          <report test="ancestor::tei:l">
         Abstract model violation: Lines may not contain higher-level structural elements such as div.
