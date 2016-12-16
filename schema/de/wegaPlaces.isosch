@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2016-09-30T15:50:32Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2016-12-16T08:23:57Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -12,66 +12,67 @@
    <!-- namespaces, implicit: -->
    <!-- ********************* -->
    <ns prefix="tei" uri="http://www.tei-c.org/ns/1.0"/>
+   <ns prefix="rng" uri="http://relaxng.org/ns/structure/1.0"/>
 
    <!-- ************ -->
    <!-- constraints: -->
    <!-- ************ -->
-   <pattern id="wegaPlaces-att.datable.w3c-constraint-att-datable-w3c-when-1">
+   <pattern id="isoschematron-constraint-wegaPlaces-att.datable.w3c-att-datable-w3c-when-1">
       <rule context="tei:*[@when]">
         <report test="@notBefore|@notAfter|@from|@to" role="nonfatal">The @when attribute cannot be used with any other att.datable.w3c attributes.</report>
       </rule>
     </pattern>
-   <pattern id="wegaPlaces-att.datable.w3c-constraint-att-datable-w3c-from-2">
+   <pattern id="isoschematron-constraint-wegaPlaces-att.datable.w3c-att-datable-w3c-from-2">
       <rule context="tei:*[@from]">
         <report test="@notBefore" role="nonfatal">The @from and @notBefore attributes cannot be used together.</report>
       </rule>
     </pattern>
-   <pattern id="wegaPlaces-att.datable.w3c-constraint-att-datable-w3c-to-3">
+   <pattern id="isoschematron-constraint-wegaPlaces-att.datable.w3c-att-datable-w3c-to-3">
       <rule context="tei:*[@to]">
         <report test="@notAfter" role="nonfatal">The @to and @notAfter attributes cannot be used together.</report>
       </rule>
     </pattern>
-   <pattern id="wegaPlaces-att.datable-calendar-constraint-calendar-4">
+   <pattern id="isoschematron-constraint-wegaPlaces-att.datable-calendar-calendar-4">
           <rule context="tei:*[@calendar]">
             <assert test="string-length(.) gt 0">
 @calendar indicates the system or calendar to which the date represented by the content of this element
 belongs, but this <name/> element has no textual content.</assert>
           </rule>
         </pattern>
-   <pattern id="wegaPlaces-att.typed-constraint-subtypeTyped-5">
+   <pattern id="isoschematron-constraint-wegaPlaces-att.typed-subtypeTyped-5">
       <rule context="tei:*[@subtype]">
         <assert test="@type">The <name/> element should not be categorized in detail with @subtype unless also categorized in general with @type</assert>
       </rule>
     </pattern>
-   <pattern id="wegaPlaces-placeName-constraint-count-modern-names-6">
+   <pattern id="schematron-constraint-wegaPlaces-placeName-count-modern-names-6">
                                 <rule context="tei:placeName[@type='modern']">
                                     <let name="lang" value="string(@xml:lang)"/> 
                                     <report test="following-sibling::tei:placeName[@type='modern'][string(@xml:lang)=$lang]">Only one modern name per xml:lang allowed.</report>
                                 </rule>
                             </pattern>
-   <pattern id="wegaPlaces-geo-constraint-whitespace-separated-coordinates-7">
+   <pattern id="schematron-constraint-wegaPlaces-geo-whitespace-separated-coordinates-7">
       <rule context="tei:geo">
                                 <assert test="(count(tokenize(., '\s+')) eq 2) and matches(., '\d\s+\-?\d')">There must be two coordinates, separated with a whitespace only (no comma!)</assert>
                             </rule>
    </pattern>
-   <pattern id="wegaPlaces-place-constraint-placeName_reg-8">
+   <pattern id="schematron-constraint-wegaPlaces-place-placeName_reg-8">
       <rule context="tei:place">
                                 <assert test="(tei:placeName[1][@type='reg'] and count(./tei:placeName[@type='reg']) = 1) or tei:ref">tei:place muss (genau) ein placeName@type="reg" enthalten</assert>
                             </rule>
    </pattern>
-   <pattern id="wegaPlaces-constraint-whitespaceOnlyContent-9">
+   <pattern id="schematron-constraint-wegaPlaces-whitespaceOnlyContent-9">
                 <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('part', 'thematicCom'))] | tei:placeName | tei:title | tei:seg | tei:item[not(@* or *)]">
                     <report test="normalize-space(.) = ''">
             <name/> has whitespace only content</report>
                 </rule>
             </pattern>
-   <pattern id="wegaPlaces-constraint-elementStartsWithWhitespace-10">
+   <pattern id="schematron-constraint-wegaPlaces-elementStartsWithWhitespace-10">
                 <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
                     <report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <name/>
          </report>
                 </rule>
             </pattern>
-   <pattern id="wegaPlaces-constraint-untrimmedAttributeValues-11">
+   <pattern id="schematron-constraint-wegaPlaces-untrimmedAttributeValues-11">
                 <rule context="*">
                     <report test="some $i in @* satisfies string-length(normalize-unicode(normalize-space(replace($i, ' | | | ', ' ')))) ne string-length($i)">There is some whitespace here at the beginning or end of some attribute value.</report>
                 </rule>
