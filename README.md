@@ -8,17 +8,20 @@ Files for documenting the Digital Edition of the [Carl-Maria-von-Weber-Gesamtaus
 Contents
 --------
 
-* `schema`: RelaxNG schemata, generated with the [roma cli](http://www.tei-c.org/Guidelines/Customization/odds.xml#romacommandline) from the ODD files below. For convenience, have a look at the `Makefile`. There are subfolders for English and German schemas which should only differ in the language of documentation (e.g. element and attribute descriptions)
+* `schema`: RelaxNG schemata, generated with the [TEI XSL Stylesheets](https://github.com/TEIC/Stylesheets) from the ODD files below. For convenience, an  `ANT build file` is provided that documents the transformations. There are subfolders for English and German schemas which should only differ in the language of documentation (e.g. element and attribute descriptions)
 * `src`: source ODD files
 	* `WeGA_biblio.odd.xml`: WeGA ODD file for bibliographic documents 
 	* `WeGA_common.odd.xml`: common macros and definitions for global use in the WeGA Digital Edition
 	* `WeGA_diaries.odd.xml`: WeGA ODD file for the encoding of diary entries
+	* `WeGA_documents.odd.xml`: WeGA ODD file for the encoding of various historic documents, e.g. receipts, passports or baptismal certificates 
 	* `WeGA_generic.odd.xml`: A generic WeGA ODD file for testing and experimental purposes
 	* `WeGA_letters.odd.xml`: WeGA ODD file for the encoding of correspondence material
 	* `WeGA_news.odd.xml`: WeGA ODD file for the encoding of website news
+	* `WeGA_orgs.odd.xml`: WeGA ODD file for the encoding of institutions and organizations
 	* `WeGA_persons.odd.xml`: WeGA ODD file for the encoding of (short) biographies
 	* `WeGA_places.odd.xml`: WeGA ODD file for the encoding of places
-	* `WeGA_var.odd.xml`: WeGA ODD file for the encoding of various  documents 
+	* `WeGA_thematicCommentaries.odd.xml`: WeGA ODD file for the encoding of thematic commentaries
+	* `WeGA_var.odd.xml`: WeGA ODD file for the encoding of various modern documents, e.g. help pages or project descriptions 
 	* `WeGA_works.odd.xml`: WeGA ODD file for the encoding of musical works
 	* `WeGA_writings.odd.xml`: WeGA ODD file for the encoding of writings
 
