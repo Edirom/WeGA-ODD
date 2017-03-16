@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemaSpec ident="wegaOrg" xml:lang="en" start="org"
+    xmlns="http://www.tei-c.org/ns/1.0" 
+    xmlns:rng="http://relaxng.org/ns/structure/1.0"
+    xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
+    <moduleRef key="core" include="abbr addrLine address author bibl biblScope choice date desc editor expan head hi item l label lb list listBibl name note p postCode ptr q quote ref rs street title"/>
+    <moduleRef key="tei"/>
+    <moduleRef key="header" include="idno"/>
+    <!--                    <moduleRef key="textstructure" include="TEI body byline closer dateline div floatingText opener postscript salute signed text"/>-->
+    <moduleRef key="namesdates" include="country event geogName org orgName persName placeName region settlement state"/>
+    <!--                    <moduleRef key="figures" include="cell figDesc figure row table"/>-->
+    <!--                    <moduleRef key="transcr" include="addSpan damage facsimile handNotes handShift space subst supplied"/>-->
+    <!--                    <moduleRef key="msdescription" include="accMat acquisition additional altIdentifier collection history incipit msDesc msIdentifier origin physDesc provenance repository"/>-->
+    <moduleRef key="linking" include="anchor seg"/>
+    <!--                    <moduleRef key="textcrit" include="app lem listWit rdg witness"/>-->
+    <moduleRef key="gaiji" include="g"/>
+    
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-patterns"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-lists"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-classes"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-element-additions"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-constraints"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-atts"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-tei-atts"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-core"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-header"/>
+    <!--                    <specGrpRef target="../Specs/common-specs.odd.xml#wega-textstructure"/>-->
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-namesdates"/>
+    <!--                    <specGrpRef target="../Specs/common-specs.odd.xml#wega-figures"/>-->
+    <!--                    <specGrpRef target="../Specs/common-specs.odd.xml#wega-transcr"/>-->
+    <!--                    <specGrpRef target="../Specs/common-specs.odd.xml#wega-msdescription"/>-->
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-linking"/>
+    <!--                    <specGrpRef target="../Specs/common-specs.odd.xml#wega-textcrit"/>-->
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-gaiji"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-tei-macros"/>
+    
+    <macroSpec ident="macro.orgContent" mode="add">
+        <desc versionDate="2015-05-22" xml:lang="en">provides information about an identifiable organization or corporate body.</desc>
+        <desc versionDate="2015-05-22" xml:lang="de">enthält Informationen über eine Organisation oder Körperschaft</desc>
+        <content>
+            <rng:zeroOrMore>
+                <rng:ref name="idno"/>
+            </rng:zeroOrMore>
+            <rng:oneOrMore>
+                <rng:ref name="orgName"/>
+            </rng:oneOrMore>
+            <rng:zeroOrMore>
+                <rng:ref name="state"/>
+            </rng:zeroOrMore>
+            <rng:zeroOrMore>
+                <rng:ref name="event"/>
+            </rng:zeroOrMore>
+            <rng:optional>
+                <rng:ref name="listBibl"/>
+            </rng:optional>
+            <rng:optional>
+                <rng:ref name="note"/>
+            </rng:optional>
+        </content>
+    </macroSpec>
+    
+    
+    <elementSpec ident="org" mode="change" module="namesdates">
+        <desc versionDate="2015-05-22" xml:lang="en">provides information about an identifiable organization or corporate body.</desc>
+        <desc versionDate="2015-05-22" xml:lang="de">enthält Informationen über eine Organisation oder Körperschaft</desc>
+        <classes mode="change">
+            <memberOf key="att.editLike" mode="delete"/>
+            <memberOf key="att.sortable" mode="delete"/>
+            <memberOf key="att.global" mode="delete"/>
+            <memberOf key="att.typed" mode="delete"/>
+        </classes>
+        <content>
+            <rng:choice>
+                <!--  Dubletten  -->
+                <rng:element name="ref">
+                    <rng:attribute name="type">
+                        <rng:choice>
+                            <rng:value>duplicate</rng:value>
+                            <rng:value>deletion</rng:value>
+                        </rng:choice>
+                    </rng:attribute>
+                    <rng:attribute name="target">
+                        <rng:ref name="key.org.pattern"/>
+                    </rng:attribute>
+                    <rng:empty/>
+                </rng:element>
+                <!-- ordentlicher Eintrag -->
+                <rng:ref name="macro.orgContent"/>
+            </rng:choice>
+        </content>
+        <attList>
+            <attDef ident="xml:id" mode="add" usage="req">
+                <gloss versionDate="2015-05-22" xml:lang="en">identifier</gloss>
+                <desc versionDate="2015-05-22" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
+                <gloss versionDate="2015-05-22" xml:lang="de">Bezeichner</gloss>
+                <desc versionDate="2015-05-22" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element mit dem Attribut.</desc>
+                <datatype>
+                    <rng:ref name="key.org.pattern"/>
+                </datatype>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="state" module="namesdates" mode="change">
+        <desc versionDate="2015-05-22" xml:lang="en">contains a description of some status or quality attributed to an organization or corporate body often at some specific time or for a specific date range.</desc>
+        <desc versionDate="2015-05-22" xml:lang="de">enthält Informationen über Merkmale einer Organisation oder Körperschaft, meistens mit zeitlicher Dauer oder Beschränkung.</desc>
+        <classes mode="change">
+            <memberOf key="att.editLike" mode="delete"/>
+            <memberOf key="att.naming" mode="delete"/>
+            <memberOf key="att.global" mode="delete"/>
+            <memberOf key="att.typed" mode="delete"/>
+        </classes>
+        <content>
+            <rng:ref name="label"/>
+            <rng:ref name="desc"/>
+        </content>
+        <constraintSpec scheme="schematron" ident="org-states">
+            <constraint>
+                <sch:assert test="tei:label=('Ort', 'Art der Institution')">label for state should be 'Ort' or 'Art der Institution'.</sch:assert>
+            </constraint>
+        </constraintSpec>
+    </elementSpec>
+    
+    <elementSpec ident="event" module="namesdates" mode="change">
+        <desc versionDate="2015-08-26" xml:lang="en">contains data relating to any kind of significant event associated with a an organization or corporate body.</desc>
+        <desc versionDate="2015-05-22" xml:lang="de">enthält Informationen über 'events' (z.B. Gründung, Einstellung der Tätigkeit) einer Organisation oder Körperschaft.</desc>
+        <classes mode="change">
+            <memberOf key="att.editLike" mode="delete"/>
+            <memberOf key="att.naming" mode="delete"/>
+            <memberOf key="att.global" mode="delete"/>
+            <memberOf key="att.typed" mode="delete"/>
+        </classes>
+        <content>
+            <rng:ref name="label"/>
+            <rng:ref name="desc"/>
+        </content>
+        <constraintSpec scheme="schematron" ident="org-events">
+            <constraint>
+                <sch:assert test="tei:label=('Beginn der Tätigkeit', 'Einstellung der Tätigkeit')">label for event should be 'Beginn der Tätigkeit' or 'Einstellung der Tätigkeit'.</sch:assert>
+            </constraint>
+        </constraintSpec>
+    </elementSpec>
+    
+    <!-- xinclude von idno, in dieser Form sehr unschön! -->
+    <xi:include href="schemaSpec-persons.odd.xml" xpointer="element(/1/28)" parse="xml">
+        <xi:fallback>
+            <div>error</div>
+        </xi:fallback>
+    </xi:include>
+    
+</schemaSpec>
