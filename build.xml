@@ -9,16 +9,15 @@
         <isset property="lang"/>
     </condition>
     
-    <target name="tei" depends="biblio,diaries,documents,generic,letters,news,orgs,persons,places,thematicCommentaries,var,writings"/>
+    <target name="tei" depends="biblio,diaries,documents,letters,news,orgs,persons,places,thematicCommentaries,var,wega_all,writings"/>
     <target name="mei" depends="works"/>
     <target name="all" depends="tei,mei"/>
     
     <target name="init">
-        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${compiledODD.dir}"/>
     </target>
     
     <target name="clean">
-        <delete dir="${build.dir}"/>
         <delete>
            <fileset dir="schema/en">
               <include name="*.isosch"/>
@@ -50,15 +49,6 @@
             <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaDocuments.rng"/>
             <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaDocuments.isosch"/>
             <param name="selectedSchema" value="wegaDocuments"/>
-        </antcall>
-    </target>
-    
-    <target name="generic" depends="init">
-        <antcall target="process">
-            <param name="inputFile" value="${basedir}/src/Guidelines/guidelines-de.xml"/>
-            <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaGeneric.rng"/>
-            <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaGeneric.isosch"/>
-            <param name="selectedSchema" value="wegaGeneric"/>
         </antcall>
     </target>
     
@@ -104,6 +94,15 @@
             <param name="outputFileRNG" value="${basedir}/schema/${lang}/wegaVar.rng"/>
             <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wegaVar.isosch"/>
             <param name="selectedSchema" value="wegaVar"/>
+        </antcall>
+    </target>
+    
+    <target name="wega_all" depends="init">
+        <antcall target="process">
+            <param name="inputFile" value="${basedir}/src/Guidelines/guidelines-de.xml"/>
+            <param name="outputFileRNG" value="${basedir}/schema/${lang}/wega_all.rng"/>
+            <param name="outputFileSchematron" value="${basedir}/schema/${lang}/wega_all.isosch"/>
+            <param name="selectedSchema" value="wega_all"/>
         </antcall>
     </target>
     
@@ -153,7 +152,7 @@
         <sequential>
             <echo>Expanding ODD file</echo>
             <xslt force="yes" style="${stylesheets.dir}/odds/odd2odd.xsl" 
-                in="${inputFile}" out="${build.dir}/${inputFile.basename}-${selectedSchema}.processed">
+                in="${inputFile}" out="${compiledODD.dir}/${inputFile.basename}-${selectedSchema}.compiled.xml">
                 <factory name="net.sf.saxon.TransformerFactoryImpl">
                     <attribute name="http://saxon.sf.net/feature/xinclude-aware" value="true"/>
                 </factory>
@@ -164,7 +163,7 @@
             
             <echo>Creating RelaxNG schema</echo>
             <xslt force="yes" style="${stylesheets.dir}/profiles/default/relaxng/to.xsl" 
-                in="${build.dir}/${inputFile.basename}-${selectedSchema}.processed" out="${outputFileRNG}">
+                in="${compiledODD.dir}/${inputFile.basename}-${selectedSchema}.compiled.xml" out="${outputFileRNG}">
                 <factory name="net.sf.saxon.TransformerFactoryImpl">
                     <attribute name="http://saxon.sf.net/feature/xinclude-aware" value="true"/>
                 </factory>
@@ -182,7 +181,7 @@
             <echo>Extracting Schematron rules</echo>
             <xslt processor="trax" force="yes" 
                 style="${stylesheets.dir}/profiles/default/schematron/to.xsl" 
-                in="${build.dir}/${inputFile.basename}-${selectedSchema}.processed" out="${outputFileSchematron}">
+                in="${compiledODD.dir}/${inputFile.basename}-${selectedSchema}.compiled.xml" out="${outputFileSchematron}">
                 <factory name="net.sf.saxon.TransformerFactoryImpl"/>
             </xslt>
         </sequential>
