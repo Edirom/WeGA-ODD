@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemaSpec ident="wegaWritings" xml:lang="en" start="TEI"
+    xmlns="http://www.tei-c.org/ns/1.0" 
+    xmlns:rng="http://relaxng.org/ns/structure/1.0"
+    xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+    <moduleRef key="core" include="abbr add address analytic author bibl biblScope biblStruct cb choice corr date del desc editor expan gap graphic head hi imprint item l label lb lg list listBibl monogr name note p pb postCode ptr pubPlace publisher q quote ref relatedItem resp respStmt rs sic street title unclear"/>
+    <moduleRef key="tei"/>
+    <moduleRef key="header" include="availability change creation edition editionStmt editorialDecl encodingDesc fileDesc handNote idno keywords langUsage language licence notesStmt profileDesc projectDesc publicationStmt revisionDesc seriesStmt sourceDesc teiHeader textClass titleStmt"/>
+    <moduleRef key="textstructure" include="TEI body closer dateline div floatingText opener postscript signed text"/>
+    <moduleRef key="namesdates" include="country geogName orgName persName placeName region settlement"/>
+    <moduleRef key="figures" include="cell figDesc figure notatedMusic row table"/>
+    <moduleRef key="transcr" include="addSpan facsimile handNotes space subst supplied"/>
+    <moduleRef key="msdescription" include="additional history msDesc msIdentifier physDesc provenance repository"/>
+    <moduleRef key="linking" include="seg"/>
+    <moduleRef key="textcrit" include="app lem listWit rdg witness"/>
+    <moduleRef key="gaiji" include="g"/>
+    
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-patterns"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-lists"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-classes"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-element-additions"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-constraints"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-atts"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-tei-atts"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-core"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-header"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-textstructure"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-namesdates"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-figures"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-transcr"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-msdescription"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-linking"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-textcrit"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-gaiji"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-tei-macros"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-datatypes"/>
+    
+    <elementSpec ident="TEI" mode="change" module="textstructure">
+        <gloss versionDate="2013-11-11" xml:lang="en">TEI document</gloss>
+        <desc versionDate="2013-11-11" xml:lang="en">contains a single TEI-conformant document, comprising a TEI header and a text, either in isolation or as part of a <gi>teiCorpus</gi> element.</desc>
+        <gloss versionDate="2013-11-11" xml:lang="de">TEI Dokument</gloss>
+        <desc versionDate="2013-11-11" xml:lang="de">enthält ein einzelnes TEI-konformes Dokument, TEI header und text einschließend, entweder einzeln oder als Teile des <gi>teiCorpus</gi> Elements.</desc>
+        <classes mode="change">
+            <memberOf key="att.global" mode="delete"/>
+        </classes>
+        <content>
+            <rng:choice>
+                <!--   Ordentlicher Eintrag   -->
+                <rng:group>
+                    <rng:ref name="teiHeader"/>
+                    <rng:choice>
+                        <rng:group>
+                            <rng:oneOrMore>
+                                <rng:ref name="model.resourceLike"/>
+                            </rng:oneOrMore>
+                            <rng:optional>
+                                <rng:ref name="text"/>
+                            </rng:optional>
+                        </rng:group>
+                        <rng:ref name="text"/>
+                    </rng:choice>
+                </rng:group>
+                <!--  Dubletten  -->
+                <rng:element name="ref">
+                    <rng:attribute name="type">
+                        <rng:value>duplicate</rng:value>
+                    </rng:attribute>
+                    <rng:attribute name="target">
+                        <rng:choice>
+                            <rng:ref name="key.writing.pattern"/>
+                            <rng:ref name="key.letter.pattern"/>
+                            <rng:ref name="key.document.pattern"/>
+                        </rng:choice>
+                    </rng:attribute>
+                    <rng:empty/>
+                </rng:element>
+            </rng:choice>
+        </content>
+        <attList>
+            <attDef ident="xml:id" mode="add" usage="req">
+                <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
+                <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
+                <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
+                <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element mit dem Attribut.</desc>
+                <datatype>
+                    <rng:ref name="key.writing.pattern"/>
+                </datatype>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="fileDesc" mode="change" module="header">
+        <constraintSpec scheme="schematron" ident="missing-writings-title">
+            <desc versionDate="2014-04-22" xml:lang="en">checks that all writings have a title</desc>
+            <desc versionDate="2014-04-22" xml:lang="de">Überprüft, dass alle Schriften einen Titel haben</desc>
+            <constraint>
+                <sch:assert test="tei:titleStmt/tei:title[@level='a']">Schrift hat keinen Titel</sch:assert>
+            </constraint>
+        </constraintSpec>
+    </elementSpec>
+    
+    <elementSpec ident="text" mode="change" module="textstructure">
+        <desc versionDate="2013-11-11" xml:lang="en">contains a single text of any kind, whether unitary or composite, for example a poem or drama, a collection of essays, a novel, a dictionary, or a corpus sample.</desc>
+        <desc versionDate="2013-11-11" xml:lang="de">enthält einen einzelnen Text jeglicher Art, ob einheitlich oder zusammengesetzt, beispielsweise ein Gedicht, ein Drama, eine Sammlung von Aufätzen, ein Roman, ein Wörterbuch, oder eine Sammlung.</desc>
+        <classes mode="change">
+            <memberOf key="att.declaring" mode="delete"/>
+            <memberOf key="att.typed" mode="delete"/>
+            <memberOf key="att.global" mode="delete"/>
+        </classes>
+        <content>
+            <rng:ref name="body"/>
+        </content>
+        <attList>
+            <attDef ident="type" mode="add" usage="req">
+                <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
+                <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</desc>
+                <valList type="closed">
+                    <valItem ident="performance-review">
+                        <desc versionDate="2013-11-11" xml:lang="en">a performance review.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Besprechung einer Aufführung.</desc>
+                    </valItem>
+                    <valItem ident="historic-news">
+                        <desc versionDate="2013-11-11" xml:lang="en">historic news.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">historische Neuigkeiten.</desc>
+                    </valItem>
+                    <valItem ident="concert_announcements">
+                        <desc versionDate="2017-06-26" xml:lang="en">ANnouncement of a concert (in some journal).</desc>
+                        <desc versionDate="2017-06-26" xml:lang="de">Anzeige eines Konzerts (in Periodika).</desc>
+                    </valItem>
+                </valList>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="body" mode="change" module="textstructure">
+        <gloss versionDate="2013-11-11" xml:lang="en">text body</gloss>
+        <desc versionDate="2013-11-11" xml:lang="en">contains the whole body of a single unitary text, excluding any front or back matter.</desc>
+        <gloss versionDate="2013-11-11" xml:lang="de">Textkörper</gloss>
+        <desc versionDate="2013-11-11" xml:lang="de">enthält den kompletten Hauptteil eines einzelnen einheitlichen Textes, ausschließlich jeglicher front oder back Materialien.</desc>
+        <classes mode="change">
+            <memberOf key="att.declaring" mode="delete"/>
+            <memberOf key="att.global" mode="delete"/>
+        </classes>
+        <content>
+            <rng:oneOrMore>
+                <rng:ref name="div"/>
+            </rng:oneOrMore>
+        </content>
+    </elementSpec>
+    
+    <elementSpec ident="div" mode="change" module="textstructure">
+        <gloss versionDate="2013-11-11" xml:lang="en">text division</gloss>
+        <desc versionDate="2013-11-11" xml:lang="en">contains a subdivision of the front, body, or back of a text.</desc>
+        <gloss versionDate="2013-11-11" xml:lang="de">Textbereich</gloss>
+        <desc versionDate="2013-11-11" xml:lang="de">enthält einen Subdivision des front, body oder back Bereichs eines Textes.</desc>
+        <classes mode="change">
+            <memberOf key="att.declaring" mode="delete"/>
+            <memberOf key="att.global" mode="delete"/>
+            <memberOf key="att.typed" mode="delete"/>
+            <memberOf key="att.divLike" mode="delete"/>
+        </classes>
+        <attList>
+            <attDef ident="decls" mode="add" usage="opt">
+                <desc versionDate="2013-11-11" xml:lang="en">identifies one or more <hi rend="italic">declarable elements</hi> within the header, which are understood to apply to the element bearing this attribute and its content.</desc>
+                <desc versionDate="2013-11-11" xml:lang="en">beschreibt ein oder mehrere <hi rend="italic">deklarationspflichtige Elemente</hi> im header, die auf das Element, dass das Attribut und dessen Inhalt trägt, bezogen werden sollen.</desc>
+                <datatype>
+                    <rng:ref name="data.pointer"/>
+                </datatype>
+            </attDef>
+            <attDef ident="xml:id" mode="add" usage="opt">
+                <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
+                <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
+                <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
+                <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element mit dem Attribut.</desc>
+                <datatype>
+                    <rng:data type="ID"/>
+                </datatype>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="idno" mode="change" module="header">
+        <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
+        <desc versionDate="2013-11-11" xml:lang="en">supplies any form of identifier used to identify some object, such as a bibliographic item, a person, a title, an organization, etc. in a standardized way.</desc>
+        <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
+        <desc versionDate="2013-11-11" xml:lang="de">lieferte jegliche Form eines Bezeichners in einer standardisierten Form, der benutzt werden kann um Objekte zu identifiziert, wie etwa ein bibliographisches Element, eine Organisation, usw.</desc>
+        <classes mode="change">
+            <memberOf key="att.global" mode="delete"/>
+        </classes>
+        <attList>
+            <attDef ident="type" mode="replace" usage="opt">
+                <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
+                <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</desc>
+                <valList type="closed">
+                    <valItem ident="WeGA">
+                        <desc versionDate="2013-11-11" xml:lang="en">The document identifier of the Carl-Maria-von-Weber-Gesamtausgabe (WeGA).</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Der Dokument-Bezeichner der Carl-Maria-von-Weber-Gesamtausgabe (WeGA).</desc>
+                    </valItem>
+                    <valItem ident="KS">
+                        <desc versionDate="2013-11-11" xml:lang="en">The document identifier from Georg Kaiser's 'Sämtliche Schriften von Carl Maria von Weber' (Schuster &amp; Löffler 1908).</desc>
+                        <desc versionDate="2013-11-11" xml:lang="en">Der Dokument-Bezeichner von Georg Kaiser's "Sämtliche Schriften von Carl Maria von Weber" (Schuster &amp; Löffler 1908).</desc> 
+                    </valItem>
+                </valList>
+            </attDef>
+            <attDef ident="n" mode="add" usage="opt">
+                <gloss versionDate="2013-11-11" xml:lang="en">number</gloss>
+                <desc versionDate="2013-11-11" xml:lang="en">gives a number (or other label) for an element, which is not necessarily unique within the document.</desc>
+                <gloss versionDate="2013-11-11" xml:lang="en">Nummer</gloss>
+                <desc versionDate="2013-11-11" xml:lang="de">gibt dem Element eine Nummer (oder eine andere Bezeichnung), die nicht unbedingt eindeutig im Dokument ist.</desc>
+                <datatype>
+                    <rng:choice>
+                        <rng:ref name="WeS.pattern"/>
+                        <rng:ref name="KS.pattern"/>
+                    </rng:choice>
+                </datatype>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="closer" mode="change" module="textstructure">
+        <desc versionDate="2013-11-11" xml:lang="en">groups together salutations, datelines, and similar phrases appearing as a final group at the end of a division, especially of a letter.</desc>
+        <desc versionDate="2013-11-11" xml:lang="de">gruppiert die Grußformeln, Datumszeilen, und ähnliche Formulierungen, die als letzte Gruppe am Ende eines Bereichs, besonders aber bei Briefen, auftreten.</desc>
+        <classes mode="change">
+            <memberOf key="att.global" mode="delete"/>
+            <memberOf key="att.written" mode="delete"/>
+        </classes>
+        <attList>
+            <attDef ident="rend" mode="add" usage="opt">
+                <gloss versionDate="2013-11-11" xml:lang="en">rendition</gloss>
+                <desc versionDate="2013-11-11" xml:lang="en">indicates how the element in question was rendered or presented in the source text.</desc>
+                <gloss versionDate="2013-11-11" xml:lang="de">Ausgabe</gloss>
+                <desc versionDate="2013-11-11" xml:lang="de">gibt an, wie das fragliche Element ausgegeben wurde oder im Quelltext präsentiert ist.</desc>
+                <datatype>
+                    <dataRef key="wegadata.textAlignment"/>
+                </datatype>
+            </attDef>
+            <attDef ident="xml:id" mode="add" usage="opt">
+                <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
+                <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
+                <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
+                <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.</desc>
+                <datatype>
+                    <rng:data type="ID"/>
+                </datatype>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+</schemaSpec>
