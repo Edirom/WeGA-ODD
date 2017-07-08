@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2017-05-07T19:04:24Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2017-07-08T14:41:49Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -138,12 +138,17 @@ The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the 
                         <assert test="@type=('editorial', 'summary', 'thematicCom', 'part', 'incipit')">Within the notesStmt only 'editorial', 'summary', 'part' or 'thematicCom' are allowed for @type on note.</assert>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wegaNews-author-sameAs-sameAs-reference-23">
+   <pattern id="schematron-constraint-wegaNews-graphic-graphic-url-check-23">
+      <rule context="tei:graphic">
+                    <assert test="matches(@url, '^[-_A-Za-z0-9\.]+$') or starts-with(@url, 'http') or starts-with(@url, 'wega:')">Found invalid (non-ASCII) characters for an internal URL in @url</assert>
+                </rule>
+   </pattern>
+   <pattern id="schematron-constraint-wegaNews-author-sameAs-sameAs-reference-24">
                             <rule context="tei:*[@sameAs]">
                                 <assert test="id(substring(@sameAs,2)) or starts-with(@sameAs, 'wega:')">There must be an element with the xml:id = "<value-of select="substring(@sameAs,2)"/>" which is the target of this @sameAs.</assert>
                             </rule>
                         </pattern>
-   <pattern id="schematron-constraint-wegaNews-title-duplicate-title-24">
+   <pattern id="schematron-constraint-wegaNews-title-duplicate-title-25">
                     <rule context="tei:title[following-sibling::tei:title]">
                         <let name="level" value="@level"/>
                         <let name="type" value="string(@type)"/> 
@@ -151,7 +156,7 @@ The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the 
                         <report test="following-sibling::tei:title[@level = $level][string(@xml:lang) = $lang][string(@type) = $type]">Following title without differing @type or xml:lang attribute</report>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wegaNews-title-punctuation-mark-25">
+   <pattern id="schematron-constraint-wegaNews-title-punctuation-mark-26">
       <rule context="tei:title">
                     <report test="matches(normalize-space(self::tei:title), '[\.,;]$') and not(matches(normalize-space(self::tei:title), '((\p{Lu})|(\setc)|(\sal)|([\s\.]a)|(\sBl)|(\sAufl))\.$'))">Found a non-valid punctuation mark at the end of <name/> 
          </report>
@@ -161,58 +166,68 @@ The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the 
       
     
       
-    <pattern id="isoschematron-constraint-wegaNews-div-abstractModel-structure-l-28">
+    <pattern id="isoschematron-constraint-wegaNews-div-abstractModel-structure-l-29">
       <rule context="tei:div">
          <report test="ancestor::tei:l">
         Abstract model violation: Lines may not contain higher-level structural elements such as div.
       </report>
       </rule>
    </pattern>
-   <pattern id="isoschematron-constraint-wegaNews-div-abstractModel-structure-p-29">
+   <pattern id="isoschematron-constraint-wegaNews-div-abstractModel-structure-p-30">
       <rule context="tei:div">
          <report test="ancestor::tei:p or ancestor::tei:ab and not(ancestor::tei:floatingText)">
         Abstract model violation: p and ab may not contain higher-level structural elements such as div.
       </report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaNews-orgName-parent-org-30">
+   <pattern id="schematron-constraint-wegaNews-orgName-parent-org-31">
                     <rule context="tei:orgName[parent::tei:org]">
                         <report test="@key or not(@type)">It is required to give the type ('alt' or 'reg') of the name while @key is forbiden here.</report>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wegaNews-orgName-parent-org-reg-31">
+   <pattern id="schematron-constraint-wegaNews-orgName-parent-org-reg-32">
                     <rule context="tei:orgName[parent::tei:org and not(preceding::tei:orgName)]">
                         <assert test="@type='reg'">There must exactly be one name with @type='reg'.</assert>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wegaNews-orgName-parent-org-reg-32">
+   <pattern id="schematron-constraint-wegaNews-orgName-parent-org-reg-33">
                     <rule context="tei:orgName[parent::tei:org and preceding::tei:orgName]">
                         <report test="@type='reg'">Only the first name can be of @type='reg'. Following names are supposed to be alternative names, @type='alt'.</report>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wegaNews-orgName-parent-not-org-33">
+   <pattern id="schematron-constraint-wegaNews-orgName-parent-not-org-34">
                     <rule context="tei:orgName[not(parent::tei:org)]">
                         <report test="@type">No @type attribute allowed here.</report>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wegaNews-whitespaceOnlyContent-34">
+   <pattern id="schematron-constraint-wegaNews-table-collapsible-head-35">
+      <rule context="tei:table">
+                    <report test="@rend='collapsible' and not(tei:head)">For the collapsible feature to work a head must be given for the <name/>.</report>
+                </rule>
+   </pattern>
+   <pattern id="schematron-constraint-wegaNews-cell-cell-rows-36">
+                    <rule context="tei:cell[@rows]">
+                        <report test="(count(parent::tei:row/following-sibling::tei:row) + 1) lt number(@rows)">There are less following rows than indicated in the @rows attribute.</report>
+                    </rule>
+                </pattern>
+   <pattern id="schematron-constraint-wegaNews-whitespaceOnlyContent-37">
                 <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('part', 'thematicCom'))] | tei:placeName | tei:title | tei:seg | tei:item[not(@* or *)]">
                     <report test="normalize-space(.) = ''">
             <name/> has whitespace only content</report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaNews-elementStartsWithWhitespace-35">
+   <pattern id="schematron-constraint-wegaNews-elementStartsWithWhitespace-38">
                 <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
                     <report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <name/>
          </report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaNews-untrimmedAttributeValues-36">
+   <pattern id="schematron-constraint-wegaNews-untrimmedAttributeValues-39">
                 <rule context="*">
                     <report test="some $i in @* satisfies string-length(normalize-unicode(normalize-space(replace($i, ' | | | ', ' ')))) ne string-length($i)">There is some whitespace here at the beginning or end of some attribute value.</report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaNews-att.wega.rend-underline-n-37">
+   <pattern id="schematron-constraint-wegaNews-att.wega.rend-underline-n-40">
                     <rule context="*:hi[@n] | *:rend[@n]">
                         <report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</report>
                     </rule>
