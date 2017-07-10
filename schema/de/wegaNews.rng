@@ -5,7 +5,7 @@
          xmlns:teix="http://www.tei-c.org/ns/Examples"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2017-07-08T14:41:48Z. .
+Schema generated from ODD source 2017-07-10T11:06:41Z. .
 TEI Edition: Version 3.1.0. Last updated on
 	15th December 2016, revision d3f5e70
 TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 3.1.0/
@@ -1597,7 +1597,9 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
       </choice>
    </define>
    <define name="model.divGenLike">
-      <notAllowed/>
+      <choice>
+         <ref name="divGen"/>
+      </choice>
    </define>
    <define name="model.teiHeaderPart">
       <choice>
@@ -2360,6 +2362,24 @@ Elements 7.2.5. Speech Contents]</a:documentation>
          <empty/>
       </element>
    </define>
+   <define name="divGen">
+      <element name="divGen">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Automatisch generierter Textabschnitt) bezeichnet die Position, an welcher ein automatisch generierter Textabschnitt erscheinen soll. [3.8.2. Index Entries]</a:documentation>
+         <empty/>
+         <optional>
+            <attribute name="type">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">spezifiziert, welche Art von Text generiert werden soll (z.B. Inhaltsverzeichnis).</a:documentation>
+               <choice>
+                  <value>toc</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Inhaltsverzeichnis) </a:documentation>
+                  <value>endNotes</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Einzelnachweise) Markiert die Stelle an der die Einzelnachweise (zusammengestellt aus den note-Elementen im laufenden Text) ausgegeben werden sollen.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
    <define name="teiHeader">
       <element name="teiHeader">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(TEI-Header (elektronische Titelseite)) beinhaltet beschreibende und erklärende Metadaten, die einer digitalen Ressource oder einer Sammlung von Ressourcen vorangestellt sind. [2.1.1. The TEI Header and Its Components 15.1. Varieties of Composite Text]</a:documentation>
@@ -2548,7 +2568,10 @@ Elements 7.2.5. Speech Contents]</a:documentation>
       <element name="body">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Textkörper) enthält den kompletten Hauptteil eines einzelnen einheitlichen Textes, ausschließlich jeglicher front oder back Materialien. [4. Default Text Structure]</a:documentation>
          <oneOrMore>
-            <ref name="div"/>
+            <choice>
+               <ref name="div"/>
+               <ref name="divGen"/>
+            </choice>
          </oneOrMore>
       </element>
    </define>
