@@ -2261,6 +2261,25 @@
             </attList>
         </elementSpec>
         
+        <elementSpec ident="fileDesc" mode="change" module="header">
+            <classes mode="change">
+                <memberOf key="att.global" mode="delete"/>
+            </classes>
+            <content>
+                <sequence>
+                    <elementRef key="titleStmt"/>
+                    <elementRef key="editionStmt"
+                        minOccurs="0"/>
+                    <elementRef key="publicationStmt"/>
+                    <elementRef key="seriesStmt"
+                        minOccurs="0"/>
+                    <elementRef key="notesStmt"
+                        minOccurs="0"/>
+                    <elementRef key="sourceDesc"/>
+                </sequence>
+            </content>
+        </elementSpec>
+        
         <elementSpec ident="sourceDesc" mode="change" module="header">
             <gloss versionDate="2013-11-11" xml:lang="en">source description</gloss>
             <desc versionDate="2013-11-11" xml:lang="en">describes the source from which an electronic text was derived or generated, typically a bibliographic description in the case of a digitized text, or a phrase such as "born digital" for a text which has no previous existence.</desc>
@@ -3194,18 +3213,20 @@
             <desc versionDate="2013-11-11" xml:lang="de">enthält eine Beschreibung von einem einzelnen zu identifizierenden Manuskript oder einem anderen textuellen Objekt.</desc>
             <classes mode="change">
                 <memberOf key="att.global" mode="delete"/>
+                <memberOf key="att.typed" mode="delete"/>
             </classes>
             <content>
-                <rng:ref name="msIdentifier"/>
-                <rng:optional>
-                    <rng:ref name="physDesc"/>
-                </rng:optional>
-                <rng:optional>
-                    <rng:ref name="history"/>
-                </rng:optional>
-                <rng:optional>
-                    <rng:ref name="additional"/>
-                </rng:optional>
+                <sequence>
+                    <elementRef key="msIdentifier"/>
+                    <elementRef key="physDesc"
+                        minOccurs="0"/>
+                    <elementRef key="history" 
+                        minOccurs="0"/>
+                    <elementRef key="additional"
+                        minOccurs="0"/>
+                    <elementRef key="msFrag" minOccurs="0"
+                        maxOccurs="unbounded"/>
+                </sequence>
             </content>
             <attList>
                 <attDef ident="rend" mode="add" usage="opt">
@@ -3235,6 +3256,24 @@
             </attList>
         </elementSpec>
         
+        <elementSpec ident="msFrag" mode="change" module="msdescription">
+            <classes mode="change">
+                <memberOf key="att.global" mode="delete"/>
+                <memberOf key="att.typed" mode="delete"/>
+            </classes>
+            <content>
+                <sequence>
+                    <elementRef key="msIdentifier"/>
+                    <elementRef key="physDesc"
+                        minOccurs="0"/>
+                    <elementRef key="history" 
+                        minOccurs="0"/>
+                    <elementRef key="additional"
+                        minOccurs="0"/>
+                </sequence>
+            </content>
+        </elementSpec>
+        
         <elementSpec ident="msIdentifier" mode="change" module="msdescription">
             <gloss versionDate="2013-11-11" xml:lang="en">manuscript identifier</gloss>
             <desc versionDate="2013-11-11" xml:lang="en">contains the information required to identify the manuscript being described.</desc>
@@ -3244,26 +3283,22 @@
                 <memberOf key="att.global" mode="delete"/>
             </classes>
             <content>
-                <rng:choice>
-                    <rng:ref name="repository"/>
-                    <rng:group>
-                        <rng:ref name="country"/>
-                        <rng:ref name="settlement"/>
-                        <rng:ref name="repository"/>
-                        <rng:optional>
-                            <rng:ref name="collection"/>
-                        </rng:optional>
-                    </rng:group>
-                    <rng:group>
-                        <rng:ref name="altIdentifier"/>
-                        <rng:oneOrMore>
-                            <rng:ref name="altIdentifier"/>
-                        </rng:oneOrMore>
-                    </rng:group>
-                </rng:choice>
-                <rng:optional>
-                    <rng:ref name="idno"/>
-                </rng:optional>
+                <sequence>
+                    <elementRef key="country"
+                        minOccurs="0"/>
+                    <elementRef key="settlement"
+                        minOccurs="0"/>
+                    <elementRef key="repository"/>
+                    <elementRef key="collection"
+                        minOccurs="0" maxOccurs="unbounded"/>
+                    <elementRef key="idno" 
+                        minOccurs="0"/>
+                    <alternate minOccurs="0"
+                        maxOccurs="unbounded">
+                        <elementRef key="msName"/>
+                        <elementRef key="altIdentifier"/>
+                    </alternate>
+                </sequence>
             </content>
         </elementSpec>
         
@@ -3296,33 +3331,18 @@
                 <memberOf key="att.typed" mode="delete"/>
             </classes>
             <content>
-                <rng:choice>
-                    <rng:ref name="repository"/>
-                    <rng:group>
-                        <rng:ref name="country"/>
-                        <rng:ref name="settlement"/>
-                        <rng:ref name="repository"/>
-                        <rng:optional>
-                            <rng:ref name="collection"/>
-                        </rng:optional>
-                    </rng:group>
-                </rng:choice>
-                <rng:optional>
-                    <rng:ref name="idno"/>
-                </rng:optional>
+                <sequence>
+                    <elementRef key="country"
+                        minOccurs="0"/>
+                    <elementRef key="settlement"
+                        minOccurs="0"/>
+                    <elementRef key="repository"/>
+                    <elementRef key="collection"
+                        minOccurs="0" maxOccurs="unbounded"/>
+                    <elementRef key="idno" 
+                        minOccurs="0"/>
+                </sequence>
             </content>
-            <attList>
-                <attDef ident="type" mode="add">
-                    <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
-                    <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</desc>
-                    <valList type="closed">
-                        <valItem ident="partial">
-                            <desc versionDate="2013-11-11" xml:lang="en">a distinct autograph is scattered across several libraries.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="en">ein eindeutiges Autograph ist auf mehrere Bibliotheken verteilt.</desc>
-                        </valItem>
-                    </valList>
-                </attDef>
-            </attList>
         </elementSpec>
         
         <elementSpec ident="physDesc" mode="change" module="msdescription">
@@ -3372,6 +3392,7 @@
                 <rng:ref name="listBibl"/>
             </content>
         </elementSpec>
+        
     </specGrp>
     
     <specGrp xml:id="wega-figures">
