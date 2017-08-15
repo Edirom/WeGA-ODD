@@ -5,7 +5,7 @@
          xmlns:teix="http://www.tei-c.org/ns/Examples"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2017-05-07T19:04:27Z. .
+Schema generated from ODD source 2017-08-15T16:11:56Z. .
 TEI Edition: Version 3.1.0. Last updated on
 	15th December 2016, revision d3f5e70
 TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 3.1.0/
@@ -4772,38 +4772,19 @@ relatedItem element must be empty</sch:report>
       <element name="fileDesc">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Dateibeschreibung) enthält die vollständige bibliografische Beschreibung einer elektronischen Datei. [2.2. The File Description 2.1.1. The TEI Header and Its Components]</a:documentation>
          <group>
-            <group>
-               <ref name="titleStmt"/>
-        
-               <optional>
-                  <ref name="editionStmt"/>
-               </optional>
-        
-        
-               <optional>
-                  <ref name="extent"/>
-               </optional>
-        
-               <ref name="publicationStmt"/>
-        
-               <optional>
-                  <ref name="seriesStmt"/>
-               </optional>
-        
-        
-               <optional>
-                  <ref name="notesStmt"/>
-               </optional>
-        
-            </group>
-      
-            <oneOrMore>
-               <ref name="sourceDesc"/>
-            </oneOrMore>
-      
+            <ref name="titleStmt"/>
+            <optional>
+               <ref name="editionStmt"/>
+            </optional>
+            <ref name="publicationStmt"/>
+            <optional>
+               <ref name="seriesStmt"/>
+            </optional>
+            <optional>
+               <ref name="notesStmt"/>
+            </optional>
+            <ref name="sourceDesc"/>
          </group>
-         <ref name="att.global.attributes"/>
-         <empty/>
       </element>
    </define>
    <define name="titleStmt">
@@ -5551,17 +5532,21 @@ Empfohlene Werte sind: 1] sent; 2] received; 3] transmitted; 4] redirected; 5] f
    <define name="msDesc">
       <element name="msDesc">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Beschreibung des Manuskripts) enthält eine Beschreibung von einem einzelnen zu identifizierenden Manuskript oder einem anderen textuellen Objekt. [10.1. Overview]</a:documentation>
-         <ref name="msIdentifier"/>
-         <optional>
-            <ref name="physDesc"/>
-         </optional>
-         <optional>
-            <ref name="history"/>
-         </optional>
-         <optional>
-            <ref name="additional"/>
-         </optional>
-         <ref name="att.typed.attributes"/>
+         <group>
+            <ref name="msIdentifier"/>
+            <optional>
+               <ref name="physDesc"/>
+            </optional>
+            <optional>
+               <ref name="history"/>
+            </optional>
+            <optional>
+               <ref name="additional"/>
+            </optional>
+            <zeroOrMore>
+               <ref name="msFrag"/>
+            </zeroOrMore>
+         </group>
          <ref name="att.declaring.attributes"/>
          <optional>
             <attribute name="rend">
@@ -5584,26 +5569,31 @@ Empfohlene Werte sind: 1] sent; 2] received; 3] transmitted; 4] redirected; 5] f
    <define name="msIdentifier">
       <element name="msIdentifier">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(manuscript identifierIdentifikator des Manuskripts) enthält die Informationen, die benötigt werden, um das beschriebene Manuskript zu identifizieren. [10.4. The Manuscript Identifier]</a:documentation>
-         <choice>
-            <ref name="repository"/>
+         <group>
             <group>
-               <ref name="country"/>
-               <ref name="settlement"/>
-               <ref name="repository"/>
                <optional>
+                  <ref name="country"/>
+               </optional>
+               <optional>
+                  <ref name="settlement"/>
+               </optional>
+               <optional>
+                  <ref name="repository"/>
+               </optional>
+               <zeroOrMore>
                   <ref name="collection"/>
+               </zeroOrMore>
+               <optional>
+                  <ref name="idno"/>
                </optional>
             </group>
-            <group>
-               <ref name="altIdentifier"/>
-               <oneOrMore>
+            <zeroOrMore>
+               <choice>
+                  <ref name="msName"/>
                   <ref name="altIdentifier"/>
-               </oneOrMore>
-            </group>
-         </choice>
-         <optional>
-            <ref name="idno"/>
-         </optional>
+               </choice>
+            </zeroOrMore>
+         </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   id="wega_all-msIdentifier-msId_minimal-constraint-report-33">
             <rule context="tei:msIdentifier">
@@ -5640,29 +5630,29 @@ Empfohlene Werte sind: 1] sent; 2] received; 3] transmitted; 4] redirected; 5] f
    <define name="altIdentifier">
       <element name="altIdentifier">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(alternative identifier) WeGA: wird verwendet, wenn ein früheres eindeutiges Autograph auf mehrere Bibliotheken verteilt ist (mit @type ="partial") [10.4. The Manuscript Identifier]</a:documentation>
-         <choice>
-            <ref name="repository"/>
-            <group>
+         <group>
+            <optional>
                <ref name="country"/>
+            </optional>
+            <optional>
                <ref name="settlement"/>
-               <ref name="repository"/>
-               <optional>
-                  <ref name="collection"/>
-               </optional>
-            </group>
-         </choice>
-         <optional>
-            <ref name="idno"/>
-         </optional>
-         <optional>
-            <attribute name="type">
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</a:documentation>
-               <choice>
-                  <value>partial</value>
-                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">a distinct autograph is scattered across several libraries.ein eindeutiges Autograph ist auf mehrere Bibliotheken verteilt.</a:documentation>
-               </choice>
-            </attribute>
-         </optional>
+            </optional>
+            <ref name="repository"/>
+            <zeroOrMore>
+               <ref name="collection"/>
+            </zeroOrMore>
+            <optional>
+               <ref name="idno"/>
+            </optional>
+         </group>
+      </element>
+   </define>
+   <define name="msName">
+      <element name="msName">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(alternative name) contains any form of unstructured alternative name used for a manuscript, such as an ocellus nominum, or nickname. [10.4. The Manuscript Identifier]</a:documentation>
+         <ref name="macro.xtext"/>
+         <ref name="att.global.attributes"/>
+         <ref name="att.typed.attributes"/>
          <empty/>
       </element>
    </define>
@@ -5733,6 +5723,23 @@ Empfohlene Werte sind: 1] sent; 2] received; 3] transmitted; 4] redirected; 5] f
       <element name="additional">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">gruppiert zusätzliche Informationen durch die Komination von bibliographischen Informationen über ein Manuskript oder Ersatzkopien dessen mit kuratorischen oder administrativen Informationen. [10.9. Additional Information]</a:documentation>
          <ref name="listBibl"/>
+      </element>
+   </define>
+   <define name="msFrag">
+      <element name="msFrag">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Fragment einer Handschrift) enthält Informationen zu einem Handschriftenfragment einer fragmentierten Handschrift, das heute als Einzeldokument oder eingebunden in eine Handschrift aufbewahrt wird. [10.11. Manuscript Fragments]</a:documentation>
+         <group>
+            <ref name="msIdentifier"/>
+            <optional>
+               <ref name="physDesc"/>
+            </optional>
+            <optional>
+               <ref name="history"/>
+            </optional>
+            <optional>
+               <ref name="additional"/>
+            </optional>
+         </group>
       </element>
    </define>
    <define name="model.persNamePart">
