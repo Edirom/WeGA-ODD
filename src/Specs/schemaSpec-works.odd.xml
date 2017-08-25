@@ -4,9 +4,10 @@
     xmlns:rng="http://relaxng.org/ns/structure/1.0"
     xmlns:sch="http://purl.oclc.org/dsdl/schematron">
     <moduleRef key="MEI"/>
+    <moduleRef key="MEI.text"/> <!-- needed to get model.listLike -->
     <moduleRef key="MEI.frbr" include="componentGrp item itemList"/>
-    <moduleRef key="MEI.shared" include="addrLine address annot body creation date edition extent group identifier incip lb mdiv mei music p physLoc pubPlace publisher rend repository respStmt score scoreDef section staffDef staffGrp title titlePage"/>
-    <moduleRef key="MEI.header" include="altId availability change changeDesc classCode classification condition dimensions editionStmt event eventList fileDesc hand handList history inscription instrVoice instrVoiceGrp instrumentation language langUsage meiHead notesStmt perfMedium physDesc physMedium plateNum price provenance pubStmt revisionDesc seriesStmt source term termList titleStmt useRestrict watermark work workDesc"/>
+    <moduleRef key="MEI.shared" include="addrLine address annot body creation date edition event eventList extent group head identifier incip lb mdiv mei music p physLoc pubPlace publisher rend repository respStmt score scoreDef section staffDef staffGrp title titlePage"/>
+    <moduleRef key="MEI.header" include="altId availability change changeDesc classCode classification condition dimensions editionStmt fileDesc hand handList history inscription language langUsage meiHead notesStmt perfMedium perfRes perfResList physDesc physMedium plateNum price provenance pubStmt revisionDesc seriesStmt source term termList titleStmt useRestrict watermark work workDesc"/>
     <moduleRef key="MEI.namesdates" include="corpName geogName periodName persName"/>
     <moduleRef key="MEI.cmn"/> <!-- for future use  -->
     <moduleRef key="MEI.edittrans" include="add damage del gap restore sic subst supplied"/>
@@ -22,6 +23,15 @@
             </rng:optional>
         </content>
     </macroSpec>-->
+    
+    <constraintSpec ident="set_ns" scheme="isoschematron" mode="add">
+        <constraint>
+            <sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron" prefix="mei"
+                uri="http://www.music-encoding.org/ns/mei"/>
+            <sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron" prefix="xlink"
+                uri="http://www.w3.org/1999/xlink"/>
+        </constraint>
+    </constraintSpec>
     
     <classSpec type="atts" ident="att.measurement" module="MEI.shared" mode="change">
         <attList>
@@ -453,7 +463,7 @@
         </classes>
     </elementSpec>
     
-    <classSpec type="model" ident="model.availabilityPart" mode="add" module="MEI.header">
+   <!-- <classSpec type="model" ident="model.availabilityPart" mode="add" module="MEI.header">
         <desc>groups elements that may appear as part of a description of the availability of and
             access to a bibliographic item.</desc>
     </classSpec>
@@ -464,7 +474,7 @@
                 <rng:ref name="model.availabilityPart"/>
             </rng:oneOrMore>
         </content>
-    </elementSpec>
+    </elementSpec>-->
     
     <elementSpec ident="repository" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
         <classes mode="change">
