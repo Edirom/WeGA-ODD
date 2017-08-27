@@ -5,7 +5,7 @@
          xmlns:teix="http://www.tei-c.org/ns/Examples"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.music-encoding.org/ns/mei"><!--
-Schema generated from ODD source 2017-08-25T15:08:12Z. .
+Schema generated from ODD source 2017-08-27T21:18:04Z. .
 TEI Edition: Version 3.0.0
 TEI Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -3893,12 +3893,6 @@ Empfohlene Werte sind: 1] gloss; 2] index; 3] instructions; 4] litany; 5] syllog
    <define name="model.resourceLike">
       <notAllowed/>
    </define>
-   <define name="model.respLike">
-      <choice>
-         <ref name="model.respLikePart"/>
-         <ref name="respStmt"/>
-      </choice>
-   </define>
    <define name="model.respLikePart">
       <notAllowed/>
    </define>
@@ -5705,7 +5699,7 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
       </element>
    </define>
    <define name="term">
-      <element name="term">
+      <element name="term" ns="http://www.music-encoding.org/ns/mei">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Keyword or phrase which describes a resource.</a:documentation>
          <zeroOrMore>
             <choice>
@@ -5716,9 +5710,33 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
          </zeroOrMore>
          <ref name="att.common.attributes"/>
          <ref name="att.bibl.attributes"/>
-         <ref name="att.classcodeident.attributes"/>
          <ref name="att.lang.attributes"/>
          <ref name="att.typed.attributes"/>
+         <optional>
+            <attribute name="classcode">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Contains a reference to the controlled vocabulary from which the term is drawn. The value must match the value of an ID attribute on a classCode element given elsewhere in the document.</a:documentation>
+               <choice>
+                  <value>http://d-nb.info/standards/elementset/gnd#MusicalWork</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Musikalisches Werk) entsprechend der GND Ontologie eine Unterklasse von 'Werk', siehe http://d-nb.info/standards/elementset/gnd#MusicalWork.</a:documentation>
+                  <value>http://d-nb.info/standards/elementset/gnd#Work</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Werk) entsprechend der GND Ontologie, siehe http://d-nb.info/standards/elementset/gnd#Work.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaWorks-term-classcode-check_classcodeTarget-constraint-rule-35">
+            <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="@classcode">
+                <sch:assert role="warning" test="not(normalize-space(.) eq '')">@classcode attribute
+                  should have content.</sch:assert>
+                <sch:assert role="warning"
+                           test="every $i in tokenize(., '\s+') satisfies substring($i,2)=//mei:classCode/@xml:id">The value in @classcode should correspond to the @xml:id attribute of a classCode
+                  element.</sch:assert>
+              </sch:rule>
+         </pattern>
          <empty/>
       </element>
    </define>
@@ -5736,16 +5754,16 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
       </element>
    </define>
    <define name="titleStmt">
-      <element name="titleStmt">
+      <element name="titleStmt" ns="http://www.music-encoding.org/ns/mei">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(title statement) – Container for title and responsibility meta-data.</a:documentation>
          <oneOrMore>
-            <ref name="model.titleLike"/>
+            <ref name="title"/>
          </oneOrMore>
-         <zeroOrMore>
-            <ref name="model.respLike"/>
-         </zeroOrMore>
+         <optional>
+            <ref name="respStmt"/>
+         </optional>
          <ref name="att.bibl.attributes"/>
-         <ref name="att.common.attributes"/>
+         <ref name="att.id.attribute.xmlid"/>
          <empty/>
       </element>
    </define>
@@ -7433,7 +7451,7 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
             </choice>
          </zeroOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-beam-When_not_copyof_beam_content-constraint-rule-35">
+                  id="wegaWorks-beam-When_not_copyof_beam_content-constraint-rule-36">
             <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -7456,7 +7474,7 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(beam span) – Alternative element for explicitly encoding beams, particularly those which extend across bar lines.</a:documentation>
          <empty/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-beamSpan-beamspan_start-_and_end-type_attributes_required-constraint-rule-36">
+                  id="wegaWorks-beamSpan-beamspan_start-_and_end-type_attributes_required-constraint-rule-37">
             <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -7496,7 +7514,7 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A variation in pitch (often micro-tonal) upwards or downwards during the course of a note.</a:documentation>
          <empty/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-bend-bend_start-_and_end-type_attributes_required-constraint-rule-37">
+                  id="wegaWorks-bend-bend_start-_and_end-type_attributes_required-constraint-rule-38">
             <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -7522,7 +7540,7 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(breath mark) – A indication of a point at which the performer on an instrument requiring breath (including the voice) may breathe.</a:documentation>
          <empty/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-breath-breath_start-type_attributes_required-constraint-rule-38">
+                  id="wegaWorks-breath-breath_start-type_attributes_required-constraint-rule-39">
             <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -7558,7 +7576,7 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An indication placed over a note or rest to indicate that it should be held longer than its written value. May also occur over a bar line to indicate the end of a phrase or section. Sometimes called a 'hold' or 'pause'.</a:documentation>
          <empty/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-fermata-fermata_start-type_attributes_required-constraint-rule-39">
+                  id="wegaWorks-fermata-fermata_start-type_attributes_required-constraint-rule-40">
             <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -7599,7 +7617,7 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
             </choice>
          </zeroOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-gliss-gliss_start-_and_end-type_attributes_required-constraint-rule-40">
+                  id="wegaWorks-gliss-gliss_start-_and_end-type_attributes_required-constraint-rule-41">
             <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -7625,7 +7643,7 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Indicates continuous dynamics expressed on the score as wedge-shaped graphics, e.g. &lt; and &gt;.</a:documentation>
          <empty/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-hairpin-hairpin_start-_and_end-type_attributes_required-constraint-rule-41">
+                  id="wegaWorks-hairpin-hairpin_start-_and_end-type_attributes_required-constraint-rule-42">
             <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -7663,7 +7681,7 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(harp pedal) – Harp pedal diagram.</a:documentation>
          <empty/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-harpPedal-harpPedal_start-type_attributes_required-constraint-rule-42">
+                  id="wegaWorks-harpPedal-harpPedal_start-type_attributes_required-constraint-rule-43">
             <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -7817,7 +7835,7 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
             </choice>
          </zeroOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-octave-octave_start-_and_end-type_attributes_required-constraint-rule-43">
+                  id="wegaWorks-octave-octave_start-_and_end-type_attributes_required-constraint-rule-44">
             <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -7881,7 +7899,7 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Piano pedal mark.</a:documentation>
          <empty/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-pedal-pedal_start-type_attributes_required-constraint-rule-46">
+                  id="wegaWorks-pedal-pedal_start-type_attributes_required-constraint-rule-47">
             <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -7924,7 +7942,7 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
       <element name="slur">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Indication of 1) a "unified melodic idea" or 2) performance technique.</a:documentation>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-slur-slur_start-_and_end-type_attributes_required-constraint-rule-47">
+                  id="wegaWorks-slur-slur_start-_and_end-type_attributes_required-constraint-rule-48">
             <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -7937,7 +7955,7 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
             </sch:rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-slur-slur_containing_curve-constraint-rule-48">
+                  id="wegaWorks-slur-slur_containing_curve-constraint-rule-49">
             <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -7963,7 +7981,7 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
       <element name="tie">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An indication that two notes of the same pitch form a single note with their combined rhythmic values.</a:documentation>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-tie-tie_start-_and_end-type_attributes_required-constraint-rule-49">
+                  id="wegaWorks-tie-tie_start-_and_end-type_attributes_required-constraint-rule-50">
             <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -7976,7 +7994,7 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
             </sch:rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-tie-tie_containing_curve-constraint-rule-50">
+                  id="wegaWorks-tie-tie_containing_curve-constraint-rule-51">
             <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -8009,7 +8027,7 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
             </choice>
          </zeroOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-rule-51">
+                  id="wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-rule-52">
             <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -8032,7 +8050,7 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(tuplet span) – Alternative element for encoding tuplets, especially useful for tuplets that extend across bar lines.</a:documentation>
          <empty/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-tupletSpan-tupletSpan_start-_and_end-type_attributes_required-constraint-rule-52">
+                  id="wegaWorks-tupletSpan-tupletSpan_start-_and_end-type_attributes_required-constraint-rule-53">
             <sch:rule xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -8385,7 +8403,7 @@ Empfohlene Werte sind: 1] interline; 2] intraline; 3] overstrike</a:documentatio
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWorks-att.wega.rend-underline-n-constraint-rule-53">
+            id="wegaWorks-att.wega.rend-underline-n-constraint-rule-54">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
@@ -8404,8 +8422,5 @@ Empfohlene Werte sind: 1] interline; 2] intraline; 3] overstrike</a:documentatio
    </start>
    <ns xmlns="http://purl.oclc.org/dsdl/schematron"
        prefix="mei"
-       uri="http://www.music-encoding.org/ns/mei"/> 
-   <ns xmlns="http://purl.oclc.org/dsdl/schematron"
-       prefix="xlink"
-       uri="http://www.w3.org/1999/xlink"/>
+       uri="http://www.music-encoding.org/ns/mei"/>
 </grammar>
