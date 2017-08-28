@@ -3048,27 +3048,25 @@
           </datatype>
         </attDef>
       </attList>
-    </classSpec><classSpec rend="add" ident="att.classcodeident" module="MEI.shared" type="atts">
-      <attList xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
-        <attDef ident="classcode" usage="opt">
-          <desc>Contains a reference to the controlled vocabulary from which the term is drawn. The
-            value must match the value of an ID attribute on a classCode element given elsewhere in
-            the document.</desc>
-          <datatype>
-            <ref xmlns="http://relaxng.org/ns/structure/1.0" name="data.URI"/>
-          </datatype>
-          <constraintSpec ident="check_classcodeTarget" scheme="isoschematron">
-            <constraint>
-              <sch:rule context="@classcode">
-                <sch:assert role="warning" test="not(normalize-space(.) eq '')">@classcode attribute
-                  should have content.</sch:assert>
-                <sch:assert role="warning" test="every $i in tokenize(., '\s+') satisfies substring($i,2)=//mei:classCode/@xml:id">The value in @classcode should correspond to the @xml:id attribute of a classCode
-                  element.</sch:assert>
-              </sch:rule>
-            </constraint>
-          </constraintSpec>
-        </attDef>
-      </attList>
+    </classSpec><classSpec ident="att.classcodeident" module="MEI.shared" type="atts" mode="replace">
+        <attList>
+            <attDef ident="classcode" mode="change" usage="rec">
+                <valList mode="replace" type="closed">
+                    <valItem ident="http://d-nb.info/standards/elementset/gnd#MusicalWork">
+                        <gloss versionDate="2016-10-19" xml:lang="en">musical work</gloss>
+                        <gloss versionDate="2016-10-19" xml:lang="de">Musikalisches Werk</gloss>
+                        <desc versionDate="2016-10-19" xml:lang="en">a subclass of 'work' according to the GND Ontology, see <ref target="http://d-nb.info/standards/elementset/gnd#MusicalWork">http://d-nb.info/standards/elementset/gnd#MusicalWork</ref>.</desc>
+                        <desc versionDate="2016-10-19" xml:lang="de">entsprechend der GND Ontologie eine Unterklasse von 'Werk', siehe <ref target="http://d-nb.info/standards/elementset/gnd#MusicalWork">http://d-nb.info/standards/elementset/gnd#MusicalWork</ref>.</desc>
+                    </valItem>
+                    <valItem ident="http://d-nb.info/standards/elementset/gnd#Work">
+                        <gloss versionDate="2016-10-19" xml:lang="en">work</gloss>
+                        <gloss versionDate="2016-10-19" xml:lang="de">Werk</gloss>
+                        <desc versionDate="2016-10-19" xml:lang="en">according to the GND Ontology, see <ref target="http://d-nb.info/standards/elementset/gnd#Work">http://d-nb.info/standards/elementset/gnd#Work</ref>.</desc>
+                        <desc versionDate="2016-10-19" xml:lang="de">entsprechend der GND Ontologie, siehe <ref target="http://d-nb.info/standards/elementset/gnd#Work">http://d-nb.info/standards/elementset/gnd#Work</ref>.</desc>
+                    </valItem>
+                </valList>
+            </attDef>
+        </attList>
     </classSpec><classSpec rend="add" ident="att.cleffing.log" module="MEI.shared" type="atts">
       <desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Used by staffDef and scoreDef to provide default values for attributes in the logical
         domain related to clefs.</desc>
@@ -5766,25 +5764,9 @@
       </remarks><remarks xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <p>This element is modelled on an element in the Encoded Archival Description (EAD)
           standard.</p>
-      </remarks></elementSpec><elementSpec rend="add" ident="respStmt" module="MEI.shared"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(responsibility statement) – Names one or more individuals, groups, or in rare cases,
+      </remarks></elementSpec><elementSpec rend="add" ident="respStmt" module="MEI.shared" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(responsibility statement) – Names one or more individuals, groups, or in rare cases,
         mechanical processes, responsible for creation or realization of the intellectual or
-        artistic content.</desc><classes xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
-        <memberOf key="att.common"/>
-        <memberOf key="att.bibl"/>
-        
-        <memberOf key="model.pubStmtPart"/>
-        
-      </classes><content xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
-        <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><ref name="resp"/><ref name="model.nameLike"/></choice></zeroOrMore>
-      </content><constraintSpec xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="check_respStmt" scheme="isoschematron">
-        <constraint>
-          <sch:rule context="mei:*[local-name()='titleStmt' or local-name()='pubStmt' or local-name()='seriesStmt']/mei:respStmt">
-            <sch:assert role="warning" test="mei:resp or (count(mei:*[@role]) = count(mei:*))">If at
-              least one resp element isn't present, all name-like elements should have a @role
-              attribute.</sch:assert>
-          </sch:rule>
-        </constraint>
-      </constraintSpec><remarks xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+        artistic content.</desc><classes><memberOf key="att.common"/><memberOf key="att.bibl"/><memberOf key="model.pubStmtPart"/></classes><content><zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><ref name="resp"/><ref name="model.nameLike"/></choice></zeroOrMore></content><attList/><remarks xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <p>This element is modelled on an element in the Text Encoding Initiative (TEI)
           standard.</p>
       </remarks></elementSpec><elementSpec rend="add" ident="score" module="MEI.shared"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Full score view of the musical content.</desc><classes xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
@@ -6529,7 +6511,7 @@
         <p>This element is modelled on an element in the Text Encoding Initiative (TEI)
           standard.</p>
       </remarks></elementSpec><elementSpec rend="add" ident="source" module="MEI.header" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A bibliographic description of a source used in the creation of the electronic
-        file.</desc><classes><memberOf key="att.common"/><memberOf key="att.bibl"/><memberOf key="att.datapointing"/><memberOf key="att.pointing"/><memberOf key="att.targeteval"/><memberOf key="model.manifestationLike"/></classes><content><zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><ref name="model.identifierLike"/></zeroOrMore><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="titleStmt"/></optional><ref xmlns="http://relaxng.org/ns/structure/1.0" name="macro.bibldescPart"/><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="contents"/></optional><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="history"/></optional><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="langUsage"/></optional><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="notesStmt"/></optional><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="classification"/></optional><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="itemList"/></optional><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="componentGrp"/></optional><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="relationList"/></optional></content><constraintSpec scheme="schematron" ident="id-check">
+        file.</desc><classes><memberOf key="att.common"/><memberOf key="att.bibl"/><memberOf key="att.datapointing"/><memberOf key="att.pointing"/><memberOf key="att.targeteval"/><memberOf key="model.manifestationLike"/></classes><content><zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><ref name="model.identifierLike"/></zeroOrMore><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="titleStmt"/></optional><ref xmlns="http://relaxng.org/ns/structure/1.0" name="macro.bibldescPart"/><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="creation"/></optional><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="history"/></optional><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="langUsage"/></optional><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="contents"/></optional><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="notesStmt"/></optional><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="classification"/></optional><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="itemList"/></optional><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="componentGrp"/></optional><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="relationList"/></optional></content><constraintSpec scheme="schematron" ident="id-check">
             <constraint>
                 <sch:rule context="mei:source">
                     <sch:assert test="@xml:id or ancestor::mei:source">
@@ -6549,22 +6531,15 @@
       </remarks><remarks xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <p>This element is modelled on elements in the Text Encoding Initiative (TEI) and Encoded
           Archival Description (EAD) standards.</p>
-      </remarks></elementSpec><elementSpec rend="add" ident="term" module="MEI.header" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Keyword or phrase which describes a resource.</desc><classes><memberOf key="att.common"/><memberOf key="att.bibl"/><memberOf key="att.classcodeident"/><memberOf key="att.lang"/><memberOf key="att.typed"/></classes><content><zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><rng:text xmlns="http://www.tei-c.org/ns/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/><ref name="term"/><ref name="model.textphraseLike.limited"/></choice></zeroOrMore></content><attList><attDef ident="classcode" mode="change" usage="rec">
-                <valList mode="replace" type="closed">
-                    <valItem ident="http://d-nb.info/standards/elementset/gnd#MusicalWork">
-                        <gloss versionDate="2016-10-19" xml:lang="en">musical work</gloss>
-                        <gloss versionDate="2016-10-19" xml:lang="de">Musikalisches Werk</gloss>
-                        <desc versionDate="2016-10-19" xml:lang="en">a subclass of 'work' according to the GND Ontology, see <ref target="http://d-nb.info/standards/elementset/gnd#MusicalWork">http://d-nb.info/standards/elementset/gnd#MusicalWork</ref>.</desc>
-                        <desc versionDate="2016-10-19" xml:lang="de">entsprechend der GND Ontologie eine Unterklasse von 'Werk', siehe <ref target="http://d-nb.info/standards/elementset/gnd#MusicalWork">http://d-nb.info/standards/elementset/gnd#MusicalWork</ref>.</desc>
-                    </valItem>
-                    <valItem ident="http://d-nb.info/standards/elementset/gnd#Work">
-                        <gloss versionDate="2016-10-19" xml:lang="en">work</gloss>
-                        <gloss versionDate="2016-10-19" xml:lang="de">Werk</gloss>
-                        <desc versionDate="2016-10-19" xml:lang="en">according to the GND Ontology, see <ref target="http://d-nb.info/standards/elementset/gnd#Work">http://d-nb.info/standards/elementset/gnd#Work</ref>.</desc>
-                        <desc versionDate="2016-10-19" xml:lang="de">entsprechend der GND Ontologie, siehe <ref target="http://d-nb.info/standards/elementset/gnd#Work">http://d-nb.info/standards/elementset/gnd#Work</ref>.</desc>
-                    </valItem>
-                </valList>
-            </attDef></attList><remarks xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+      </remarks></elementSpec><elementSpec rend="add" ident="term" module="MEI.header"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Keyword or phrase which describes a resource.</desc><classes xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+        <memberOf key="att.common"/>
+        <memberOf key="att.bibl"/>
+        <memberOf key="att.classcodeident"/>
+        <memberOf key="att.lang"/>
+        <memberOf key="att.typed"/>
+      </classes><content xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+        <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><rng:text xmlns="http://www.tei-c.org/ns/1.0"/><ref name="term"/><ref name="model.textphraseLike.limited"/></choice></zeroOrMore>
+      </content><remarks xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <p>The <att>classcode</att> attribute may be used to link the term to a terminological
           source given in a <gi scheme="MEI">classCode</gi> element. The <gi scheme="MEI">term</gi>
           element may include other <gi scheme="MEI">term</gi> elements in order to allow the
