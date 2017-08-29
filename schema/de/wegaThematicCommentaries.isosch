@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2017-08-16T13:41:19Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2017-08-29T18:48:43Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -243,53 +243,74 @@ On <name/>, either the @marks attribute should be used, or a paragraph of descri
                     <report test="@rend='collapsible' and not(tei:head)">For the collapsible feature to work a head must be given for the <name/>.</report>
                 </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaThematicCommentaries-cell-cell-rows-42">
+   <pattern id="schematron-constraint-wegaThematicCommentaries-row-number-of-cells-42">
+                    <rule context="tei:row[preceding-sibling::tei:row]">
+                        <let name="thisNode" value="."/>
+                        
+                        <let name="thisRowCellCount"
+              value="count(tei:cell[not(@cols)]) + sum(tei:cell/@cols)"/>
+                        
+                        <let name="precedingCellsWithRowspan"
+              value="preceding-sibling::tei:row/tei:cell[@rows][some $i in (1 to xs:integer(@rows - 1)) satisfies parent::tei:row/following-sibling::tei:row[$i] is $thisNode]"/>
+                        
+                        <let name="precedingCellsWithRowspanPlus1"
+              value="preceding-sibling::tei:row/tei:cell[@rows][some $i in (1 to xs:integer(@rows)) satisfies parent::tei:row/following-sibling::tei:row[$i] is $thisNode]"/>
+                        
+                        <let name="precedingCellsWithRowspanCount"
+              value="count($precedingCellsWithRowspan[not(@cols)]) + sum($precedingCellsWithRowspan/@cols)"/>
+                        
+                        <let name="precedingRowCellCount"
+              value="                             count(preceding-sibling::tei:row[1]/tei:cell[not(@cols)])                              + sum(preceding-sibling::tei:row[1]/tei:cell/@cols)                              + count(($precedingCellsWithRowspanPlus1 except preceding-sibling::tei:row[1]/tei:cell)[not(@cols)])                             + sum(($precedingCellsWithRowspanPlus1 except preceding-sibling::tei:row[1]/tei:cell)/@cols)"/>
+                        <assert test="$thisRowCellCount + $precedingCellsWithRowspanCount = $precedingRowCellCount">The total ammount of cells should be equal for every row in a table. This row ammounts to <value-of select="$thisRowCellCount + $precedingCellsWithRowspanCount"/> cells (possibly affected by some preceding rowspans, i.e. cell/@rows) instead of <value-of select="$precedingRowCellCount"/> for the preceding row.</assert>
+                    </rule>
+                </pattern>
+   <pattern id="schematron-constraint-wegaThematicCommentaries-cell-cell-rows-43">
                     <rule context="tei:cell[@rows]">
                         <report test="(count(parent::tei:row/following-sibling::tei:row) + 1) lt number(@rows)">There are less following rows than indicated in the @rows attribute.</report>
                     </rule>
                 </pattern>
-   <pattern id="isoschematron-constraint-wegaThematicCommentaries-ab-abstractModel-structure-p-43">
+   <pattern id="isoschematron-constraint-wegaThematicCommentaries-ab-abstractModel-structure-p-44">
       <rule context="tei:ab">
          <report test="(ancestor::tei:p or ancestor::tei:ab)          and not(parent::tei:exemplum         |parent::tei:item         |parent::tei:note         |parent::tei:q         |parent::tei:quote         |parent::tei:remarks         |parent::tei:said         |parent::tei:sp         |parent::tei:stage         |parent::tei:cell         |parent::tei:figure)">
         Abstract model violation: ab may not contain paragraphs or other ab elements.
       </report>
       </rule>
    </pattern>
-   <pattern id="isoschematron-constraint-wegaThematicCommentaries-ab-abstractModel-structure-l-44">
+   <pattern id="isoschematron-constraint-wegaThematicCommentaries-ab-abstractModel-structure-l-45">
       <rule context="tei:ab">
          <report test="ancestor::tei:l or ancestor::tei:lg">
         Abstract model violation: Lines may not contain higher-level divisions such as p or ab.
       </report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaThematicCommentaries-seg-activeOrPassivePerformance-45">
+   <pattern id="schematron-constraint-wegaThematicCommentaries-seg-activeOrPassivePerformance-46">
       <rule context="tei:seg">
                     <report test="./@subtype = ('active', 'passive') and not(./@type = 'performance')">if @subtype contains 'active' or 'passive' @type has to be 'performance'</report>
                 </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaThematicCommentaries-seg-AddresseeOrSenderCorrespondence-46">
+   <pattern id="schematron-constraint-wegaThematicCommentaries-seg-AddresseeOrSenderCorrespondence-47">
       <rule context="tei:seg">
                     <report test="./@subtype = ('sender', 'addressee') and not(./@type = 'correspondence')">if @subtype contains 'sender' or 'addressee' @type has to be 'correspondence'</report>
                 </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaThematicCommentaries-att.wega.rend-underline-n-47">
+   <pattern id="schematron-constraint-wegaThematicCommentaries-att.wega.rend-underline-n-48">
                     <rule context="*:hi[@n] | *:rend[@n]">
                         <report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</report>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wegaThematicCommentaries-whitespaceOnlyContent-48">
+   <pattern id="schematron-constraint-wegaThematicCommentaries-whitespaceOnlyContent-49">
                 <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('part', 'thematicCom'))] | tei:placeName | tei:title | tei:seg | tei:item[not(@* or *)]">
                     <report test="normalize-space(.) = ''">
             <name/> has whitespace only content</report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaThematicCommentaries-elementStartsWithWhitespace-49">
+   <pattern id="schematron-constraint-wegaThematicCommentaries-elementStartsWithWhitespace-50">
                 <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
                     <report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <name/>
          </report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaThematicCommentaries-untrimmedAttributeValues-50">
+   <pattern id="schematron-constraint-wegaThematicCommentaries-untrimmedAttributeValues-51">
                 <rule context="*">
                     <report test="some $i in @* satisfies string-length(normalize-unicode(normalize-space(replace($i, ' | | | ', ' ')))) ne string-length($i)">There is some whitespace here at the beginning or end of some attribute value.</report>
                 </rule>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2017-05-07T19:04:27Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2017-08-29T18:48:44Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -238,36 +238,57 @@ On <name/>, either the @marks attribute should be used, or a paragraph of descri
                     <report test="@rend='collapsible' and not(tei:head)">For the collapsible feature to work a head must be given for the <name/>.</report>
                 </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaVar-cell-cell-rows-41">
+   <pattern id="schematron-constraint-wegaVar-row-number-of-cells-41">
+                    <rule context="tei:row[preceding-sibling::tei:row]">
+                        <let name="thisNode" value="."/>
+                        
+                        <let name="thisRowCellCount"
+              value="count(tei:cell[not(@cols)]) + sum(tei:cell/@cols)"/>
+                        
+                        <let name="precedingCellsWithRowspan"
+              value="preceding-sibling::tei:row/tei:cell[@rows][some $i in (1 to xs:integer(@rows - 1)) satisfies parent::tei:row/following-sibling::tei:row[$i] is $thisNode]"/>
+                        
+                        <let name="precedingCellsWithRowspanPlus1"
+              value="preceding-sibling::tei:row/tei:cell[@rows][some $i in (1 to xs:integer(@rows)) satisfies parent::tei:row/following-sibling::tei:row[$i] is $thisNode]"/>
+                        
+                        <let name="precedingCellsWithRowspanCount"
+              value="count($precedingCellsWithRowspan[not(@cols)]) + sum($precedingCellsWithRowspan/@cols)"/>
+                        
+                        <let name="precedingRowCellCount"
+              value="                             count(preceding-sibling::tei:row[1]/tei:cell[not(@cols)])                              + sum(preceding-sibling::tei:row[1]/tei:cell/@cols)                              + count(($precedingCellsWithRowspanPlus1 except preceding-sibling::tei:row[1]/tei:cell)[not(@cols)])                             + sum(($precedingCellsWithRowspanPlus1 except preceding-sibling::tei:row[1]/tei:cell)/@cols)"/>
+                        <assert test="$thisRowCellCount + $precedingCellsWithRowspanCount = $precedingRowCellCount">The total ammount of cells should be equal for every row in a table. This row ammounts to <value-of select="$thisRowCellCount + $precedingCellsWithRowspanCount"/> cells (possibly affected by some preceding rowspans, i.e. cell/@rows) instead of <value-of select="$precedingRowCellCount"/> for the preceding row.</assert>
+                    </rule>
+                </pattern>
+   <pattern id="schematron-constraint-wegaVar-cell-cell-rows-42">
                     <rule context="tei:cell[@rows]">
                         <report test="(count(parent::tei:row/following-sibling::tei:row) + 1) lt number(@rows)">There are less following rows than indicated in the @rows attribute.</report>
                     </rule>
                 </pattern>
-   <pattern id="isoschematron-constraint-wegaVar-ab-abstractModel-structure-p-42">
+   <pattern id="isoschematron-constraint-wegaVar-ab-abstractModel-structure-p-43">
       <rule context="tei:ab">
          <report test="(ancestor::tei:p or ancestor::tei:ab)          and not(parent::tei:exemplum         |parent::tei:item         |parent::tei:note         |parent::tei:q         |parent::tei:quote         |parent::tei:remarks         |parent::tei:said         |parent::tei:sp         |parent::tei:stage         |parent::tei:cell         |parent::tei:figure)">
         Abstract model violation: ab may not contain paragraphs or other ab elements.
       </report>
       </rule>
    </pattern>
-   <pattern id="isoschematron-constraint-wegaVar-ab-abstractModel-structure-l-43">
+   <pattern id="isoschematron-constraint-wegaVar-ab-abstractModel-structure-l-44">
       <rule context="tei:ab">
          <report test="ancestor::tei:l or ancestor::tei:lg">
         Abstract model violation: Lines may not contain higher-level divisions such as p or ab.
       </report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaVar-seg-activeOrPassivePerformance-44">
+   <pattern id="schematron-constraint-wegaVar-seg-activeOrPassivePerformance-45">
       <rule context="tei:seg">
                     <report test="./@subtype = ('active', 'passive') and not(./@type = 'performance')">if @subtype contains 'active' or 'passive' @type has to be 'performance'</report>
                 </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaVar-seg-AddresseeOrSenderCorrespondence-45">
+   <pattern id="schematron-constraint-wegaVar-seg-AddresseeOrSenderCorrespondence-46">
       <rule context="tei:seg">
                     <report test="./@subtype = ('sender', 'addressee') and not(./@type = 'correspondence')">if @subtype contains 'sender' or 'addressee' @type has to be 'correspondence'</report>
                 </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaVar-att.wega.rend-underline-n-46">
+   <pattern id="schematron-constraint-wegaVar-att.wega.rend-underline-n-47">
                     <rule context="*:hi[@n] | *:rend[@n]">
                         <report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</report>
                     </rule>

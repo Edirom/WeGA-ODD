@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2017-07-08T14:41:49Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2017-08-29T18:48:38Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -205,29 +205,50 @@ The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the 
                     <report test="@rend='collapsible' and not(tei:head)">For the collapsible feature to work a head must be given for the <name/>.</report>
                 </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaNews-cell-cell-rows-36">
+   <pattern id="schematron-constraint-wegaNews-row-number-of-cells-36">
+                    <rule context="tei:row[preceding-sibling::tei:row]">
+                        <let name="thisNode" value="."/>
+                        
+                        <let name="thisRowCellCount"
+              value="count(tei:cell[not(@cols)]) + sum(tei:cell/@cols)"/>
+                        
+                        <let name="precedingCellsWithRowspan"
+              value="preceding-sibling::tei:row/tei:cell[@rows][some $i in (1 to xs:integer(@rows - 1)) satisfies parent::tei:row/following-sibling::tei:row[$i] is $thisNode]"/>
+                        
+                        <let name="precedingCellsWithRowspanPlus1"
+              value="preceding-sibling::tei:row/tei:cell[@rows][some $i in (1 to xs:integer(@rows)) satisfies parent::tei:row/following-sibling::tei:row[$i] is $thisNode]"/>
+                        
+                        <let name="precedingCellsWithRowspanCount"
+              value="count($precedingCellsWithRowspan[not(@cols)]) + sum($precedingCellsWithRowspan/@cols)"/>
+                        
+                        <let name="precedingRowCellCount"
+              value="                             count(preceding-sibling::tei:row[1]/tei:cell[not(@cols)])                              + sum(preceding-sibling::tei:row[1]/tei:cell/@cols)                              + count(($precedingCellsWithRowspanPlus1 except preceding-sibling::tei:row[1]/tei:cell)[not(@cols)])                             + sum(($precedingCellsWithRowspanPlus1 except preceding-sibling::tei:row[1]/tei:cell)/@cols)"/>
+                        <assert test="$thisRowCellCount + $precedingCellsWithRowspanCount = $precedingRowCellCount">The total ammount of cells should be equal for every row in a table. This row ammounts to <value-of select="$thisRowCellCount + $precedingCellsWithRowspanCount"/> cells (possibly affected by some preceding rowspans, i.e. cell/@rows) instead of <value-of select="$precedingRowCellCount"/> for the preceding row.</assert>
+                    </rule>
+                </pattern>
+   <pattern id="schematron-constraint-wegaNews-cell-cell-rows-37">
                     <rule context="tei:cell[@rows]">
                         <report test="(count(parent::tei:row/following-sibling::tei:row) + 1) lt number(@rows)">There are less following rows than indicated in the @rows attribute.</report>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wegaNews-whitespaceOnlyContent-37">
+   <pattern id="schematron-constraint-wegaNews-whitespaceOnlyContent-38">
                 <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('part', 'thematicCom'))] | tei:placeName | tei:title | tei:seg | tei:item[not(@* or *)]">
                     <report test="normalize-space(.) = ''">
             <name/> has whitespace only content</report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaNews-elementStartsWithWhitespace-38">
+   <pattern id="schematron-constraint-wegaNews-elementStartsWithWhitespace-39">
                 <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
                     <report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <name/>
          </report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaNews-untrimmedAttributeValues-39">
+   <pattern id="schematron-constraint-wegaNews-untrimmedAttributeValues-40">
                 <rule context="*">
                     <report test="some $i in @* satisfies string-length(normalize-unicode(normalize-space(replace($i, ' | | | ', ' ')))) ne string-length($i)">There is some whitespace here at the beginning or end of some attribute value.</report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaNews-att.wega.rend-underline-n-40">
+   <pattern id="schematron-constraint-wegaNews-att.wega.rend-underline-n-41">
                     <rule context="*:hi[@n] | *:rend[@n]">
                         <report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</report>
                     </rule>
