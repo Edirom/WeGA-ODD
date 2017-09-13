@@ -162,7 +162,7 @@
     
     <xsl:template match="mentioned">
         <xsl:element name="hi">
-            <xsl:attribute name="rendition">#italic</xsl:attribute>
+            <xsl:attribute name="rendition">#bold</xsl:attribute>
             <xsl:apply-templates/>
         </xsl:element>
     </xsl:template>

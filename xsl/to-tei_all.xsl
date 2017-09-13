@@ -272,6 +272,27 @@
         </TEI>
     </xsl:variable>
     
+    <xsl:variable name="tagsDecl">
+        <tagsDecl>
+            <rendition xml:id="latintype" scheme="css">font-style: italic;</rendition>
+            <rendition xml:id="italic" scheme="css">font-style: italic;</rendition>
+            <rendition xml:id="underline" scheme="css">text-decoration: underline;</rendition>
+            <rendition xml:id="superscript" scheme="css">vertical-align: super; font-size: 0.8em; line-height: 0.7em;</rendition>
+            <rendition xml:id="subscript" scheme="css">vertical-align: sub; font-size: 0.8em; line-height: 0.7em;</rendition>
+            <rendition xml:id="center" scheme="css">display: block; text-align: center;</rendition>
+            <rendition xml:id="right" scheme="css">display: block; text-align: right;</rendition>
+            <rendition xml:id="antiqua" scheme="css">font-style: italic;</rendition>
+            <rendition xml:id="left" scheme="css">display: block; text-align: left;</rendition>
+            <rendition xml:id="spaced_out" scheme="css">letter-spacing: 0.15em;</rendition>
+            <rendition xml:id="bold" scheme="css">font-weight: bold;</rendition>
+            <rendition xml:id="small-caps" scheme="css">font-variant: small-caps;</rendition>
+            <rendition xml:id="double-quotes-before" scheme="css" scope="before">content: '&quot;'</rendition>
+            <rendition xml:id="double-quotes-after" scheme="css" scope="after">content: '&quot;'</rendition>
+            <rendition xml:id="single-quotes-before" scheme="css" scope="before">content: "&apos;";</rendition>
+            <rendition xml:id="single-quotes-after" scheme="css" scope="after">content: "&apos;";</rendition>
+        </tagsDecl>
+    </xsl:variable>
+    
     <xsl:template match="node() | @*" mode="#all">
         <xsl:copy>
             <xsl:apply-templates select="node() | @*" mode="#current"/>
@@ -310,7 +331,7 @@
             <xsl:choose>
                 <xsl:when test="@rend"/>
                 <xsl:otherwise>
-                    <xsl:attribute name="rendition">#double-quotes</xsl:attribute>
+                    <xsl:attribute name="rendition">#double-quotes-before #double-quotes-after</xsl:attribute>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:apply-templates select="@*|node()"/>
@@ -382,6 +403,30 @@
         <xsl:apply-templates select="$duplicatesWrapper"/>
     </xsl:template>
     
+    <xsl:template match="teiHeader">
+        <xsl:copy>
+            <xsl:choose>
+                <xsl:when test="encodingDesc">
+                    <xsl:apply-templates/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="node() except revisionDesc"/>
+                    <xsl:element name="encodingDesc">
+                        <xsl:apply-templates select="$tagsDecl"/>
+                    </xsl:element>
+                    <xsl:apply-templates select="revisionDesc"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="encodingDesc">
+        <xsl:copy>
+            <xsl:apply-templates/>
+            <xsl:apply-templates select="$tagsDecl"/>
+        </xsl:copy>
+    </xsl:template>
+    
     <xsl:template match="title[@level='a']" mode="biblio diaries persons orgs places">
         <xsl:param name="curNode" tunnel="yes"/>
         <xsl:copy>
@@ -450,7 +495,14 @@
     </xsl:template>
     
     <xsl:template match="@rend">
-        <xsl:attribute name="rendition" select="concat('#',.)"/>
+        <xsl:choose>
+            <xsl:when test="ends-with(., 'quotes')">
+                <xsl:attribute name="rendition" select="concat('#',.,'-before #', ., '-after')"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:attribute name="rendition" select="concat('#',.)"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <xsl:template match="@key[matches(., 'A[A-F0-9]{6}')]" mode="#all">
