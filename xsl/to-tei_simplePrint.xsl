@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:teix="http://www.tei-c.org/ns/Examples"
     xpath-default-namespace="http://www.tei-c.org/ns/1.0"
     xmlns="http://www.tei-c.org/ns/1.0"
     exclude-result-prefixes="xs"
@@ -115,6 +116,13 @@
         </xsl:element>
     </xsl:template>
     
+    <xsl:template match="biblStruct" mode="biblio" priority="1">
+        <xsl:param name="curNode" tunnel="yes"/>
+        <xsl:element name="bibl">
+            <xsl:apply-templates select="$curNode/analytic/node() | $curNode/monogr/node() except $curNode/monogr/imprint | $curNode/monogr/imprint/node()"/>
+        </xsl:element>
+    </xsl:template>
+    
     <xsl:template match="author[@sameAs]">
         <xsl:variable name="lookup" select="id(substring(@sameAs, 2))"/>
         <xsl:copy>
@@ -152,6 +160,20 @@
         <xsl:apply-templates/>
     </xsl:template>
     
+    <xsl:template match="mentioned">
+        <xsl:element name="hi">
+            <xsl:attribute name="rendition">#italic</xsl:attribute>
+            <xsl:apply-templates/>
+        </xsl:element>
+    </xsl:template>
+    
+    <xsl:template match="ptr">
+        <xsl:element name="ref">
+            <xsl:apply-templates select="@*"/>
+            <xsl:value-of select="@target"/>
+        </xsl:element>
+    </xsl:template>
+    
     <xsl:template match="sex"/>
     <xsl:template match="birth"/>
     <xsl:template match="death"/>
@@ -159,11 +181,14 @@
     <xsl:template match="residence"/>
     <xsl:template match="affiliation"/>
     <xsl:template match="correspDesc"/>
+    <xsl:template match="divGen"/>
     <xsl:template match="space"/>
     <xsl:template match="addSpan"/>
     <xsl:template match="delSpan"/>
     <xsl:template match="handNotes"/>
     <xsl:template match="handShift"/>
+    <xsl:template match="eg"/>
+    <xsl:template match="teix:egXML"/>
     <xsl:template match="ptr[starts-with(@target, '#')]"/>
     <xsl:template match="@rend[parent::del or parent::closer]" priority="1"/>
     <xsl:template match="@place[.='mixed']"/>

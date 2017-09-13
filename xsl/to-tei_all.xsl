@@ -9,6 +9,47 @@
     <xsl:output media-type="application/tei+xml" encoding="UTF-8" indent="no" method="xml"/>
     <xsl:preserve-space elements="*"/>
     
+    <xsl:variable name="biblioWrapper">
+        <TEI xmlns="http://www.tei-c.org/ns/1.0">
+            <teiHeader>
+                <fileDesc>
+                    <titleStmt>
+                        <title level="s">WeGA, Bibliographie, Digitale Edition</title>
+                        <title level='a'>Title</title>
+                        <editor>Veit, Joachim</editor>
+                        <editor>Stadler, Peter</editor>
+                    </titleStmt>
+                    <publicationStmt>
+                        <publisher>
+                            <name>Carl-Maria-von-Weber-Gesamtausgabe</name>
+                            <address>
+                                <street>Hornsche Str. 39</street>
+                                <postCode>32756</postCode>
+                                <placeName>
+                                    <country>D</country>
+                                    <settlement>Detmold</settlement>
+                                </placeName>
+                            </address>
+                        </publisher>
+                        <availability>
+                            <licence target="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC BY 4.0)</licence>
+                        </availability>
+                    </publicationStmt>
+                    <sourceDesc>
+                        <p>Born digital</p>
+                    </sourceDesc>
+                </fileDesc>
+            </teiHeader>
+            <text>
+                <body>
+                    <listBibl>
+                        <biblStruct></biblStruct>
+                    </listBibl>
+                </body>
+            </text>
+        </TEI>
+    </xsl:variable>
+    
     <xsl:variable name="diariesWrapper">
         <TEI xmlns="http://www.tei-c.org/ns/1.0">
             <teiHeader>
@@ -192,6 +233,45 @@
         </TEI>
     </xsl:variable>
     
+    <xsl:variable name="duplicatesWrapper">
+        <TEI xmlns="http://www.tei-c.org/ns/1.0">
+            <teiHeader>
+                <fileDesc>
+                    <titleStmt>
+                        <title level="s">WeGA, Digitale Edition</title>
+                        <title level='a'>Duplikat</title>
+                        <editor>Veit, Joachim</editor>
+                        <editor>Stadler, Peter</editor>
+                    </titleStmt>
+                    <publicationStmt>
+                        <publisher>
+                            <name>Carl-Maria-von-Weber-Gesamtausgabe</name>
+                            <address>
+                                <street>Hornsche Str. 39</street>
+                                <postCode>32756</postCode>
+                                <placeName>
+                                    <country>D</country>
+                                    <settlement>Detmold</settlement>
+                                </placeName>
+                            </address>
+                        </publisher>
+                        <availability>
+                            <licence target="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International (CC BY 4.0)</licence>
+                        </availability>
+                    </publicationStmt>
+                    <sourceDesc>
+                        <p>born digital</p>
+                    </sourceDesc>
+                </fileDesc>
+            </teiHeader>
+            <text>
+                <body>
+                    <p>Dies ist ein Duplikat!</p>
+                </body>
+            </text>
+        </TEI>
+    </xsl:variable>
+    
     <xsl:template match="node() | @*" mode="#all">
         <xsl:copy>
             <xsl:apply-templates select="node() | @*" mode="#current"/>
@@ -245,6 +325,14 @@
         </xsl:element>
     </xsl:template>
     
+    <xsl:template match="date[parent::publicationStmt]">
+        <xsl:element name="p">
+            <xsl:copy>
+                <xsl:apply-templates select="@*|node()"/>
+            </xsl:copy>
+        </xsl:element>
+    </xsl:template>
+    
     <xsl:template match="ab[parent::document-node()]" mode="#default">
         <xsl:apply-templates select="$diariesWrapper" mode="diaries">
             <xsl:with-param name="curNode" select="." tunnel="yes"/>
@@ -269,7 +357,20 @@
         </xsl:apply-templates>
     </xsl:template>
     
-    <xsl:template match="TEI" mode="diaries persons orgs places">
+    <xsl:template match="biblStruct[parent::document-node()]" mode="#default">
+        <xsl:choose>
+            <xsl:when test="ref">
+                <xsl:apply-templates select="$duplicatesWrapper"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="$biblioWrapper" mode="biblio">
+                    <xsl:with-param name="curNode" select="." tunnel="yes"/>
+                </xsl:apply-templates>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
+    <xsl:template match="TEI" mode="biblio diaries persons orgs places">
         <xsl:param name="curNode" tunnel="yes"/>
         <xsl:copy>
             <xsl:apply-templates select="$curNode/@xml:id"/>
@@ -277,7 +378,11 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="title[@level='a']" mode="diaries persons orgs places">
+    <xsl:template match="TEI[ref]">
+        <xsl:apply-templates select="$duplicatesWrapper"/>
+    </xsl:template>
+    
+    <xsl:template match="title[@level='a']" mode="biblio diaries persons orgs places">
         <xsl:param name="curNode" tunnel="yes"/>
         <xsl:copy>
             <xsl:apply-templates select="@level" mode="#default"/>
@@ -293,6 +398,9 @@
                 </xsl:when>
                 <xsl:when test="$curNode/self::place">
                     <xsl:value-of select="concat('Kurzbeschreibung für ', normalize-space($curNode//placeName[@type='reg']))"/>
+                </xsl:when>
+                <xsl:when test="$curNode/self::biblStruct">
+                    <xsl:value-of select="'Bibliographieeintrag'"/>
                 </xsl:when>
             </xsl:choose>
         </xsl:copy>
@@ -326,6 +434,13 @@
         </xsl:copy>
     </xsl:template>
     
+    <xsl:template match="biblStruct" mode="biblio">
+        <xsl:param name="curNode" tunnel="yes"/>
+        <xsl:copy>
+            <xsl:apply-templates select="$curNode/node() except $curNode/ref" mode="#default"/>
+        </xsl:copy>
+    </xsl:template>
+    
     <xsl:template match="list[parent::event]">
         <xsl:element name="p">
             <xsl:copy>
@@ -347,5 +462,6 @@
     </xsl:template>
     
     <xsl:template match="@notInvolved" mode="#all"/>
+    <xsl:template match="keywords[parent::biblStruct]" mode="#all"/>
         
 </xsl:stylesheet>
