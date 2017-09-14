@@ -6,10 +6,12 @@
     exclude-result-prefixes="xs"
     version="2.0">
     
+    <xsl:param name="current-tei-version" as="xs:string">3.1.0</xsl:param>
+    
     <xsl:output media-type="application/tei+xml" encoding="UTF-8" indent="no" method="xml"/>
     <xsl:preserve-space elements="*"/>
     
-    <xsl:variable name="biblioWrapper">
+    <xsl:variable name="biblioWrapper" as="element()">
         <TEI xmlns="http://www.tei-c.org/ns/1.0">
             <teiHeader>
                 <fileDesc>
@@ -50,7 +52,7 @@
         </TEI>
     </xsl:variable>
     
-    <xsl:variable name="diariesWrapper">
+    <xsl:variable name="diariesWrapper" as="element()">
         <TEI xmlns="http://www.tei-c.org/ns/1.0">
             <teiHeader>
                 <fileDesc>
@@ -110,7 +112,7 @@
         </TEI>
     </xsl:variable>
     
-    <xsl:variable name="personsWrapper">
+    <xsl:variable name="personsWrapper" as="element()">
         <TEI xmlns="http://www.tei-c.org/ns/1.0">
             <teiHeader>
                 <fileDesc>
@@ -151,7 +153,7 @@
         </TEI>
     </xsl:variable>
     
-    <xsl:variable name="orgsWrapper">
+    <xsl:variable name="orgsWrapper" as="element()">
         <TEI xmlns="http://www.tei-c.org/ns/1.0">
             <teiHeader>
                 <fileDesc>
@@ -192,7 +194,7 @@
         </TEI>
     </xsl:variable>
     
-    <xsl:variable name="placesWrapper">
+    <xsl:variable name="placesWrapper" as="element()">
         <TEI xmlns="http://www.tei-c.org/ns/1.0">
             <teiHeader>
                 <fileDesc>
@@ -233,7 +235,7 @@
         </TEI>
     </xsl:variable>
     
-    <xsl:variable name="duplicatesWrapper">
+    <xsl:variable name="duplicatesWrapper" as="element()">
         <TEI xmlns="http://www.tei-c.org/ns/1.0">
             <teiHeader>
                 <fileDesc>
@@ -272,7 +274,7 @@
         </TEI>
     </xsl:variable>
     
-    <xsl:variable name="tagsDecl">
+    <xsl:variable name="tagsDecl" as="element()">
         <tagsDecl>
             <rendition xml:id="latintype" scheme="css">font-style: italic;</rendition>
             <rendition xml:id="italic" scheme="css">font-style: italic;</rendition>
@@ -389,6 +391,13 @@
                 </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+    
+    <xsl:template match="document-node()">
+        <xsl:call-template name="inject-schema-references">
+            <xsl:with-param name="schema-URL">http://www.tei-c.org/Vault/P5/<xsl:value-of select="$current-tei-version"/>/xml/tei/custom/schema/relaxng/tei_all.rng</xsl:with-param>
+        </xsl:call-template>
+        <xsl:apply-templates/>
     </xsl:template>
     
     <xsl:template match="TEI" mode="biblio diaries persons orgs places">
@@ -515,5 +524,13 @@
     
     <xsl:template match="@notInvolved" mode="#all"/>
     <xsl:template match="keywords[parent::biblStruct]" mode="#all"/>
-        
+    
+    <xsl:template name="inject-schema-references">
+        <xsl:param name="schema-URL" as="xs:string"/>
+        <xsl:text>&#10;</xsl:text>
+        <xsl:processing-instruction name="xml-model">href="<xsl:value-of select="$schema-URL"/>" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"</xsl:processing-instruction>
+        <xsl:text>&#10;</xsl:text>
+        <xsl:processing-instruction name="xml-model">href="<xsl:value-of select="$schema-URL"/>" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"</xsl:processing-instruction>
+        <xsl:text>&#10;</xsl:text>
+    </xsl:template>
 </xsl:stylesheet>

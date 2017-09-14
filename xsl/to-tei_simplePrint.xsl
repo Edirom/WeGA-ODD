@@ -12,6 +12,13 @@
     
     <xsl:include href="to-tei_all.xsl"/>
     
+    <xsl:template match="document-node()" priority="1">
+        <xsl:call-template name="inject-schema-references">
+            <xsl:with-param name="schema-URL">http://www.tei-c.org/Vault/P5/<xsl:value-of select="$current-tei-version"/>/xml/tei/custom/schema/relaxng/tei_simplePrint.rng</xsl:with-param>
+        </xsl:call-template>
+        <xsl:apply-templates/>
+    </xsl:template>
+    
     <xsl:template match="address[*][not(addrLine)]" mode="#all">
         <xsl:copy>
             <xsl:for-each select="*">
