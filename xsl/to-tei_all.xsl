@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:wega="https://weber-gesamtausgabe.de/"
     xpath-default-namespace="http://www.tei-c.org/ns/1.0"
     xmlns="http://www.tei-c.org/ns/1.0"
-    exclude-result-prefixes="xs"
+    exclude-result-prefixes="xs wega"
     version="2.0">
     
     <xsl:param name="current-tei-version" as="xs:string">3.1.0</xsl:param>
@@ -522,6 +523,23 @@
         <xsl:attribute name="ref" select="replace(., 'wega:', 'https://weber-gesamtausgabe.de/')"/>
     </xsl:template>
     
+    <xsl:template match="@url" mode="#all">
+        <xsl:attribute name="url">
+            <xsl:choose>
+                <xsl:when test="matches(., 'wega:')">
+                    <xsl:value-of select="replace(., 'wega:', 'https://weber-gesamtausgabe.de/digilib/Scaler/IIIF/')"/>
+                </xsl:when>
+                <xsl:when test="starts-with(., 'http')"/>
+                <xsl:otherwise>
+                    <xsl:variable name="curID" select="root()/*/data(@xml:id)"/>
+                    <xsl:variable name="docType" select="wega:docType($curID)"/>
+                    <xsl:variable name="pathSegment" select="encode-for-uri(string-join(($docType, concat(substring($curID,1,5), 'xx'), $curID, .), '/'))"/>
+                    <xsl:value-of select="concat('https://weber-gesamtausgabe.de/digilib/Scaler/IIIF/', $pathSegment, '/full/,600/0/native.jpg')"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+    </xsl:template>
+    
     <xsl:template match="@notInvolved" mode="#all"/>
     <xsl:template match="keywords[parent::biblStruct]" mode="#all"/>
     
@@ -533,4 +551,24 @@
         <xsl:processing-instruction name="xml-model">href="<xsl:value-of select="$schema-URL"/>" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"</xsl:processing-instruction>
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
+    
+    <xsl:function name="wega:docType" as="xs:string?">
+        <xsl:param name="id" as="xs:string"/>
+        <xsl:choose>
+            <xsl:when test="matches($id, 'A00[A-F0-9]{4}')">persons</xsl:when>
+            <xsl:when test="matches($id, 'A02\d{4}')">works</xsl:when>
+            <xsl:when test="matches($id, 'A03\d{4}')">writings</xsl:when>
+            <xsl:when test="matches($id, 'A04\d{4}')">letters</xsl:when>
+            <xsl:when test="matches($id, 'A05\d{4}')">news</xsl:when>
+            <xsl:when test="matches($id, 'A06\d{4}')">diaries</xsl:when>
+            <xsl:when test="matches($id, 'A07\d{4}')">var</xsl:when>
+            <xsl:when test="matches($id, 'A08\d{4}')">orgs</xsl:when>
+            <xsl:when test="matches($id, 'A09\d{4}')">thematicCommentaries</xsl:when>
+            <xsl:when test="matches($id, 'A10\d{4}')">documents</xsl:when>
+            <xsl:when test="matches($id, 'A11\d{4}')">biblio</xsl:when>
+            <xsl:when test="matches($id, 'A13\d{4}')">places</xsl:when>
+            <xsl:when test="matches($id, 'A22\d{4}')">sources</xsl:when>
+        </xsl:choose>
+    </xsl:function>
+    
 </xsl:stylesheet>

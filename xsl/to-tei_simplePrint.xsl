@@ -2,9 +2,10 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:teix="http://www.tei-c.org/ns/Examples"
+    xmlns:wega="https://weber-gesamtausgabe.de/"
     xpath-default-namespace="http://www.tei-c.org/ns/1.0"
     xmlns="http://www.tei-c.org/ns/1.0"
-    exclude-result-prefixes="xs"
+    exclude-result-prefixes="xs wega teix"
     version="2.0">
     
     <xsl:output media-type="application/tei+xml" encoding="UTF-8" indent="no" method="xml"/>
