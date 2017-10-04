@@ -38,7 +38,7 @@
     
     <xsl:template match="TEI[@xml:id]">
         <xsl:copy>
-            <xsl:apply-templates select="@* except xml:id | node()"/>
+            <xsl:apply-templates select="@* except @xml:id | node()"/>
         </xsl:copy>
     </xsl:template>
     
@@ -56,6 +56,13 @@
                     <xsl:apply-templates select="revisionDesc"/>
                 </xsl:otherwise>
             </xsl:choose>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="encodingDesc" priority="1">
+        <xsl:copy>
+            <xsl:apply-templates/>
+            <xsl:apply-templates select="$tagsDecl_dta"/>
         </xsl:copy>
     </xsl:template>
     
@@ -82,7 +89,7 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="note[@type=('summary', 'incipit')]">
+    <xsl:template match="note[@type=('summary', 'incipit', 'commentary', 'textConst')]">
         <xsl:copy>
             <xsl:attribute name="type">editorial</xsl:attribute>
             <xsl:apply-templates select="@* except @type | node()"/>
@@ -103,6 +110,70 @@
     
     <xsl:template match="placeName[settlement][count(node()) eq 1]">
         <xsl:apply-templates/>
+    </xsl:template>
+    
+    <!-- Hmm, what about projects without images? -->
+    <xsl:template match="pb[not(@facs)]">
+        <xsl:copy>
+            <xsl:attribute name="facs">#</xsl:attribute>
+            <xsl:apply-templates select="@* | node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="rs">
+        <xsl:choose>
+            <xsl:when test="@key">
+                <xsl:element name="ref">
+                    <xsl:attribute name="target" select="replace(@key, '(A[A-F0-9]{6})', 'https://weber-gesamtausgabe.de/$1')"/>
+                    <xsl:apply-templates/>
+                </xsl:element>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
+    <xsl:template match="characterName" mode="#all" priority="1">
+        <xsl:apply-templates/>
+    </xsl:template>
+    
+    <!-- Hmm, no desc nor graphic is supported within figures -->
+    <xsl:template match="notatedMusic">
+        <xsl:element name="figure">
+            <xsl:attribute name="type">notatedMusic</xsl:attribute>
+            <xsl:comment>
+                <xsl:apply-templates/>
+            </xsl:comment>
+        </xsl:element>
+    </xsl:template>
+    
+    <xsl:template match="figure">
+        <xsl:copy/>
+    </xsl:template>
+    
+    <xsl:template match="cb|lb">
+        <xsl:if test="@type='inWord'">
+            <xsl:text>&#x002D;</xsl:text>
+        </xsl:if>
+        <xsl:copy/>
+    </xsl:template>
+    
+    <xsl:template match="seg[@rend]">
+        <xsl:element name="hi">
+            <xsl:attribute name="rendition">
+                <xsl:choose>
+                    <xsl:when test="@rend='center'">#c</xsl:when>
+                    <xsl:when test="@rend='right'">#right</xsl:when>
+                </xsl:choose>
+            </xsl:attribute>
+        </xsl:element>
+    </xsl:template>
+    
+    <xsl:template match="space">
+        <xsl:copy>
+            <xsl:attribute name="dim">horizontal</xsl:attribute>
+        </xsl:copy>
     </xsl:template>
     
     <xsl:template match="@rend" priority="1">
@@ -129,7 +200,12 @@
     
     <xsl:template match="projectDesc"/>
     <xsl:template match="revisionDesc"/>
-    <xsl:template match="note[@type='part']"/>
+    <!-- prevent empty notesStmt -->
+    <xsl:template match="notesStmt[count(* except note[@type='part']) = 0]"/>
+    <xsl:template match="note[@type=('part', 'fontUsage')]"/>
     <xsl:template match="@xml:id[parent::author]"/>
+    <xsl:template match="@key[parent::author]" priority="1"/>
+    <xsl:template match="@type[parent::head]"/>
+    <xsl:template match="@type[parent::date]"/>
     
 </xsl:stylesheet>

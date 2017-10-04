@@ -305,7 +305,7 @@
     
     <xsl:template match="workName" mode="#all">
         <xsl:element name="name">
-            <xsl:attribute name="type">work</xsl:attribute>
+            <xsl:attribute name="type">artificialWork</xsl:attribute>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:element>
     </xsl:template>
@@ -408,7 +408,7 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="TEI[ref]">
+    <xsl:template match="TEI[ref]" priority="10">
         <xsl:apply-templates select="$duplicatesWrapper"/>
     </xsl:template>
     
