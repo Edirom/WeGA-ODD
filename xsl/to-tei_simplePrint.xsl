@@ -104,7 +104,7 @@
         </xsl:element>
     </xsl:template>
     
-    <xsl:template match="list[parent::event]">
+    <xsl:template match="list[parent::event]" priority="1">
         <xsl:element name="item">
             <xsl:copy>
                 <xsl:apply-templates select="@*|node()"/>
