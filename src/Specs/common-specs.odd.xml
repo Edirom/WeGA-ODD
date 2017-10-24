@@ -333,7 +333,7 @@
         </macroSpec>
         
         <macroSpec ident="marcRelator.list" mode="add">
-            <desc><ref target="http://www.loc.gov/marc/relators/relaterm.html">MARC Code List for Relators</ref>, constrained for use in the WeGA.</desc>
+            <desc versionDate="2014-04-02" xml:lang="en"><ref target="http://www.loc.gov/marc/relators/relaterm.html">MARC Code List for Relators</ref>, constrained for use in the WeGA.</desc>
             <content>
                 <rng:choice>
                     <rng:value>arr</rng:value><a:documentation>(Arranger) A person, family, or organization contributing to a musical work by rewriting the composition for a medium of performance different from that for which the work was originally intended, or modifying the work for the same medium of performance, etc., such that the musical substance of the original composition remains essentially unchanged. For extensive modification that effectively results in the creation of a new musical work, see composer.</a:documentation>
@@ -2012,7 +2012,7 @@
                 <memberOf key="att.global" mode="delete"/>
                 <memberOf key="att.ascribed" mode="delete"/>
             </classes>
-            <remarks>
+            <remarks versionDate="2014-07-14" xml:lang="en">
                 <p>The quoted text will be rendered with quotation marks, according to the language settings of the application.</p>
             </remarks>
         </elementSpec>
@@ -2118,7 +2118,44 @@
           </attList>
        </elementSpec>
         
-       <classSpec ident="att.declarable" module="tei" mode="delete"/>
+        <elementSpec ident="relatedItem" mode="change" module="core">
+            <classes mode="change">
+                <memberOf key="att.global" mode="delete"/>
+            </classes>
+            <constraintSpec scheme="schematron" ident="relatedItem-type-within-notesStmt">
+                <constraint>
+                    <sch:report test="@type and not(parent::tei:notesStmt)">The @type attribute on <sch:name/> must only be used within the notesStmt.</sch:report>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="schematron" ident="relatedItem-target-within-notesStmt">
+                <constraint>
+                    <sch:rule context="tei:relatedItem[parent::tei:notesStmt]">
+                        <sch:assert test="@target and @type">Within the notesStmt you must supply both the @target and the @type attribute on <sch:name/>.</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <attList>
+                <attDef mode="change" ident="type">
+                    <valList type="closed" mode="replace">
+                        <valItem ident="multiPart">
+                            <desc xml:lang="en" versionDate="2017-10-24">the related item is another part of a multi-part text (e.g. journal or newspaper article).</desc>
+                            <desc xml:lang="de" versionDate="2017-10-24">das verknüpfte Objekt ist ein weiterer Teil eines mehrteiligen Texts (z.B. eines Zeitschriften- oder Zeitungsaufsatzes).</desc>
+                        </valItem>
+                        <valItem ident="draft">
+                            <desc xml:lang="en" versionDate="2017-10-24">the related item is the draft version of the current text.</desc>
+                            <desc xml:lang="de" versionDate="2017-10-24">das verknüpfte Objekt die Entwurfsfassung des vorliegenden Texts.</desc>
+                        </valItem>
+                        <valItem ident="sentVersion">
+                            <desc xml:lang="en" versionDate="2017-10-24">the related item is the sent version of the current draft.</desc>
+                            <desc xml:lang="de" versionDate="2017-10-24">das verknüpfte Objekt die verschickte Fassung des vorliegenden Entwurfs.</desc>
+                        </valItem>
+                    </valList>
+                </attDef>
+                <attRef class="att.global" name="n"/>
+            </attList>
+        </elementSpec>        
+        
+       <classSpec type="atts" ident="att.declarable" module="tei" mode="delete"/>
     </specGrp>
     
     <specGrp xml:id="wega-header">
@@ -2275,6 +2312,7 @@
         <elementSpec ident="notesStmt" module="header" mode="change">
             <content>
                 <elementRef key="note" maxOccurs="unbounded"/>
+                <elementRef key="relatedItem" minOccurs="0" maxOccurs="unbounded"/>
             </content>
             <constraintSpec scheme="schematron" ident="count-notes">
                 <constraint>

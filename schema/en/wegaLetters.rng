@@ -5,7 +5,7 @@
          xmlns:teix="http://www.tei-c.org/ns/Examples"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2017-10-20T20:06:08Z. .
+Schema generated from ODD source 2017-10-24T15:03:31Z. .
 TEI Edition: Version 3.1.0. Last updated on
 	15th December 2016, revision d3f5e70
 TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 3.1.0/
@@ -2146,6 +2146,7 @@ Suggested values include: 1] label; 2] data</a:documentation>
          <ref name="model.imprintPart"/>
          <ref name="series"/>
          <ref name="bibl"/>
+         <ref name="relatedItem"/>
          <ref name="edition"/>
          <ref name="availability"/>
          <ref name="msIdentifier"/>
@@ -3856,7 +3857,7 @@ Elements 7.2.5. Speech Contents]</a:documentation>
                <choice>
                   <ref name="model.noteLike"/>
                   <ref name="model.ptrLike"/>
-        
+                  <ref name="relatedItem"/>
         
                </choice>
             </zeroOrMore>
@@ -3886,6 +3887,84 @@ Elements 7.2.5. Speech Contents]</a:documentation>
          </group>
       </element>
    </define>
+   <define name="relatedItem">
+      <element name="relatedItem">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains or references some other bibliographic item which is related to the present one in some specified manner, for example as a constituent or alternative version of it. [3.11.2.7. Related Items]</a:documentation>
+         <optional>
+            <choice>
+               <ref name="model.biblLike"/>
+               <ref name="model.ptrLike"/>
+            </choice>
+         </optional>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaLetters-relatedItem-relatedItem-type-within-notesStmt-constraint-report-23">
+            <rule context="tei:relatedItem">
+               <sch:report xmlns:mei="http://www.music-encoding.org/ns/mei"
+                           xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                           xmlns:s="http://www.ascc.net/xml/schematron"
+                           xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                           xmlns="http://www.tei-c.org/ns/1.0"
+                           xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                           test="@type and not(parent::tei:notesStmt)">The @type attribute on <sch:name/> must only be used within the notesStmt.</sch:report>
+            </rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaLetters-relatedItem-relatedItem-target-within-notesStmt-constraint-rule-17">
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:relatedItem[parent::tei:notesStmt]">
+                        <sch:assert test="@target and @type">Within the notesStmt you must supply both the @target and the @type attribute on <sch:name/>.</sch:assert>
+                    </sch:rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaLetters-relatedItem-targetorcontent1-constraint-report-24">
+            <rule context="tei:relatedItem">
+               <sch:report xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                           xmlns="http://www.tei-c.org/ns/1.0"
+                           xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                           test="@target and count( child::* ) &gt; 0">
+If the @target attribute on <sch:name/> is used, the
+relatedItem element must be empty</sch:report>
+            </rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaLetters-relatedItem-targetorcontent1-constraint-assert-16">
+            <rule context="tei:relatedItem">
+               <sch:assert xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                           xmlns="http://www.tei-c.org/ns/1.0"
+                           xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                           test="@target or child::*">A relatedItem element should have either a 'target' attribute
+        or a child element to indicate the related bibliographic item</sch:assert>
+            </rule>
+         </pattern>
+         <ref name="att.typed.attribute.subtype"/>
+         <optional>
+            <attribute name="type">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.</a:documentation>
+               <choice>
+                  <value>multiPart</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the related item is another part of a multi-part text (e.g. journal or newspaper article).</a:documentation>
+                  <value>draft</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the related item is the draft version of the current text.</a:documentation>
+                  <value>sentVersion</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the related item is the sent version of the current draft.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <ref name="att.global.attribute.n"/>
+         <optional>
+            <attribute name="target">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">points to the related bibliographic element by means of an absolute or relative URI reference</a:documentation>
+               <data type="anyURI"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
    <define name="l">
       <element name="l">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(verse line) contains a single, possibly incomplete, line of verse. [3.12.1. Core Tags for Verse 3.12. Passages of Verse or Drama 7.2.5. Speech Contents]</a:documentation>
@@ -3899,7 +3978,7 @@ Elements 7.2.5. Speech Contents]</a:documentation>
             </choice>
          </zeroOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-l-abstractModel-structure-l-constraint-report-23">
+                  id="wegaLetters-l-abstractModel-structure-l-constraint-report-25">
             <rule context="tei:l">
                <report xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                        xmlns:rng="http://relaxng.org/ns/structure/1.0"
@@ -3948,7 +4027,7 @@ Elements 7.2.5. Speech Contents]</a:documentation>
             </zeroOrMore>
          </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-lg-atleast1oflggapl-constraint-assert-15">
+                  id="wegaLetters-lg-atleast1oflggapl-constraint-assert-17">
             <rule context="tei:lg">
                <sch:assert xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                            xmlns="http://www.tei-c.org/ns/1.0"
@@ -3958,7 +4037,7 @@ Elements 7.2.5. Speech Contents]</a:documentation>
             </rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-lg-abstractModel-structure-l-constraint-report-24">
+                  id="wegaLetters-lg-abstractModel-structure-l-constraint-report-26">
             <rule context="tei:lg">
                <report xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                        xmlns:rng="http://relaxng.org/ns/structure/1.0"
@@ -3981,7 +4060,7 @@ Elements 7.2.5. Speech Contents]</a:documentation>
             <ref name="revisionDesc"/>
          </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-teiHeader-seriesTitle-constraint-rule-17">
+                  id="wegaLetters-teiHeader-seriesTitle-constraint-rule-18">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -4177,8 +4256,11 @@ Elements 7.2.5. Speech Contents]</a:documentation>
          <oneOrMore>
             <ref name="note"/>
          </oneOrMore>
+         <zeroOrMore>
+            <ref name="relatedItem"/>
+         </zeroOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-notesStmt-count-notes-constraint-report-25">
+                  id="wegaLetters-notesStmt-count-notes-constraint-report-27">
             <rule context="tei:notesStmt">
                <sch:report xmlns:mei="http://www.music-encoding.org/ns/mei"
                            xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
@@ -4684,7 +4766,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
             </optional>
          </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-div-abstractModel-structure-l-constraint-report-26">
+                  id="wegaLetters-div-abstractModel-structure-l-constraint-report-28">
             <rule context="tei:div">
                <report xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                        xmlns:rng="http://relaxng.org/ns/structure/1.0"
@@ -4694,7 +4776,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
             </rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-div-abstractModel-structure-p-constraint-report-27">
+                  id="wegaLetters-div-abstractModel-structure-p-constraint-report-29">
             <rule context="tei:div">
                <report xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                        xmlns:rng="http://relaxng.org/ns/structure/1.0"
@@ -4929,7 +5011,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(organization name) contains an organizational name. [13.2.2. Organizational Names]</a:documentation>
          <ref name="macro.phraseSeq"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-orgName-parent-org-constraint-rule-18">
+                  id="wegaLetters-orgName-parent-org-constraint-rule-19">
             <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:s="http://www.ascc.net/xml/schematron"
@@ -4941,7 +5023,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
                     </sch:rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-orgName-parent-org-reg-constraint-rule-19">
+                  id="wegaLetters-orgName-parent-org-reg-constraint-rule-20">
             <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:s="http://www.ascc.net/xml/schematron"
@@ -4953,7 +5035,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
                     </sch:rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-orgName-parent-org-reg-constraint-rule-20">
+                  id="wegaLetters-orgName-parent-org-reg-constraint-rule-21">
             <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:s="http://www.ascc.net/xml/schematron"
@@ -4965,7 +5047,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
                     </sch:rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-orgName-parent-not-org-constraint-rule-21">
+                  id="wegaLetters-orgName-parent-not-org-constraint-rule-22">
             <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:s="http://www.ascc.net/xml/schematron"
@@ -5111,7 +5193,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
             <ref name="row"/>
          </oneOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-table-collapsible-head-constraint-report-31">
+                  id="wegaLetters-table-collapsible-head-constraint-report-33">
             <rule context="tei:table">
                <sch:report xmlns:mei="http://www.music-encoding.org/ns/mei"
                            xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
@@ -5145,7 +5227,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
             <ref name="cell"/>
          </oneOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-row-number-of-cells-constraint-rule-22">
+                  id="wegaLetters-row-number-of-cells-constraint-rule-23">
             <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:s="http://www.ascc.net/xml/schematron"
@@ -5182,7 +5264,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains one cell of a table [14.1.1. TEI Tables]</a:documentation>
          <ref name="macro.specialPara"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-cell-cell-rows-constraint-rule-23">
+                  id="wegaLetters-cell-cell-rows-constraint-rule-24">
             <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:s="http://www.ascc.net/xml/schematron"
@@ -5314,7 +5396,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(added span of text) marks the beginning of a longer sequence of text added by an author, scribe, annotator or corrector. [11.3.1.4. Additions and Deletions]</a:documentation>
          <empty/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-addSpan-spanTo-constraint-assert-19">
+                  id="wegaLetters-addSpan-spanTo-constraint-assert-21">
             <rule context="tei:addSpan">
                <sch:assert xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                            xmlns="http://www.tei-c.org/ns/1.0"
@@ -5323,7 +5405,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
             </rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-addSpan-spanTo_fr-constraint-assert-20">
+                  id="wegaLetters-addSpan-spanTo_fr-constraint-assert-22">
             <rule context="tei:addSpan">
                <sch:assert xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                            xmlns="http://www.tei-c.org/ns/1.0"
@@ -5348,7 +5430,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
             <data type="anyURI"/>
          </attribute>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-addSpan-hand-hand-reference-constraint-rule-24">
+                  id="wegaLetters-addSpan-hand-hand-reference-constraint-rule-25">
             <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:s="http://www.ascc.net/xml/schematron"
@@ -5364,7 +5446,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
             <data type="anyURI"/>
          </attribute> 
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-addSpan-spanTo-spanTo-7-constraint-rule-25">
+                  id="wegaLetters-addSpan-spanTo-spanTo-7-constraint-rule-26">
             <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:s="http://www.ascc.net/xml/schematron"
@@ -5465,7 +5547,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
             </oneOrMore>
          </interleave>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-subst-substContents1-constraint-assert-23">
+                  id="wegaLetters-subst-substContents1-constraint-assert-25">
             <rule context="tei:subst">
                <assert xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                        xmlns:rng="http://relaxng.org/ns/structure/1.0"
@@ -5572,7 +5654,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
             </zeroOrMore>
          </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-msIdentifier-msId_minimal-constraint-report-33">
+                  id="wegaLetters-msIdentifier-msId_minimal-constraint-report-35">
             <rule context="tei:msIdentifier">
                <report xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                        xmlns:rng="http://relaxng.org/ns/structure/1.0"
@@ -5759,7 +5841,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(arbitrary segment) represents any segmentation of text below the ‘chunk’ level. [16.3. Blocks, Segments, and Anchors 6.2. Components of the Verse Line 7.2.5. Speech Contents]</a:documentation>
          <ref name="macro.paraContent"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-seg-activeOrPassivePerformance-constraint-report-34">
+                  id="wegaLetters-seg-activeOrPassivePerformance-constraint-report-36">
             <rule context="tei:seg">
                <sch:report xmlns:mei="http://www.music-encoding.org/ns/mei"
                            xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
@@ -5771,7 +5853,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
             </rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaLetters-seg-AddresseeOrSenderCorrespondence-constraint-report-35">
+                  id="wegaLetters-seg-AddresseeOrSenderCorrespondence-constraint-report-37">
             <rule context="tei:seg">
                <sch:report xmlns:mei="http://www.music-encoding.org/ns/mei"
                            xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
@@ -5930,7 +6012,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaLetters-att.witnessed-att-wit-constraint-rule-26">
+            id="wegaLetters-att.witnessed-att-wit-constraint-rule-27">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
@@ -6156,7 +6238,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaLetters-att.wega.rend-underline-n-constraint-rule-30">
+            id="wegaLetters-att.wega.rend-underline-n-constraint-rule-31">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
@@ -6173,7 +6255,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
       </choice>
    </start>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaLetters-whitespaceOnlyContent-constraint-rule-27">
+            id="wegaLetters-whitespaceOnlyContent-constraint-rule-28">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
@@ -6186,7 +6268,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
                 </sch:rule>
    </pattern>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaLetters-elementStartsWithWhitespace-constraint-rule-28">
+            id="wegaLetters-elementStartsWithWhitespace-constraint-rule-29">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
@@ -6199,7 +6281,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
                 </sch:rule>
    </pattern>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaLetters-untrimmedAttributeValues-constraint-rule-29">
+            id="wegaLetters-untrimmedAttributeValues-constraint-rule-30">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
