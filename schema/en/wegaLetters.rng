@@ -5,7 +5,7 @@
          xmlns:teix="http://www.tei-c.org/ns/Examples"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2017-10-24T15:03:31Z. .
+Schema generated from ODD source 2017-10-27T17:15:05Z. .
 TEI Edition: Version 3.1.0. Last updated on
 	15th December 2016, revision d3f5e70
 TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 3.1.0/
@@ -3236,7 +3236,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
                       xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:rng="http://relaxng.org/ns/structure/1.0"
                       context="tei:note[parent::tei:notesStmt]">
-                        <sch:assert test="@type=('editorial', 'summary', 'thematicCom', 'part', 'incipit')">Within the notesStmt only 'editorial', 'summary', 'part' or 'thematicCom' are allowed for @type on note.</sch:assert>
+                        <sch:assert test="@type=('editorial', 'summary', 'thematicCom', 'incipit')">Within the notesStmt only 'editorial', 'summary', or 'thematicCom' are allowed for @type on note.</sch:assert>
                     </sch:rule>
          </pattern>
          <ref name="att.global.attribute.xmlid"/>
@@ -3282,8 +3282,6 @@ attributes @target and @cRef may be supplied on <name/>.</report>
                   <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Some general remark about the file (only applicable in the notesStmt).</a:documentation>
                   <value>incipit</value>
                   <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The text incipit of the letter (or other piece of correspondence).</a:documentation>
-                  <value>part</value>
-                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Wrapper for pointers to related parts, e.g. drafts of letters (only applicable in the notesStmt).</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -4253,11 +4251,11 @@ relatedItem element must be empty</sch:report>
    <define name="notesStmt">
       <element name="notesStmt">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(notes statement) collects together any notes providing information about a text additional to that recorded in other parts of the bibliographic description. [2.2.6. The Notes Statement 2.2. The File Description]</a:documentation>
-         <oneOrMore>
-            <ref name="note"/>
-         </oneOrMore>
          <zeroOrMore>
-            <ref name="relatedItem"/>
+            <choice>
+               <ref name="note"/>
+               <ref name="relatedItem"/>
+            </choice>
          </zeroOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   id="wegaLetters-notesStmt-count-notes-constraint-report-27">
@@ -6262,7 +6260,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
                 xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                 xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('part', 'thematicCom'))] | tei:placeName | tei:title | tei:seg | tei:item[not(@* or *)]">
+                context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('thematicCom'))] | tei:placeName | tei:title | tei:seg | tei:item[not(@* or *)]">
                     <sch:report test="normalize-space(.) = ''">
             <sch:name/> has whitespace only content</sch:report>
                 </sch:rule>
