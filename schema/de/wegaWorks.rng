@@ -5,7 +5,7 @@
          xmlns:teix="http://www.tei-c.org/ns/Examples"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.music-encoding.org/ns/mei"><!--
-Schema generated from ODD source 2017-08-28T09:50:10Z. .
+Schema generated from ODD source 2017-11-01T20:17:46Z. .
 TEI Edition: Version 3.0.0
 TEI Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -691,21 +691,6 @@ TEI Edition Location: http://www.tei-c.org/Vault/P5//
          <value>2048</value>
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">2048th note.</a:documentation>
       </choice>
-   </define>
-   <define name="key.person.pattern">
-      <data type="string">
-         <param name="pattern">A00[0-9A-F]{4}</param>
-      </data>
-   </define>
-   <define name="key.work.pattern">
-      <data type="string">
-         <param name="pattern">A02\d{4}</param>
-      </data>
-   </define>
-   <define name="key.sources.pattern">
-      <data type="string">
-         <param name="pattern">A22\d{4}</param>
-      </data>
    </define>
    <define name="rism.pattern">
       <data type="string">
@@ -4564,7 +4549,7 @@ Empfohlene Werte sind: 1] gloss; 2] index; 3] instructions; 4] litany; 5] syllog
                   </choice>
                </attribute>
                <attribute name="target">
-                  <ref name="key.work.pattern"/>
+                  <empty/>
                </attribute>
                <empty/>
             </element>
@@ -4583,7 +4568,6 @@ Empfohlene Werte sind: 1] gloss; 2] index; 3] instructions; 4] litany; 5] syllog
          <ref name="att.meiversion.attributes"/>
          <attribute name="xml:id">
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Bezeichner) lieferte jegliche Form eines Bezeichners in einer standardisierten Form, der benutzt werden kann um Objekte zu identifiziert, wie etwa ein bibliographisches Element, eine Organisation, usw.</a:documentation>
-            <ref name="key.work.pattern"/>
          </attribute>
          <empty/>
       </element>
@@ -5674,7 +5658,6 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
          <optional>
             <attribute name="xml:id">
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Regularizes the naming of an element and thus facilitates building links between it and other resources. Each id attribute within a document must have a unique value.</a:documentation>
-               <ref name="key.sources.pattern"/>
             </attribute>
          </optional>
          <empty/>
@@ -6056,7 +6039,6 @@ Empfohlene Werte sind: 1] gnd(Gemeinsame Normdatei) ; 2] JV(Jähns-Verzeichnis) 
          <optional>
             <attribute name="dbkey">
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Die WeGA ID der jeweiligen Person, z.B. "A002068" für Carl Maria von Weber</a:documentation>
-               <ref name="key.person.pattern"/>
             </attribute>
          </optional>
          <optional>
@@ -8361,7 +8343,7 @@ Empfohlene Werte sind: 1] interline; 2] intraline; 3] overstrike</a:documentatio
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWorks-att.wega.rend-underline-n-constraint-rule-51">
+            id="wegaWorks-att.wega.rend-underline-n-constraint-rule-52">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
@@ -8378,6 +8360,19 @@ Empfohlene Werte sind: 1] interline; 2] intraline; 3] overstrike</a:documentatio
          <ref name="source"/>
       </choice>
    </start>
+   <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+            id="wegaWorks-styleguide-document-node-content-constraint-rule-51">
+      <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                xmlns:s="http://www.ascc.net/xml/schematron"
+                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                xmlns="http://www.tei-c.org/ns/1.0"
+                xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                context="document-node()">
+                    <sch:report test="count(processing-instruction()) ne 2">WeGA styleguide error: there should exactly be two processing instructions before the root element</sch:report>
+                    <sch:report test="comment()">WeGA styleguide error: there should be no comments outside the root element</sch:report>
+                </sch:rule>
+   </pattern>
    <ns xmlns="http://purl.oclc.org/dsdl/schematron"
        prefix="mei"
        uri="http://www.music-encoding.org/ns/mei"/>
