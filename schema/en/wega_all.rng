@@ -5,10 +5,10 @@
          xmlns:teix="http://www.tei-c.org/ns/Examples"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2017-11-01T20:20:50Z. .
-TEI Edition: Version 3.1.0. Last updated on
-	15th December 2016, revision d3f5e70
-TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 3.1.0/
+Schema generated from ODD source 2017-11-15T18:58:27Z. .
+TEI Edition: Version 3.2.0. Last updated on
+	10th July 2017, revision 0fcf651
+TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 3.2.0/
   
 --><!--This work is licensed under a Creative Commons Attribution 3.0 Unported License (CC BY 3.0).-->
    <define name="macro.paraContent">
@@ -2034,6 +2034,7 @@ Suggested values include: 1] label; 2] data</a:documentation>
          <ref name="model.biblLike"/>
          <ref name="model.eventLike"/>
          <ref name="model.persStateLike"/>
+         <ref name="name"/>
          <ref name="idno"/>
          <ref name="birth"/>
          <ref name="death"/>
@@ -2193,6 +2194,7 @@ Suggested values include: 1] label; 2] data</a:documentation>
    </define>
    <define name="model.publicationStmtPart.detail">
       <choice>
+         <ref name="model.ptrLike"/>
          <ref name="address"/>
          <ref name="date"/>
          <ref name="pubPlace"/>
@@ -3623,6 +3625,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
                <ref name="model.global"/>
             </choice>
          </zeroOrMore>
+         <ref name="att.placement.attributes"/>
          <optional>
             <attribute name="type">
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.</a:documentation>
@@ -4100,32 +4103,37 @@ Elements]</a:documentation>
    <define name="respStmt">
       <element name="respStmt">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(statement of responsibility) supplies a statement of responsibility for the intellectual content of a text, edition, recording, or series, where the specialized elements for authors, editors, etc. do not suffice or do not apply. May also be used to encode information about individuals or organizations which have played a role in the production or distribution of a bibliographic work. [3.11.2.2. Titles, Authors, and Editors 2.2.1. The Title Statement 2.2.2. The Edition Statement 2.2.5. The Series Statement]</a:documentation>
-         <choice>
-            <group>
-        
-               <oneOrMore>
-                  <ref name="resp"/>
-               </oneOrMore>
-        
-        
-               <oneOrMore>
-                  <ref name="model.nameLike.agent"/>
-               </oneOrMore>
-        
-            </group>
-            <group>
-        
-               <oneOrMore>
-                  <ref name="model.nameLike.agent"/>
-               </oneOrMore>
-        
-        
-               <oneOrMore>
-                  <ref name="resp"/>
-               </oneOrMore>
-        
-            </group>
-         </choice>
+         <group>
+            <choice>
+               <group>
+          
+                  <oneOrMore>
+                     <ref name="resp"/>
+                  </oneOrMore>
+          
+          
+                  <oneOrMore>
+                     <ref name="model.nameLike.agent"/>
+                  </oneOrMore>
+          
+               </group>
+               <group>
+          
+                  <oneOrMore>
+                     <ref name="model.nameLike.agent"/>
+                  </oneOrMore>
+          
+          
+                  <oneOrMore>
+                     <ref name="resp"/>
+                  </oneOrMore>
+          
+               </group>
+            </choice>
+            <zeroOrMore>
+               <ref name="note"/>
+            </zeroOrMore>
+         </group>
          <ref name="att.global.attributes"/>
          <ref name="att.canonical.attributes"/>
          <empty/>
@@ -5366,7 +5374,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
             <rule context="tei:ab">
                <report xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                        xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                       test="(ancestor::tei:p or ancestor::tei:ab)          and not(parent::tei:exemplum         |parent::tei:item         |parent::tei:note         |parent::tei:q         |parent::tei:quote         |parent::tei:remarks         |parent::tei:said         |parent::tei:sp         |parent::tei:stage         |parent::tei:cell         |parent::tei:figure)">
+                       test="not(ancestor::floatingText) and (ancestor::tei:p or ancestor::tei:ab)          and not(parent::tei:exemplum         |parent::tei:item         |parent::tei:note         |parent::tei:q         |parent::tei:quote         |parent::tei:remarks         |parent::tei:said         |parent::tei:sp         |parent::tei:stage         |parent::tei:cell         |parent::tei:figure)">
         Abstract model violation: ab may not contain paragraphs or other ab elements.
       </report>
             </rule>
@@ -5579,6 +5587,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
             </zeroOrMore>
          </group>
          <ref name="att.declaring.attributes"/>
+         <ref name="att.docStatus.attributes"/>
          <optional>
             <attribute name="rend">
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(rendition) WeGA: tradition of the text: without any add on = autograph (original handwriting); alternative information within rend is 'draft', 'copy', 'autograph_copy' and 'authorized_copy'.</a:documentation>
@@ -5681,7 +5690,14 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
    <define name="msName">
       <element name="msName">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(alternative name) contains any form of unstructured alternative name used for a manuscript, such as an ocellus nominum, or nickname. [10.4. The Manuscript Identifier]</a:documentation>
-         <ref name="macro.xtext"/>
+         <zeroOrMore>
+            <choice>
+               <text/>
+               <ref name="model.gLike"/>
+               <ref name="rs"/>
+               <ref name="name"/>
+            </choice>
+         </zeroOrMore>
          <ref name="att.global.attributes"/>
          <ref name="att.typed.attributes"/>
          <empty/>
@@ -6113,6 +6129,16 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
          <ref name="att.editLike.attributes"/>
          <ref name="att.datable.attributes"/>
          <ref name="att.naming.attributes"/>
+         <ref name="att.typed.attribute.subtype"/>
+         <optional>
+            <attribute name="type">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.
+Sample values include: 1] sponsor; 2] recommend; 3] discredit; 4] pledged</a:documentation>
+               <data type="token">
+                  <param name="pattern">(\p{L}|\p{N}|\p{P}|\p{S})+</param>
+               </data>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>
@@ -6124,6 +6150,16 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
          <ref name="att.editLike.attributes"/>
          <ref name="att.datable.attributes"/>
          <ref name="att.naming.attributes"/>
+         <ref name="att.typed.attribute.subtype"/>
+         <optional>
+            <attribute name="type">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.
+Sample values include: 1] caesarean(caesarean section) ; 2] vaginal(vaginal delivery) ; 3] exNihilo(ex nihilo) ; 4] incorporated; 5] founded; 6] established</a:documentation>
+               <data type="token">
+                  <param name="pattern">(\p{L}|\p{N}|\p{P}|\p{S})+</param>
+               </data>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>
@@ -6135,6 +6171,16 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
          <ref name="att.editLike.attributes"/>
          <ref name="att.datable.attributes"/>
          <ref name="att.naming.attributes"/>
+         <ref name="att.typed.attribute.subtype"/>
+         <optional>
+            <attribute name="type">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.
+Sample values include: 1] proclaimed; 2] assumed; 3] verified; 4] clinical; 5] brain; 6] natural; 7] unnatural; 8] fragmentation; 9] dissolution</a:documentation>
+               <data type="token">
+                  <param name="pattern">(\p{L}|\p{N}|\p{P}|\p{S})+</param>
+               </data>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>
@@ -6232,6 +6278,16 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
          <ref name="att.datable.attributes"/>
          <ref name="att.editLike.attributes"/>
          <ref name="att.naming.attributes"/>
+         <ref name="att.typed.attribute.subtype"/>
+         <optional>
+            <attribute name="type">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.
+Sample values include: 1] primary; 2] other; 3] paid; 4] unpaid</a:documentation>
+               <data type="token">
+                  <param name="pattern">(\p{L}|\p{N}|\p{P}|\p{S})+</param>
+               </data>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="scheme">
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the classification system or taxonomy in use, for example by supplying the identifier of a taxonomy element, or pointing to some other resource.</a:documentation>
@@ -6421,6 +6477,16 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
          <ref name="att.datable.attributes"/>
          <ref name="att.editLike.attributes"/>
          <ref name="att.naming.attributes"/>
+         <ref name="att.typed.attribute.subtype"/>
+         <optional>
+            <attribute name="type">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.
+Sample values include: 1] primary; 2] secondary; 3] temporary; 4] permanent</a:documentation>
+               <data type="token">
+                  <param name="pattern">(\p{L}|\p{N}|\p{P}|\p{S})+</param>
+               </data>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>
@@ -6431,6 +6497,16 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
          <ref name="att.global.attributes"/>
          <ref name="att.editLike.attributes"/>
          <ref name="att.datable.attributes"/>
+         <ref name="att.typed.attribute.subtype"/>
+         <optional>
+            <attribute name="type">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.
+Sample values include: 1] explicit; 2] implicit</a:documentation>
+               <data type="token">
+                  <param name="pattern">(\p{L}|\p{N}|\p{P}|\p{S})+</param>
+               </data>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="value">
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">supplies a coded value for sex</a:documentation>
@@ -6526,7 +6602,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
    </define>
    <define name="egXML">
       <element name="egXML" ns="http://www.tei-c.org/ns/Examples">
-         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(example of XML) a single XML fragment demonstrating the use of some XML element or attribute, in which the egXML element functions as the root element. [22.1.1. Phrase Level Terms]</a:documentation>
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(example of XML) a single XML fragment demonstrating the use of some XML, such as elements, attributes, or processing instructions, etc., in which the egXML element functions as the root element. [22.1.1. Phrase Level Terms]</a:documentation>
          <zeroOrMore>
             <choice>
                <text/>
@@ -7202,6 +7278,7 @@ Suggested values include: 1] sent; 2] received; 3] transmitted; 4] redirected; 5
             </zeroOrMore>
          </group>
          <ref name="att.global.attributes"/>
+         <ref name="att.written.attributes"/>
          <empty/>
       </element>
    </define>
