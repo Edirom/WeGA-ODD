@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xml:base="file:/Users/pstadler/repos/WeGA-ODD/src/Guidelines/guidelines-de.xml" xml:lang="de"><?TEIVERSION Version 3.1.0. Last updated on
-	15th December 2016, revision d3f5e70?>
+<?xml version="1.0" encoding="utf-8"?><TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xml:base="file:/Users/pstadler/repos/WeGA-ODD/src/Guidelines/guidelines-de.xml" xml:lang="de"><?TEIVERSION Version 3.2.0. Last updated on
+	10th July 2017, revision 0fcf651?>
 	<teiHeader>
 		<fileDesc>
 			<titleStmt>
@@ -986,7 +986,7 @@
 				
 				
 				
-				<schemaSpec xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:teix="http://www.tei-c.org/ns/Examples" ident="wegaPlaces" xml:lang="en" start="place" xml:base="../Specs/schemaSpec-places.odd.xml" defaultExceptions="http://www.tei-c.org/ns/1.0 teix:egXML" source="/Users/pstadler/static/tei-3.1.0/xml/tei/odd/p5subset.xml"><classSpec module="tei" type="atts" ident="att.canonical">
+				<schemaSpec xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:teix="http://www.tei-c.org/ns/Examples" ident="wegaPlaces" xml:lang="en" start="place" xml:base="../Specs/schemaSpec-places.odd.xml" defaultExceptions="http://www.tei-c.org/ns/1.0 teix:egXML" source="/Users/pstadler/static/tei-3.2.0/xml/tei/odd/p5subset.xml"><classSpec module="tei" type="atts" ident="att.canonical">
   <desc versionDate="2008-09-05" xml:lang="en">provides attributes which can be used to associate a representation such as a name or title
     with canonical information about the object being named or referenced.</desc>
   <desc versionDate="2009-05-25" xml:lang="fr">fournit des attributs qui peuvent être utilisés pour
@@ -1051,6 +1051,9 @@
       </remarks>
     </attDef>
   </attList>
+  <listRef>
+    <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ND.html#NDATTSnr">13.1.1. Linking Names and Their Referents</ref>
+  </listRef>
 </classSpec><classSpec module="tei" type="atts" ident="att.datable.w3c" xml:id="DATABLEW3C">
   <desc versionDate="2013-11-22" xml:lang="en">provides attributes for normalization of elements that contain
   datable events  conforming to the W3C
@@ -1063,21 +1066,21 @@
   d'événements datés ou susceptibles de l'être</desc>
   <desc versionDate="2007-11-06" xml:lang="it">indica degli attributi per la normalizzazione di elementi che contengono eventi databili utilizzando i tipi di dati del W3C</desc>
   <desc versionDate="2007-05-04" xml:lang="es">proporciona atributos para la normalización de elementos que contienen eventos datables.</desc>
-  <constraintSpec ident="att-datable-w3c-when" scheme="isoschematron">
+  <constraintSpec ident="att-datable-w3c-when" scheme="schematron">
     <constraint>
       <sch:rule context="tei:*[@when]">
         <sch:report test="@notBefore|@notAfter|@from|@to" role="nonfatal">The @when attribute cannot be used with any other att.datable.w3c attributes.</sch:report>
       </sch:rule>
     </constraint>
   </constraintSpec>
-  <constraintSpec ident="att-datable-w3c-from" scheme="isoschematron">
+  <constraintSpec ident="att-datable-w3c-from" scheme="schematron">
     <constraint>
       <sch:rule context="tei:*[@from]">
         <sch:report test="@notBefore" role="nonfatal">The @from and @notBefore attributes cannot be used together.</sch:report>
       </sch:rule>
     </constraint>
   </constraintSpec>
-  <constraintSpec ident="att-datable-w3c-to" scheme="isoschematron">
+  <constraintSpec ident="att-datable-w3c-to" scheme="schematron">
     <constraint>
       <sch:rule context="tei:*[@to]">
         <sch:report test="@notAfter" role="nonfatal">The @to and @notAfter attributes cannot be used together.</sch:report>
@@ -1316,7 +1319,7 @@
       <desc versionDate="2007-01-21" xml:lang="it">indica il sistema o calendario al quale la data
         appartiene.</desc>
       <datatype><dataRef key="teidata.pointer"/></datatype>
-      <constraintSpec ident="calendar" scheme="isoschematron">
+      <constraintSpec ident="calendar" scheme="schematron">
         <constraint>
           <sch:rule context="tei:*[@calendar]">
             <sch:assert test="string-length(.) gt 0">
@@ -1566,11 +1569,15 @@ used for this element in the source text</desc>
               <lb/><hi style="font-variant: normal">New Blazing-World</hi>. </head>
         </egXML>
       </exemplum>
-      <remarks versionDate="2014-09-09" xml:lang="en">
+      <remarks versionDate="2017-07-02" xml:lang="en">
         <p>Unlike the attribute values of <att>rend</att>, which uses whitespace as a separator, the <att>style</att> attribute may contain whitespace. This attribute is intended for recording inline stylistic information concerning the
 source, not any particular output.</p>
         <p>The formal language in which values for this attribute are expressed may be specified using the <gi>styleDefDecl</gi> element in
 the TEI header.</p>
+        <p>If <att>style</att> and <att>rendition</att> are both present on an element, then
+          <att>style</att> overrides or complements <att>rendition</att>. <att>style</att> should
+          not be used in conjunction with <att>rend</att>, because the latter does not employ a
+          formal style definition language.</p>
       </remarks>
     </attDef>
     <attDef ident="rendition" usage="opt">
@@ -1603,12 +1610,14 @@ the TEI header.</p>
           <rendition xml:id="fr_ac" scheme="css">text-align: center</rendition>
         </egXML>
       </exemplum>
-      <remarks versionDate="2007-09-22" xml:lang="en">
+      <remarks versionDate="2017-07-02" xml:lang="en">
         <p>The <att>rendition</att> attribute is used in a very similar way to the <att>class</att>
           attribute defined for XHTML but with the important distinction that its function is to
           describe the appearance of the source text, not necessarily to determine how that text
           should be presented on screen or paper.</p>
-        <p>Where both <att>rendition</att> and <att>rend</att> are supplied, the latter is
+        <p>If <att>rendition</att> is used to refer to a style definition in a formal language like
+          CSS, it is recommended that it not be used in conjunction with <att>rend</att>. 
+          Where both <att>rendition</att> and <att>rend</att> are supplied, the latter is
           understood to override or complement the former.</p>
         <p>Each URI provided should indicate a <gi>rendition</gi> element defining the intended
           rendition in terms of some appropriate style language, as indicated by the
@@ -1651,22 +1660,34 @@ the TEI header.</p>
     <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ST.html#STGAre">1.3.1.1.3. Rendition Indicators</ref>
   </listRef>
 </classSpec><classSpec predeclare="true" xml:id="GBLSRC" module="tei" type="atts" ident="att.global.source">
-  <desc versionDate="2016-02-15" xml:lang="en">provides an attribute used by elements to point to an external source.</desc>
+  <desc versionDate="2016-02-15" xml:lang="en">provides an attribute used by elements to point to an
+    external source.</desc>
   <attList>
     <attDef ident="source" usage="opt">
-      <desc versionDate="2010-05-09" xml:lang="en">specifies the source from which some aspect of this element is drawn.</desc>
-      <datatype maxOccurs="unbounded"><dataRef key="teidata.pointer"/></datatype>
-      <remarks xml:lang="en" versionDate="2016-12-04">
-        <p>The <att>source</att> attribute points to an external source. When used on elements describing schema components it locates the source for the ODD processor from which declarations and definitions for the components of the object being defined may be obtained. On other elements it provides a pointer to the bibliographical source from which a quotation or citation is drawn. These are provided as any form of URI, for example an absolute URI, a relative URI, or private scheme URI that is expanded to an absolute URI as documented in a <gi>prefixDef</gi>.</p>
+      <desc versionDate="2010-05-09" xml:lang="en">specifies the source from which some aspect of
+        this element is drawn.</desc>
+      <datatype maxOccurs="unbounded">
+        <dataRef key="teidata.pointer"/>
+      </datatype>
+      <remarks xml:lang="en" versionDate="2017-06-06">
+        <p>The <att>source</att> attribute points to an external source. When used on elements
+          describing schema components such as <gi>schemaSpec</gi> or <gi>moduleRef</gi> it
+          identifies the source from which declarations for the components of the object being
+          defined may be obtained. </p>
+        <p> On other elements it provides a pointer to the bibliographical source from which a
+          quotation or citation is drawn. </p>
+        <p>In either case, the location may be provided using any form of URI, for example an
+          absolute URI, a relative URI, or private scheme URI that is expanded to an absolute URI as
+          documented in a <gi>prefixDef</gi>.</p>
+        <p>If more than one location is specified, the default assumption is that the required
+          source should be obtained by combining the resources indicated. </p>
       </remarks>
     </attDef>
   </attList>
   <exemplum xml:lang="en">
     <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#SOURCE-eg-01">
-      <p><!-- ... -->
-        As Willard McCarty (<bibl xml:id="mcc_2012">2012, p.2</bibl>) 
-        tells us, <quote source="#mcc_2012">‘Collaboration’  is  a   
-          problematic  and  should  be  a  contested  term.</quote>
+      <p><!-- ... --> As Willard McCarty (<bibl xml:id="mcc_2012">2012, p.2</bibl>) tells us, <quote source="#mcc_2012">‘Collaboration’ is a problematic and should be a contested
+          term.</quote>
         <!-- ... -->
       </p>
     </egXML>
@@ -1675,18 +1696,14 @@ the TEI header.</p>
     <egXML xmlns="http://www.tei-c.org/ns/Examples">
       <p>
         <!-- ... -->
-        <quote source="#chicago_15_ed">Grammatical theories 
-          are in flux, and the more we learn, the less we 
-          seem to know.</quote>
+        <quote source="#chicago_15_ed">Grammatical theories are in flux, and the more we learn, the
+          less we seem to know.</quote>
         <!-- ... -->
       </p>
       <!-- ... -->
-      <bibl xml:id="chicago_15_ed"><title level="m">The Chicago Manual of Style</title>, 
-        <edition>15th edition</edition>. 
-        <pubPlace>Chicago</pubPlace>: 
-        <publisher>University of Chicago Press</publisher> 
-        (<date>2003</date>), 
-        <biblScope unit="page">p.147</biblScope>.
+      <bibl xml:id="chicago_15_ed"><title level="m">The Chicago Manual of Style</title>,
+          <edition>15th edition</edition>. <pubPlace>Chicago</pubPlace>: <publisher>University of
+          Chicago Press</publisher> (<date>2003</date>), <biblScope unit="page">p.147</biblScope>.
       </bibl>
     </egXML>
   </exemplum>
@@ -1694,10 +1711,17 @@ the TEI header.</p>
     <egXML xmlns="http://www.tei-c.org/ns/Examples">
       <elementRef key="p" source="tei:2.0.1"/>
     </egXML>
-    <p>Include in the schema an element named <gi>p</gi> 
-      available from the TEI P5 2.0.1 release.</p>
+    <p>Include in the schema an element named <gi>p</gi> available from the TEI P5 2.0.1
+      release.</p>
   </exemplum>
-  
+  <exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">
+      <schemaSpec ident="myODD" source="mycompiledODD.xml">
+        <!-- further declarations specifying the components required -->
+      </schemaSpec>
+    </egXML>
+    <p>Create a schema using components taken from the file <ident>mycompiledODD.xml</ident>.</p>
+  </exemplum>
   <listRef>
     <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ST.html#STGAso">1.3.1.1.4. Sources, certainty, and responsibility</ref>
     <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/CO.html#COHQQ">3.3.3. Quotation</ref>
@@ -1924,45 +1948,7 @@ and that a single TEI document may contain texts in many languages.</p>
           </div>
         </egXML>
       </exemplum>
-      <exemplum versionDate="2010-02-26" xml:lang="fr">
-        <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#fr-ex-Bibliog_Renaissance_Ital">
-          <div type="bibl">
-            <head>La Renaissance italienne, bibliographie sélective</head>
-            <listBibl>
-              <bibl n="1">
-                <author>
-                  <name> Michel Hochmann, ... </name>
-                </author>
-                <ref>
-                  <title>L’Abcdaire de la Renaissance italienne</title>
-                </ref>
-              </bibl>
-              <bibl n="2">
-                <author>
-                  <name>Thames et Hudson,</name>
-                </author>
-                <ref>
-                  <title>Dictionnaire de la Renaissance</title>
-                </ref>
-              </bibl>
-              <bibl n="3">
-                <author>
-                  <name> Hervé Loilier</name>
-                </author>
-                <ref>
-                  <title>Florence : voyage dans la Renaissance italienne du XVe siècle</title>
-                </ref>
-              </bibl>
-              <bibl n="3">
-                <author>
-                  <name>Linda Murray</name>
-                  <title>La Haute Renaissance et le Maniérisme</title>
-                </author>
-              </bibl>
-            </listBibl>
-          </div>
-        </egXML>
-      </exemplum>
+     
     </attDef>
     <attDef ident="xml:space" usage="opt">
       <desc versionDate="2010-02-10" xml:lang="en">signals an intention about how white space should be 
@@ -2064,7 +2050,7 @@ this name in the form of a set of whitespace-separated values, for example the o
       utilisés pour classer ou interclasser des éléments de n'importe quelle façon.</desc>
   <desc versionDate="2007-05-04" xml:lang="es">proporciona atributos genéricos utilizables para cualquier clasificación o subclasificación de elementos.</desc>
   <desc versionDate="2007-01-21" xml:lang="it">assegna degli attributi generici utilizzabili per qualsiasi classificazione e sottoclassificazione di elementi</desc>
-  <constraintSpec scheme="isoschematron" ident="subtypeTyped">
+  <constraintSpec scheme="schematron" ident="subtypeTyped">
     <constraint>
       <sch:rule context="tei:*[@subtype]">
         <sch:assert test="@type">The <sch:name/> element should not be categorized in detail with @subtype unless also categorized in general with @type</sch:assert>
@@ -2458,6 +2444,7 @@ in transcribing and in authoring.</desc>
   <classes>
     <memberOf key="model.phrase"/>
     <memberOf key="model.limitedPhrase"/>
+    
     
   </classes>
   <listRef>
@@ -3780,47 +3767,6 @@ value.</desc>
   <listRef xmlns:tei="http://www.tei-c.org/ns/1.0">
       <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/CH.html#CHSH">6.1. Language Identification</ref>
   </listRef>
-</dataSpec><dataSpec module="tei" ident="teidata.namespace">
-  <desc xmlns:tei="http://www.tei-c.org/ns/1.0" versionDate="2007-10-14" xml:lang="en">defines the range of attribute values used to indicate XML namespaces as defined by the W3C
-    <ref target="http://www.w3.org/TR/1999/REC-xml-names-19990114/">Namespaces in XML</ref>
-    Technical Recommendation.</desc>
-  <desc xmlns:tei="http://www.tei-c.org/ns/1.0" versionDate="2007-12-20" xml:lang="ko">W3C <ref target="http://www.w3.org/TR/1999/REC-xml-names-19990114/">Namespaces in XML</ref> 기술적 권고안에 의해
-    정의된 XML 이름공간을 나타내는 속성 값 범위를 정의한다.</desc>
-  <desc xmlns:tei="http://www.tei-c.org/ns/1.0" versionDate="2007-05-02" xml:lang="zh-TW">定義的屬性值範圍指出XML名稱空間，由XML technical
-    recommendation中的W3C名稱空間所定義。</desc>
-  <desc xmlns:tei="http://www.tei-c.org/ns/1.0" versionDate="2008-04-05" xml:lang="ja">W3Cの<ref target="http://www.w3.org/TR/1999/REC-xml-names-19990114/">
-    XML名前空間</ref>で定義されている名前空間を示す属性値の範囲を示す．</desc>
-  <desc xmlns:tei="http://www.tei-c.org/ns/1.0" versionDate="2007-06-12" xml:lang="fr">définit la gamme des
-  valeurs d'attributs exprimant une espace de noms XML tels qu'ils
-  sont définis par le
-      W3C.</desc>
-  <desc xmlns:tei="http://www.tei-c.org/ns/1.0" versionDate="2007-05-04" xml:lang="es">define la gama de valores de atributos usados para
-    indicar los nombres de los espacios en XML como establecen las recomendaciones técnicas del W3C
-    para los <ptr target="http://www.w3.org/TR/1999/REC-xml-names-19990114/"/>
-   </desc>
-  <desc xmlns:tei="http://www.tei-c.org/ns/1.0" versionDate="2007-01-21" xml:lang="it">definisce la gamma di valori di attributi usati per
-    indicare i nomi degli spazi in XML come stabilito dalle raccomandazioni tecniche del W3C per gli
-    <ref target="http://www.w3.org/TR/1999/REC-xml-names-19990114/">spazi dei nomi in XML</ref>.</desc>
-  <content xmlns:tei="http://www.tei-c.org/ns/1.0">
-      <dataRef name="anyURI"/>
-   </content>
-  <remarks xmlns:tei="http://www.tei-c.org/ns/1.0" versionDate="2008-02-08" xml:lang="en">
-      <p>The range of syntactically valid values is defined by <ref target="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986 <title>Uniform Resource Identifier
-          (URI): Generic Syntax</title>
-         </ref>
-      </p>
-  </remarks>
-  <remarks xmlns:tei="http://www.tei-c.org/ns/1.0" xml:lang="ja" versionDate="2008-04-05">
-      <p> 当該データ値は，<ref target="http://www.ietf.org/rfc/rfc2396.txt">RFC 2396 <title>Uniform Resource
-          Identifier (URI) Reference</title>
-         </ref> に定義されている． </p>
-  </remarks>
-  <remarks xmlns:tei="http://www.tei-c.org/ns/1.0" versionDate="2009-05-25" xml:lang="fr">
-      <p>La gamme des valeurs  syntaxiquement valides est définie par <ref target="http://www.ietf.org/rfc/rfc3986.txt">RFC 3986 <title>Uniform Resource Identifier
-          (URI): Generic Syntax</title>
-         </ref>.</p>
-      
-  </remarks>
 </dataSpec><dataSpec module="tei" ident="teidata.outputMeasurement">
   <desc xmlns:tei="http://www.tei-c.org/ns/1.0" versionDate="2013-03-26" xml:lang="en">defines a range of values for use in specifying the size of an object that is intended for
     display.</desc>
@@ -4003,6 +3949,16 @@ resource, either within the current document or elsewhere.</desc>
   <remarks xmlns:tei="http://www.tei-c.org/ns/1.0" versionDate="2013-04-14" xml:lang="en">
       <p/>
   </remarks>
+</dataSpec><dataSpec module="tei" ident="teidata.xpath">
+  <desc xmlns:tei="http://www.tei-c.org/ns/1.0" versionDate="2013-04-14" xml:lang="en">defines attribute values which contain an XPath  expression.</desc>
+  <content xmlns:tei="http://www.tei-c.org/ns/1.0">
+      <textNode/>
+   </content>
+  <remarks xmlns:tei="http://www.tei-c.org/ns/1.0" versionDate="2013-04-14" xml:lang="en">
+      <p>Any XPath expression using the syntax
+defined in <ptr target="#XSLT2"/>
+      </p>
+  </remarks>
 </dataSpec><dataSpec module="tei" ident="teidata.word">
   <desc xmlns:tei="http://www.tei-c.org/ns/1.0" versionDate="2007-10-22" xml:lang="en">defines the range of attribute values expressed as a single
   word or token.</desc>
@@ -4144,26 +4100,40 @@ resource, either within the current document or elsewhere.</desc>
     <p>In the last case, the identifier includes a non-Unicode character
 which is defined elsewhere by
 means of a <gi>glyph</gi> or <gi>char</gi> element referenced here as <code>#sym</code>. </p>
+  </exemplum><exemplum xml:lang="de" versionDate="2017-06-25">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">
+      <idno type="ISBN">978-1-906964-22-1</idno>
+      <idno type="ISSN">0143-3385</idno>
+      <idno type="DOI">10.1000/123</idno>
+      <idno type="URI">http://www.worldcat.org/oclc/185922478</idno>
+      <idno type="URI">http://authority.nzetc.org/463/</idno>
+      <idno type="LT">Thomason Tract E.537(17)</idno>
+      <idno type="Wing">C695</idno>
+      <idno type="oldCat"><g ref="#sym"/>345</idno>
+    </egXML>
+    <p>In letztgenanntem Fall enthält der Identifikator ein Nicht-Unicode-Zeichen, das an anderer
+      Stelle mit Hilfe eines <gi>glyph</gi> oder <gi>char</gi>-Elements definiert ist und hier als
+      <code>#sym</code> referenziert wird.</p>
   </exemplum><exemplum versionDate="2010-02-26" xml:lang="fr">
     <egXML xmlns="http://www.tei-c.org/ns/Examples">
       <idno type="ISSN">0143-3385</idno>
       <idno type="OTA">116</idno>
       <idno type="ISBN">1-896016-00-6</idno>
     </egXML>
-  </exemplum><remarks versionDate="2012-03-09" xml:lang="en">
+  </exemplum><remarks versionDate="2017-05-11" xml:lang="en">
     <p><gi>idno</gi> should be used for labels which identify an
     object or concept in a formal cataloguing system such as a
     database or an RDF store, or in a distributed system such as the
     World Wide Web. Some suggested values for <att>type</att> on <gi>idno</gi>
-    are <code>ISBN</code>, <code>ISSN</code>, <code>DOI</code>, and
-    <code>URI</code>.</p>
-  </remarks><remarks versionDate="2016-11-17" xml:lang="de">
+    are <val>ISBN</val>, <val>ISSN</val>, <val>DOI</val>, and
+    <val>URI</val>.</p>
+  </remarks><remarks versionDate="2017-06-25" xml:lang="de">
       <p>
           <gi>idno</gi> sollte für Identifikatoren genutzt werden, die ein Objekt 
           oder Konzept in einem formalen Katalogsystem wie z. B. einer Datenbank 
           oder einem RDF store oder in einem verteilten System wie dem World Wide Web 
           eindeutig identifizieren. Als Werte für <att>type</att> von <gi>idno</gi> 
-          bieten sich z. B. die <code>ISBN</code>, die <code>ISSN</code>, ein <code>DOI</code> oder ein <code>URI</code> an.
+          bieten sich z. B. die <val>ISBN</val>, die <val>ISSN</val>, ein <val>DOI</val> oder ein <val>URI</val> an.
       </p>
   </remarks><listRef>
     <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/HD.html#HD24">2.2.4. Publication, Distribution, Licensing, etc.</ref>
