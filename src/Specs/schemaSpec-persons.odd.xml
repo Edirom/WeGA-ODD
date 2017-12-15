@@ -20,7 +20,7 @@
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-namesdates"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-tei-macros"/>
 
-    <macroSpec ident="macro.persNameContent">
+    <macroSpec ident="macro.persNameContent" mode="add">
         <content>
             <rng:interleave>
                 <rng:oneOrMore>
@@ -46,6 +46,25 @@
                 </rng:zeroOrMore>
             </rng:interleave>
         </content>
+    </macroSpec>
+    
+    <macroSpec ident="macro.birthDeathContent" mode="add">
+        <content>
+            <elementRef key="date" minOccurs="0" maxOccurs="unbounded"/>
+            <alternate minOccurs="0" maxOccurs="unbounded">
+                <elementRef key="placeName"/>
+                <elementRef key="settlement"/>
+                <elementRef key="country"/>
+                <elementRef key="region"/>
+            </alternate>
+        </content>
+        <constraintSpec scheme="schematron" ident="uncertainPlacenames">
+            <constraint>
+                <sch:rule context="tei:birth | tei:death">
+                    <sch:report test="count(distinct-values((tei:placeName | tei:settlement | tei:region | tei:country)/local-name())) gt 1">Multiple encodings of places will be regarded as alternatives. If it's really one place, please wrap in a placeName</sch:report>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
     </macroSpec>
 
     <elementSpec ident="person" mode="change" module="namesdates">
@@ -426,12 +445,7 @@
             <memberOf key="att.naming" mode="delete"/>
         </classes>
         <content>
-            <rng:zeroOrMore>
-                <rng:ref name="date"/>
-            </rng:zeroOrMore>
-            <rng:zeroOrMore>
-                <rng:ref name="placeName"/>
-            </rng:zeroOrMore>
+            <macroRef key="macro.birthDeathContent"/>
         </content>
     </elementSpec>
 
@@ -447,12 +461,7 @@
             <memberOf key="att.naming" mode="delete"/>
         </classes>
         <content>
-            <rng:zeroOrMore>
-                <rng:ref name="date"/>
-            </rng:zeroOrMore>
-            <rng:zeroOrMore>
-                <rng:ref name="placeName"/>
-            </rng:zeroOrMore>
+            <macroRef key="macro.birthDeathContent"/>
         </content>
     </elementSpec>
 
