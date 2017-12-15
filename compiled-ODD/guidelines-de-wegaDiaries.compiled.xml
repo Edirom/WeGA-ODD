@@ -6347,6 +6347,46 @@ Measures</ref>
           kann verwendet werden, um einzelne Buchstaben innerhalb der Auflösung auszuzeichnen.  </p>
   </remarks><listRef>
     <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/CO.html#CONAAB">3.5.5. Abbreviations and Their Expansions</ref>
+  </listRef></elementSpec><elementSpec rend="change" module="core" ident="ptr"><gloss versionDate="2007-07-04" xml:lang="en">pointer</gloss><gloss versionDate="2007-12-20" xml:lang="ko">포인터</gloss><gloss versionDate="2007-05-02" xml:lang="zh-TW"/><gloss versionDate="2008-04-06" xml:lang="es">puntero</gloss><gloss versionDate="2009-01-06" xml:lang="fr">pointeur</gloss><gloss versionDate="2007-11-06" xml:lang="it">puntatore</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2016-10-21" xml:lang="de">wird benutzt um auf ein folgendes <gi>note</gi> zu zeigen und somit den Beginn des zu kommentierenden Bereichs zu markieren.
+              Alternativ kann das Element ein Platzhalter für eine externe URL (präfigiert mit 'http') sein.
+          </desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2016-10-21" xml:lang="en">is used to point at a following <gi>note</gi> thus marking the beginning of the to be annotated section.
+              Alternatively, the element can be a placeholder for an external URL (prefixed with 'http').
+          </desc><classes><memberOf key="model.ptrLike"/><memberOf key="att.pointing"/><memberOf key="att.typed"/></classes><content/><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" ident="ptr-target" scheme="schematron">
+             <desc>The @target attribute must point to a note element following the
+                current element</desc>
+             <constraint>
+                 <sch:rule context="tei:ptr[not(starts-with(@target, 'http'))]">
+                    <sch:assert test="following::tei:note[@xml:id=substring(current()/@target,2)]">
+                       The note element indicated by @target (<sch:value-of select="@target"/>) must follow the current element <sch:name/>. 
+                        Otherwise the target must be some external URL prefixed with 'http'.
+                    </sch:assert>
+                 </sch:rule>
+             </constraint>
+          </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" ident="duplicate-ptr" scheme="schematron">
+             <desc>There must be only one pointer to a note</desc>
+             <constraint>
+                <sch:report test="following::tei:ptr[@target=current()/@target]">
+                   There must be only one pointer with the @target (<sch:value-of select="@target"/>)
+                </sch:report>
+             </constraint>
+          </constraintSpec><constraintSpec scheme="schematron" ident="ptrAtts">
+    <constraint>
+      <report xmlns="http://purl.oclc.org/dsdl/schematron" test="@target and @cRef">Only one of the
+attributes @target and @cRef may be supplied on <name/>.</report>
+    </constraint>
+  </constraintSpec><attList><attDef xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" ident="subtype" mode="delete"/><attDef xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" ident="type" mode="change" usage="opt">
+                <valList mode="replace" type="closed">
+                   <valItem ident="start"/>
+                </valList>
+             </attDef></attList><exemplum xml:lang="und">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">
+      <ptr target="#p143 #p144"/>
+      <ptr target="http://www.tei-c.org"/>
+      <ptr cRef="1.3.4"/>
+    </egXML>
+  </exemplum><listRef>
+    <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/CO.html#COXR">3.6. Simple Links and Cross-References</ref>
+    <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/SA.html#SAPT">16.1. Links</ref>
   </listRef></elementSpec><elementSpec rend="change" module="core" ident="ref"><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">reference</gloss><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">Quellenangabe</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">defines a reference to another location, possibly modified by additional text or comment.</desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">definiert eine Quellenangabe an einer anderen Stelle, die womöglich durch zusätzlichen Text oder Kommentare modifizert wurde.</desc><classes><memberOf key="model.ptrLike"/><memberOf key="att.internetMedia"/><memberOf key="att.cReferencing"/></classes><content><macroRef key="macro.paraContent"/></content><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="prev-next-correspContext">
                 <constraint>
                     <sch:report test="@type=('previousLetterFromAddressee', 'nextLetterFromAddressee') and not(parent::tei:correspContext)">'previousLetterFromAddressee' and 'nextLetterFromAddressee' are only used within the correspContext element.</sch:report>
