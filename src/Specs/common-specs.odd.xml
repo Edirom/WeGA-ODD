@@ -808,22 +808,26 @@
                 <memberOf key="att.typed" mode="delete"/>
                 <memberOf key="att.global.responsibility" mode="add"/>
             </classes>
-            <constraintSpec scheme="schematron" ident="dateHeuristics1">
-                <desc versionDate="2013-11-11" xml:lang="en">checks for the existence of an <att>notBefore</att> with a <emph>larger</emph> value than its corresponding <att>notAfter</att> (for dates AC)</desc>
-                <desc versionDate="2013-11-11" xml:lang="de">sucht nach der Existenz eines <att>notBefore</att> mit einem <emph>größeren</emph> Wert als sein entsprechendes <att>notAfter</att> (für Daten n.Chr.)</desc>
-                <constraint>
-                    <sch:report
-                        test="(@notBefore gt @notAfter) and not(starts-with(@notBefore, '-'))"
-                        >value of notBefore greater than notAfter</sch:report>
-                </constraint>
-            </constraintSpec>
             <constraintSpec scheme="schematron" ident="dateHeuristics2">
-                <desc versionDate="2013-11-11" xml:lang="en">checks for the existence of an <att>notBefore</att> with a <emph>smaller</emph> value than its corresponding <att>notAfter</att> (for dates BC)</desc>
-                <desc versionDate="2013-11-11" xml:lang="de">sucht nach der Existenz eines <att>notBefore</att> mit einem <emph>kleineren</emph> Wert als sein entsprechendes <att>notAfter</att> (für Daten v.Chr.)</desc>
+                <desc versionDate="2013-11-11" xml:lang="en">checks for the existence of an <att>notBefore</att> with a <emph>smaller</emph> date value than its corresponding <att>notAfter</att></desc>
+                <desc versionDate="2013-11-11" xml:lang="de">sucht nach der Existenz eines <att>notBefore</att> mit einem <emph>kleineren</emph> Datumswert als sein entsprechendes <att>notAfter</att></desc>
                 <constraint>
-                    <sch:report
-                        test="(@notBefore lt @notAfter) and starts-with(@notBefore, '-')"
-                        >value of notBefore smaller than notAfter</sch:report>
+                    <sch:rule context="tei:date[@notBefore castable as xs:date and @notAfter castable as xs:date]">
+                        <sch:report test="xs:date(@notBefore) gt xs:date(@notAfter)"
+                            >the date value of notBefore is later than notAfter</sch:report>
+                    </sch:rule>
+                    <sch:rule context="tei:date[@notBefore castable as xs:gYear and @notAfter castable as xs:gYear]">
+                        <sch:report test="xs:date(concat(@notBefore, '-01-01')) gt xs:date(concat(@notAfter, '-01-01'))"
+                            >the date value of notBefore is later than notAfter</sch:report>
+                    </sch:rule>
+                    <sch:rule context="tei:date[@notBefore castable as xs:gYear and @notAfter castable as xs:date]">
+                        <sch:report test="xs:date(concat(@notBefore, '-01-01')) gt xs:date(@notAfter)"
+                            >the date value of notBefore is later than notAfter</sch:report>
+                    </sch:rule>
+                    <sch:rule context="tei:date[@notBefore castable as xs:date and @notAfter castable as xs:gYear]">
+                        <sch:report test="xs:date(@notBefore) gt xs:date(concat(@notAfter, '-12-31'))"
+                            >the date value of notBefore is later than notAfter</sch:report>
+                    </sch:rule>
                 </constraint>
             </constraintSpec>
             <constraintSpec scheme="schematron" ident="dateHeuristics3">
