@@ -9,6 +9,7 @@
     <moduleRef key="namesdates" include="addName affiliation birth country death event forename genName geogName nameLink occupation orgName persName person placeName region residence roleName settlement sex surname"/>
     
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-patterns"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-styleguides"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-lists"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-element-additions"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-constraints"/>
@@ -19,7 +20,7 @@
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-namesdates"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-tei-macros"/>
 
-    <macroSpec ident="macro.persNameContent">
+    <macroSpec ident="macro.persNameContent" mode="add">
         <content>
             <rng:interleave>
                 <rng:oneOrMore>
@@ -46,6 +47,25 @@
             </rng:interleave>
         </content>
     </macroSpec>
+    
+    <macroSpec ident="macro.birthDeathContent" mode="add">
+        <content>
+            <elementRef key="date" minOccurs="0" maxOccurs="unbounded"/>
+            <alternate minOccurs="0" maxOccurs="unbounded">
+                <elementRef key="placeName"/>
+                <elementRef key="settlement"/>
+                <elementRef key="country"/>
+                <elementRef key="region"/>
+            </alternate>
+        </content>
+        <constraintSpec scheme="schematron" ident="uncertainPlacenames">
+            <constraint>
+                <sch:rule context="tei:birth | tei:death">
+                    <sch:report test="count(distinct-values((tei:placeName | tei:settlement | tei:region | tei:country)/local-name())) gt 1">Multiple encodings of places will be regarded as alternatives. If it's really one place, please wrap in a placeName</sch:report>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
+    </macroSpec>
 
     <elementSpec ident="person" mode="change" module="namesdates">
         <desc versionDate="2013-11-11" xml:lang="en">provides information about an identifiable individual, for example a participant in a language interaction, or a person referred to in a historical source.</desc>
@@ -70,10 +90,7 @@
                         </rng:choice>
                     </rng:attribute>
                     <rng:attribute name="target">
-                        <rng:choice>
-                            <rng:ref name="key.person.pattern"/>
-                            <rng:ref name="key.org.pattern"/>
-                        </rng:choice>
+                        <dataRef key="wega.personsPlus.pointer"/>
                     </rng:attribute>
                     <rng:empty/>
                 </rng:element>
@@ -313,7 +330,7 @@
                 <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
                 <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element mit dem Attribut.</desc>
                 <datatype>
-                    <rng:ref name="key.person.pattern"/>
+                    <dataRef key="wega.persons.pointer"/>
                 </datatype>
             </attDef>
             <attDef ident="role" mode="delete"/>
@@ -428,12 +445,7 @@
             <memberOf key="att.naming" mode="delete"/>
         </classes>
         <content>
-            <rng:zeroOrMore>
-                <rng:ref name="date"/>
-            </rng:zeroOrMore>
-            <rng:zeroOrMore>
-                <rng:ref name="placeName"/>
-            </rng:zeroOrMore>
+            <macroRef key="macro.birthDeathContent"/>
         </content>
     </elementSpec>
 
@@ -449,12 +461,7 @@
             <memberOf key="att.naming" mode="delete"/>
         </classes>
         <content>
-            <rng:zeroOrMore>
-                <rng:ref name="date"/>
-            </rng:zeroOrMore>
-            <rng:zeroOrMore>
-                <rng:ref name="placeName"/>
-            </rng:zeroOrMore>
+            <macroRef key="macro.birthDeathContent"/>
         </content>
     </elementSpec>
 

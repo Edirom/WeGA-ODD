@@ -3,28 +3,25 @@
     xmlns="http://www.tei-c.org/ns/1.0" 
     xmlns:rng="http://relaxng.org/ns/structure/1.0"
     xmlns:sch="http://purl.oclc.org/dsdl/schematron">
-    <moduleRef key="core" include="abbr add addrLine address analytic author bibl biblScope biblStruct choice corr date del desc editor expan gap graphic head hi imprint item l label lb lg list listBibl milestone monogr name note num p pb postCode ptr pubPlace publisher q quote ref resp respStmt rs series sic street title unclear"/>
+    <moduleRef key="core" include="abbr add addrLine address analytic author bibl biblScope biblStruct choice corr date del desc editor expan gap graphic head hi imprint item l label lb lg list listBibl milestone monogr name note num p pb postCode ptr pubPlace publisher q quote ref relatedItem resp respStmt rs series sic street title unclear"/>
     <moduleRef key="tei"/>
     <moduleRef key="header" include="availability change correspDesc correspAction correspContext edition editionStmt editorialDecl encodingDesc fileDesc handNote idno keywords langUsage language licence notesStmt profileDesc projectDesc publicationStmt revisionDesc seriesStmt sourceDesc teiHeader textClass titleStmt"/>
     <moduleRef key="textstructure" include="TEI body byline closer dateline div floatingText opener postscript salute signed text"/>
     <moduleRef key="namesdates" include="country geogName orgName persName placeName region settlement"/>
     <moduleRef key="figures" include="cell figDesc figure notatedMusic row table"/>
     <moduleRef key="transcr" include="addSpan damage facsimile handNotes handShift space subst supplied"/>
-    <moduleRef key="msdescription" include="accMat acquisition additional altIdentifier collection history incipit msDesc msIdentifier origin physDesc provenance repository"/>
+    <moduleRef key="msdescription" include="accMat acquisition additional altIdentifier collection history incipit msDesc msFrag msIdentifier msName origin physDesc provenance repository"/>
     <moduleRef key="linking" include="anchor seg"/>
     <moduleRef key="textcrit" include="app lem listWit rdg witness"/>
     <moduleRef key="gaiji" include="g"/>
 
-    <moduleSpec ident="correspondence" mode="add">
-        <desc versionDate="2013-11-11" xml:lang="en">A module for grouping correspondence meta data.</desc>
-        <desc versionDate="2013-11-11" xml:lang="de">ein Modul um Metadaten zur Korrespondenz zu gruppieren.</desc>
-    </moduleSpec>
-    
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-patterns"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-styleguides"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-lists"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-classes"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-element-additions"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-constraints"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-styleguides"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-atts"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-tei-atts"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-core"/>
@@ -72,11 +69,11 @@
                         <rng:value>duplicate</rng:value>
                     </rng:attribute>
                     <rng:attribute name="target">
-                        <rng:choice>
-                            <rng:ref name="key.letter.pattern"/>
-                            <rng:ref name="key.writing.pattern"/>
-                            <rng:ref name="key.document.pattern"/>
-                        </rng:choice>
+                        <alternate>
+                            <dataRef key="wega.writings.pointer"/>
+                            <dataRef key="wega.letters.pointer"/>
+                            <dataRef key="wega.documents.pointer"/>
+                        </alternate>
                     </rng:attribute>
                     <rng:empty/>
                 </rng:element>
@@ -90,9 +87,7 @@
                 <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
                 <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element mit dem Attribut.</desc>
                 <datatype>
-                    <rng:choice>
-                        <rng:ref name="key.letter.pattern"/>
-                    </rng:choice>
+                    <dataRef key="wega.letters.pointer"/>
                 </datatype>
             </attDef>
         </attList>
@@ -493,6 +488,14 @@
                 <elementRef key="revisionDesc"/>
             </sequence>
         </content>
+        <constraintSpec scheme="isoschematron" ident="seriesTitle">
+            <constraint>
+                <sch:rule context="tei:fileDesc/tei:titleStmt/tei:title[@level='s']">
+                    <sch:assert test=".=('WeGA, Briefe, Digitale Edition', 'WeGA, Albumblätter, Digitale Edition')">The series title must be either 
+                        "WeGA, Briefe, Digitale Edition", or "WeGA, Albumblätter, Digitale Edition".</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
     </elementSpec>
     
     <elementSpec ident="profileDesc" module="header" mode="change">
@@ -504,6 +507,24 @@
                 <elementRef key="handNotes" minOccurs="0" maxOccurs="1"/>
             </sequence>
         </content>
+    </elementSpec>
+    
+    <elementSpec ident="correspDesc" module="header" mode="change">
+        <classes>
+            <memberOf key="att.global" mode="delete"/>
+            <memberOf key="att.declarable" mode="delete"/>
+            <memberOf key="att.typed" mode="delete"/>
+        </classes>
+        <attList>
+            <attDef ident="n" mode="add">
+                <valList type="closed">
+                    <valItem ident="revealed">
+                        <desc xml:lang="en" versionDate="2017-10-20">specifies correpondence which is only revealed (by secondary sources).</desc>
+                        <desc xml:lang="de" versionDate="2017-10-20">bezeichnet erschlossene Korrespondenz.</desc>
+                    </valItem>
+                </valList>
+            </attDef>
+        </attList>
     </elementSpec>
 
 </schemaSpec>

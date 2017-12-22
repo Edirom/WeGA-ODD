@@ -10,12 +10,13 @@
     <moduleRef key="namesdates" include="country geogName orgName persName placeName region settlement"/>
     <moduleRef key="figures" include="cell figDesc figure notatedMusic row table"/>
     <moduleRef key="transcr" include="addSpan facsimile handNotes space subst supplied"/>
-    <moduleRef key="msdescription" include="additional history msDesc msIdentifier physDesc provenance repository"/>
+    <moduleRef key="msdescription" include="additional history msDesc msFrag msIdentifier msName physDesc provenance repository"/>
     <moduleRef key="linking" include="anchor seg"/>
     <moduleRef key="textcrit" include="app lem listWit rdg witness"/>
     <moduleRef key="gaiji" include="g"/>
     
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-patterns"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-styleguides"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-lists"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-classes"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-element-additions"/>
@@ -66,35 +67,45 @@
                         <rng:value>duplicate</rng:value>
                     </rng:attribute>
                     <rng:attribute name="target">
-                        <rng:choice>
-                            <rng:ref name="key.writing.pattern"/>
-                            <rng:ref name="key.letter.pattern"/>
-                            <rng:ref name="key.document.pattern"/>
-                        </rng:choice>
+                        <alternate>
+                            <dataRef key="wega.writings.pointer"/>
+                            <dataRef key="wega.letters.pointer"/>
+                            <dataRef key="wega.documents.pointer"/>
+                        </alternate>
                     </rng:attribute>
                     <rng:empty/>
                 </rng:element>
             </rng:choice>
         </content>
         <attList>
+            <attDef ident="version" mode="delete"/>
             <attDef ident="xml:id" mode="add" usage="req">
                 <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
                 <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
                 <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
                 <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element mit dem Attribut.</desc>
                 <datatype>
-                    <rng:ref name="key.document.pattern"/>
+                    <dataRef key="wega.documents.pointer"/>
                 </datatype>
             </attDef>
         </attList>
     </elementSpec>
     
-    <elementSpec ident="fileDesc" mode="change" module="header">
-        <constraintSpec scheme="isoschematron" ident="missing-writings-title">
-            <desc versionDate="2014-04-22" xml:lang="en">checks that all writings have a title</desc>
-            <desc versionDate="2014-04-22" xml:lang="de">Überprüft, dass alle Schriften einen Titel haben</desc>
+    <elementSpec ident="teiHeader" module="header" mode="change">
+        <content>
+            <sequence>
+                <elementRef key="fileDesc"/>
+                <elementRef key="encodingDesc"/>
+                <elementRef key="profileDesc"/>
+                <elementRef key="revisionDesc"/>
+            </sequence>
+        </content>
+        <constraintSpec scheme="isoschematron" ident="seriesTitle">
             <constraint>
-                <sch:assert test="tei:titleStmt/tei:title[@level='a']">Document hat keinen Titel</sch:assert>
+                <sch:rule context="tei:fileDesc/tei:titleStmt/tei:title[@level='s']">
+                    <sch:assert test=".='WeGA, Dokumente, Digitale Edition'">The series title must be 
+                        "WeGA, Dokumente, Digitale Edition".</sch:assert>
+                </sch:rule>
             </constraint>
         </constraintSpec>
     </elementSpec>

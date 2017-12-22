@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schemaSpec ident="wegaWorks" ns="http://www.music-encoding.org/ns/mei" start="mei source"
+<schemaSpec ident="wegaWorks" 
+    xml:lang="en" 
+    ns="http://www.music-encoding.org/ns/mei" 
+    start="mei source"
     xmlns="http://www.tei-c.org/ns/1.0" 
     xmlns:rng="http://relaxng.org/ns/structure/1.0"
     xmlns:sch="http://purl.oclc.org/dsdl/schematron">
     <moduleRef key="MEI"/>
+    <moduleRef key="MEI.text"/> <!-- needed to get model.listLike -->
     <moduleRef key="MEI.frbr" include="componentGrp item itemList"/>
-    <moduleRef key="MEI.shared" include="addrLine address annot body creation date edition extent group identifier incip lb mdiv mei music p physLoc pubPlace publisher rend repository respStmt score scoreDef section staffDef staffGrp title titlePage"/>
-    <moduleRef key="MEI.header" include="altId availability change changeDesc classCode classification condition dimensions editionStmt event eventList fileDesc hand handList history inscription instrVoice instrVoiceGrp instrumentation language langUsage meiHead notesStmt perfMedium physDesc physMedium plateNum price provenance pubStmt revisionDesc seriesStmt source term termList titleStmt useRestrict watermark work workDesc"/>
+    <moduleRef key="MEI.shared" include="addrLine address annot body creation date edition event eventList extent group head identifier incip lb mdiv mei music p physLoc pubPlace publisher rend repository respStmt score scoreDef section staffDef staffGrp title titlePage"/>
+    <moduleRef key="MEI.header" include="altId availability change changeDesc classCode classification condition dimensions editionStmt fileDesc hand handList history inscription language langUsage meiHead notesStmt perfMedium perfRes perfResList physDesc physMedium plateNum price provenance pubStmt revisionDesc seriesStmt source term termList titleStmt useRestrict watermark work workDesc"/>
     <moduleRef key="MEI.namesdates" include="corpName geogName periodName persName"/>
     <moduleRef key="MEI.cmn"/> <!-- for future use  -->
     <moduleRef key="MEI.edittrans" include="add damage del gap restore sic subst supplied"/>
     
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-patterns"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-styleguides"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-lists"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-atts"/>
     
@@ -22,6 +27,15 @@
             </rng:optional>
         </content>
     </macroSpec>-->
+    
+    <constraintSpec ident="set_ns" scheme="isoschematron" mode="add">
+        <constraint>
+            <sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron" prefix="mei"
+                uri="http://www.music-encoding.org/ns/mei"/>
+            <!--<sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron" prefix="xlink"
+                uri="http://www.w3.org/1999/xlink"/>-->
+        </constraint>
+    </constraintSpec>
     
     <classSpec type="atts" ident="att.measurement" module="MEI.shared" mode="change">
         <attList>
@@ -83,7 +97,7 @@
                     </rng:attribute>
                     <rng:attribute name="target">
                         <rng:choice>
-                            <rng:ref name="key.work.pattern"/>
+                            <rng:ref name="wega.works.pointer"/>
                         </rng:choice>
                     </rng:attribute>
                     <rng:empty/>
@@ -97,7 +111,7 @@
                 <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
                 <desc versionDate="2013-11-11" xml:lang="de">lieferte jegliche Form eines Bezeichners in einer standardisierten Form, der benutzt werden kann um Objekte zu identifiziert, wie etwa ein bibliographisches Element, eine Organisation, usw.</desc>
                 <datatype>
-                    <rng:ref name="key.work.pattern"/>
+                    <rng:ref name="wega.works.pointer"/>
                 </datatype>
             </attDef>
         </attList>
@@ -201,7 +215,7 @@
                 <desc versionDate="2013-11-11" xml:lang="en">The WeGA ID of this person, e.g. "A002068" for Carl Maria von Weber</desc>
                 <desc versionDate="2013-11-11" xml:lang="de">Die WeGA ID der jeweiligen Person, z.B. "A002068" für Carl Maria von Weber</desc>
                 <datatype>
-                    <rng:ref name="key.person.pattern"/>
+                    <rng:ref name="wega.persons.pointer"/>
                 </datatype>
             </attDef>
             <attDef ident="cert" mode="add" usage="opt">
@@ -223,15 +237,18 @@
                 <rng:ref name="titleStmt"/>
             </rng:optional>
             <rng:ref name="macro.bibldescPart"/>
+            <!-- Adding creation to source -->
             <rng:optional>
-                <rng:ref name="contents"/>
+                <rng:ref name="creation"/>
             </rng:optional>
-            <!-- Adding history to source -->
             <rng:optional>
                 <rng:ref name="history"/>
             </rng:optional>
             <rng:optional>
                 <rng:ref name="langUsage"/>
+            </rng:optional>
+            <rng:optional>
+                <rng:ref name="contents"/>
             </rng:optional>
             <rng:optional>
                 <rng:ref name="notesStmt"/>
@@ -261,7 +278,7 @@
         <attList>
             <attDef ident="xml:id" mode="change" usage="opt">
                 <datatype>
-                    <rng:ref name="key.sources.pattern"/>
+                    <rng:ref name="wega.sources.pointer"/>
                 </datatype>
             </attDef>
         </attList>
@@ -453,19 +470,6 @@
         </classes>
     </elementSpec>
     
-    <classSpec type="model" ident="model.availabilityPart" mode="add" module="MEI.header">
-        <desc>groups elements that may appear as part of a description of the availability of and
-            access to a bibliographic item.</desc>
-    </classSpec>
-    
-    <elementSpec ident="availability" module="MEI.header" mode="change" ns="http://www.music-encoding.org/ns/mei">
-        <content>
-            <rng:oneOrMore>
-                <rng:ref name="model.availabilityPart"/>
-            </rng:oneOrMore>
-        </content>
-    </elementSpec>
-    
     <elementSpec ident="repository" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
         <classes mode="change">
             <memberOf key="att.typed" mode="delete"/>
@@ -487,7 +491,8 @@
         </attList>
     </elementSpec>
     
-    <elementSpec ident="term" module="MEI.header" mode="change" ns="http://www.music-encoding.org/ns/mei">
+    <!-- need to replace this attribute class to get rid of the constraintSpec -->
+    <classSpec ident="att.classcodeident" module="MEI.shared" type="atts" mode="replace">
         <attList>
             <attDef ident="classcode" mode="change" usage="rec">
                 <valList mode="replace" type="closed">
@@ -506,7 +511,7 @@
                 </valList>
             </attDef>
         </attList>
-    </elementSpec>
+    </classSpec>
     
     <elementSpec ident="classification" module="MEI.header" mode="change" ns="http://www.music-encoding.org/ns/mei">
         <content>
@@ -522,5 +527,8 @@
         </content>
     </elementSpec>
     
+    <elementSpec ident="respStmt" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <constraintSpec scheme="isoschematron" ident="check_respStmt" mode="delete"/>
+    </elementSpec>
     
 </schemaSpec>

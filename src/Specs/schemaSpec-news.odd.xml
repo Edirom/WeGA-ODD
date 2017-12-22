@@ -3,14 +3,15 @@
     xmlns="http://www.tei-c.org/ns/1.0" 
     xmlns:rng="http://relaxng.org/ns/structure/1.0"
     xmlns:sch="http://purl.oclc.org/dsdl/schematron">
-    <moduleRef key="core" include="author bibl date head hi item label lb list mentioned note p q quote ref rs term title"/>
+    <moduleRef key="core" include="author bibl date divGen graphic head hi item label lb list mentioned note p q quote ref rs term title"/>
     <moduleRef key="tei"/>
     <moduleRef key="header" include="editionStmt fileDesc keywords profileDesc publicationStmt sourceDesc teiHeader textClass titleStmt"/>
     <moduleRef key="textstructure" include="TEI body div text"/>
     <moduleRef key="namesdates" include="country orgName persName placeName settlement"/>
-    <!--<moduleRef key="figures" include="cell figDesc figure row table"/>-->
+    <moduleRef key="figures" include="cell figDesc figure row table"/>
     
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-patterns"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-styleguides"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-lists"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-element-additions"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-constraints"/>
@@ -21,6 +22,7 @@
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-textstructure"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-namesdates"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-tei-macros"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-figures"/>
     
     <elementSpec ident="TEI" mode="change" module="textstructure">
         <gloss versionDate="2013-11-11" xml:lang="en">TEI document</gloss>
@@ -53,7 +55,7 @@
                         <rng:value>duplicate</rng:value>
                     </rng:attribute>
                     <rng:attribute name="target">
-                        <rng:ref name="key.newsSg.pattern"/>
+                        <dataRef key="wega.news.pointer"/>
                     </rng:attribute>
                     <rng:empty/>
                 </rng:element>
@@ -67,7 +69,7 @@
                 <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
                 <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.</desc>
                 <datatype>
-                    <rng:ref name="key.newsSg.pattern"/>
+                    <dataRef key="wega.news.pointer"/>
                 </datatype>
             </attDef>
         </attList>
@@ -108,9 +110,10 @@
             <memberOf key="att.global" mode="delete"/>
         </classes>
         <content>
-            <rng:oneOrMore>
-                <rng:ref name="div"/>
-            </rng:oneOrMore>
+            <alternate maxOccurs="unbounded">
+                <elementRef key="div"/>
+                <elementRef key="divGen"/>
+            </alternate>
         </content>
     </elementSpec>
     
