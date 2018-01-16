@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2016-10-31T11:59:50Z. 
+Schema generated from ODD source 2017-07-28T15:01:28Z. 
 Edition: 2013 Release
 Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -503,6 +503,22 @@ Edition Location: http://www.tei-c.org/Vault/P5//
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
       <value>3f</value>
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+    </choice>
+  </define>
+  <define name="data.LINERENDITION">
+    <choice>
+      <value>narrow</value>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">default line width</a:documentation>
+      <value>medium</value>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">twice as wide as narrow</a:documentation>
+      <value>wide</value>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">twice as wide as medium</a:documentation>
+      <value>dashed</value>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">dashed line</a:documentation>
+      <value>dotted</value>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">dotted line</a:documentation>
+      <value>wavy</value>
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">undulating line</a:documentation>
     </choice>
   </define>
   <define name="data.MEASUREBEAT">
@@ -1184,6 +1200,39 @@ Edition Location: http://www.tei-c.org/Vault/P5//
       <ref name="att.common.attributes"/>
       <empty/>
     </element>
+  </define>
+  <define name="att.accid.anl.attributes">
+    <empty/>
+  </define>
+  <define name="att.accid.ges.attributes">
+    <empty/>
+  </define>
+  <define name="att.accid.log.attributes">
+    <ref name="att.accidental.attributes"/>
+    <ref name="att.controlevent.attributes"/>
+    <ref name="att.accid.log.attribute.func"/>
+  </define>
+  <define name="att.accid.log.attribute.func">
+    <optional>
+      <attribute name="func">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">records the function of an accidental.</a:documentation>
+        <choice>
+          <value>caution</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">cautionary accidental.</a:documentation>
+          <value>edit</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">editorial accidental.</a:documentation>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.accid.vis.attributes">
+    <ref name="att.color.attributes"/>
+    <ref name="att.enclosingchars.attributes"/>
+    <ref name="att.placement.attributes"/>
+    <ref name="att.staffloc.attributes"/>
+    <ref name="att.visualoffset.ho.attributes"/>
+    <ref name="att.visualoffset.vo.attributes"/>
+    <ref name="att.xy.attributes"/>
   </define>
   <define name="att.accidental.attributes">
     <ref name="att.accidental.attribute.accid"/>
@@ -2121,6 +2170,17 @@ Edition Location: http://www.tei-c.org/Vault/P5//
       <attribute name="line">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the line upon which a feature stands. The value must be in the range between 1 and the number of lines on the staff. The numbering of lines starts with the lowest line of the staff.</a:documentation>
         <ref name="data.CLEFLINE"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.linerend.attributes">
+    <ref name="att.linerend.attribute.rend"/>
+  </define>
+  <define name="att.linerend.attribute.rend">
+    <optional>
+      <attribute name="rend">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">records the appearance of a line.</a:documentation>
+        <ref name="data.LINERENDITION"/>
       </attribute>
     </optional>
   </define>
@@ -4208,6 +4268,7 @@ Edition Location: http://www.tei-c.org/Vault/P5//
   </define>
   <define name="model.noteModifierLike">
     <choice>
+      <ref name="accid"/>
       <ref name="artic"/>
     </choice>
   </define>
@@ -4534,6 +4595,19 @@ Edition Location: http://www.tei-c.org/Vault/P5//
     <oneOrMore>
       <ref name="title"/>
     </oneOrMore>
+  </define>
+  <define name="accid">
+    <element name="accid">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(accidental) – Records a temporary alteration to the pitch of a note. </a:documentation>
+      <empty/>
+      <ref name="att.common.attributes"/>
+      <ref name="att.typography.attributes"/>
+      <ref name="att.accid.log.attributes"/>
+      <ref name="att.accid.vis.attributes"/>
+      <ref name="att.accid.ges.attributes"/>
+      <ref name="att.accid.anl.attributes"/>
+      <empty/>
+    </element>
   </define>
   <define name="address">
     <element name="address">
@@ -4993,17 +5067,14 @@ Edition Location: http://www.tei-c.org/Vault/P5//
     </element>
   </define>
   <define name="note">
-    <element name="note">
+    <element name="note" ns="http://www.music-encoding.org/ns/mei">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A single pitched event. </a:documentation>
-      <zeroOrMore>
-        <choice>
-          <ref name="model.noteModifierLike"/>
-          <ref name="model.verseLike"/>
-          <ref name="model.sylLike"/>
-          <ref name="model.editLike"/>
-          <ref name="model.transcriptionLike"/>
-        </choice>
-      </zeroOrMore>
+      <optional>
+        <ref name="accid"/>
+      </optional>
+      <optional>
+        <ref name="verse"/>
+      </optional>
       <ref name="att.common.attributes"/>
       <ref name="att.note.log.attributes"/>
       <ref name="att.note.vis.attributes"/>
@@ -7142,6 +7213,39 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
       </attribute>
     </optional>
   </define>
+  <define name="att.octave.anl.attributes">
+    <empty/>
+  </define>
+  <define name="att.octave.ges.attributes">
+    <ref name="att.duration.performed.attributes"/>
+  </define>
+  <define name="att.octave.log.attributes">
+    <ref name="att.controlevent.attributes"/>
+    <ref name="att.augmentdots.attributes"/>
+    <ref name="att.duration.additive.attributes"/>
+    <ref name="att.octavedisplacement.attributes"/>
+    <ref name="att.startendid.attributes"/>
+    <ref name="att.timestamp2.musical.attributes"/>
+    <ref name="att.octave.log.attribute.coll"/>
+  </define>
+  <define name="att.octave.log.attribute.coll">
+    <optional>
+      <attribute name="coll">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates whether the octave displacement should be performed simultaneously with the written notes, i.e., "coll' ottava". Unlike other octave signs which are indicated by broken lines, coll' ottava typically uses an unbroken line or a series of longer broken lines, ending with a short vertical stroke. See Read, p. 47-48.</a:documentation>
+        <choice>
+          <value>coll</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">coll' ottava (with the octave).</a:documentation>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="att.octave.vis.attributes">
+    <ref name="att.xy.attributes"/>
+    <ref name="att.visualoffset.attributes"/>
+    <ref name="att.visualoffset2.ho.attributes"/>
+    <ref name="att.visualoffset2.to.attributes"/>
+    <ref name="att.linerend.attributes"/>
+  </define>
   <define name="att.pianopedals.attributes">
     <ref name="att.pianopedals.attribute.pedal.style"/>
   </define>
@@ -7392,6 +7496,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
     <choice>
       <ref name="fermata"/>
       <ref name="hairpin"/>
+      <ref name="octave"/>
       <ref name="slur"/>
       <ref name="tie"/>
       <ref name="tupletSpan"/>
@@ -7402,6 +7507,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
     <choice>
       <ref name="fermata"/>
       <ref name="hairpin"/>
+      <ref name="octave"/>
       <ref name="slur"/>
       <ref name="tie"/>
       <ref name="tupletSpan"/>
@@ -7411,6 +7517,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
   <define name="model.controleventLike.cmn_sequence">
     <ref name="fermata"/>
     <ref name="hairpin"/>
+    <ref name="octave"/>
     <ref name="slur"/>
     <ref name="tie"/>
     <ref name="tupletSpan"/>
@@ -7422,6 +7529,9 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
     </optional>
     <optional>
       <ref name="hairpin"/>
+    </optional>
+    <optional>
+      <ref name="octave"/>
     </optional>
     <optional>
       <ref name="slur"/>
@@ -7444,6 +7554,9 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
       <ref name="hairpin"/>
     </zeroOrMore>
     <zeroOrMore>
+      <ref name="octave"/>
+    </zeroOrMore>
+    <zeroOrMore>
       <ref name="slur"/>
     </zeroOrMore>
     <zeroOrMore>
@@ -7462,6 +7575,9 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
     </oneOrMore>
     <oneOrMore>
       <ref name="hairpin"/>
+    </oneOrMore>
+    <oneOrMore>
+      <ref name="octave"/>
     </oneOrMore>
     <oneOrMore>
       <ref name="slur"/>
@@ -7835,11 +7951,31 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
       <empty/>
     </element>
   </define>
+  <define name="octave">
+    <element name="octave">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An indication that a passage should be performed one or more octaves above or below its written pitch. </a:documentation>
+      <empty/>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-octave-Start-_and_end-type_attributes_required_on_some_control_events-constraint-34">
+        <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:octave">
+          <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
+          <sch:assert test="@dur or @dur.ges or @endid or @tstamp2">Must have one of the
+              attributes: dur, dur.ges, endid, or tstamp2</sch:assert>
+        </sch:rule>
+      </pattern>
+      <ref name="att.common.attributes"/>
+      <ref name="att.octave.log.attributes"/>
+      <ref name="att.octave.vis.attributes"/>
+      <ref name="att.octave.ges.attributes"/>
+      <ref name="att.octave.anl.attributes"/>
+      <empty/>
+    </element>
+  </define>
   <define name="slur">
     <element name="slur">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Indication of 1) a "unified melodic idea" or 2) performance technique. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-slur-Start-_and_end-type_attributes_required_on_some_control_events-constraint-34">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-slur-Start-_and_end-type_attributes_required_on_some_control_events-constraint-35">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:slur">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -7860,7 +7996,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
     <element name="tie">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An indication that two notes of the same pitch form a single note with their combined rhythmic values. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tie-Start-_and_end-type_attributes_required_on_some_control_events-constraint-35">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tie-Start-_and_end-type_attributes_required_on_some_control_events-constraint-36">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:tie">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -7887,7 +8023,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
           <ref name="model.transcriptionLike"/>
         </choice>
       </zeroOrMore>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-36">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-37">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:tuplet[not(@copyof)]">
           <sch:assert test="count(descendant::*[local-name()='note' or local-name()='rest' or               local-name()='chord']) &gt; 1">A tuplet without a copyof attribute must have at least
               2 note, rest, or chord descendants.</sch:assert>
@@ -7905,7 +8041,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
     <element name="tupletSpan">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(tuplet span) – Alternative element for encoding tuplets, especially useful for tuplets that extend across bar lines. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tupletSpan-Start-_and_end-type_attributes_required_on_some_control_events-constraint-37">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tupletSpan-Start-_and_end-type_attributes_required_on_some_control_events-constraint-38">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:tupletSpan">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -8058,7 +8194,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
     <element name="trill">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Rapid alternation of a note with one (usually at the interval of a second) above. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-trill-Start-type_attributes_required_on_some_control_events-constraint-38">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-trill-Start-type_attributes_required_on_some_control_events-constraint-39">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:trill">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -8076,7 +8212,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
     <element name="turn">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An ornament consisting of four notes — the upper neighbor of the written note, the written note, the lower neighbor, and the written note. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-turn-Start-type_attributes_required_on_some_control_events-constraint-39">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-turn-Start-type_attributes_required_on_some_control_events-constraint-40">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:turn">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -8128,11 +8264,6 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
   <define name="model.sylLike">
     <choice>
       <ref name="syl"/>
-    </choice>
-  </define>
-  <define name="model.verseLike">
-    <choice>
-      <ref name="verse"/>
     </choice>
   </define>
   <define name="verse">
