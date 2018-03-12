@@ -7505,6 +7505,18 @@ Measures</ref>
                 <constraint>
                     <sch:assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</sch:assert>
                 </constraint>
+            </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="dateHeuristics6">
+                <desc versionDate="2018-03-12" xml:lang="en">checks for future dates</desc>
+                <desc versionDate="2018-03-12" xml:lang="de">prüft auf in der Zukunft liegende Daten</desc>
+                <constraint>
+                    <sch:rule context="tei:date[some $i in (@when, @notBefore, @notAfter, @from, @to) satisfies $i castable as xs:date]">
+                        <sch:report test="every $j in (@when, @notBefore, @notAfter, @from, @to)[. castable as xs:date] satisfies xs:date($j) gt current-date()">some attribute value of <sch:name/> is greater than the current date</sch:report>
+                    </sch:rule>
+                    <sch:rule context="tei:date[some $i in (@when, @notBefore, @notAfter, @from, @to) satisfies $i castable as xs:gYear]">
+                        <sch:report test="every $j in (@when, @notBefore, @notAfter, @from, @to)[. castable as xs:gYear] satisfies number($j) gt year-from-date(current-date())">some attribute value of <sch:name/> is greater than the current date</sch:report>
+                    </sch:rule>
+                    
+                </constraint>
             </constraintSpec><attList><attDef ident="type" usage="opt">
                     <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
                     <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</desc>
