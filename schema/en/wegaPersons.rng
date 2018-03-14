@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2015-08-17T17:05:33Z. 
+Schema generated from ODD source 2018-03-14T11:34:34Z. 
 Edition: Version 2.7.0. Last updated on
 	16th September 2014, revision 13036
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
@@ -104,16 +104,6 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
   <define name="data.enumerated">
     <ref name="data.name"/>
   </define>
-  <define name="key.person.pattern">
-    <data type="string">
-      <param name="pattern">H00\d{4}</param>
-    </data>
-  </define>
-  <define name="key.persons.pattern">
-    <data type="string">
-      <param name="pattern">(H00\d{4}\s)*H00\d{4}</param>
-    </data>
-  </define>
   <define name="key.work.pattern">
     <data type="string">
       <param name="pattern">H02\d{4}</param>
@@ -141,7 +131,7 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
   </define>
   <define name="wega.pattern">
     <data type="string">
-      <param name="pattern">A00\d{4}</param>
+      <param name="pattern">A00[0-9A-F]{4}</param>
     </data>
   </define>
   <define name="staffSignatures.list">
@@ -387,6 +377,22 @@ Sample values include: 1] all; 2] most; 3] range</a:documentation>
 belongs, but this <sch:name/> element has no textual content.</sch:assert>
     </sch:rule>
   </pattern>
+  <define name="att.declarable.attributes">
+    <ref name="att.declarable.attribute.default"/>
+  </define>
+  <define name="att.declarable.attribute.default">
+    <optional>
+      <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" name="default" a:defaultValue="false">
+        <a:documentation>indicates whether or not this element is selected by default when its parent is selected.</a:documentation>
+        <choice>
+          <value>true</value>
+          <a:documentation>This element is selected if its parent is selected</a:documentation>
+          <value>false</value>
+          <a:documentation>This element can only be selected explicitly, unless it is the only one of its kind, in which case it is selected if its parent is selected.</a:documentation>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
   <define name="att.fragmentable.attributes">
     <ref name="att.fragmentable.attribute.part"/>
   </define>
@@ -921,7 +927,9 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
     <notAllowed/>
   </define>
   <define name="model.biblLike">
-    <notAllowed/>
+    <choice>
+      <ref name="bibl"/>
+    </choice>
   </define>
   <define name="model.labelLike">
     <notAllowed/>
@@ -1084,6 +1092,12 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
       <ref name="model.quoteLike"/>
     </choice>
   </define>
+  <define name="model.respLike">
+    <notAllowed/>
+  </define>
+  <define name="model.imprintPart">
+    <notAllowed/>
+  </define>
   <define name="model.addressLike">
     <choice>
       <ref name="address"/>
@@ -1230,6 +1244,13 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
       <ref name="model.milestoneLike"/>
       <ref name="model.noteLike"/>
       <ref name="model.global.edit"/>
+    </choice>
+  </define>
+  <define name="model.biblPart">
+    <choice>
+      <ref name="model.respLike"/>
+      <ref name="model.imprintPart"/>
+      <ref name="bibl"/>
     </choice>
   </define>
   <define name="model.pPart.data">
@@ -1397,8 +1418,6 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
         <attribute name="key">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</a:documentation>
           <choice>
-            <ref name="key.person.pattern"/>
-            <ref name="key.persons.pattern"/>
             <ref name="key.work.pattern"/>
             <ref name="key.works.pattern"/>
             <ref name="key.biblio.pattern"/>
@@ -1653,6 +1672,28 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
       <empty/>
     </element>
   </define>
+  <define name="bibl">
+    <element name="bibl">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(bibliographic citation) contains a loosely-structured bibliographic citation of which the sub-components may or may not be explicitly tagged. [3.11.1.  2.2.7.  15.3.2. ]</a:documentation>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="model.gLike"/>
+          <ref name="model.highlighted"/>
+          <ref name="model.pPart.data"/>
+          <ref name="model.pPart.edit"/>
+          <ref name="model.segLike"/>
+          <ref name="model.ptrLike"/>
+          <ref name="model.biblPart"/>
+          <ref name="model.global"/>
+        </choice>
+      </zeroOrMore>
+      <ref name="att.global.attributes"/>
+      <ref name="att.declarable.attributes"/>
+      <ref name="att.typed.attributes"/>
+      <empty/>
+    </element>
+  </define>
   <define name="idno">
     <element name="idno">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(identifier) supplies any form of identifier used to identify some object, such as a bibliographic item, a person, a title, an organization, etc. in a standardized way. [2.2.4.  2.2.5.  3.11.2.4. ]</a:documentation>
@@ -1782,7 +1823,6 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
       <optional>
         <attribute name="key">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</a:documentation>
-          <ref name="key.person.pattern"/>
         </attribute>
       </optional>
       <ref name="att.responsibility.attribute.cert"/>
@@ -2098,7 +2138,7 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
             </choice>
           </attribute>
           <attribute name="target">
-            <ref name="key.person.pattern"/>
+            <empty/>
           </attribute>
           <empty/>
         </element>
@@ -2228,6 +2268,9 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
                 </element>
               </zeroOrMore>
             </optional>
+            <zeroOrMore>
+              <ref name="bibl"/>
+            </zeroOrMore>
           </interleave>
         </group>
       </choice>
@@ -2244,7 +2287,6 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
       <ref name="att.docStatus.attributes"/>
       <attribute name="xml:id">
         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(identifier) provides a unique identifier for the element bearing the attribute.</a:documentation>
-        <ref name="key.person.pattern"/>
       </attribute>
       <empty/>
     </element>
