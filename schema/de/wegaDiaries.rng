@@ -5,7 +5,7 @@
          xmlns:teix="http://www.tei-c.org/ns/Examples"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2018-04-24T17:23:31Z. .
+Schema generated from ODD source 2018-05-09T15:13:03Z. .
 TEI Edition: Version 3.3.0. Last updated on
 	31st January 2018, revision f4d8439
 TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 3.3.0/
@@ -1332,26 +1332,37 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
       </choice>
    </define>
    <define name="model.quoteLike">
-      <notAllowed/>
+      <choice>
+         <ref name="quote"/>
+      </choice>
    </define>
    <define name="model.quoteLike_alternation">
-      <notAllowed/>
+      <choice>
+         <ref name="quote"/>
+      </choice>
    </define>
    <define name="model.quoteLike_sequence">
-      <empty/>
+      <ref name="quote"/>
    </define>
    <define name="model.quoteLike_sequenceOptional">
-      <empty/>
+      <optional>
+         <ref name="quote"/>
+      </optional>
    </define>
    <define name="model.quoteLike_sequenceOptionalRepeatable">
-      <empty/>
+      <zeroOrMore>
+         <ref name="quote"/>
+      </zeroOrMore>
    </define>
    <define name="model.quoteLike_sequenceRepeatable">
-      <notAllowed/>
+      <oneOrMore>
+         <ref name="quote"/>
+      </oneOrMore>
    </define>
    <define name="model.qLike">
       <choice>
          <ref name="model.quoteLike"/>
+         <ref name="q"/>
       </choice>
    </define>
    <define name="model.addressLike">
@@ -1608,6 +1619,62 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
             <attribute name="xml:id">
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Bezeichner) liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.</a:documentation>
                <data type="ID"/>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="quote">
+      <element name="quote">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Zitat) enthält Text, der vom Autor (des umgebenden Texts) einer anderen Autorität zugeschrieben wird. [3.3.3. Quotation 4.3.1. Grouped Texts]</a:documentation>
+         <ref name="macro.specialPara"/>
+         <ref name="att.global.source.attributes"/>
+         <ref name="att.notated.attributes"/>
+         <optional>
+            <attribute name="rend">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">bestimmt, wie das Zitat vom umgebenden Text abgesetzt ist. Wenn kein rend angegeben wird, dann ist das Zitat typographisch nicht erkennbar.</a:documentation>
+               <choice>
+                  <value>double-quotes</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">das Zitat is durch doppelte Anführungszeichen markiert.</a:documentation>
+                  <value>single-quotes</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">das Zitat is durch einfache Anführungszeichen markiert.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="q">
+      <element name="q">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(in Anführungszeichen gesetzt) enthält Text, der in Anführungszeichen gesetzt ist. [3.3.3. Quotation]</a:documentation>
+         <ref name="macro.specialPara"/>
+         <optional>
+            <attribute name="type">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Typ) kann verwendet werden, um anzuzeigen, ob die abgesetzte Textpassage gesprochen oder gedacht wird, oder um sie auf andere Weise detaillierter zu beschreiben.
+Empfohlene Werte sind: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] foreign; 6] distinct; 7] term; 8] emph; 9] mentioned</a:documentation>
+               <choice>
+                  <value>spoken</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(gesprochen) Wiedergabe gesprochener Sprache</a:documentation>
+                  <value>thought</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(gedacht) Wiedergabe von Gedanken, z. B. eines inneren Monologes</a:documentation>
+                  <value>written</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(geschrieben) Zitat aus einer schriftlichen Quelle</a:documentation>
+                  <value>soCalled</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(sogenannt) Distanzierung des Autors</a:documentation>
+                  <value>foreign</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(fremdartig) </a:documentation>
+                  <value>distinct</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(distinkt) linguistisch hervorgehoben</a:documentation>
+                  <value>term</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Fachbegriff</a:documentation>
+                  <value>emph</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(betont) rhetorische Emphase</a:documentation>
+                  <value>mentioned</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(erwähnt) bezieht sich auf sich selbst, nicht auf den üblichen Bezugspunkt</a:documentation>
+                  <data type="token">
+                     <param name="pattern">(\p{L}|\p{N}|\p{P}|\p{S})+</param>
+                  </data>
+               </choice>
             </attribute>
          </optional>
          <empty/>
