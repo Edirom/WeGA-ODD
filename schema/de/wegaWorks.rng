@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2018-03-14T11:47:10Z. 
+Schema generated from ODD source 2018-05-18T15:34:20Z. 
 Edition: 2013 Release
 Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -893,14 +893,14 @@ Edition Location: http://www.tei-c.org/Vault/P5//
       </oneOrMore>
     </list>
   </define>
+  <define name="key.person.pattern">
+    <data type="string">
+      <param name="pattern">H00\d{4}</param>
+    </data>
+  </define>
   <define name="key.work.pattern">
     <data type="string">
       <param name="pattern">H02\d{4}</param>
-    </data>
-  </define>
-  <define name="key.sources.pattern">
-    <data type="string">
-      <param name="pattern">H22\d{4}</param>
     </data>
   </define>
   <define name="marcRelator.list">
@@ -6420,7 +6420,6 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
       <optional>
         <attribute name="xml:id">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">regularizes the naming of an element and thus facilitates building links between it and other resources. Each id attribute within a document must have a unique value.</a:documentation>
-          <ref name="key.sources.pattern"/>
         </attribute>
       </optional>
       <empty/>
@@ -6793,6 +6792,7 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
       <optional>
         <attribute name="dbkey">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Die WeGA ID der jeweiligen Person, z.B. "A002068" für Carl Maria von Weber</a:documentation>
+          <ref name="key.person.pattern"/>
         </attribute>
       </optional>
       <optional>
@@ -6899,6 +6899,23 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
         <data type="positiveInteger"/>
       </attribute>
     </optional>
+  </define>
+  <define name="att.beamSpan.anl.attributes">
+    <empty/>
+  </define>
+  <define name="att.beamSpan.ges.attributes">
+    <ref name="att.duration.performed.attributes"/>
+  </define>
+  <define name="att.beamSpan.log.attributes">
+    <ref name="att.controlevent.attributes"/>
+    <ref name="att.augmentdots.attributes"/>
+    <ref name="att.beamedwith.attributes"/>
+    <ref name="att.duration.additive.attributes"/>
+    <ref name="att.startendid.attributes"/>
+    <ref name="att.timestamp2.musical.attributes"/>
+  </define>
+  <define name="att.beamSpan.vis.attributes">
+    <ref name="att.beam.vis.attributes"/>
   </define>
   <define name="att.beatRpt.anl.attributes">
     <empty/>
@@ -7521,6 +7538,7 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
   </define>
   <define name="model.controleventLike.cmn">
     <choice>
+      <ref name="beamSpan"/>
       <ref name="fermata"/>
       <ref name="hairpin"/>
       <ref name="octave"/>
@@ -7532,6 +7550,7 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
   </define>
   <define name="model.controleventLike.cmn_alternation">
     <choice>
+      <ref name="beamSpan"/>
       <ref name="fermata"/>
       <ref name="hairpin"/>
       <ref name="octave"/>
@@ -7542,6 +7561,7 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
     </choice>
   </define>
   <define name="model.controleventLike.cmn_sequence">
+    <ref name="beamSpan"/>
     <ref name="fermata"/>
     <ref name="hairpin"/>
     <ref name="octave"/>
@@ -7551,6 +7571,9 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
     <ref name="model.ornamentLike.cmn_sequence"/>
   </define>
   <define name="model.controleventLike.cmn_sequenceOptional">
+    <optional>
+      <ref name="beamSpan"/>
+    </optional>
     <optional>
       <ref name="fermata"/>
     </optional>
@@ -7575,6 +7598,9 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
   </define>
   <define name="model.controleventLike.cmn_sequenceOptionalRepeatable">
     <zeroOrMore>
+      <ref name="beamSpan"/>
+    </zeroOrMore>
+    <zeroOrMore>
       <ref name="fermata"/>
     </zeroOrMore>
     <zeroOrMore>
@@ -7597,6 +7623,9 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
     </zeroOrMore>
   </define>
   <define name="model.controleventLike.cmn_sequenceRepeatable">
+    <oneOrMore>
+      <ref name="beamSpan"/>
+    </oneOrMore>
     <oneOrMore>
       <ref name="fermata"/>
     </oneOrMore>
@@ -7826,6 +7855,26 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
       <empty/>
     </element>
   </define>
+  <define name="beamSpan">
+    <element name="beamSpan">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(beam span) – Alternative element for explicitly encoding beams, particularly those which extend across bar lines. </a:documentation>
+      <empty/>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-beamSpan-Start-_and_end-type_attributes_required_on_some_control_events-constraint-32">
+        <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:beamSpan">
+          <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
+              the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
+          <sch:assert test="@dur or @dur.ges or @endid or @tstamp2">Must have one of the
+              attributes: dur, dur.ges, endid, or tstamp2</sch:assert>
+        </sch:rule>
+      </pattern>
+      <ref name="att.common.attributes"/>
+      <ref name="att.beamSpan.log.attributes"/>
+      <ref name="att.beamSpan.vis.attributes"/>
+      <ref name="att.beamSpan.ges.attributes"/>
+      <ref name="att.beamSpan.anl.attributes"/>
+      <empty/>
+    </element>
+  </define>
   <define name="beatRpt">
     <element name="beatRpt">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(beat repeat) – An indication that material on a preceding beat should be repeated. </a:documentation>
@@ -7857,7 +7906,7 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
     <element name="fermata">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An indication placed over a note or rest to indicate that it should be held longer than its written value. May also occur over a bar line to indicate the end of a phrase or section. Sometimes called a 'hold' or 'pause'. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-fermata-Start-type_attributes_required_on_some_control_events-constraint-32">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-fermata-Start-type_attributes_required_on_some_control_events-constraint-33">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:fermata">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -7902,7 +7951,7 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
     <element name="hairpin">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Indicates continuous dynamics expressed on the score as wedge-shaped graphics, e.g. &lt; and &gt;. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-hairpin-Start-_and_end-type_attributes_required_on_some_control_events-constraint-33">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-hairpin-Start-_and_end-type_attributes_required_on_some_control_events-constraint-34">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:hairpin">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -7982,7 +8031,7 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
     <element name="octave">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An indication that a passage should be performed one or more octaves above or below its written pitch. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-octave-Start-_and_end-type_attributes_required_on_some_control_events-constraint-34">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-octave-Start-_and_end-type_attributes_required_on_some_control_events-constraint-35">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:octave">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -8002,7 +8051,7 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
     <element name="slur">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Indication of 1) a "unified melodic idea" or 2) performance technique. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-slur-Start-_and_end-type_attributes_required_on_some_control_events-constraint-35">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-slur-Start-_and_end-type_attributes_required_on_some_control_events-constraint-36">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:slur">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -8023,7 +8072,7 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
     <element name="tie">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An indication that two notes of the same pitch form a single note with their combined rhythmic values. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tie-Start-_and_end-type_attributes_required_on_some_control_events-constraint-36">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tie-Start-_and_end-type_attributes_required_on_some_control_events-constraint-37">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:tie">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -8050,7 +8099,7 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
           <ref name="model.transcriptionLike"/>
         </choice>
       </zeroOrMore>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-37">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-38">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:tuplet[not(@copyof)]">
           <sch:assert test="count(descendant::*[local-name()='note' or local-name()='rest' or               local-name()='chord']) &gt; 1">A tuplet without a copyof attribute must have at least
               2 note, rest, or chord descendants.</sch:assert>
@@ -8068,7 +8117,7 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
     <element name="tupletSpan">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(tuplet span) – Alternative element for encoding tuplets, especially useful for tuplets that extend across bar lines. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tupletSpan-Start-_and_end-type_attributes_required_on_some_control_events-constraint-38">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tupletSpan-Start-_and_end-type_attributes_required_on_some_control_events-constraint-39">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:tupletSpan">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -8221,7 +8270,7 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
     <element name="trill">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Rapid alternation of a note with one (usually at the interval of a second) above. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-trill-Start-type_attributes_required_on_some_control_events-constraint-39">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-trill-Start-type_attributes_required_on_some_control_events-constraint-40">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:trill">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real"> Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -8239,7 +8288,7 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
     <element name="turn">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An ornament consisting of four notes — the upper neighbor of the written note, the written note, the lower neighbor, and the written note. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-turn-Start-type_attributes_required_on_some_control_events-constraint-40">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-turn-Start-type_attributes_required_on_some_control_events-constraint-41">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:turn">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>

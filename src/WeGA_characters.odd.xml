@@ -7,7 +7,7 @@
     <teiHeader>
         <fileDesc>
             <titleStmt>
-                <title>WeGA characters ODD</title>
+                <title>WeGA roles ODD</title>
                 <author>Peter Stadler</author>
                 <author>Kristina Richts</author>
             </titleStmt>
@@ -41,14 +41,14 @@
     <text>
         <body>
             <div>
-                <schemaSpec ident="wegaCharacters" xml:lang="en" start="character">
+                <schemaSpec ident="wegaCharacters" xml:lang="en" start="castItem">
                     <moduleRef key="core"
-                        include="addrLine address date head hi item list note p ref rs"/>
+                        include="addrLine address date head hi item list name note p ref rs"/>
                     <moduleRef key="tei"/>
-                    <moduleRef key="header" include="idno characterDesc"/>
+                    <moduleRef key="header" include="idno"/>
                     <moduleRef key="namesdates"
-                        include="addName characterName forename genName geogName nameLink orgName persName person placeName roleName sex surname"/>
-                    <moduleRef key="drama" include="actor"/>
+                        include="addName forename genName geogName nameLink orgName persName person placeName roleName sex surname"/>
+                    <moduleRef key="drama" include="actor castItem role roleDesc"/>
 
                     <specGrpRef target="WeGA_common.odd.xml#wega-patterns"/>
                     <specGrpRef target="WeGA_common.odd.xml#wega-lists"/>
@@ -60,15 +60,14 @@
                     <specGrpRef target="WeGA_common.odd.xml#wega-header"/>
                     <specGrpRef target="WeGA_common.odd.xml#wega-namesdates"/>
 
-                    <macroSpec ident="macro.characterContent">
+                    <macroSpec ident="macro.castItemContent">
                         <content>
-                            
                                 <rng:element name="ref">
-                                    <rng:attribute name="type">
+                                    <!--<rng:attribute name="type">
                                         <rng:choice>
                                             <rng:value>roleWithin</rng:value>
                                         </rng:choice>
-                                    </rng:attribute>
+                                    </rng:attribute>-->
                                     <rng:attribute name="target">
                                         <rng:ref name="key.work.pattern"/>
                                     </rng:attribute>
@@ -78,7 +77,7 @@
                                 <rng:zeroOrMore>
                                     <rng:ref name="idno"/>
                                 </rng:zeroOrMore>
-                                <rng:element name="characterName">
+                                <rng:element name="name">
                                     <rng:attribute name="type">
                                         <rng:value>reg</rng:value>
                                     </rng:attribute>
@@ -91,26 +90,10 @@
                                 </rng:element>
                                 
                                 <rng:zeroOrMore>
-                                    <rng:element name="characterName">
-                                        <rng:attribute name="type">
-                                            <rng:choice>
-                                                <rng:value>alt</rng:value>
-                                            </rng:choice>
-                                        </rng:attribute>
-                                        <rng:optional>
-                                            <rng:attribute name="xml:lang">
-                                                <rng:ref name="data.language"/>
-                                            </rng:attribute>
-                                        </rng:optional>
-                                        <rng:text/>
-                                    </rng:element>
+                                    <rng:ref name="roleDesc"/>
                                 </rng:zeroOrMore>
                                 
-                                <rng:zeroOrMore>
-                                    <rng:ref name="characterDesc"/>
-                                </rng:zeroOrMore>
-                                
-                                <rng:interleave>
+                                <!--<rng:interleave>
                                     <rng:ref name="sex"/>
                                     <rng:optional>
                                         <rng:element name="figure">
@@ -127,7 +110,7 @@
                                             </rng:element>
                                         </rng:zeroOrMore>
                                     </rng:optional>
-                                </rng:interleave>
+                                </rng:interleave>-->
                                 
                                 <rng:zeroOrMore>
                                     <rng:element name="actor">
@@ -139,22 +122,6 @@
                         </content>
                     </macroSpec>
                     
-                    <!--<macroSpec ident="macro.characterDescContent">
-                        <content>
-                            <rng:interleave>
-                                <rng:zeroOrMore>
-                                    <rng:ref name="p"/>
-                                </rng:zeroOrMore>
-                            </rng:interleave>
-                        </content>
-                    </macroSpec>-->
-                    
-                    <!--<macroSpec ident="characterNameContent">
-                        <content>
-                            <rng:text/>
-                        </content>
-                    </macroSpec>-->
-                    
                     <macroSpec ident="macro.actorContent">
                         <content>
                             <rng:zeroOrMore>
@@ -163,7 +130,7 @@
                         </content>
                     </macroSpec>
 
-                    <elementSpec ident="character" mode="add">
+                    <!--<elementSpec ident="role" mode="add">
                         <desc versionDate="2013-11-11" xml:lang="en">provides information about an
                             identifiable individual, for example a participant in a language
                             interaction, or a person referred to in a historical source.</desc>
@@ -183,13 +150,13 @@
                         <content>
                             <rng:ref name="macro.characterContent"/>
                         </content>
-                    </elementSpec>
+                    </elementSpec>-->
                     
-                    <elementSpec ident="characterName" mode="add">
+                    <!--<elementSpec ident="name" mode="add">
                         <classes mode="change">
                             <memberOf mode="add" key="att.canonical"/>
                         </classes>
-                    </elementSpec>
+                    </elementSpec>-->
 
                     <elementSpec ident="surname" mode="change" module="namesdates">
                         <desc versionDate="2013-11-11" xml:lang="en">contains a family (inherited)
@@ -204,11 +171,14 @@
                         </classes>
                     </elementSpec>
                     
-                    <elementSpec ident="characterDesc" mode="add">
+                    <!--<elementSpec ident="roleDesc" mode="add">
                         <content>
                             <rng:ref name="model.pLike"/>
+                            <!-\-<rng:optional>
+                                <rng:ref name="name"/>
+                            </rng:optional>-\->
                         </content>
-                    </elementSpec>
+                    </elementSpec>-->
 
                     <!--<elementSpec ident="forename" mode="change" module="namesdates">
                         <desc versionDate="2014-03-12" xml:lang="en">contains a forename, given or
@@ -387,9 +357,6 @@
                                         <gloss versionDate="2014-10-29" xml:lang="de">'Weber
                                             Gesamtausgabe'</gloss>
                                     </valItem>
-                                    <!--<valItem ident="lccn">
-                                        <gloss>Library of Congress Control Number</gloss>
-                                    </valItem>-->
                                 </valList>
                             </attDef>
                         </attList>

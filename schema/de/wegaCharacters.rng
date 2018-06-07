@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.tei-c.org/ns/1.0">
   <!--
-Schema generated from ODD source 2015-07-02T13:54:19Z. 
+Schema generated from ODD source 2018-06-07T13:18:08Z. 
 Edition: Version 2.7.0. Last updated on
 	16th September 2014, revision 13036
 Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
@@ -141,7 +141,7 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
   </define>
   <define name="wega.pattern">
     <data type="string">
-      <param name="pattern">A00\d{4}</param>
+      <param name="pattern">A00[0-9A-F]{4}</param>
     </data>
   </define>
   <define name="staffSignatures.list">
@@ -162,73 +162,6 @@ Edition Location: http://www.tei-c.org/Vault/P5/Version 2.7.0/
       <data type="gYear"/>
       <data type="gYearMonth"/>
     </choice>
-  </define>
-  <define name="macro.characterContent">
-    <element name="ref">
-      <attribute name="type">
-        <value>roleWithin</value>
-      </attribute>
-      <attribute name="target">
-        <ref name="key.work.pattern"/>
-      </attribute>
-      <empty/>
-    </element>
-    <zeroOrMore>
-      <ref name="idno"/>
-    </zeroOrMore>
-    <element name="characterName">
-      <attribute name="type">
-        <value>reg</value>
-      </attribute>
-      <optional>
-        <attribute name="xml:lang">
-          <ref name="data.language"/>
-        </attribute>
-      </optional>
-      <text/>
-    </element>
-    <zeroOrMore>
-      <element name="characterName">
-        <attribute name="type">
-          <value>alt</value>
-        </attribute>
-        <optional>
-          <attribute name="xml:lang">
-            <ref name="data.language"/>
-          </attribute>
-        </optional>
-        <text/>
-      </element>
-    </zeroOrMore>
-    <zeroOrMore>
-      <ref name="characterDesc"/>
-    </zeroOrMore>
-    <interleave>
-      <ref name="sex"/>
-      <optional>
-        <element name="figure">
-          <ref name="head"/>
-          <attribute name="n">
-            <value>reg</value>
-          </attribute>
-        </element>
-        <zeroOrMore>
-          <element name="figure">
-            <ref name="head"/>
-          </element>
-        </zeroOrMore>
-      </optional>
-    </interleave>
-    <zeroOrMore>
-      <element name="actor">
-        <ref name="macro.actorContent"/>
-      </element>
-    </zeroOrMore>
-  </define>
-  <define name="macro.actorContent">
-    <zeroOrMore>
-      <ref name="persName"/>
-    </zeroOrMore>
   </define>
   <define name="att.canonical.attributes">
     <ref name="att.canonical.attribute.key"/>
@@ -447,24 +380,6 @@ belongs, but this <sch:name/> element has no textual content.</sch:assert>
           <a:documentation>(medial) this is a medial part of a fragmented element</a:documentation>
           <value>F</value>
           <a:documentation>(final) this is the final part of a fragmented element</a:documentation>
-        </choice>
-      </attribute>
-    </optional>
-  </define>
-  <define name="att.docStatus.attributes">
-    <ref name="att.docStatus.attribute.status"/>
-  </define>
-  <define name="att.docStatus.attribute.status">
-    <optional>
-      <attribute name="status">
-        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">beschreibt entweder den aktuellen Status eines Dokuments oder den Zeitpunkt zu dem ein veraltetes Element zugeordnet wurde.</a:documentation>
-        <choice>
-          <value>proposed</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Kategorie "rot") unterste Kategorie, d.h. die Dokumente sind noch im Rohzustand.</a:documentation>
-          <value>candidate</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Kategorie "gelb") mittlere Kategorie für Dokumente, die schon eine gewisse Auszeichnungstiefe besitzen.</a:documentation>
-          <value>approved</value>
-          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Kategorie "grün") freigegebene Dokumente, die den aktuellen Auszeichnungsvorgaben entsprechen sowie kontrolliert und durchgesehen wurden.</a:documentation>
         </choice>
       </attribute>
     </optional>
@@ -716,6 +631,7 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
   </define>
   <define name="model.nameLike.agent">
     <choice>
+      <ref name="name"/>
       <ref name="orgName"/>
       <ref name="persName"/>
       <ref name="characterName"/>
@@ -723,17 +639,22 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
   </define>
   <define name="model.nameLike.agent_alternation">
     <choice>
+      <ref name="name"/>
       <ref name="orgName"/>
       <ref name="persName"/>
       <ref name="characterName"/>
     </choice>
   </define>
   <define name="model.nameLike.agent_sequence">
+    <ref name="name"/>
     <ref name="orgName"/>
     <ref name="persName"/>
     <ref name="characterName"/>
   </define>
   <define name="model.nameLike.agent_sequenceOptional">
+    <optional>
+      <ref name="name"/>
+    </optional>
     <optional>
       <ref name="orgName"/>
     </optional>
@@ -746,6 +667,9 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
   </define>
   <define name="model.nameLike.agent_sequenceOptionalRepeatable">
     <zeroOrMore>
+      <ref name="name"/>
+    </zeroOrMore>
+    <zeroOrMore>
       <ref name="orgName"/>
     </zeroOrMore>
     <zeroOrMore>
@@ -756,6 +680,9 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
     </zeroOrMore>
   </define>
   <define name="model.nameLike.agent_sequenceRepeatable">
+    <oneOrMore>
+      <ref name="name"/>
+    </oneOrMore>
     <oneOrMore>
       <ref name="orgName"/>
     </oneOrMore>
@@ -1099,6 +1026,13 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
       <ref name="model.quoteLike"/>
     </choice>
   </define>
+  <define name="model.castItemPart">
+    <choice>
+      <ref name="role"/>
+      <ref name="roleDesc"/>
+      <ref name="actor"/>
+    </choice>
+  </define>
   <define name="model.addressLike">
     <choice>
       <ref name="address"/>
@@ -1360,6 +1294,18 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
           <data type="ID"/>
         </attribute>
       </optional>
+      <empty/>
+    </element>
+  </define>
+  <define name="name">
+    <element name="name">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(name, proper noun) contains a proper noun or noun phrase. [3.5.1. ]</a:documentation>
+      <ref name="macro.phraseSeq"/>
+      <ref name="att.global.attributes"/>
+      <ref name="att.personal.attributes"/>
+      <ref name="att.datable.attributes"/>
+      <ref name="att.editLike.attributes"/>
+      <ref name="att.typed.attributes"/>
       <empty/>
     </element>
   </define>
@@ -1943,6 +1889,65 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
       <empty/>
     </element>
   </define>
+  <define name="castItem">
+    <element name="castItem">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(cast list item) contains a single entry within a cast list, describing either a single role or a list of non-speaking roles. [7.1.4. ]</a:documentation>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="model.gLike"/>
+          <ref name="model.castItemPart"/>
+          <ref name="model.phrase"/>
+          <ref name="model.global"/>
+        </choice>
+      </zeroOrMore>
+      <ref name="att.global.attributes"/>
+      <optional>
+        <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" name="type" a:defaultValue="role">
+          <a:documentation>characterizes the cast item.</a:documentation>
+          <choice>
+            <value>role</value>
+            <a:documentation>the item describes a single role.</a:documentation>
+            <value>list</value>
+            <a:documentation>the item describes a list of non-speaking roles.</a:documentation>
+          </choice>
+        </attribute>
+      </optional>
+      <empty/>
+    </element>
+  </define>
+  <define name="role">
+    <element name="role">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains the name of a dramatic role, as given in a cast list. [7.1.4. ]</a:documentation>
+      <ref name="macro.phraseSeq"/>
+      <ref name="att.global.attributes"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="roleDesc">
+    <element name="roleDesc">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(role description) describes a character's role in a drama. [7.1.4. ]</a:documentation>
+      <ref name="macro.phraseSeq"/>
+      <ref name="att.global.attributes"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="actor">
+    <element name="actor">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains the name of an actor appearing within a cast list. [7.1.4. ]</a:documentation>
+      <ref name="macro.phraseSeq"/>
+      <ref name="att.global.attributes"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="characterName">
+    <element name="characterName">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Name eines Charakters) Name einer Rolle oder eines Charakters in einem Werk.</a:documentation>
+      <ref name="macro.phraseSeq"/>
+      <ref name="att.responsibility.attribute.cert"/>
+      <empty/>
+    </element>
+  </define>
   <define name="workName">
     <element name="workName">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Name des Werkes (z.B. Komposition)</a:documentation>
@@ -2013,27 +2018,9 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
       <sch:report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</sch:report>
     </sch:rule>
   </pattern>
-  <define name="character">
-    <element name="character">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">liefert Informationen über ein identifizierbares Individuum, beispielsweise ein Teilnehmer einer Sprachinteraktion, oder eine Person, auf die in einer historischen Quelle verwiesen wird.</a:documentation>
-      <ref name="macro.characterContent"/>
-      <ref name="att.global.attributes"/>
-      <ref name="att.editLike.attributes"/>
-      <ref name="att.datable.attributes"/>
-      <ref name="att.typed.attributes"/>
-      <ref name="att.docStatus.attributes"/>
-      <empty/>
-    </element>
-  </define>
-  <define name="characterDesc">
-    <element name="characterDesc">
-      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-      <ref name="model.pLike"/>
-    </element>
-  </define>
   <start>
     <choice>
-      <ref name="character"/>
+      <ref name="castItem"/>
     </choice>
   </start>
   <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaCharacters-whitespaceOnlyContent-constraint-5">
