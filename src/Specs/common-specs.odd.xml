@@ -634,6 +634,15 @@
                 </sch:rule>
             </constraint>
         </constraintSpec>
+        <constraintSpec scheme="schematron" ident="wegaTargets">
+            <desc versionDate="2018-06-13" xml:lang="en">constraints the "wega:"-prefixed URIs to be (syntactically) valid WeGA IDs</desc>
+            <desc versionDate="2018-06-13" xml:lang="de">überprüft die mit "wega:" präfigierten URIs auf (syntaktische) Validität</desc>
+            <constraint>
+                <sch:rule context="*[starts-with(@target, 'wega:')]">
+                    <sch:assert test="matches(@target, '^wega:A[0-9A-F]{6}(#.+)?$')">"wega"-prefixed URIs must follow the pattern "wega:A002068" (i.e. without any file extension)</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
     </specGrp>
     
     <specGrp xml:id="wega-styleguides">
@@ -704,15 +713,7 @@
                 <rng:ref name="macro.specialPara"/>
             </content>
             <attList>
-                <attDef ident="xml:id" mode="add" usage="req">
-                    <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.</desc>
-                    <datatype>
-                        <rng:data type="ID"/>
-                    </datatype>
-                </attDef>
+                <attRef class="att.global" name="xml:id"/>
             </attList>
         </elementSpec>
     </specGrp>
@@ -859,6 +860,20 @@
                 </desc>
                 <constraint>
                     <sch:assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</sch:assert>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="schematron" ident="dateHeuristics6">
+                <desc versionDate="2018-03-12" xml:lang="en">checks for future dates</desc>
+                <desc versionDate="2018-03-12" xml:lang="de">prüft auf in der Zukunft liegende Daten</desc>
+                <constraint>
+                    <sch:rule context="tei:date[some $i in (@when, @notBefore, @notAfter, @from, @to) satisfies $i castable as xs:date]">
+                        <sch:report test="every $j in (@when, @notBefore, @notAfter, @from, @to)[. castable as xs:date] satisfies xs:date($j) gt current-date()"
+                            >some attribute value of <sch:name/> is greater than the current date</sch:report>
+                    </sch:rule>
+                    <sch:rule context="tei:date[some $i in (@when, @notBefore, @notAfter, @from, @to) satisfies $i castable as xs:gYear]">
+                        <sch:report test="every $j in (@when, @notBefore, @notAfter, @from, @to)[. castable as xs:gYear] satisfies number($j) gt year-from-date(current-date())"
+                            >some attribute value of <sch:name/> is greater than the current date</sch:report>
+                    </sch:rule>
                 </constraint>
             </constraintSpec>
             <attList>
@@ -1072,7 +1087,7 @@
                 <attDef ident="n" mode="add" usage="opt">
                     <gloss versionDate="2013-11-11" xml:lang="en">number</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">gives a number (or other label) for an element, which is not necessarily unique within the document.</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="en">Nummer</gloss>
+                    <gloss versionDate="2018-03-29" xml:lang="de">Nummer</gloss>
                     <desc versionDate="2013-11-11" xml:lang="de">gibt dem Element eine Nummer (oder eine andere Bezeichnung), die nicht unbedingt eindeutig im Dokument ist.</desc>
                     <valList type="closed">
                         <valItem ident="telephone">
@@ -1108,15 +1123,7 @@
                         <dataRef key="wega.personsPlus.pointer"/>
                     </datatype>
                 </attDef>
-                <attDef ident="xml:id" mode="add" usage="opt">
-                    <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element mit dem Attribut.</desc>
-                    <datatype>
-                        <rng:data type="ID"/>
-                    </datatype>
-                </attDef>
+                <attRef class="att.global" name="xml:id"/>
                 <attDef ident="sameAs" mode="add" usage="opt">
                     <desc versionDate="2013-11-11" xml:lang="en">points to an element that is the same as the current element.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">zeigt auf ein Element, dass das gleiche ist, wie das aktuelle Element.</desc>
@@ -1165,15 +1172,7 @@
                         <dataRef key="wega.personsPlus.pointer"/>
                     </datatype>
                 </attDef>
-                <attDef ident="xml:id" mode="add" usage="opt">
-                    <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.</desc>
-                    <datatype>
-                        <rng:data type="ID"/>
-                    </datatype>
-                </attDef>
+                <attRef class="att.global" name="xml:id"/>
             </attList>
         </elementSpec>
         
@@ -1187,15 +1186,7 @@
                 <memberOf key="att.wega.rend" mode="add"/>
             </classes>
             <attList>
-                <attDef ident="xml:id" mode="add" usage="opt">
-                    <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="en">Bezeichner</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.</desc>
-                    <datatype>
-                        <rng:data type="ID"/>
-                    </datatype>
-                </attDef>
+                <attRef class="att.global" name="xml:id"/>
             </attList>
         </elementSpec>
         
@@ -1210,31 +1201,65 @@
                 <memberOf key="att.naming" mode="delete"/>
             </classes>
             <constraintSpec scheme="schematron" ident="rs-typeNkey">
-                <desc versionDate="2014-04-11" xml:lang="en">warnings for wrong combination of <att>type</att> and <att>key</att> values.</desc>
-                <desc versionDate="2014-04-11" xml:lang="en">Warnung vor falscher Kombination von <att>type</att> und <att>key</att> Werten.</desc>
+                <desc versionDate="2018-04-24" xml:lang="en">warnings for wrong combination of <att>type</att> and <att>key</att> values.</desc>
+                <desc versionDate="2018-04-24" xml:lang="de">Warnung vor falscher Kombination von <att>type</att> und <att>key</att> Werten.</desc>
                 <constraint>
-                    <sch:rule context="tei:rs[@type][@key]">
-                        <sch:assert
-                            test="
-                            (matches(@key, '^A00[0-9A-F]{4}$') and @type='person') or
-                            (matches(@key, '^A02\d{4}$') and @type='work') or
-                            (matches(@key, '^A03\d{4}$') and @type='writing') or
-                            (matches(@key, '^A04\d{4}$') and @type='letter') or
-                            (matches(@key, '^A06\d{4}$') and @type='diaryDay') or
-                            (matches(@key, '^(A00[0-9A-F]{4}\s)*A00[0-9A-F]{4}$') and @type='persons') or
-                            (matches(@key, '^(A02\d{4}\s)*A02\d{4}$') and @type='works') or
-                            (matches(@key, '^(A03\d{4}\s)*A03\d{4}$') and @type='writings') or
-                            (matches(@key, '^(A04\d{4}\s)*A04\d{4}$') and @type='letters') or
-                            (matches(@key, '^(A05\d{4}\s)*A05\d{4}$') and @type='news') or
-                            (matches(@key, '^(A06\d{4}\s)*A06\d{4}$') and @type='diaryDays') or
-                            (matches(@key, '^A08\d{4}$') and @type='org') or
-                            (matches(@key, '^(A08\d{4}\s)*A08\d{4}$') and @type='orgs') or
-                            (matches(@key, '^A13\d{4}$') and @type='place') or
-                            (matches(@key, '^(A13\d{4}\s)*A13\d{4}$') and @type='places') or
-                            (matches(@key, '^(A11\d{4}\s)*A11\d{4}$') and @type='biblio') or
-                            (matches(@key, '^A10\d{4}$') and @type='document') or
-                            (matches(@key, '^(A10\d{4}\s)*A10\d{4}$') and @type='documents')"
-                            >Type mismatch: The value for @type must be in accordance with the given ID in @key</sch:assert>
+                    <sch:rule context="tei:rs[@type='person'][@key]">
+                        <sch:assert test="matches(@key, '^A00[0-9A-F]{4}$')">A type value of 'person' must have only one key, starting with 'A00'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='persons'][@key]">
+                        <sch:assert test="matches(@key, '^(A00[0-9A-F]{4}\s)*A00[0-9A-F]{4}$')">A type value of 'persons' must have at least one key, each starting with 'A00'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='work'][@key]">
+                        <sch:assert test="matches(@key, '^A02\d{4}$')">A type value of 'work' must have only one key, starting with 'A02'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='works'][@key]">
+                        <sch:assert test="matches(@key, '^(A02\d{4}\s)*A02\d{4}$')">A type value of 'works' must have at least one key, each starting with 'A02'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='writing'][@key]">
+                        <sch:assert test="matches(@key, '^A03\d{4}$')">A type value of 'writing' must have only one key, starting with 'A03'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='writings'][@key]">
+                        <sch:assert test="matches(@key, '^(A03\d{4}\s)*A03\d{4}$')">A type value of 'writings' must have at least one key, each starting with 'A03'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='letter'][@key]">
+                        <sch:assert test="matches(@key, '^A04\d{4}$')">A type value of 'letter' must have only one key, starting with 'A04'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='letters'][@key]">
+                        <sch:assert test="matches(@key, '^(A04\d{4}\s)*A04\d{4}$')">A type value of 'letters' must have at least one key, each starting with 'A04'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='news'][@key]">
+                        <sch:assert test="matches(@key, '^(A05\d{4}\s)*A05\d{4}$')">A type value of 'news' must have at least one key, starting with 'A05'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='diaryDay'][@key]">
+                        <sch:assert test="matches(@key, '^A06\d{4}$')">A type value of 'diaryDay' must have only one key, starting with 'A06'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='diaryDays'][@key]">
+                        <sch:assert test="matches(@key, '^(A06\d{4}\s)*A06\d{4}$')">A type value of 'diaryDays' must have at least one key, each starting with 'A06'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='org'][@key]">
+                        <sch:assert test="matches(@key, '^A08\d{4}$')">A type value of 'org' must have only one key, starting with 'A08'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='orgs'][@key]">
+                        <sch:assert test="matches(@key, '^(A08\d{4}\s)*A08\d{4}$')">A type value of 'orgs' must have at least one key, each starting with 'A08'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='document'][@key]">
+                        <sch:assert test="matches(@key, '^A10\d{4}$')">A type value of 'document' must have only one key, starting with 'A10'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='documents'][@key]">
+                        <sch:assert test="matches(@key, '^(A10\d{4}\s)*A10\d{4}$')">A type value of 'documents' must have at least one key, each starting with 'A10'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='biblio'][@key]">
+                        <sch:assert test="matches(@key, '^(A11\d{4}\s)*A11\d{4}$')">A type value of 'biblio' must have at least one key, each starting with 'A11'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='place'][@key]">
+                        <sch:assert test="matches(@key, '^A13\d{4}$')">A type value of 'place' must have only one key, starting with 'A13'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='places'][@key]">
+                        <sch:assert test="matches(@key, '^(A13\d{4}\s)*A13\d{4}$')">A type value of 'places' must have at least one key, each starting with 'A13'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='mixed'][@key]">
+                        <sch:assert test="count(distinct-values(for $i in tokenize(@key, '\s+') return substring($i, 1, 3))) gt 1">A type value of 'mixed' must have keys referring to different document types</sch:assert>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
@@ -1321,6 +1346,10 @@
                         <valItem ident="documents">
                             <desc versionDate="2016-05-20" xml:lang="en">marks organizations that are not explicitly mentioned.</desc>
                             <desc versionDate="2016-05-20" xml:lang="de">markiert mehrere Dokumente, die nicht explizit betitelt sind.</desc>
+                        </valItem>
+                        <valItem ident="mixed">
+                            <desc versionDate="2018-04-24" xml:lang="en">marks a variety of documents/entities that are not explicitly mentioned.</desc>
+                            <desc versionDate="2018-04-24" xml:lang="de">markiert mehrere unterschiedliche Dokumente oder Entitäten, die nicht explizit betitelt bzw. benannt sind.</desc>
                         </valItem>
                     </valList>
                 </attDef>
@@ -1800,7 +1829,7 @@
                 <attDef ident="facs" mode="add" usage="opt">
                     <gloss versionDate="2013-11-11" xml:lang="en">facsimile</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">points to all or part of an image which corresponds with the content of the element.</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="en">Faksimile</gloss>
+                    <gloss versionDate="2018-03-29" xml:lang="de">Faksimile</gloss>
                     <desc versionDate="2013-11-11" xml:lang="de">verweist auf alle oder nur einen Teil eines Bildes, das mit dem Inhalt des Elements korrespondiert.</desc>
                     <datatype>
                         <rng:ref name="data.pointer"/>
@@ -1816,7 +1845,7 @@
                 <attDef ident="n" mode="add" usage="opt">
                     <gloss versionDate="2013-11-11" xml:lang="en">number</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">gives a number (or other label) for an element, which is not necessarily unique within the document.</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="en">Nummer</gloss>
+                    <gloss versionDate="2018-03-29" xml:lang="de">Nummer</gloss>
                     <desc versionDate="2013-11-11" xml:lang="de">gibt dem Element eine Nummer (oder eine andere Bezeichnung), die nicht unbedingt eindeutig im Dokument ist.</desc>
                     <datatype>
                         <rng:data type="string">
@@ -1836,7 +1865,7 @@
                 <memberOf key="att.global" mode="delete"/>
                 <memberOf key="att.declaring" mode="delete"/>
             </classes>
-            <constraintSpec ident="abstractModel-p" scheme="schematron" mode="change">
+            <constraintSpec ident="abstractModel-structure-p" scheme="schematron" mode="change">
                 <constraint>
                     <report xmlns="http://purl.oclc.org/dsdl/schematron" xmlns:tei="http://www.tei-c.org/ns/1.0" 
                         test="(ancestor::tei:p or ancestor::tei:ab) 
@@ -1860,7 +1889,7 @@
                 <attDef ident="n" mode="add" usage="opt">
                     <gloss versionDate="2013-11-11" xml:lang="en">number</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">gives a number (or other label) for an element, which is not necessarily unique within the document.</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="en">Nummer</gloss>
+                    <gloss versionDate="2018-03-29" xml:lang="de">Nummer</gloss>
                     <desc versionDate="2013-11-11" xml:lang="de">gibt dem Element eine Nummer (oder eine andere Bezeichnung), die nicht unbedingt eindeutig im Dokument ist.</desc>
                     <valList type="closed">
                         <valItem ident="1">
@@ -1881,15 +1910,7 @@
                         </valItem>
                     </valList>
                 </attDef>
-                <attDef ident="xml:id" mode="add" usage="opt">
-                    <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.</desc>
-                    <datatype>
-                        <rng:data type="ID"/>
-                    </datatype>
-                </attDef>
+                <attRef class="att.global" name="xml:id"/>
             </attList>
         </elementSpec>
         <elementSpec ident="list" mode="change" module="core">
@@ -2146,6 +2167,7 @@
                 <constraint>
                     <sch:rule context="tei:relatedItem[parent::tei:notesStmt]">
                         <sch:assert test="@target and @type">Within the notesStmt you must supply both the @target and the @type attribute on <sch:name/>.</sch:assert>
+                        <sch:assert test="starts-with(@target, 'wega:')">Within the notesStmt, pointers to WeGA resources with the @target attribute must be prefixed with 'wega:'.</sch:assert>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
@@ -2158,11 +2180,15 @@
                         </valItem>
                         <valItem ident="draft">
                             <desc xml:lang="en" versionDate="2017-10-24">the related item is the draft version of the current text.</desc>
-                            <desc xml:lang="de" versionDate="2017-10-24">das verknüpfte Objekt die Entwurfsfassung des vorliegenden Texts.</desc>
+                            <desc xml:lang="de" versionDate="2018-03-20">das verknüpfte Objekt ist die Entwurfsfassung des vorliegenden Texts.</desc>
                         </valItem>
                         <valItem ident="sentVersion">
                             <desc xml:lang="en" versionDate="2017-10-24">the related item is the sent version of the current draft.</desc>
-                            <desc xml:lang="de" versionDate="2017-10-24">das verknüpfte Objekt die verschickte Fassung des vorliegenden Entwurfs.</desc>
+                            <desc xml:lang="de" versionDate="2018-03-20">das verknüpfte Objekt ist die verschickte Fassung des vorliegenden Entwurfs.</desc>
+                        </valItem>
+                        <valItem ident="print">
+                            <desc xml:lang="en" versionDate="2018-03-20">the related item is the printed version of the current draft.</desc>
+                            <desc xml:lang="de" versionDate="2018-03-20">das verknüpfte Objekt ist die gedruckte Fassung des vorliegenden Entwurfs.</desc>
                         </valItem>
                         <!--<valItem ident="attachment">
                             <desc xml:lang="en" versionDate="2017-11-10">the related item was sent as an attachment to the current letter.</desc>
@@ -2172,7 +2198,40 @@
                 </attDef>
                 <attRef class="att.global" name="n"/>
             </attList>
-        </elementSpec>        
+        </elementSpec>
+
+        <elementSpec ident="pubPlace" module="core" mode="change">
+            <classes mode="change">
+                <memberOf key="att.global" mode="delete"/>
+                <memberOf key="att.naming" mode="delete"/>
+            </classes>
+            <attList>
+                <attRef class="att.global" name="xml:lang"/>
+                <attRef class="att.global" name="xml:id"/>
+                <attDef ident="key" mode="add" usage="opt">
+                    <datatype>
+                        <dataRef key="wega.places.pointer"/>
+                    </datatype>
+                </attDef>
+            </attList>
+        </elementSpec>
+        
+        <elementSpec ident="publisher" module="core" mode="change">
+            <classes mode="change">
+                <memberOf key="att.global" mode="delete"/>
+            </classes>
+            <attList>
+                <attRef class="att.global" name="xml:lang"/>
+                <attRef class="att.global" name="xml:id"/>
+                <attDef ident="key" mode="add" usage="opt">
+                    <desc versionDate="2018-05-28" xml:lang="en">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</desc>
+                    <desc versionDate="2018-05-28" xml:lang="de">bietet mittels eines codierten Wertes in einer beliebigen Form ein extern definiertes Mittel zur Identifizierung einer Einheit (oder mehrerer Einheiten).</desc>
+                    <datatype>
+                        <dataRef key="wega.personsPlus.pointer"/>
+                    </datatype>
+                </attDef>
+            </attList>
+        </elementSpec>
         
        <classSpec type="atts" ident="att.declarable" module="tei" mode="delete"/>
     </specGrp>
@@ -2330,12 +2389,10 @@
         
         <elementSpec ident="notesStmt" module="header" mode="change">
             <content>
-                <sequence minOccurs="0" maxOccurs="unbounded">
-                    <alternate>
-                        <elementRef key="note"/>
-                        <elementRef key="relatedItem"/>
-                    </alternate>
-                </sequence>
+                <alternate minOccurs="1" maxOccurs="unbounded">
+                    <elementRef key="note"/>
+                    <elementRef key="relatedItem"/>
+                </alternate>
             </content>
             <constraintSpec scheme="schematron" ident="count-notes">
                 <constraint>
@@ -2828,15 +2885,7 @@
                         <rng:ref name="data.pointer"/>
                     </datatype>
                 </attDef>
-                <attDef ident="xml:id" mode="add" usage="opt">
-                    <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.</desc>
-                    <datatype>
-                        <rng:data type="ID"/>
-                    </datatype>
-                </attDef>
+                <attRef class="att.global" name="xml:id"/>
                 <attDef ident="notInvolved" mode="add" usage="opt">
                     <gloss versionDate="2013-11-11" xml:lang="en">not involved</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">keys of non-participating persons, works etc.</desc>
@@ -2851,7 +2900,7 @@
         
         <elementSpec ident="anchor" mode="change" module="linking">
             <gloss versionDate="2013-11-11" xml:lang="en">anchor point</gloss>
-            <desc versionDate="2013-11-11" xml:lang="de">attaches an identifier to a point within a text, whether or not it corresponds with a textual element.</desc>
+            <desc versionDate="2018-03-29" xml:lang="en">attaches an identifier to a point within a text, whether or not it corresponds with a textual element.</desc>
             <gloss versionDate="2013-11-11" xml:lang="de">Ankerpunkt</gloss>
             <desc versionDate="2013-11-11" xml:lang="de">verknüpft eine ID zu einem Punkt innerhalb eines Textes, egal ob es mit einem Text-Element korrespondiert oder nicht.</desc>
             <classes mode="change">
@@ -3074,15 +3123,7 @@
                     </valList>
                 </attDef>
                 <attDef ident="subtype" mode="delete"/>
-                <attDef ident="xml:id" mode="add" usage="opt">
-                    <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.</desc>
-                    <datatype>
-                        <rng:data type="ID"/>
-                    </datatype>
-                </attDef>
+                <attRef class="att.global" name="xml:id"/>
             </attList>
         </elementSpec>
         
@@ -3166,15 +3207,7 @@
                         </valItem>
                     </valList>
                 </attDef>
-                <attDef ident="xml:id" mode="add" usage="rec">
-                    <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.</desc>
-                    <datatype>
-                        <rng:data type="ID"/>
-                    </datatype>
-                </attDef>
+                <attRef class="att.global" name="xml:id"/>
             </attList>
         </elementSpec>
         
@@ -3301,7 +3334,7 @@
         <elementSpec ident="msIdentifier" mode="change" module="msdescription">
             <gloss versionDate="2013-11-11" xml:lang="en">manuscript identifier</gloss>
             <desc versionDate="2013-11-11" xml:lang="en">contains the information required to identify the manuscript being described.</desc>
-            <gloss versionDate="2013-11-11" xml:lang="en">Identifikator des Manuskripts</gloss>
+            <gloss versionDate="2018-03-29" xml:lang="de">Identifikator des Manuskripts</gloss>
             <desc versionDate="2013-11-11" xml:lang="de">enthält die Informationen, die benötigt werden, um das beschriebene Manuskript zu identifizieren.</desc>
             <classes mode="change">
                 <memberOf key="att.global" mode="delete"/>
@@ -3341,7 +3374,7 @@
                 <attDef ident="n" mode="add" usage="rec">
                     <gloss versionDate="2013-11-11" xml:lang="en">RISM code</gloss>
                     <desc  versionDate="2013-11-11" xml:lang="en">WeGA: the RISM code for the repository</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="en">RISM Code</gloss>
+                    <gloss versionDate="2018-03-29" xml:lang="de">RISM Code</gloss>
                     <desc  versionDate="2013-11-11" xml:lang="de">WeGA: der RISM Code für den Aufbewahrungsort</desc>
                     <datatype>
                         <rng:ref name="rism.pattern"/>
@@ -3462,15 +3495,7 @@
                         </valItem>
                     </valList>
                 </attDef>
-                <attDef ident="xml:id" mode="add" usage="opt">
-                    <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
-                    <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
-                    <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element, dass das Attribut trägt.</desc>
-                    <datatype>
-                        <rng:data type="ID"/>
-                    </datatype>
-                </attDef>
+                <attRef class="att.global" name="xml:id"/>
             </attList>
         </elementSpec>
         <elementSpec ident="table" mode="change" module="figures">
@@ -3594,11 +3619,7 @@
                     </valList>
                 </attDef>
                 <attDef ident="ref" mode="change" usage="req"/>
-                <attDef ident="xml:id" mode="add" usage="opt">
-                    <datatype>
-                        <rng:data type="ID"/>
-                    </datatype>
-                </attDef>
+                <attRef class="att.global" name="xml:id"/>
             </attList>
         </elementSpec>
     </specGrp>
