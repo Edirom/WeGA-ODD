@@ -508,11 +508,11 @@
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
             <!-- 
-                inject an empty graphic element for those facsimile elements
+                inject an empty surface element for those facsimile elements
                 where we only provide a @sameAs link to an IIIF manifest
             -->
-            <xsl:if test="not(graphic)">
-                <xsl:element name="graphic"></xsl:element>
+            <xsl:if test="not(*)">
+                <xsl:element name="surface"/>
             </xsl:if>
         </xsl:copy>
     </xsl:template>
