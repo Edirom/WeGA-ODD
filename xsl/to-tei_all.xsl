@@ -7,7 +7,7 @@
     exclude-result-prefixes="xs wega"
     version="2.0">
     
-    <xsl:param name="current-tei-version" as="xs:string">3.3.0</xsl:param>
+    <xsl:param name="current-tei-version" as="xs:string">3.4.0</xsl:param>
     
     <xsl:output media-type="application/tei+xml" encoding="UTF-8" indent="no" method="xml"/>
     <xsl:preserve-space elements="*"/>
@@ -502,6 +502,19 @@
                 <xsl:apply-templates select="@*|node()"/>
             </xsl:copy>
         </xsl:element>
+    </xsl:template>
+    
+    <xsl:template match="facsimile">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <!-- 
+                inject an empty graphic element for those facsimile elements
+                where we only provide a @sameAs link to an IIIF manifest
+            -->
+            <xsl:if test="not(graphic)">
+                <xsl:element name="graphic"></xsl:element>
+            </xsl:if>
+        </xsl:copy>
     </xsl:template>
     
     <xsl:template match="@rend">
