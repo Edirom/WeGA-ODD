@@ -3108,9 +3108,17 @@
                     <sch:assert test="@sameAs or tei:graphic">A facsimile element must have (at least) a nested graphic element or a @sameAs attribute</sch:assert>
                 </constraint>
             </constraintSpec>
+            <constraintSpec scheme="schematron" ident="sourceNwitness">
+                <constraint>
+                    <sch:rule context="tei:facsimile[preceding::tei:witness]">
+                        <sch:let name="source" value="@source"/>
+                        <sch:assert test="@source and preceding::tei:witness[concat('#',@xml:id) = $source]">A facsimile element must have a @source attribute pointing at the respective witness element</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
             <attList>
                 <attRef class="att.global" name="xml:id"/>
-                <attRef class="att.global.linking" name="corresp"/>
+                <attRef class="att.global.source" name="source"/>
                 <attDef ident="sameAs" mode="add">
                     <desc versionDate="2018-11-02" xml:lang="en">points to an IIIF manifest file for this resource.</desc>
                     <desc versionDate="2018-11-02" xml:lang="de">verweist auf ein IIIF-Manifest dieser Ressource.</desc>
