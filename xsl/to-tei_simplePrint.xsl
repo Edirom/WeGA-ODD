@@ -183,20 +183,24 @@
     </xsl:template>
     
     <xsl:template match="facsimile" priority="1">
-        <xsl:copy>
-            <xsl:apply-templates select="@*"/>
-            <!-- 
-                inject an empty surface element for those facsimile elements
-                where we only provide a @sameAs link to an IIIF manifest
-            -->
-            <xsl:if test="not(*)">
-                <xsl:element name="surface">
-                    <xsl:if test="@sameAs">
-                        <xsl:attribute name="corresp" select="@sameAs"/>
-                    </xsl:if>
-                </xsl:element>
-            </xsl:if>
-        </xsl:copy>
+        <xsl:variable name="wit" select="wega:facsimile-witness(.)"/>
+        <xsl:if test="$wit//repository[@n = tokenize($facsimileWhiteList, '\s+')] or @sameAs">
+            <xsl:copy>
+                <xsl:apply-templates select="@*"/>
+                <!-- 
+                    inject an empty surface element for those facsimile elements
+                    where we only provide a @sameAs link to an IIIF manifest
+                -->
+                <xsl:if test="not(*)">
+                    <xsl:element name="surface">
+                        <xsl:if test="@sameAs">
+                            <xsl:attribute name="corresp" select="@sameAs"/>
+                        </xsl:if>
+                    </xsl:element>
+                </xsl:if>
+                <xsl:apply-templates/>
+            </xsl:copy>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template match="sex"/>
