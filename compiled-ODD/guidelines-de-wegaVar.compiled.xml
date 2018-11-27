@@ -2357,8 +2357,8 @@ the TEI header.</p>
     <memberOf key="att.global.rendition"/>
     <memberOf key="att.global.linking"/>
     
-    
-    
+    <memberOf key="att.global.facs"/>
+    <memberOf key="att.global.change"/>
     <memberOf key="att.global.responsibility"/>
     <memberOf key="att.global.source"/>
   </classes>
@@ -4161,6 +4161,15 @@ niveau dans une entrée de dictionnaire.</desc>
   <classes>
     <memberOf key="model.nameLike"/>
   </classes>
+</classSpec><classSpec module="tei" type="model" ident="model.certLike">
+  <desc versionDate="2011-11-10" xml:lang="en">groups elements which are used to indicate uncertainty or
+  precision of other elements.</desc>
+  <classes>
+    
+  </classes>
+</classSpec><classSpec module="tei" type="model" ident="model.descLike">
+  <desc versionDate="2012-10-07" xml:lang="en">groups elements which contain a description of their function.</desc>
+  <desc xml:lang="fr" versionDate="2007-06-12">regroupe des éléments qui contiennent une description de la fonction d'un élément.</desc>
 </classSpec><classSpec module="tei" xml:id="QUOTELIKE" type="model" ident="model.quoteLike">
   <desc versionDate="2005-11-17" xml:lang="en">groups elements used to directly contain quotations.</desc>
   <desc versionDate="2007-12-20" xml:lang="ko">인용을 직접 포함하는 요소를 모아 놓는다.</desc>
@@ -5711,6 +5720,48 @@ value.</desc>
       </cit>
     </p>
   </remarks>
+</dataSpec><dataSpec module="tei" ident="teidata.point">
+  <desc versionDate="2010-10-17" xml:lang="en">defines the data type used to express a point in cartesian space.</desc>
+  <content>
+    <dataRef name="token" restriction="(\-?[0-9]+\.?[0-9]*,\-?[0-9]+\.?[0-9]*)"/>
+    
+    
+  </content>
+  <constraintSpec validUntil="2019-02-25" scheme="schematron" ident="deprecate_trailing_decimal_point">
+    
+    <constraint>
+    
+      <sch:rule context="*[@points]">
+        <sch:report test="matches( @points, '\.[, ]|\.$')">It is considered poor 
+          practice to end a number with a decimal point; as of 2019-02-25 TEI will 
+          consider this @points attribute of <sch:name/> invalid</sch:report>
+      </sch:rule>
+    </constraint>
+  </constraintSpec>
+  <exemplum xml:lang="en">
+      <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#UND">
+         <facsimile>
+            <surface ulx="0" uly="0" lrx="400" lry="280">
+               <zone points="220,100 300,210 170,250 123,234">
+                  <graphic url="handwriting.png "/>
+               </zone>
+            </surface>
+         </facsimile>
+      </egXML>
+  </exemplum>
+  <remarks versionDate="2010-10-17" xml:lang="en">
+      <p>A point is defined by two numeric values, which should be
+      expressed as decimal numbers.</p>
+      
+      <p>Currently, this datatype permits either of the two numeric
+      values to end in a decimal point. This practice is <emph style="color:red;font-style:normal;">deprecated</emph>, and as
+      of <emph style="color:red;font-style:normal;">2019-02-25</emph>
+      this datatype will no longer permit a <emph style="font-weight:bold;">number</emph> to <emph style="font-weight:bold;">end in a decimal</emph>
+      point. E.g., both <val>0.0,84.2</val> and <val>0,84</val> are
+      allowed, but <val>0.,84.</val> will not be.
+      
+      </p>
+  </remarks>
 </dataSpec><dataSpec module="tei" ident="teidata.pointer">
   <desc xmlns:tei="http://www.tei-c.org/ns/1.0" versionDate="2013-01-19" xml:lang="en">defines the range of attribute values used to provide a single
   URI, absolute or relative, pointing to some other
@@ -6469,7 +6520,7 @@ one initial.</desc>
     wird, üblicherweise einem Dokumentationselement oder einer Einheit.</desc>
   <classes>
     <memberOf key="att.global"/>
-    
+    <memberOf key="model.descLike"/>
     <memberOf key="att.translatable"/>
     <memberOf key="att.typed"/>
     <memberOf key="model.labelLike"/>
@@ -14884,6 +14935,96 @@ used for recording how parts of the example was rendered.</item>
     <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/SA.html#SASE">16.3. Blocks, Segments, and Anchors</ref>
     <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/VE.html#VESE">6.2. Components of the Verse Line</ref>
     <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/DR.html#DRPAL">7.2.5. Speech Contents</ref>
+  </listRef></elementSpec><classSpec predeclare="true" module="transcr" type="atts" ident="att.global.facs">
+  <desc versionDate="2016-02-15" xml:lang="en">provides an attribute used to express correspondence
+    between an element containing transcribed text and all or part of an image representing that text.</desc>
+  <desc versionDate="2007-12-20" xml:lang="ko"><gi>facsimile</gi> 요소 내에서 이미지 또는 표면부와 관련될 수 있는 요소</desc>
+  <desc versionDate="2008-04-06" xml:lang="es">los elementos que se pueden asociar a una imagen o a una
+    superficie dentro de un <gi>facsímil</gi>.</desc>
+  <desc versionDate="2008-04-06" xml:lang="ja">要素<gi>facsimile</gi>に含まれる画像や紙面に関する要素．</desc>
+  <desc versionDate="2009-11-16" xml:lang="fr">attributs utilisables pour les éléments correspondant à tout ou partie d'une image, parce qu'ils contiennent une représentation alternative de cette image, généralement mais
+    pas nécessairement, une transcription.</desc>
+  <desc versionDate="2007-11-06" xml:lang="it">elementi che possono essere associati a un'immagine o una
+    superficie all'interno dell'elemento facsimile</desc>
+  <attList>
+    <attDef ident="facs" usage="opt">
+      <gloss versionDate="2007-08-26" xml:lang="en">facsimile</gloss>
+      <gloss versionDate="2007-12-20" xml:lang="ko">모사</gloss>
+      <gloss versionDate="2008-04-06" xml:lang="es">facsímil</gloss>
+      <gloss versionDate="2008-03-30" xml:lang="fr">fac-similé</gloss>
+      <desc versionDate="2008-04-05" xml:lang="en">points to all or part of an image which corresponds with the content of the element.</desc>
+      <desc versionDate="2007-12-20" xml:lang="ko">이미지 또는 이 요소와 일치하는 <gi>facsimile</gi> 요소의 부분을 직접 가리킨다.</desc>
+      <desc versionDate="2008-04-06" xml:lang="es">indica directamente a la imagen, o a la parte de un
+          <gi>facsímil</gi> que se corresponde con este elemento.</desc>
+      <desc versionDate="2008-04-06" xml:lang="ja">当該要素に対応する要素<gi>facsimile</gi>にある画像やその部分への 参照．</desc>
+      <desc versionDate="2009-11-16" xml:lang="fr">pointe directement vers une image ou vers une partie
+        d'une image correspondant au contenu de l'élément.</desc>
+      <desc versionDate="2007-11-06" xml:lang="it">indica direttamente un'immagine o una parte di un
+        elemento facsimile corrispondente a tale elemento</desc>
+      <datatype maxOccurs="unbounded"><dataRef key="teidata.pointer"/></datatype>
+    </attDef>
+  </attList>
+  <listRef>
+    <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHFAX">11.1. Digital Facsimiles</ref>
+  </listRef>
+</classSpec><classSpec ident="att.global.change" predeclare="true" module="transcr" type="atts">
+  <desc versionDate="2011-10-31" xml:lang="en">supplies the <att>change</att> attribute, allowing its member
+elements to specify one or more states or revision campaigns with which they are
+associated.</desc>
+  <attList>
+    <attDef ident="change">
+      <desc versionDate="2011-10-31" xml:lang="en">points to one or more <gi>change</gi> elements documenting
+      a state or revision campaign to which the element bearing this
+      attribute and its children have been assigned by the encoder.</desc>
+      <datatype minOccurs="1" maxOccurs="unbounded"><dataRef key="teidata.pointer"/></datatype>
+    </attDef>
+  </attList>
+  
+</classSpec><elementSpec rend="change" module="transcr" ident="space"><gloss versionDate="2007-06-12" xml:lang="fr">espace</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">indicates the location of a significant space in the copy text.</desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2018-11-27" xml:lang="de">markiert signifikanten Leerraum in der Textkopie.</desc><classes><memberOf key="att.typed"/><memberOf key="model.global.edit"/></classes><content><alternate minOccurs="0" maxOccurs="unbounded"><classRef key="model.descLike"/><classRef key="model.certLike"/></alternate></content><attList><attDef ident="unit" usage="req">
+                    <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2013-11-11" xml:lang="en">names the unit used for the measurement</desc>
+                    <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2013-11-11" xml:lang="de">nennt die für die Messung verwendete Einheit</desc>
+                    <valList xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" type="closed">
+                        <valItem ident="chars">
+                            <gloss versionDate="2013-11-11" xml:lang="en">characters</gloss>
+                            <desc versionDate="2013-11-11" xml:lang="en">characters of text</desc>
+                            <gloss versionDate="2013-11-11" xml:lang="de">Zeichen</gloss>
+                            <desc versionDate="2013-11-11" xml:lang="de">Textzeichen</desc>
+                        </valItem>
+                    </valList>
+                </attDef><attDef ident="quantity" usage="req">
+                    <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2013-11-11" xml:lang="en">specifies the length in the units specified.</desc>
+                    <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2018-11-27" xml:lang="de">gibt die Länge in der angegebenen Einheit an.</desc>
+                    <datatype xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron">
+                        <dataRef key="teidata.count"/>
+                    </datatype>
+                </attDef><attDef xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" ident="dim" mode="delete"/><attDef xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" ident="resp" mode="delete"/></attList><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">By god if wommen had writen storyes
+      As <space quantity="7" unit="minims"/> han within her oratoryes</egXML>
+  </exemplum><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">στρατηλάτ<space quantity="1" unit="chars"/>ου</egXML>
+  </exemplum><exemplum versionDate="2008-04-06" xml:lang="fr">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#fr-ex-Perec-vie"> Lettre à lettre,
+        un texte se forme, s'affirme, s'affermit, se fixe, se fige : une ligne assez strictement
+        horizontale se dépose sur la <space quantity="3" unit="lignes"/>feuille blanche.</egXML>
+  </exemplum><exemplum xml:lang="zh-TW">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#biblzh-tw_n62">
+      夕陽西下<space quantity="1" unit="minims"/>斷腸人在天涯</egXML>
+  </exemplum><remarks versionDate="2005-01-14" xml:lang="en">
+    <p>This element should be used wherever it is desired to record
+an unusual space in the source text, e.g. space left for a word to be
+filled in later, for later rubrication, etc.  It is not intended to be
+used to mark normal inter-word space or the like.</p>
+  </remarks><remarks xml:lang="fr" versionDate="2009-11-16">
+    <p>Cet élément devrait être utilisé partout où l'on désire signaler un espace inhabituel dans le texte source, par exemple un espace réservé pour un mot à écrire plus tard, pour une rubrication ultérieure, etc. Il n'est pas destiné à être utilisé pour marquer l'espace normal entre des mots par exemple.</p>
+  </remarks><remarks xml:lang="ja" versionDate="2008-04-05">
+    <p>
+    当該要素は，元テキストにある普通でない空白を記録するために使われる
+    べきである．例えば，単語の後に多くある空白や，続く朱書きのためにあ
+    る空白など．当該要素は，一般的な単語間や行間の空白を示すために使わ
+    れるものではない．
+    </p>
+  </remarks><listRef>
+    <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHSP">11.5.1. Space</ref>
   </listRef></elementSpec><elementSpec module="gaiji" ident="g" xml:id="G">
   <gloss versionDate="2005-01-14" xml:lang="en">character or glyph</gloss>
   <gloss versionDate="2007-12-20" xml:lang="ko">문자 또는 그림문자</gloss>
@@ -15175,7 +15316,7 @@ used for recording how parts of the example was rendered.</item>
         <content>
             <alternate minOccurs="1" maxOccurs="1"><dataRef key="wega.var.pointer"/><dataRef key="wega.addenda.pointer"/></alternate>
         </content>
-    </dataSpec><moduleSpec n="ST" xml:id="DSTTEI2" ident="tei" type="core"/><moduleSpec n="CO" xml:id="DCO" ident="core"/><moduleSpec xmlns:xi="http://www.w3.org/2001/XInclude" n="HD" xml:id="DHD" ident="header"/><moduleSpec n="DS" xml:id="DDS" ident="textstructure"/><moduleSpec n="ND" xml:id="DND" ident="namesdates"/><moduleSpec n="FT" xml:id="DFTFF" ident="figures"/><moduleSpec n="TD" xml:id="DTDDTD" ident="tagdocs"/><moduleSpec n="SA" xml:id="DSA" ident="linking"/><moduleSpec n="WD" xml:id="DWD" ident="gaiji"/></schemaSpec>
+    </dataSpec><moduleSpec n="ST" xml:id="DSTTEI2" ident="tei" type="core"/><moduleSpec n="CO" xml:id="DCO" ident="core"/><moduleSpec xmlns:xi="http://www.w3.org/2001/XInclude" n="HD" xml:id="DHD" ident="header"/><moduleSpec n="DS" xml:id="DDS" ident="textstructure"/><moduleSpec n="ND" xml:id="DND" ident="namesdates"/><moduleSpec n="FT" xml:id="DFTFF" ident="figures"/><moduleSpec n="TD" xml:id="DTDDTD" ident="tagdocs"/><moduleSpec n="SA" xml:id="DSA" ident="linking"/><moduleSpec n="PH" xml:id="DPH" ident="transcr"/><moduleSpec n="WD" xml:id="DWD" ident="gaiji"/></schemaSpec>
 				
 				
 				
