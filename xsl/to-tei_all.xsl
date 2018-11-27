@@ -288,6 +288,7 @@
             <rendition xml:id="antiqua" scheme="css">font-style: italic;</rendition>
             <rendition xml:id="left" scheme="css">display: block; text-align: left;</rendition>
             <rendition xml:id="spaced_out" scheme="css">letter-spacing: 0.15em;</rendition>
+            <rendition xml:id="smaller" scheme="css">font-size: smaller;</rendition>
             <rendition xml:id="bold" scheme="css">font-weight: bold;</rendition>
             <rendition xml:id="small-caps" scheme="css">font-variant: small-caps;</rendition>
             <rendition xml:id="double-quotes-before" scheme="css" scope="before">content: '&quot;'</rendition>
