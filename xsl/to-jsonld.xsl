@@ -22,9 +22,9 @@
         <xsl:map-entry key="'url'" select="concat($purl-root, @xml:id)"/>
     </xsl:template>
     
-    <xsl:template match="tei:TEI">
+    <xsl:template match="tei:TEI | tei:ab[@status]">
         <xsl:map>
-            <xsl:map-entry key="'@type'" select="'CreativeWork'"/>
+            <xsl:map-entry key="'@type'" select="wega:infer-type(.)"/>
             <xsl:map-entry key="'publisher'">
                 <xsl:map>
                     <xsl:map-entry key="'@type'" select="'Organization'"/>
@@ -40,12 +40,30 @@
                 </xsl:map>
             </xsl:map-entry>
             <xsl:map-entry key="'license'" select="'http://creativecommons.org/licenses/by/4.0/'"/>
+            <xsl:map-entry key="'dateCreated'" select="wega:dateCreated(.)"/>
             <xsl:call-template name="common-entries"/>
             <xsl:apply-templates/>
-            <xsl:if test=".//tei:text//tei:persName">
+            <xsl:if test=".//tei:text//tei:persName 
+                | .//tei:correspDesc//tei:persName 
+                | .//tei:text//tei:settlement 
+                | .//tei:correspDesc//tei:settlement
+                | ./self::tei:ab//tei:persName
+                | ./self::tei:ab//tei:settlement">
+                <xsl:variable name="mentioned-persNames" as="element()*">
+                    <xsl:for-each-group select=".//tei:text//tei:persName | .//tei:correspDesc//tei:persName | ./self::tei:ab//tei:persName" group-by="@key">
+                        <xsl:sequence select="current-group()[1]"/>
+                    </xsl:for-each-group>
+                </xsl:variable>
+                <xsl:variable name="mentioned-placeNames" as="element()*">
+                    <xsl:for-each-group select=".//tei:text//tei:settlement | .//tei:correspDesc//tei:settlement | ./self::tei:ab//tei:settlement" group-by="@key">
+                        <xsl:sequence select="current-group()[1]"/>
+                    </xsl:for-each-group>
+                </xsl:variable>
                 <xsl:map-entry key="'mentions'" select="array {
-                    for $persName in .//tei:text//tei:persName
-                    return wega:persName($persName)
+                    for $persName in $mentioned-persNames
+                    return wega:persName($persName),
+                    for $placeName in $mentioned-placeNames
+                    return wega:place($placeName)
                     }"/>
             </xsl:if>
         </xsl:map>
@@ -75,7 +93,15 @@
         </xsl:map>
     </xsl:template>
     
-    <xsl:template match="tei:*[@type='reg'] | tei:title[@level='a']">
+    <!--<xsl:template match="tei:ab[@status]">
+        <xsl:map>
+            <xsl:map-entry key="'@type'" select="'CreativeWork'"/>
+            <xsl:call-template name="common-entries"/>
+            <xsl:apply-templates/>
+        </xsl:map>
+    </xsl:template>-->
+    
+    <xsl:template match="tei:*[@type='reg'] | tei:title[@level='a'][1]">
         <xsl:map-entry key="'name'" select="normalize-space(.)"/>
     </xsl:template>
     
@@ -105,11 +131,11 @@
         <xsl:apply-templates/>
     </xsl:template>
     
-    <xsl:template match="tei:date[@when][parent::tei:birth or parent::tei:death]">
+    <xsl:template match="tei:date[@when][parent::tei:birth or parent::tei:death][1]">
         <xsl:map-entry key="concat(local-name(./parent::*), 'Date')" select="string(@when)"/>
     </xsl:template>
     
-    <xsl:template match="tei:settlement[parent::tei:birth or parent::tei:death]">
+    <xsl:template match="tei:settlement[parent::tei:birth or parent::tei:death][1]">
         <xsl:map-entry key="concat(local-name(./parent::*), 'Place')" select="normalize-space(.)"/>
     </xsl:template>
     
@@ -191,6 +217,43 @@
                 <xsl:map-entry key="'@id'" select="concat($purl-root, $node/@key)"/>
             </xsl:if>
         </xsl:map>
+    </xsl:function>
+    
+    <xsl:function name="wega:infer-type" as="xs:string">
+        <xsl:param name="doc" as="element()"/>
+        <xsl:choose>
+            <xsl:when test="starts-with($doc/@xml:id, 'A05')">NewsArticle</xsl:when>
+            <xsl:when test="starts-with($doc/@xml:id, 'A09')">Article</xsl:when>
+            <xsl:when test="starts-with($doc/@xml:id, 'A12')">Article</xsl:when>
+            <xsl:otherwise>CreativeWork</xsl:otherwise>
+        </xsl:choose>
+    </xsl:function>
+    
+    <xsl:function name="wega:dateCreated" as="xs:string">
+        <xsl:param name="doc" as="element()"/>
+        <xsl:choose>
+            <xsl:when test="starts-with($doc/@xml:id, 'A03')">
+                <xsl:value-of select="$doc//tei:sourceDesc/tei:biblStruct/tei:monogr/tei:imprint/tei:date/string((@notBefore, @when, @from))"/>
+            </xsl:when>
+            <xsl:when test="starts-with($doc/@xml:id, 'A04')">
+                <xsl:value-of select="$doc//tei:correspAction[@type='sent']/tei:date/string((@notBefore, @when, @from))"/>
+            </xsl:when>
+            <xsl:when test="starts-with($doc/@xml:id, 'A05')">
+                <xsl:value-of select="$doc//tei:publicationStmt/tei:date/string(@when)"/>
+            </xsl:when>
+            <xsl:when test="starts-with($doc/@xml:id, 'A06')">
+                <xsl:value-of select="$doc/string(@n)"/>
+            </xsl:when>
+            <xsl:when test="starts-with($doc/@xml:id, 'A09')">
+                <xsl:value-of select="$doc//tei:revisionDesc/tei:change[last()]/string(@when)"/>
+            </xsl:when>
+            <xsl:when test="starts-with($doc/@xml:id, 'A10')">
+                <xsl:value-of select="$doc//tei:creation/tei:date/string((@notBefore, @when, @from))"/>
+            </xsl:when>
+            <xsl:when test="starts-with($doc/@xml:id, 'A12')">
+                <xsl:value-of select="$doc//tei:revisionDesc/tei:change[last()]/string(@when)"/>
+            </xsl:when>
+        </xsl:choose>
     </xsl:function>
     
 </xsl:stylesheet>
