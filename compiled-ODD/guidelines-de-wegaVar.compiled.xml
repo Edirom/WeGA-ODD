@@ -15310,7 +15310,48 @@ used to mark normal inter-word space or the like.</p>
                 <memberOf key="model.noteLike" mode="add"/>
             </classes><content xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron">
                 <ref xmlns="http://relaxng.org/ns/structure/1.0" name="macro.specialPara"/>
-            </content><attList><attRef xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" class="att.global" name="xml:id"/></attList></elementSpec><dataSpec rend="add" module="derived-module-wegaVar" ident="wega.varOrAddenda.pointer">
+            </content><attList><attRef xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" class="att.global" name="xml:id"/></attList></elementSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="whitespaceOnlyContent">
+            <desc versionDate="2014-03-05" xml:lang="en">Warnings for elements with whitespace only.</desc>
+            <desc versionDate="2014-03-05" xml:lang="de">Warnung vor leeren (bzw. whitespace-only) Elementen.</desc>
+            <constraint>
+                <sch:rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('thematicCom'))] | tei:placeName | tei:title | tei:seg | tei:item[not(@* or *)]">
+                    <sch:report test="normalize-space(.) = ''"><sch:name/> has whitespace only content</sch:report>
+                </sch:rule>
+            </constraint>
+        </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="elementStartsWithWhitespace">
+            <desc versionDate="2014-03-05" xml:lang="en">warnings for whitespace at the beginning of an element.</desc>
+            <desc versionDate="2014-03-05" xml:lang="de">Warnung vor Leerzeichen am Beginn eines Elements.</desc>
+            <constraint>
+                <sch:rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
+                    <sch:report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <sch:name/></sch:report>
+                </sch:rule>
+            </constraint>
+        </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="untrimmedAttributeValues">
+            <desc versionDate="2016-09-30" xml:lang="en">Warnings for attribute values with leading or trailing whitespace</desc>
+            <desc versionDate="2016-09-30" xml:lang="de">Warnung vor Leerzeichen am Beginn oder Ende eines Attributs</desc>
+            <constraint>
+                <sch:rule context="*">
+                    <sch:report test="some $i in @* satisfies string-length(normalize-unicode(normalize-space(replace($i, ' | | | ', ' ')))) ne string-length($i)">There is some whitespace here at the beginning or end of some attribute value.</sch:report>
+                </sch:rule>
+            </constraint>
+        </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="wegaTargets">
+            <desc versionDate="2018-06-13" xml:lang="en">constraints the "wega:"-prefixed URIs to be (syntactically) valid WeGA IDs</desc>
+            <desc versionDate="2018-06-13" xml:lang="de">überprüft die mit "wega:" präfigierten URIs auf (syntaktische) Validität</desc>
+            <constraint>
+                <sch:rule context="*[starts-with(@target, 'wega:')]">
+                    <sch:assert test="matches(@target, '^wega:A[0-9A-F]{6}(#.+)?$')">"wega"-prefixed URIs must follow the pattern "wega:A002068" (i.e. without any file extension)</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="emojiCheck">
+            
+            <desc versionDate="2018-12-05" xml:lang="en">warnings for characters that are displayed (in browsers) as emojis per default</desc>
+            <desc versionDate="2018-12-05" xml:lang="de">Warnung bei Zeichen die in Browsern standardmäßig als Emojis dargestellt werden</desc>
+            <constraint>
+                <sch:rule context="*[some $i in text() satisfies normalize-space($i) ne '']">
+                    <sch:report test="matches(., '[⌚-⌛]|[⏩-⏬]|[⏰]|[⏳]|[◽-◾]|[☔-☕]|[♈-♓]|[♿]|[⚓]|[⚡]|[⚪-⚫]|[⚽-⚾]|[⛄-⛅]|[⛎]|[⛔]|[⛪]|[⛲-⛳]|[⛵]|[⛺]|[⛽]|[✅]|[✊-✋]|[✨]|[❌]|[❎]|[❓-❕]|[❗]|[➕-➗]|[➰]|[➿]|[⬛-⬜]|[⭐]|[⭕]|[🀄]|[🃏]|[🆎]|[🆑-🆚]|[🇦-🇿]|[🈁]|[🈚]|[🈯]|[🈲-🈶]|[🈸-🈺]|[🉐-🉑]|[🌀-🌠]|[🌭-🌯]|[🌰-🌵]|[🌷-🍼]|[🍾-🍿]|[🎀-🎓]|[🎠-🏄]|[🏅]|[🏆-🏊]|[🏏-🏓]|[🏠-🏰]|[🏴]|[🏸-🏿]|[🐀-🐾]|[👀]|[👂-📷]|[📸]|[📹-📼]|[📿]|[🔀-🔽]|[🕋-🕎]|[🕐-🕧]|[🕺]|[🖕-🖖]|[🖤]|[🗻-🗿]|[😀]|[😁-😐]|[😑]|[😒-😔]|[😕]|[😖]|[😗]|[😘]|[😙]|[😚]|[😛]|[😜-😞]|[😟]|[😠-😥]|[😦-😧]|[😨-😫]|[😬]|[😭]|[😮-😯]|[😰-😳]|[😴]|[😵-🙀]|[🙁-🙂]|[🙃-🙄]|[🙅-🙏]|[🚀-🛅]|[🛌]|[🛐]|[🛑-🛒]|[🛕]|[🛫-🛬]|[🛴-🛶]|[🛷-🛸]|[🛹]|[🛺]|[🟠-🟫]|[🤍-🤏]|[🤐-🤘]|[🤙-🤞]|[🤟]|[🤠-🤧]|[🤨-🤯]|[🤰]|[🤱-🤲]|[🤳-🤺]|[🤼-🤾]|[🤿]|[🥀-🥅]|[🥇-🥋]|[🥌]|[🥍-🥏]|[🥐-🥞]|[🥟-🥫]|[🥬-🥰]|[🥱]|[🥳-🥶]|[🥺]|[🥻]|[🥼-🥿]|[🦀-🦄]|[🦅-🦑]|[🦒-🦗]|[🦘-🦢]|[🦥-🦪]|[🦮-🦯]|[🦰-🦹]|[🦺-🦿]|[🧀]|[🧁-🧂]|[🧃-🧊]|[🧍-🧏]|[🧐-🧦]|[🧧-🧿]|[🩰-🩳]|[🩸-🩺]|[🪀-🪂]|[🪐-🪕]')">Text contains characters with Emoji presentation as default.</sch:report>
+                </sch:rule>
+            </constraint>
+        </constraintSpec><dataSpec rend="add" module="derived-module-wegaVar" ident="wega.varOrAddenda.pointer">
         <desc xml:lang="de" versionDate="2017-08-29">fasst die potentiellen internen Verweise zu Varia und Addenda zusammen</desc>
         <desc xml:lang="en" versionDate="2017-08-29">groups together the possible internal pointers to varia and addenda documents</desc>
         <content>
