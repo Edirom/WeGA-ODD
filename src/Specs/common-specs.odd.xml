@@ -153,6 +153,14 @@
             </content>
         </dataSpec>
         
+        <dataSpec ident="wega.addenda.pointer">
+            <desc xml:lang="de" versionDate="2018-11-16">definiert das Muster für Addenda-Dokument-IDs innerhalb der WeGA</desc>
+            <desc xml:lang="en" versionDate="2018-11-16">defines the possible attribute values for addenda document IDs within the WeGA</desc>
+            <content>
+                <dataRef name="string" restriction="A12\d{4}"/>
+            </content>
+        </dataSpec>
+        
         <dataSpec ident="wega.internal.pointer">
             <desc xml:lang="de" versionDate="2017-08-29">fasst die potentiellen internen Verweise zusammen</desc>
             <desc xml:lang="en" versionDate="2017-08-29">groups together the possible internal linkable patterns</desc>
@@ -170,6 +178,7 @@
                     <dataRef key="wega.biblio.pointer"/>
                     <dataRef key="wega.places.pointer"/>
                     <dataRef key="wega.sources.pointer"/>
+                    <dataRef key="wega.addenda.pointer"/>
                 </alternate>
             </content>
         </dataSpec>
@@ -422,6 +431,10 @@
                             <desc versionDate="2013-11-11" xml:lang="en">small caps.</desc>
                             <desc versionDate="2013-11-11" xml:lang="de">Kapitälchen.</desc>
                         </valItem>
+                        <valItem ident="smaller">
+                            <desc versionDate="2018-11-27" xml:lang="en">smaller font.</desc>
+                            <desc versionDate="2018-11-27" xml:lang="de">kleinere Schrift(type).</desc>
+                        </valItem>
                     </valList>
                 </attDef>
                 <attDef ident="n" mode="add" usage="opt">
@@ -430,7 +443,7 @@
                     <gloss versionDate="2013-11-11" xml:lang="de">Zahl</gloss>
                     <desc versionDate="2014-06-16" xml:lang="de">gibt die Anzahl der Unterstreichungen an (d.h., @n kann nur in Kombination mit hi@rend='underline' auftreten).</desc>
                     <datatype>
-                        <rng:ref name="data.count"/>
+                        <dataRef key="teidata.count"/>
                     </datatype>
                 </attDef>
             </attList>
@@ -643,6 +656,16 @@
                 </sch:rule>
             </constraint>
         </constraintSpec>
+        <constraintSpec scheme="schematron" ident="emojiCheck">
+            <!-- thanks to David Sewell and David Maus, see https://listserv.brown.edu/cgi-bin/wa?A2=TEI-L;46a9b49b.1812 -->
+            <desc versionDate="2018-12-05" xml:lang="en">warnings for characters that are displayed (in browsers) as emojis per default</desc>
+            <desc versionDate="2018-12-05" xml:lang="de">Warnung bei Zeichen die in Browsern standardmäßig als Emojis dargestellt werden</desc>
+            <constraint>
+                <sch:rule context="*[some $i in text() satisfies normalize-space($i) ne '']">
+                    <sch:report test="matches(., '[&#x231A;-&#x231B;]|[&#x23E9;-&#x23EC;]|[&#x23F0;]|[&#x23F3;]|[&#x25FD;-&#x25FE;]|[&#x2614;-&#x2615;]|[&#x2648;-&#x2653;]|[&#x267F;]|[&#x2693;]|[&#x26A1;]|[&#x26AA;-&#x26AB;]|[&#x26BD;-&#x26BE;]|[&#x26C4;-&#x26C5;]|[&#x26CE;]|[&#x26D4;]|[&#x26EA;]|[&#x26F2;-&#x26F3;]|[&#x26F5;]|[&#x26FA;]|[&#x26FD;]|[&#x2705;]|[&#x270A;-&#x270B;]|[&#x2728;]|[&#x274C;]|[&#x274E;]|[&#x2753;-&#x2755;]|[&#x2757;]|[&#x2795;-&#x2797;]|[&#x27B0;]|[&#x27BF;]|[&#x2B1B;-&#x2B1C;]|[&#x2B50;]|[&#x2B55;]|[&#x1F004;]|[&#x1F0CF;]|[&#x1F18E;]|[&#x1F191;-&#x1F19A;]|[&#x1F1E6;-&#x1F1FF;]|[&#x1F201;]|[&#x1F21A;]|[&#x1F22F;]|[&#x1F232;-&#x1F236;]|[&#x1F238;-&#x1F23A;]|[&#x1F250;-&#x1F251;]|[&#x1F300;-&#x1F320;]|[&#x1F32D;-&#x1F32F;]|[&#x1F330;-&#x1F335;]|[&#x1F337;-&#x1F37C;]|[&#x1F37E;-&#x1F37F;]|[&#x1F380;-&#x1F393;]|[&#x1F3A0;-&#x1F3C4;]|[&#x1F3C5;]|[&#x1F3C6;-&#x1F3CA;]|[&#x1F3CF;-&#x1F3D3;]|[&#x1F3E0;-&#x1F3F0;]|[&#x1F3F4;]|[&#x1F3F8;-&#x1F3FF;]|[&#x1F400;-&#x1F43E;]|[&#x1F440;]|[&#x1F442;-&#x1F4F7;]|[&#x1F4F8;]|[&#x1F4F9;-&#x1F4FC;]|[&#x1F4FF;]|[&#x1F500;-&#x1F53D;]|[&#x1F54B;-&#x1F54E;]|[&#x1F550;-&#x1F567;]|[&#x1F57A;]|[&#x1F595;-&#x1F596;]|[&#x1F5A4;]|[&#x1F5FB;-&#x1F5FF;]|[&#x1F600;]|[&#x1F601;-&#x1F610;]|[&#x1F611;]|[&#x1F612;-&#x1F614;]|[&#x1F615;]|[&#x1F616;]|[&#x1F617;]|[&#x1F618;]|[&#x1F619;]|[&#x1F61A;]|[&#x1F61B;]|[&#x1F61C;-&#x1F61E;]|[&#x1F61F;]|[&#x1F620;-&#x1F625;]|[&#x1F626;-&#x1F627;]|[&#x1F628;-&#x1F62B;]|[&#x1F62C;]|[&#x1F62D;]|[&#x1F62E;-&#x1F62F;]|[&#x1F630;-&#x1F633;]|[&#x1F634;]|[&#x1F635;-&#x1F640;]|[&#x1F641;-&#x1F642;]|[&#x1F643;-&#x1F644;]|[&#x1F645;-&#x1F64F;]|[&#x1F680;-&#x1F6C5;]|[&#x1F6CC;]|[&#x1F6D0;]|[&#x1F6D1;-&#x1F6D2;]|[&#x1F6D5;]|[&#x1F6EB;-&#x1F6EC;]|[&#x1F6F4;-&#x1F6F6;]|[&#x1F6F7;-&#x1F6F8;]|[&#x1F6F9;]|[&#x1F6FA;]|[&#x1F7E0;-&#x1F7EB;]|[&#x1F90D;-&#x1F90F;]|[&#x1F910;-&#x1F918;]|[&#x1F919;-&#x1F91E;]|[&#x1F91F;]|[&#x1F920;-&#x1F927;]|[&#x1F928;-&#x1F92F;]|[&#x1F930;]|[&#x1F931;-&#x1F932;]|[&#x1F933;-&#x1F93A;]|[&#x1F93C;-&#x1F93E;]|[&#x1F93F;]|[&#x1F940;-&#x1F945;]|[&#x1F947;-&#x1F94B;]|[&#x1F94C;]|[&#x1F94D;-&#x1F94F;]|[&#x1F950;-&#x1F95E;]|[&#x1F95F;-&#x1F96B;]|[&#x1F96C;-&#x1F970;]|[&#x1F971;]|[&#x1F973;-&#x1F976;]|[&#x1F97A;]|[&#x1F97B;]|[&#x1F97C;-&#x1F97F;]|[&#x1F980;-&#x1F984;]|[&#x1F985;-&#x1F991;]|[&#x1F992;-&#x1F997;]|[&#x1F998;-&#x1F9A2;]|[&#x1F9A5;-&#x1F9AA;]|[&#x1F9AE;-&#x1F9AF;]|[&#x1F9B0;-&#x1F9B9;]|[&#x1F9BA;-&#x1F9BF;]|[&#x1F9C0;]|[&#x1F9C1;-&#x1F9C2;]|[&#x1F9C3;-&#x1F9CA;]|[&#x1F9CD;-&#x1F9CF;]|[&#x1F9D0;-&#x1F9E6;]|[&#x1F9E7;-&#x1F9FF;]|[&#x1FA70;-&#x1FA73;]|[&#x1FA78;-&#x1FA7A;]|[&#x1FA80;-&#x1FA82;]|[&#x1FA90;-&#x1FA95;]')">Text contains characters with Emoji presentation as default.</sch:report>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
     </specGrp>
     
     <specGrp xml:id="wega-styleguides">
@@ -694,7 +717,7 @@
                 <attDef ident="key" mode="add" usage="opt">
                     <desc versionDate="2013-11-11" xml:lang="en">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">bietet mittels eines codierten Wertes in einer beliebigen Form ein extern definiertes Mittel zur Identifizierung einer Einheit (oder mehrerer Einheiten).</desc>
-                    <datatype maxOccurs="unbounded">
+                    <datatype>
                         <dataRef key="wega.works.pointer"/>
                     </datatype>
                 </attDef>
@@ -1069,7 +1092,7 @@
                     <desc versionDate="2013-11-11" xml:lang="en">specifies the destination of the reference by supplying one or more URI References.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">spezifiziert das Ziel der Referenz in dem eine oder mehrere URI-Referenzen aufgeführt werden.</desc>
                     <datatype>
-                        <rng:ref name="data.pointer"/>
+                        <dataRef key="teidata.pointer"/>
                     </datatype>
                 </attDef>
             </attList>
@@ -1128,11 +1151,11 @@
                     <desc versionDate="2013-11-11" xml:lang="en">points to an element that is the same as the current element.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">zeigt auf ein Element, dass das gleiche ist, wie das aktuelle Element.</desc>
                     <datatype>
-                        <rng:ref name="data.pointer"/>
+                        <dataRef key="teidata.pointer"/>
                     </datatype>
                     <constraintSpec scheme="schematron" ident="sameAs-reference">
                         <constraint>
-                            <sch:rule context="tei:*[@sameAs]">
+                            <sch:rule context="tei:author[@sameAs]">
                                 <sch:assert test="id(substring(@sameAs,2)) or starts-with(@sameAs, 'wega:')">There must be an element with the xml:id = "<sch:value-of select="substring(@sameAs,2)"/>" which is the target of this @sameAs.</sch:assert>
                             </sch:rule>
                         </constraint>
@@ -1252,6 +1275,9 @@
                     <sch:rule context="tei:rs[@type='biblio'][@key]">
                         <sch:assert test="matches(@key, '^(A11\d{4}\s)*A11\d{4}$')">A type value of 'biblio' must have at least one key, each starting with 'A11'</sch:assert>
                     </sch:rule>
+                    <sch:rule context="tei:rs[@type='addenda'][@key]">
+                        <sch:assert test="matches(@key, '^A12\d{4}$')">A type value of 'addenda' must have only one key, starting with 'A12'</sch:assert>
+                    </sch:rule>
                     <sch:rule context="tei:rs[@type='place'][@key]">
                         <sch:assert test="matches(@key, '^A13\d{4}$')">A type value of 'place' must have only one key, starting with 'A13'</sch:assert>
                     </sch:rule>
@@ -1350,6 +1376,10 @@
                         <valItem ident="mixed">
                             <desc versionDate="2018-04-24" xml:lang="en">marks a variety of documents/entities that are not explicitly mentioned.</desc>
                             <desc versionDate="2018-04-24" xml:lang="de">markiert mehrere unterschiedliche Dokumente oder Entitäten, die nicht explizit betitelt bzw. benannt sind.</desc>
+                        </valItem>
+                        <valItem ident="addenda">
+                            <desc versionDate="2018-11-19" xml:lang="en">marks a reference to addenda of printed volumes.</desc>
+                            <desc versionDate="2018-11-19" xml:lang="de">markiert einen Verweis auf Addenda zu den gedruckten Bänden.</desc>
                         </valItem>
                     </valList>
                 </attDef>
@@ -1595,7 +1625,7 @@
                     <desc versionDate="2013-11-11" xml:lang="en">specifies the length in the units specified.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">gibt die Länge der angegebenen Einheit an.</desc>
                     <datatype>
-                        <rng:ref name="data.count"/>
+                        <dataRef key="teidata.count"/>
                     </datatype>
                 </attDef>
                 <attDef ident="reason" mode="change" usage="rec">
@@ -1832,7 +1862,7 @@
                     <gloss versionDate="2018-03-29" xml:lang="de">Faksimile</gloss>
                     <desc versionDate="2013-11-11" xml:lang="de">verweist auf alle oder nur einen Teil eines Bildes, das mit dem Inhalt des Elements korrespondiert.</desc>
                     <datatype>
-                        <rng:ref name="data.pointer"/>
+                        <dataRef key="teidata.pointer"/>
                     </datatype>
                     <constraintSpec scheme="schematron" ident="facs-reference">
                         <constraint>
@@ -2223,7 +2253,7 @@
             <attList>
                 <attRef class="att.global" name="xml:lang"/>
                 <attRef class="att.global" name="xml:id"/>
-                <attDef ident="key" mode="add" usage="opt">
+                <attDef ident="key" mode="change" usage="opt">
                     <desc versionDate="2018-05-28" xml:lang="en">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</desc>
                     <desc versionDate="2018-05-28" xml:lang="de">bietet mittels eines codierten Wertes in einer beliebigen Form ein extern definiertes Mittel zur Identifizierung einer Einheit (oder mehrerer Einheiten).</desc>
                     <datatype>
@@ -2882,7 +2912,7 @@
                     <gloss versionDate="2013-11-11" xml:lang="de">entspricht</gloss>
                     <desc versionDate="2013-11-11" xml:lang="de">zeigt auf ein Element das dem momentanem Element in beliebiger Weise entspricht.</desc>
                     <datatype maxOccurs="unbounded">
-                        <rng:ref name="data.pointer"/>
+                        <dataRef key="teidata.pointer"/>
                     </datatype>
                 </attDef>
                 <attRef class="att.global" name="xml:id"/>
@@ -2937,7 +2967,7 @@
                     <desc versionDate="2013-11-11" xml:lang="en">indicates the end of a span initiated by the element bearing this attribute.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">zeigt das Ende eines Bereichs auf, dass vom Element, welches dieses Attribut trägt, eingeleitet wird.</desc>
                     <!--<datatype>
-                        <rng:ref name="data.pointer"/>
+                        <dataRef key="teidata.pointer"/>
                     </datatype>-->
                     <constraintSpec ident="spanTo-7" scheme="schematron">
                         <desc>The @spanTo attribute must point to an element following the
@@ -2956,8 +2986,8 @@
         </elementSpec>
         
         <elementSpec ident="space" mode="change" module="transcr">
-            <desc versionDate="2013-11-11" xml:lang="en">indicates the location of a significant space in the copy text. [11.5.1 Space]</desc>
-            <desc versionDate="2013-11-11" xml:lang="de">zeigt die Stelle eines wichtigen Bereichs in der Textkopie auf.</desc>
+            <desc versionDate="2013-11-11" xml:lang="en">indicates the location of a significant space in the copy text.</desc>
+            <desc versionDate="2018-11-27" xml:lang="de">markiert signifikanten Leerraum in der Textkopie.</desc>
             <classes mode="change">
                 <memberOf key="att.global" mode="delete"/>
                 <memberOf key="att.dimensions" mode="delete"/>
@@ -2978,9 +3008,9 @@
                 </attDef>
                 <attDef ident="quantity" mode="add" usage="req">
                     <desc versionDate="2013-11-11" xml:lang="en">specifies the length in the units specified.</desc>
-                    <desc versionDate="2013-11-11" xml:lang="de">gibt die Länge der angegebenen Einheit an.</desc>
+                    <desc versionDate="2018-11-27" xml:lang="de">gibt die Länge in der angegebenen Einheit an.</desc>
                     <datatype>
-                        <rng:ref name="data.count"/>
+                        <dataRef key="teidata.count"/>
                     </datatype>
                 </attDef>
                 <attDef ident="dim" mode="delete"/>
@@ -3088,6 +3118,46 @@
                 </attDef>
             </attList>
         </elementSpec>
+        
+        <elementSpec ident="facsimile" mode="change" module="transcr">
+            <desc versionDate="2018-11-02" xml:lang="en">contains a representation of some written source in the form of a set of images rather than as transcribed or encoded text.</desc>
+            <desc versionDate="2018-11-02" xml:lang="de">enthält eine Darstellung der Textzeugen in Form von (digitalen) Bildern.</desc>
+            <classes mode="change">
+                <memberOf key="att.global" mode="delete"/>
+            </classes>
+            <content>
+                <alternate minOccurs="0"
+                    maxOccurs="unbounded">
+                    <classRef key="model.graphicLike"/>
+                    <elementRef key="surface"/>
+                    <elementRef key="surfaceGrp"/>
+                </alternate>
+            </content>
+            <constraintSpec scheme="schematron" ident="graphicOrSameAs">
+                <constraint>
+                    <sch:assert test="@sameAs or tei:graphic">A facsimile element must have (at least) a nested graphic element or a @sameAs attribute</sch:assert>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="schematron" ident="sourceNwitness">
+                <constraint>
+                    <sch:rule context="tei:facsimile[preceding::tei:witness]">
+                        <sch:let name="source" value="@source"/>
+                        <sch:assert test="@source and preceding::tei:witness/descendant-or-self::tei:*[concat('#',@xml:id) = $source]">A facsimile element must have a @source attribute pointing at the respective witness element (or some descendant thereof)</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <attList>
+                <attRef class="att.global" name="xml:id"/>
+                <attRef class="att.global.source" name="source"/>
+                <attDef ident="sameAs" mode="add">
+                    <desc versionDate="2018-11-02" xml:lang="en">points to an IIIF manifest file for this resource.</desc>
+                    <desc versionDate="2018-11-02" xml:lang="de">verweist auf ein IIIF-Manifest dieser Ressource.</desc>
+                    <datatype>
+                        <dataRef key="teidata.pointer"/>
+                    </datatype>
+                </attDef>
+            </attList>
+        </elementSpec>
     </specGrp>
     
     <specGrp xml:id="wega-textstructure">
@@ -3188,7 +3258,7 @@
             <attList>
                 <attDef ident="n" mode="add" usage="req">
                     <datatype>
-                        <rng:ref name="data.count"/>
+                        <dataRef key="teidata.count"/>
                     </datatype>
                 </attDef>
                 <attDef ident="rend" mode="add" usage="opt">
@@ -3286,6 +3356,7 @@
                 </sequence>
             </content>
             <attList>
+                <attRef name="xml:id" class="att.global"/>
                 <attDef ident="rend" mode="add" usage="opt">
                     <gloss versionDate="2013-11-11" xml:lang="en">rendition</gloss>
                     <desc versionDate="2013-11-11" xml:lang="en">WeGA: tradition of the text: without any add on = autograph (original handwriting); alternative information within <att>rend</att> is 'draft', 'copy', 'autograph_copy' and 'authorized_copy'.</desc>
@@ -3640,7 +3711,7 @@
                     <desc versionDate="2013-11-11" xml:lang="en">specifies the destination of the reference by supplying one or more URI References.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">spezifiziert das Ziel der Referenz in dem eine oder mehrere URI-Referenzen aufgeführt werden.</desc>
                     <datatype>
-                        <rng:ref name="data.pointer"/>
+                        <dataRef key="teidata.pointer"/>
                     </datatype>
                 </attDef>
             </attList>

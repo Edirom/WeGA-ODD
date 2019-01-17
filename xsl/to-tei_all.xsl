@@ -7,7 +7,8 @@
     exclude-result-prefixes="xs wega"
     version="2.0">
     
-    <xsl:param name="current-tei-version" as="xs:string">3.3.0</xsl:param>
+    <xsl:param name="current-tei-version" as="xs:string">3.4.0</xsl:param>
+    <xsl:param name="facsimileWhiteList" as="xs:string">D-B</xsl:param>
     
     <xsl:output media-type="application/tei+xml" encoding="UTF-8" indent="no" method="xml"/>
     <xsl:preserve-space elements="*"/>
@@ -287,6 +288,7 @@
             <rendition xml:id="antiqua" scheme="css">font-style: italic;</rendition>
             <rendition xml:id="left" scheme="css">display: block; text-align: left;</rendition>
             <rendition xml:id="spaced_out" scheme="css">letter-spacing: 0.15em;</rendition>
+            <rendition xml:id="smaller" scheme="css">font-size: smaller;</rendition>
             <rendition xml:id="bold" scheme="css">font-weight: bold;</rendition>
             <rendition xml:id="small-caps" scheme="css">font-variant: small-caps;</rendition>
             <rendition xml:id="double-quotes-before" scheme="css" scope="before">content: '&quot;'</rendition>
@@ -504,6 +506,23 @@
         </xsl:element>
     </xsl:template>
     
+    <xsl:template match="facsimile">
+        <xsl:variable name="wit" select="wega:facsimile-witness(.)"/>
+        <xsl:if test="$wit//repository[@n = tokenize($facsimileWhiteList, '\s+')] or @sameAs">
+            <xsl:copy>
+                <xsl:apply-templates select="@*"/>
+                <!-- 
+                inject an empty surface element for those facsimile elements
+                where we only provide a @sameAs link to an IIIF manifest
+            -->
+                <xsl:if test="not(*)">
+                    <xsl:element name="surface"/>
+                </xsl:if>
+                <xsl:apply-templates/>
+            </xsl:copy>
+        </xsl:if>
+    </xsl:template>
+    
     <xsl:template match="@rend">
         <xsl:choose>
             <xsl:when test="ends-with(., 'quotes')">
@@ -527,14 +546,14 @@
         <xsl:attribute name="url">
             <xsl:choose>
                 <xsl:when test="matches(., 'wega:')">
-                    <xsl:value-of select="replace(., 'wega:', 'https://weber-gesamtausgabe.de/digilib/Scaler/IIIF/')"/>
+                    <xsl:value-of select="replace(., 'wega:', 'https://weber-gesamtausgabe.de/Scaler/IIIF/')"/>
                 </xsl:when>
                 <xsl:when test="starts-with(., 'http')"/>
                 <xsl:otherwise>
                     <xsl:variable name="curID" select="root()/*/data(@xml:id)"/>
                     <xsl:variable name="docType" select="wega:docType($curID)"/>
                     <xsl:variable name="pathSegment" select="encode-for-uri(string-join(($docType, concat(substring($curID,1,5), 'xx'), $curID, .), '/'))"/>
-                    <xsl:value-of select="concat('https://weber-gesamtausgabe.de/digilib/Scaler/IIIF/', $pathSegment, '/full/,600/0/native.jpg')"/>
+                    <xsl:value-of select="concat('https://weber-gesamtausgabe.de/Scaler/IIIF/', $pathSegment, '/full/,600/0/native.jpg')"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
@@ -568,6 +587,29 @@
             <xsl:when test="matches($id, 'A11\d{4}')">biblio</xsl:when>
             <xsl:when test="matches($id, 'A13\d{4}')">places</xsl:when>
             <xsl:when test="matches($id, 'A22\d{4}')">sources</xsl:when>
+        </xsl:choose>
+    </xsl:function>
+    
+    <xsl:function name="wega:facsimile-witness" as="element()?">
+        <xsl:param name="facsimile" as="element(facsimile)"/>
+        <xsl:variable name="sourceID" select="substring($facsimile/@source, 2)"/>
+        <xsl:variable name="source" as="element()">
+            <xsl:choose>
+                <xsl:when test="$sourceID">
+                    <xsl:sequence select="$facsimile/preceding::sourceDesc//*[@xml:id=$sourceID]"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="$facsimile/preceding::sourceDesc/*"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="$source[self::witness]">
+                <xsl:sequence select="$source/*"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="$source"/>
+            </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
     

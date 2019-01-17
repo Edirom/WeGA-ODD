@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2018-06-13T19:05:17Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2019-01-04T09:03:54Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -13,7 +13,7 @@
    <!-- ********************* -->
    <!-- namespaces, implicit: -->
    <!-- ********************* -->
-   <ns prefix="rng" uri="http://relaxng.org/ns/structure/1.0"/>
+
 
    <!-- ************ -->
    <!-- constraints: -->
@@ -119,6 +119,9 @@ The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the 
                     </rule>
                     <rule context="tei:rs[@type='biblio'][@key]">
                         <assert test="matches(@key, '^(A11\d{4}\s)*A11\d{4}$')">A type value of 'biblio' must have at least one key, each starting with 'A11'</assert>
+                    </rule>
+                    <rule context="tei:rs[@type='addenda'][@key]">
+                        <assert test="matches(@key, '^A12\d{4}$')">A type value of 'addenda' must have only one key, starting with 'A12'</assert>
                     </rule>
                     <rule context="tei:rs[@type='place'][@key]">
                         <assert test="matches(@key, '^A13\d{4}$')">A type value of 'place' must have only one key, starting with 'A13'</assert>
@@ -231,7 +234,7 @@ attributes @target and @cRef may be supplied on <name/>.</report>
                 </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaThematicCommentaries-author-sameAs-sameAs-reference-27">
-                            <rule context="tei:*[@sameAs]">
+                            <rule context="tei:author[@sameAs]">
                                 <assert test="id(substring(@sameAs,2)) or starts-with(@sameAs, 'wega:')">There must be an element with the xml:id = "<value-of select="substring(@sameAs,2)"/>" which is the target of this @sameAs.</assert>
                             </rule>
                         </pattern>
@@ -392,20 +395,9 @@ On <name/>, either the @marks attribute should be used, or a paragraph of descri
                     <assert test="matches(@target, '^wega:A[0-9A-F]{6}(#.+)?$')">"wega"-prefixed URIs must follow the pattern "wega:A002068" (i.e. without any file extension)</assert>
                 </rule>
             </pattern>
-
-   <!-- *********** -->
-   <!-- deprecated: -->
-   <!-- *********** -->
-   <pattern>
-      <rule context="tei:dataRef|rng:ref">
-         <report test="concat(normalize-space(@key), normalize-space(@name)) eq 'data.count'"
-                 role="nonfatal">WARNING: reference to deprecated macro — 'data.count' will be removed from the TEI on 2018-10-01.</report>
-      </rule>
-   </pattern>
-   <pattern>
-      <rule context="tei:dataRef|rng:ref">
-         <report test="concat(normalize-space(@key), normalize-space(@name)) eq 'data.pointer'"
-                 role="nonfatal">WARNING: reference to deprecated macro — 'data.pointer' will be removed from the TEI on 2018-10-01.</report>
-      </rule>
-   </pattern>
+   <pattern id="schematron-constraint-wegaThematicCommentaries-emojiCheck-54">
+                <rule context="*[some $i in text() satisfies normalize-space($i) ne '']">
+                    <report test="matches(., '[⌚-⌛]|[⏩-⏬]|[⏰]|[⏳]|[◽-◾]|[☔-☕]|[♈-♓]|[♿]|[⚓]|[⚡]|[⚪-⚫]|[⚽-⚾]|[⛄-⛅]|[⛎]|[⛔]|[⛪]|[⛲-⛳]|[⛵]|[⛺]|[⛽]|[✅]|[✊-✋]|[✨]|[❌]|[❎]|[❓-❕]|[❗]|[➕-➗]|[➰]|[➿]|[⬛-⬜]|[⭐]|[⭕]|[🀄]|[🃏]|[🆎]|[🆑-🆚]|[🇦-🇿]|[🈁]|[🈚]|[🈯]|[🈲-🈶]|[🈸-🈺]|[🉐-🉑]|[🌀-🌠]|[🌭-🌯]|[🌰-🌵]|[🌷-🍼]|[🍾-🍿]|[🎀-🎓]|[🎠-🏄]|[🏅]|[🏆-🏊]|[🏏-🏓]|[🏠-🏰]|[🏴]|[🏸-🏿]|[🐀-🐾]|[👀]|[👂-📷]|[📸]|[📹-📼]|[📿]|[🔀-🔽]|[🕋-🕎]|[🕐-🕧]|[🕺]|[🖕-🖖]|[🖤]|[🗻-🗿]|[😀]|[😁-😐]|[😑]|[😒-😔]|[😕]|[😖]|[😗]|[😘]|[😙]|[😚]|[😛]|[😜-😞]|[😟]|[😠-😥]|[😦-😧]|[😨-😫]|[😬]|[😭]|[😮-😯]|[😰-😳]|[😴]|[😵-🙀]|[🙁-🙂]|[🙃-🙄]|[🙅-🙏]|[🚀-🛅]|[🛌]|[🛐]|[🛑-🛒]|[🛕]|[🛫-🛬]|[🛴-🛶]|[🛷-🛸]|[🛹]|[🛺]|[🟠-🟫]|[🤍-🤏]|[🤐-🤘]|[🤙-🤞]|[🤟]|[🤠-🤧]|[🤨-🤯]|[🤰]|[🤱-🤲]|[🤳-🤺]|[🤼-🤾]|[🤿]|[🥀-🥅]|[🥇-🥋]|[🥌]|[🥍-🥏]|[🥐-🥞]|[🥟-🥫]|[🥬-🥰]|[🥱]|[🥳-🥶]|[🥺]|[🥻]|[🥼-🥿]|[🦀-🦄]|[🦅-🦑]|[🦒-🦗]|[🦘-🦢]|[🦥-🦪]|[🦮-🦯]|[🦰-🦹]|[🦺-🦿]|[🧀]|[🧁-🧂]|[🧃-🧊]|[🧍-🧏]|[🧐-🧦]|[🧧-🧿]|[🩰-🩳]|[🩸-🩺]|[🪀-🪂]|[🪐-🪕]')">Text contains characters with Emoji presentation as default.</report>
+                </rule>
+            </pattern>
 </schema>
