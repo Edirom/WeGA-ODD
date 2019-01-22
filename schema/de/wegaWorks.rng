@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<grammar xmlns="http://relaxng.org/ns/structure/1.0"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
+<grammar xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:tei="http://www.tei-c.org/ns/1.0"
          xmlns:teix="http://www.tei-c.org/ns/Examples"
+         xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.music-encoding.org/ns/mei"><!--
-Schema generated from ODD source 2018-03-30T19:57:55Z. .
+Schema generated from ODD source 2019-01-22T13:20:37Z. .
 TEI Edition: Version 3.0.0
 TEI Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -248,7 +248,7 @@ TEI Edition Location: http://www.tei-c.org/Vault/P5//
    </define>
    <define name="data.FONTSIZENUMERIC">
       <data type="token">
-         <param name="pattern">\d*(\.\d+)?(pt)?</param>
+         <param name="pattern">\d*(\.\d+)?(pt)?</param> 
          <except>
             <choice>
                <data type="token">
@@ -375,7 +375,7 @@ TEI Edition Location: http://www.tei-c.org/Vault/P5//
    </define>
    <define name="data.LINESTARTENDSYMBOLSIZE">
       <data type="positiveInteger">
-         <param name="minInclusive">1</param>
+         <param name="minInclusive">1</param> 
          <param name="maxInclusive">9</param>
       </data>
    </define>
@@ -477,7 +477,7 @@ TEI Edition Location: http://www.tei-c.org/Vault/P5//
    </define>
    <define name="data.PAGE.PANELS">
       <data type="positiveInteger">
-         <param name="minInclusive">1</param>
+         <param name="minInclusive">1</param> 
          <param name="maxInclusive">2</param>
       </data>
    </define>
@@ -512,7 +512,7 @@ TEI Edition Location: http://www.tei-c.org/Vault/P5//
    </define>
    <define name="data.SLASH">
       <data type="positiveInteger">
-         <param name="minInclusive">1</param>
+         <param name="minInclusive">1</param> 
          <param name="maxInclusive">6</param>
       </data>
    </define>
@@ -4270,15 +4270,21 @@ Empfohlene Werte sind: 1] gloss; 2] index; 3] instructions; 4] litany; 5] syllog
       </element>
    </define>
    <define name="creation">
-      <element name="creation">
+      <element name="creation" ns="http://www.music-encoding.org/ns/mei">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Non-bibliographic details of the creation of an intellectual entity, in narrative form, such as the date, place, and circumstances of its composition. More detailed information may be captured within the history element.</a:documentation>
-         <zeroOrMore>
-            <choice>
-               <text/>
-               <ref name="date"/>
-               <ref name="model.nameLike"/>
-            </choice>
-         </zeroOrMore>
+         <optional>
+            <ref name="geogName"/>
+         </optional>
+         <ref name="date"/>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaWorks-creation-check_creationDateHasText-constraint-assert-30">
+            <rule context="mei:creation">
+               <sch:assert xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                           xmlns="http://www.tei-c.org/ns/1.0"
+                           xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                           test="mei:date/text()">The creation date should have human readable text as content.</sch:assert>
+            </rule>
+         </pattern>
          <ref name="att.common.attributes"/>
          <ref name="att.bibl.attributes"/>
          <ref name="att.lang.attributes"/>
@@ -4322,7 +4328,7 @@ Empfohlene Werte sind: 1] gloss; 2] index; 3] instructions; 4] litany; 5] syllog
             </rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-date-dateHeuristics5-constraint-assert-30">
+                  id="wegaWorks-date-dateHeuristics5-constraint-assert-31">
             <rule context="mei:date">
                <sch:assert xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                            xmlns="http://www.tei-c.org/ns/1.0"
@@ -4562,10 +4568,10 @@ Empfohlene Werte sind: 1] gloss; 2] index; 3] instructions; 4] litany; 5] syllog
                      <value>duplicate</value>
                      <value>deletion</value>
                   </choice>
-               </attribute>
+               </attribute> 
                <attribute name="target">
                   <ref name="wega.works.pointer"/>
-               </attribute>
+               </attribute> 
                <empty/>
             </element>
          </choice>
@@ -6062,7 +6068,6 @@ Empfohlene Werte sind: 1] gnd (Gemeinsame Normdatei) ; 2] JV (Jähns-Verzeichnis
          <optional>
             <attribute name="cert">
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">signifies the degree of certainty or precision of identifying this person.besagt den Grad der Gewissheit oder Präzision der Identifikation der Person.</a:documentation>
-               <ref name="data.CERTAINTY"/>
             </attribute>
          </optional>
          <empty/>
@@ -8350,6 +8355,8 @@ Empfohlene Werte sind: 1] interline; 2] intraline; 3] overstrike</a:documentatio
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">unterstrichener Text.</a:documentation>
             <value>small-caps</value>
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Kapitälchen.</a:documentation>
+            <value>smaller</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">kleinere Schrift(type).</a:documentation>
          </choice>
       </attribute>
    </define>
