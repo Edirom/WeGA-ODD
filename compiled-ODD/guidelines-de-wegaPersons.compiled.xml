@@ -2114,7 +2114,7 @@ belongs, but this <sch:name/> element has no textual content.</sch:assert>
 </classSpec><classSpec rend="change" module="tei" xml:id="GLOBAL" type="atts" ident="att.global"><desc versionDate="2007-10-02" xml:lang="en">provides attributes common to all elements in the TEI encoding scheme.</desc><desc versionDate="2007-12-20" xml:lang="ko">TEI 부호화 스키마의 모든 요소에 공통 속성을 제공한다.</desc><desc versionDate="2007-05-02" xml:lang="zh-TW">提供一組屬性，通用於TEI編碼標準中的所有元素。</desc><desc versionDate="2008-04-05" xml:lang="ja">TEI符号化スキーム中の全要素に共通する属性を示す． </desc><desc versionDate="2007-06-12" xml:lang="fr">fournit un jeu d'attributs communs à tous les éléments
     dans le système de codage TEI.</desc><desc versionDate="2007-05-04" xml:lang="es">proporciona un conjunto de atributos común a todos los
     elementos del esquema de codificación TEI.</desc><desc versionDate="2007-01-21" xml:lang="it">stabilisce un insieme di attributi comuni a tutti gli
-    elementi dello schema di codifica TEI</desc><classes><memberOf key="att.global.rendition"/><memberOf key="att.global.responsibility"/><memberOf key="att.global.source"/></classes><attList><attDef ident="xml:id" usage="opt">
+    elementi dello schema di codifica TEI</desc><classes><memberOf key="att.global.rendition"/><memberOf key="att.global.facs"/><memberOf key="att.global.change"/><memberOf key="att.global.responsibility"/><memberOf key="att.global.source"/></classes><attList><attDef ident="xml:id" usage="opt">
       <gloss versionDate="2007-07-02" xml:lang="en">identifier</gloss>
       <gloss versionDate="2007-12-20" xml:lang="ko">확인소</gloss>
       <gloss versionDate="2008-04-06" xml:lang="es">identificador</gloss>
@@ -4197,6 +4197,52 @@ integer value used as a count.</desc>
       </cit>
     </p>
   </remarks>
+</dataSpec><dataSpec module="tei" ident="teidata.point">
+  <desc versionDate="2010-10-17" xml:lang="en">defines the data type used to express a point in cartesian space.</desc>
+  <content>
+    <dataRef name="token" restriction="(\-?[0-9]+\.?[0-9]*,\-?[0-9]+\.?[0-9]*)"/>
+    
+    
+  </content>
+  <constraintSpec validUntil="2019-02-25" scheme="schematron" type="deprecationWarning" ident="deprecate_trailing_decimal_point">
+    
+    <desc type="deprecationInfo" versionDate="2018-09-14" xml:lang="en">Several standards bodies, including NIST in the USA,
+    strongly recommend against ending the representation of a number
+    with a decimal point. So instead of <q>3.</q> use either <q>3</q>
+    or <q>3.0</q>.</desc>
+    <constraint>
+    
+      <sch:rule context="*[@points]">
+        <sch:report test="matches( @points, '\.[, ]|\.$')">It is considered poor 
+          practice to end a number with a decimal point; as of 2019-02-25 TEI will 
+          consider this @points attribute of <sch:name/> invalid</sch:report>
+      </sch:rule>
+    </constraint>
+  </constraintSpec>
+  <exemplum xml:lang="en">
+      <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#UND">
+         <facsimile>
+            <surface ulx="0" uly="0" lrx="400" lry="280">
+               <zone points="220,100 300,210 170,250 123,234">
+                  <graphic url="handwriting.png "/>
+               </zone>
+            </surface>
+         </facsimile>
+      </egXML>
+  </exemplum>
+  <remarks versionDate="2010-10-17" xml:lang="en">
+      <p>A point is defined by two numeric values, which should be
+      expressed as decimal numbers.</p>
+      
+      <p>Currently, this datatype permits either of the two numeric
+      values to end in a decimal point. This practice is <emph style="color:red;font-style:normal;">deprecated</emph>, and as
+      of <emph style="color:red;font-style:normal;">2019-02-25</emph>
+      this datatype will no longer permit a <emph style="font-weight:bold;">number</emph> to <emph style="font-weight:bold;">end in a decimal</emph>
+      point. E.g., both <val>0.0,84.2</val> and <val>0,84</val> are
+      allowed, but <val>0.,84.</val> will not be.
+      
+      </p>
+  </remarks>
 </dataSpec><dataSpec module="tei" ident="teidata.pointer">
   <desc xmlns:tei="http://www.tei-c.org/ns/1.0" versionDate="2013-01-19" xml:lang="en">defines the range of attribute values used to provide a single
   URI, absolute or relative, pointing to some other
@@ -4849,6 +4895,410 @@ one initial.</desc>
                 <p>The quoted text will be rendered with quotation marks, according to the language settings of the application.</p>
             </remarks><listRef>
     <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/CO.html#COHQQ">3.3.3. Quotation</ref>
+  </listRef></elementSpec><elementSpec rend="change" module="core" ident="sic"><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">Latin for thus or so</gloss><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">also oder so in Latein</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">contains text reproduced although apparently incorrect or inaccurate.</desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">enthält Text, obwohl dieser anscheinend nicht korrekt oder ungenau wiedergegeben wird.</desc><classes><memberOf key="model.pPart.transcriptional"/></classes><content><macroRef key="macro.paraContent"/></content><attList/><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#FHENRY5">for his nose was as sharp as
+      a pen, and <sic>a Table</sic> of green fields.</egXML>
+  </exemplum><exemplum versionDate="2008-04-06" xml:lang="fr">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#fr-ex-Verne_Chasse">Des nuages, des
+          <sic>cyrrhus</sic>, des nimbus, des cumulus, tant qu'on en veut, et assurément plus que
+        n'en voulaient le maître et le serviteur.</egXML>
+  </exemplum><exemplum versionDate="2008-04-06" xml:lang="fr">
+    <p>Si on veut seulement attirer l'attention sur ce qui paraît être un problème dans la copie
+        du texte, <gi>sic</gi> est utilisé seul :</p>
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#fr-ex-Mauss_Sociologie">Tel est le
+        chat Rutterkin des sorcières Margaret et Filippa Flower, qui furent
+        <sic>prûlées</sic>brûlées à Lincoln, le 11 mars 1619, pour avoir envoûté un parent du comte
+        de Rutland.</egXML>
+  </exemplum><exemplum versionDate="2008-04-06" xml:lang="fr">
+    <p>Il est également possible, en utilisant les éléments <gi>choice</gi> et <gi>corr</gi>, de
+        proposer une lecture corrigée :</p>
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#fr-ex-Mauss_Sociologie">Tel est le
+        chat Rutterkin des sorcières Margaret et Filippa Flower, qui furent<choice><sic>prûlées</sic><corr>brûlées</corr></choice> à Lincoln, le 11 mars 1619, pour avoir envoûté un parent du comte de
+      Rutland.</egXML>
+  </exemplum><exemplum versionDate="2008-04-06" xml:lang="fr">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#fr-ex-Roubaud_Boucle">Ouvrage très
+        véridique et mirifique du Sieur Marcus Publius Dataficus du digne fils du seigneur comte,
+        vicomte, duc et archiduc Johannus de Bessinguya<choice><sic> Percepteur</sic><corr>Precepteur</corr></choice> du digne fils du seigneur comte, vicomte, duc et archiduc Johannus de
+      Bessinguya.</egXML>
+  </exemplum><exemplum xml:lang="zh-TW">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">
+    賣饅頭的老頭，背著木箱子，裡邊裝著熱<sic>鰻魚</sic>，太陽一出來，就在街上叫喚。</egXML>
+  </exemplum><exemplum xml:lang="zh-TW">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples"> 人們走起路來是快的，嘴裡邊的呼吸，一遇到了<sic>嚴肅</sic>好像冒著煙似的。
+    </egXML>
+  </exemplum><exemplum xml:lang="zh-TW">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples"> 人們走起路來是快的，嘴裡邊的呼吸，一遇到了<choice><sic>嚴肅</sic><corr>嚴寒</corr></choice> 好像冒著煙似的。</egXML>
+  </exemplum><exemplum xml:lang="zh-TW">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#biblzh-tw_n21"> 賣饅頭的老頭，背著木箱子，裡邊裝著熱<choice><sic>鰻魚</sic><corr>饅頭</corr></choice>，太陽一出來，就在街上叫喚。</egXML>
+  </exemplum><exemplum xml:lang="en">
+    <p>If all that is desired is to call attention to the apparent problem in the copy text,
+      <gi>sic</gi> may be used alone:</p>
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#VINGE">I don't know, Juan. It's so far in the past now
+      — how <sic>we can</sic> prove or disprove anyone's theories?</egXML>
+  </exemplum><exemplum xml:lang="de" versionDate="2017-06-25">
+    <p>Wenn es nur darum geht, auf das offensichtliche Problem in der Textvorlage hinzuweisen, kann das
+      <gi>sic</gi>-Element auch allein verwendet werden:</p>
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#VINGE">I don't know, Juan. It's so far in the past now
+      — how <sic>we can</sic> prove or disprove anyone's theories?</egXML>
+  </exemplum><exemplum xml:lang="en">
+    <p>It is also possible, using the <gi>choice</gi> and <gi>corr</gi> elements, to provide a
+      corrected reading:</p>
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#VINGE">I don't know, Juan. It's so far in the past now
+      — how <choice><sic>we can</sic><corr>can we</corr></choice> prove or disprove anyone's theories?</egXML>
+  </exemplum><exemplum xml:lang="de" versionDate="2017-06-25">
+    <p>Es ist auch möglich, zusätzlich die Elemente <gi>choice</gi> und <gi>corr</gi> zu verwenden, um
+      eine korrigierte Lesart anzubieten:</p>
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#VINGE">I don't know, Juan. It's so far in the past now
+      — how <choice><sic>we can</sic><corr>can we</corr></choice> prove or disprove anyone's theories?</egXML>
+  </exemplum><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#THENRY5">for his nose was as sharp as
+      a pen, and <choice><sic>a Table</sic><corr>a' babbld</corr></choice> of green fields.</egXML>
+  </exemplum><listRef>
+    <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/CO.html#COEDCOR">3.4.1. Apparent Errors</ref>
+  </listRef></elementSpec><elementSpec rend="change" module="core" ident="corr"><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">correction</gloss><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">Korrektur</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">contains the correct form of a passage apparently erroneous in the copy text.</desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">enthält die richtige Form einer Passage, der offenbar fehlerhaften Textkopie.</desc><classes/><content><macroRef key="macro.paraContent"/></content><attList/><exemplum xml:lang="en">
+    <p>If all that is desired is to call attention to the
+      fact that the copy text has been corrected, <gi>corr</gi> may be used alone:</p>
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#VINGE">I don't know,
+      Juan. It's so far in the past now — how <corr>can we</corr> prove
+      or disprove anyone's theories?</egXML>
+  </exemplum><exemplum xml:lang="de" versionDate="2017-06-25">
+    <p>Wenn es nur darum geht, darauf hinzuweisen, dass die Textvorlage korrigiert wurde, kann das
+      <gi>corr</gi>-Element auch allein verwendet werden:</p>
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#VINGE">I don't know,
+      Juan. It's so far in the past now — how <corr>can we</corr> prove
+      or disprove anyone's theories?</egXML>
+  </exemplum><exemplum versionDate="2008-04-06" xml:lang="fr">
+    <p>Si l'on veut mettre l'accent sur le fait que le texte a été corrigé, <gi>corr</gi> seul
+        sera employé:</p>
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#fr-ex-Mauss_Sociologie">Tel est le
+        chat Rutterkin des sorcières Margaret et Filippa Flower, qui
+	furent <corr>brûlées</corr> à Lincoln, le 11 mars 1619, pour avoir envoûté un parent du comte de
+      Rutland.</egXML>
+  </exemplum><exemplum versionDate="2008-04-06" xml:lang="fr">
+    <p>Il est aussi possible d'associer <gi>choice</gi> et<gi>sic</gi>, pour donner une lecture
+        incorrecte : </p>
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#fr-ex-Mauss_Sociologie">Tel est le
+        chat Rutterkin des sorcières Margaret et Filippa Flower, qui furent<choice><sic>prûlées</sic><corr>brûlées</corr></choice> à Lincoln, le 11 mars 1619, pour avoir envoûté un parent du comte de
+      Rutland.</egXML>
+  </exemplum><exemplum xml:lang="zh-TW">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">
+      不怨天，不尤人。下學而上達。<corr>知我</corr> 者，其天乎！</egXML>
+  </exemplum><exemplum xml:lang="zh-TW">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#biblzh-tw_n2">
+      不怨天，不尤人。下學而上達。<choice><sic>我知</sic><corr>知我</corr></choice>者，其天乎！</egXML>
+  </exemplum><exemplum xml:lang="en">
+    <p>It is also possible, using the <gi>choice</gi> and
+      <gi>sic</gi> elements, to provide an uncorrected reading:</p>
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#VINGE">I don't know, Juan. It's so far in the past now —
+      how <choice><sic>we can</sic><corr>can we</corr></choice> prove or
+      disprove anyone's theories?</egXML>
+  </exemplum><exemplum xml:lang="de" versionDate="2017-06-25">
+    <p>Es ist auch möglich, zusätzlich die Elemente <gi>choice</gi> und <gi>sic</gi> zu verwenden, um
+      eine nicht korrigierte Lesart anzubieten:</p>
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#VINGE">I don't know, Juan. It's so far in the past now —
+      how <choice><sic>we can</sic><corr>can we</corr></choice> prove or
+      disprove anyone's theories?</egXML>
+  </exemplum><listRef>
+    <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/CO.html#COEDCOR">3.4.1. Apparent Errors</ref>
+  </listRef></elementSpec><elementSpec rend="change" module="core" ident="choice"><gloss versionDate="2009-01-06" xml:lang="fr">choix</gloss><gloss versionDate="2016-11-25" xml:lang="de">Alternative</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">groups a number of alternative encodings for the same point in a text.</desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">gruppiert eine Anzahl von alternativen Codierungen für denselben Punkt in einem Text</desc><classes><memberOf key="model.pPart.editorial"/></classes><content><choice xmlns="http://relaxng.org/ns/structure/1.0"><group><ref name="sic"/><ref name="corr"/></group><group><ref name="abbr"/><ref name="expan"/></group><group><ref name="unclear"/><oneOrMore><ref name="unclear"/></oneOrMore></group></choice></content><attList/><exemplum xml:lang="en">
+    <p>An American encoding of <title>Gulliver's Travels</title> which
+            retains the British spelling but also provides a version
+            regularized to American spelling might be encoded as follows.</p>
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#COEDCOR-eg-71">
+      <p>Lastly, That, upon his solemn oath to observe all the above
+                articles, the said man-mountain shall have a daily allowance of
+                meat and drink sufficient for the support of <choice><sic>1724</sic><corr>1728</corr></choice> of our subjects,
+                with free access to our royal person, and other marks of our
+                <choice><orig>favour</orig><reg>favor</reg></choice>.</p>
+    </egXML>
+    
+  </exemplum><exemplum xml:lang="de" versionDate="2017-06-25">
+    <p>Eine Kodierung von <title>Gulliver's Travels</title>, die die britische Schreibweise beibehält,
+      aber auch eine der amerikanischen Rechtschreibung entsprechende Version anbietet, kann wie folgt
+      kodiert werden.</p>
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#COEDCOR-eg-71">
+      <p>Lastly, That, upon his solemn oath to observe all the above
+        articles, the said man-mountain shall have a daily allowance of
+        meat and drink sufficient for the support of <choice><sic>1724</sic><corr>1728</corr></choice> of our subjects,
+        with free access to our royal person, and other marks of our
+        <choice><orig>favour</orig><reg>favor</reg></choice>.</p>
+    </egXML>
+    
+  </exemplum><exemplum versionDate="2008-04-06" xml:lang="fr">
+    <p>L'encodage d'une édition des <title>Essais</title> pourra faire état à la fois des formes
+        originales et des formes modernisées correspondantes:.</p>
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#fr-ex-Montaigne_Essais">
+      <p>Ainsi lecteur, je suis<choice><orig>moy-mesmes</orig><reg>moi-même</reg></choice> la matière de mon livre : ce n'est pas raison que tu emploies ton loisir en un <choice><orig>subject</orig><reg>sujet</reg></choice>si frivole et si vain.</p>
+    </egXML>
+  </exemplum><exemplum xml:lang="zh-TW">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">
+      <p>清朝與日本為爭奪北韓半島控制權，爆發歷史上著名的甲午戰爭。 發生於清光緒二十年，西元 <choice><sic>1892</sic><corr>1894</corr></choice>年，雙方水陸大戰，傷亡者<choice><orig>衆</orig><reg>眾</reg></choice>。</p>
+    </egXML>
+  </exemplum><remarks versionDate="2010-05-01" xml:lang="en">
+    <p>Because the children of a  <gi>choice</gi> element all
+            represent alternative ways of encoding the same sequence, it is
+            natural to think of them as mutually exclusive. However, there may
+            be cases where a full representation of a text requires the
+            alternative encodings to be considered as parallel. </p>
+    <p>Note also that <gi>choice</gi> elements may self-nest.</p>
+    <p>Where the purpose of an encoding is to record multiple
+            witnesses of a single work, rather than to identify
+    multiple possible encoding decisions at a given point, the
+    <gi>app</gi> element and associated elements discussed in  section
+    <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/TC.html#TCAPLL">12.1. The Apparatus Entry, Readings, and Witnesses</ref> should be preferred.</p>
+  </remarks><remarks xml:lang="fr" versionDate="2007-06-12">
+    <p>Parce que les éléments contenus par un élément <gi>choice</gi> correspondent  tous à des solutions
+            possibles  pour encoder la même séquence, il est naturel de les envisager comme
+            exclusifs les uns des autres. Toutefois il peut y avoir des cas où la pleine
+            représentation d'un texte requiert de considérer ces encodages alternatifs comme
+            parallèles.</p>
+    <p>A Noter aussi que les <gi>choice</gi> peuvent s'imbriquer. </p>
+    <p>Pour une version de <gi>choice</gi> spécialisée pour l'encodage de témoins multiples
+            d'une même oeuvre, l'élément <gi>app</gi> peut etre préférable : voir la section <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/TC.html#TCAPLL">12.1. The Apparatus Entry, Readings, and Witnesses</ref>.</p>
+  </remarks><remarks xml:lang="es" versionDate="2008-04-06">
+    <p>Porque los niños de un elemento <gi>opción</gi> representan las maneras alternativas de codificar la misma secuencia, es natural pensar en ellas como mutuamente exclusivas.
+            Sin embargo, puede haber casos donde una representación completa de un texto requiera que las codificaciones alternativas sean consideradas como paralelas. </p>
+    <p>Se Observa también que los elementos <gi>opción</gi> pueden ser uno mismo-jerarquía.</p>
+    <p>Para una versión especializada de la <gi>opción</gi> para codificar los testimonios múltiples de un único trabajo, ver la sección <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/TC.html#TCAPLL">12.1. The Apparatus Entry, Readings, and Witnesses</ref>.</p>
+  </remarks><remarks xml:lang="ja" versionDate="2008-04-05">
+    <p>
+            要素<gi>choice</gi>の子要素は全て，選択的な符号化方法を示している．
+            従って，それらは互いに排他的であるとするのが自然である．けれども，
+            並列的に符号化されていると考えられる場合もあるだろう．
+        </p>
+    <p>要素<gi>choice</gi>は，入れ子化できることにも注意して欲しい．
+        </p>
+    <p>
+            1つの作品にある複数の現存資料を要素<gi>choice</gi>符号化することに
+            ついては，<ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/TC.html#TCAPLL">12.1. The Apparatus Entry, Readings, and Witnesses</ref>を参照のこと．
+        </p>
+  </remarks><remarks xml:lang="de" versionDate="2016-11-24">
+      <p>
+          Da die Kindelemente des <gi>choice</gi>-Elements alternative Kodierungsmöglichkeiten der selben Textstelle repräsentieren, 
+          ist es naheliegend, sie als sich gegenseitig ausschließend zu betrachten. Es sind jedoch Fälle vorstellbar, 
+          in der Kodierungsalternativen als Kodierungsparallelen verstanden werden müssen, um den Text vollständig zu repräsentieren. 
+      </p>
+      <p>
+          Man beachte außerdem, dass <gi>choice</gi>-Elemente weitere <gi>choice</gi>-Elemente als Kindelemente enthalten können.
+      </p>
+      <p>
+          In Fällen, in denen nicht mehrere mögliche Kodierungsvarianten, sondern Varianten aus mehreren Zeugen eines Werkes kodiert werden sollen, 
+          sind das <gi>app</gi>-Element und dazu gehörige Elemente, die im Abschnitt <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/TC.html#TCAPLL">12.1. The Apparatus Entry, Readings, and Witnesses</ref> erläutert werden, zu bevorzugen.
+      </p>
+  </remarks><listRef>
+    <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/CO.html#COED">3.4. Simple Editorial Changes</ref>
+  </listRef></elementSpec><elementSpec rend="change" module="core" ident="add"><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">addition</gloss><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">Ergänzung</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">contains letters, words, or phrases inserted in the source text by an author, scribe, annotator, or corrector.</desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">enthält Buchstaben, Wörter oder Sätze im Quelltext, die von einem Autor, Schreiber, Kommentator oder Korrektor eingesetzt wurden.</desc><classes><memberOf key="model.pPart.transcriptional"/><memberOf key="att.placement"/><memberOf key="att.dimensions"/></classes><content><macroRef key="macro.paraContent"/></content><attList><attDef ident="place" mode="change" usage="req">
+                    <desc versionDate="2013-11-11" xml:lang="en">specifies where this item is placed.</desc>
+                    <desc versionDate="2013-11-11" xml:lang="de">spezifiert wo das Element angebracht ist.</desc>
+                    <valList type="closed" mode="replace">
+                        <valItem ident="above">
+                            <desc versionDate="2013-11-11" xml:lang="en">insertion above the line.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="de">Einfügung über der Zeile.</desc>
+                        </valItem>
+                        <valItem ident="below">
+                            <desc versionDate="2013-11-11" xml:lang="en">insertion below the line.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="de">Einfügung unter der Zeile.</desc>
+                        </valItem>
+                        <valItem ident="inline">
+                            <desc versionDate="2013-11-11" xml:lang="en">insertion inline.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="de">Einfügung in der Zeile.</desc>
+                        </valItem>
+                        <valItem ident="margin">
+                            <desc versionDate="2013-11-11" xml:lang="en">insertion at margin.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="de">Einfügung am Rand.</desc>
+                        </valItem>
+                        <valItem ident="mixed">
+                            <desc versionDate="2013-11-11" xml:lang="en"/>
+                            <desc versionDate="2013-11-11" xml:lang="de"/>
+                        </valItem>
+                    </valList>
+                </attDef><attRef name="xml:id" class="att.global"/><attRef name="hand" class="att.written"/></attList><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#COEDADD-eg-84">The story I am
+    going to relate is true as to its main facts, and as to the
+    consequences <add place="above">of these facts</add> from which
+    this tale takes its title.</egXML>
+  </exemplum><remarks versionDate="2013-06-20" xml:lang="en">
+    <p>In a diplomatic edition attempting to represent an original
+    source, the <gi>add</gi> element should not be used for additions
+    to the current TEI electronic edition made by editors or encoders.
+    In these cases, either the <gi>corr</gi> or <gi>supplied</gi>
+    element are recommended.</p>
+    <p>In a TEI edition of a historical text with previous editorial
+    emendations in which such additions or reconstructions are
+    considered part of the source text, the use of <gi>add</gi> may be
+    appropriate, dependent on the editorial philosophy of the
+    project.</p>
+  </remarks><remarks xml:lang="fr" versionDate="2007-06-12">
+    <p>Dans une édition diplomatique souhaitant representer une source
+    originalle, l'élément <gi>add</gi> ne sera pas utilisé pour les
+    ajouts effectués par les éditeurs ou les encodeurs. Dans ce cas, on
+    va préféra soit l'élément <gi>corr</gi> soit l'élément
+    <gi>supplied</gi>.</p>
+  </remarks><remarks xml:lang="es" versionDate="2008-04-06">
+    <p>El elemento <gi>addición</gi> no se debe utilizar para las
+    adiciones hechas por los editores o los codificadores. En estos
+    casos, cualquiera de los elementos <gi>corr</gi> o <gi>supplied</gi>
+    son más convenientes.</p>
+  </remarks><remarks xml:lang="ja" versionDate="2018-12-20">
+    <p>
+      元のソースを表現しようとしているdiplomatic editionでは，<gi>add</gi>要素は，編集者や符号化する人が作成した現在のTEI電子版への追加には使用しないでください．このような場合は，<gi>corr</gi>または<gi>supplied</gi>要素のいずれかをお勧めします．そのような追加や再構成が原文の一部とみなされる以前の編集上の訂正を含む歴史的テキストのTEI版では，プロジェクトの編集理念に応じて，<gi>add</gi>の使用が適切かもしれません．
+    </p>
+  </remarks><remarks xml:lang="de" versionDate="2016-11-24">
+      <p>
+          In einer diplomatischen Ausgabe, die auf eine genaue Wiedergabe der Vorlage zielt, 
+          sollte das <gi>add</gi>-Element nicht für jene Hinzufügungen genutzt werden, die von den 
+          Editoren oder Auszeichnenden zu der elektronischen TEI-Edition gemacht werden. 
+          In diesen Fällen wird empfohlen, entweder das <gi>corr</gi>-Element oder <gi>supplied</gi>-Element zu verwenden.
+      </p>
+      <p>
+          In der TEI-Edition eines historischen Textes mit bereits vorhandenen editorischen Korrekturen, in dem solche Ergänzungen 
+          oder Rekonstruktionen als Teil der Textvorlage betrachtet werden, kann - im Rahmen der Editionsgrundsätze eines Projekts - 
+          die Verwendung des <gi>add</gi>-Elements geeignet sein.
+      </p>
+  </remarks><listRef>
+    <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/CO.html#COEDADD">3.4.3. Additions, Deletions, and Omissions</ref>
+  </listRef></elementSpec><elementSpec rend="change" module="core" ident="del"><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">deletion</gloss><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">Löschung</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">contains a letter, word, or passage deleted, marked as deleted, or otherwise indicated as superfluous or spurious in the copy text by an author, scribe, annotator, or corrector.</desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">enthält einen Buchstaben, ein Wort, oder eine Passage die gestrichen wurde, die als gelöscht markiert, oder auf andere Weise als überflüssig oder falsch in der Textkopie von einem Autor, Schreiber, Kommentator oder Korrektor angegeben wird</desc><classes><memberOf key="model.pPart.transcriptional"/><memberOf key="att.dimensions"/></classes><content><macroRef key="macro.paraContent"/></content><attList><attDef ident="rend" usage="req">
+                    <gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2013-11-11" xml:lang="en">rendition</gloss>
+                    <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2013-11-11" xml:lang="en">indicates how the element in question was rendered or presented in the source text.</desc>
+                    <gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2013-11-11" xml:lang="de">Ausgabe</gloss>
+                    <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2013-11-11" xml:lang="de">gibt an, wie das fragliche Element ausgegeben wurde oder im Quelltext präsentiert ist.</desc>
+                    <valList xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" type="closed">
+                        <valItem ident="strikethrough">
+                            <gloss versionDate="2013-11-11" xml:lang="en">crossed out</gloss>
+                            <desc versionDate="2013-11-11" xml:lang="en">The deleted word (or the deleted character) is crossed out.</desc>
+                            <gloss versionDate="2013-11-11" xml:lang="de">durchgestrichen</gloss>
+                            <desc versionDate="2013-11-11" xml:lang="de">Das gelöschte Wort (bzw. das gelöschte Zeichen) ist durchgestrichen.</desc>
+                        </valItem>
+                        <valItem ident="overwritten">
+                            <gloss versionDate="2013-11-11" xml:lang="en">overwritten</gloss>
+                            <desc versionDate="2013-11-11" xml:lang="en">The deleted word (or the deleted character) is overwritten by the substitution.</desc>
+                            <gloss versionDate="2013-11-11" xml:lang="de">überschrieben</gloss>
+                            <desc versionDate="2013-11-11" xml:lang="de">Das gelöschte Wort (bzw. das gelöschte Zeichen) ist durch die Ersetzung überschrieben.</desc>
+                        </valItem>
+                        <valItem ident="erased">
+                            <gloss versionDate="2013-11-11" xml:lang="en">covered</gloss>
+                            <desc versionDate="2013-11-11" xml:lang="en">The deleted word (or the deleted character) is repaid by shaving or other means.</desc>
+                            <gloss versionDate="2013-11-11" xml:lang="de">getilgt</gloss>
+                            <desc versionDate="2013-11-11" xml:lang="de">Das gelöschte Wort (bzw. das gelöschte Zeichen) ist durch Rasur oder sonstige Weise getilgt.</desc>
+                        </valItem>
+                    </valList>
+                </attDef><attRef name="xml:id" class="att.global"/><attRef name="hand" class="att.written"/></attList><exemplum xml:lang="mul">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" xml:lang="de" source="#COEDADD-eg-89">
+      <l><del rend="overtyped">Mein</del> Frisch <del rend="overstrike" type="primary">schwebt</del>
+        weht der Wind</l>
+    </egXML>
+  </exemplum><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#NONE">
+      <del rend="overstrike">
+        <gap reason="illegible" quantity="5" unit="character"/>
+      </del>
+    </egXML>
+  </exemplum><exemplum versionDate="2008-04-06" xml:lang="fr">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#fr-ex-Gide_Journal">
+      <p>[...] mais il y reste quelque chose de mystérieux, de furtif. <del rend="overtyped">Je</del> On cesse un instant d'y penser; <del rend="overstrike">les </del>mes yeux se
+          ferment ou <del rend="overstrike">s'attardent sur </del> se détournent sur un livre... On
+          relève la tête: il est là </p>
+    </egXML>
+  </exemplum><exemplum xml:lang="zh-TW">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">
+      <l><del rend="改寫">雨</del> 風 <del rend="改寫" type="primary">飄</del> 吹來涼爽。</l>
+    </egXML>
+  </exemplum><remarks versionDate="2013-11-19" xml:lang="en">
+    <p>This element should be used for deletion of shorter sequences of text, typically single words
+      or phrases. The <gi>delSpan</gi> element should be used for longer sequences of text, for
+      those containing structural subdivisions, and for those containing overlapping additions and
+      deletions.</p>
+    <p>The text deleted must be at least partially legible in order for the encoder to be able to
+      transcribe it (unless it is restored in a <gi>supplied</gi> tag). Illegible or lost text within a 
+      deletion may be marked using the <gi>gap</gi> tag to signal that text is present but has not
+      been transcribed, or is no longer visible. Attributes on the <gi>gap</gi>
+      element may be used to indicate how much text is omitted, the reason for omitting it, etc. If
+      text is not fully legible, the <gi>unclear</gi> element (available when using the additional
+      tagset for transcription of primary sources) should be used to signal the areas of text which
+      cannot be read with confidence in a similar way.</p>
+    <p>Degrees of uncertainty over what can still be read, or whether a deletion was intended may be
+      indicated by use of the <gi>certainty</gi> element (see <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/CE.html#CE">21. Certainty, Precision, and Responsibility</ref>).</p>
+    <p>There is a clear distinction in the TEI between <gi>del</gi>
+    and <gi>surplus</gi> on the one hand and <gi>gap</gi> or
+    <gi>unclear</gi> on the other. <gi>del</gi> indicates a
+    deletion present in the source being transcribed, which states
+     the author's or a later scribe's intent to cancel or remove
+     text. <gi>surplus</gi> indicates material present in the source
+     being transcribed which  should have been so
+     deleted, but which is not in fact. <gi>gap</gi> or <gi>unclear</gi>, by contrast, signal an
+     editor's or encoder's decision to omit something or their
+     inability to read the source text.
+    See  sections <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHOM">11.3.1.7. Text Omitted from or Supplied in the Transcription</ref> and <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHCOMB">11.3.3.2. Use of the gap, del, damage, unclear, and
+                  supplied Elements in Combination</ref> for the relationship between these and other
+    related elements used in detailed transcription. </p>
+  </remarks><remarks xml:lang="fr" versionDate="2007-06-12">
+    <p>Cf. <gi>gap</gi>.</p>
+    <p>Les degrés d'incertitude sur ce qui est encore lisible peuvent être indiqués par l'emploi de
+      l'élément <gi>certainty</gi> (voir <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/CE.html#CE">21. Certainty, Precision, and Responsibility</ref>).</p>
+    <p>Cet élément doit être utilisé pour la suppression de courtes séquences de texte, généralement
+      des mots ou des expressions. Il faut utiliser l'élément <gi>delSpan</gi> pour les séquences de
+      texte plus longues, celles qui contiennent des divisions structurelles, et celles qui
+      contiennent un chevauchement d'ajouts et de suppressions.</p>
+    <p>Le texte supprimé doit être au moins partiellement lisible, afin que l'encodeur soit en
+      mesure de le transcrire. La partie illisible du texte à l'intérieur d'une suppression peut être
+      marquée au moyen de la balise <gi>gap</gi> pour signaler la présence de texte non transcrit.
+      La quantité de texte omise, la raison de l'omission, etc., peuvent être indiquées au moyen des
+      attributs de l'élément <gi>gap</gi>. Si le texte n'est pas entièrement lisible, l'élément
+        <gi>unclear</gi> (disponible avec le jeu additionnel de balises pour la transcription des
+      sources primaires) doit être utilisé pour signaler les zones de texte ne pouvant pas être lues
+      de manière fiable. Voir les sections suivantes <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHOM">11.3.1.7. Text Omitted from or Supplied in the Transcription</ref> et, pour l'association
+      étroite entre les balises <gi>del</gi> et <gi>gap</gi>, <gi>damage</gi>, <gi>unclear</gi> et
+        <gi>supplied</gi> (ces trois dernières balises étant disponibles avec le jeu additionnel de
+      balises pour la transcription de sources primaires), voir la section <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHCOMB">11.3.3.2. Use of the gap, del, damage, unclear, and
+                  supplied Elements in Combination</ref>.</p>
+    <p>La balise <gi>del</gi> ne doit pas être utilisée pour les suppressions par des éditeurs
+      scientifiques ou des encodeurs. Dans ce cas, il faut utiliser soit la balise <gi>corr</gi>,
+      soit la balise <gi>gap</gi>. </p>
+  </remarks><remarks xml:lang="ja" versionDate="2008-04-05">
+    <p><gi>gap</gi>を参照のこと．</p>
+    <p> 当該解釈の確信度は要素<gi>certainty</gi>で示される (<ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/CE.html#CE">21. Certainty, Precision, and Responsibility</ref>を参照のこと)． </p>
+    <p> 当該要素は，短いテキスト部分，例えばひつとの単語や句が削除されてい る時に使用されるべきである．要素<gi>delSpan</gi>は，より大きなテキ
+      スト部分，例えば，下位構造を含むものや追加と削除をともに含むような ものが削除されているときに使用されるべきである． </p>
+    <p> 当該削除されているテキストは，少なくとも転記するに充分なほどには読 めるものでなければならない．全く読めないのであれば，要素
+        <gi>del</gi>は使うべきではない．この場合には，要素<gi>gap</gi>を使 い，転記できない単一のテキスト部分を示すべきである．この際，属性
+      <att>reason</att>により転記ができない理由が削除であることを示すこ とができる．全てが読めるわけではないという場合には，要素
+      <gi>unclear</gi>を使い，確信が持てないが読めるひとつのテキスト部分 を示すべきである．詳しくは，<ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHOM">11.3.1.7. Text Omitted from or Supplied in the Transcription</ref>を参照のこと．
+        また，要素<gi>del</gi>と要素<gi>gap</gi>, <gi>damage</gi>, <gi>unclear</gi>,
+      <gi>supplied</gi>との関係については， <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHCOMB">11.3.3.2. Use of the gap, del, damage, unclear, and
+                  supplied Elements in Combination</ref>を参照のこと(damageとsuppliedは元資料を転記
+      するための追加モジュールを使用する際に使うことができる)． </p>
+    <p> 要素<gi>del</gi>は，編集者や符号化する人による削除部分に使用される べきではない．この場合は，要素<gi>corr</gi>または要素<gi>gap</gi>
+      が使われるべきである． </p>
+  </remarks><remarks versionDate="2017-06-04" xml:lang="de">
+    <p>Dieses Element sollte nur für Löschungen kürzerer Textpassagen wie etwa einzelner Wörter
+      oder Phrasen benutzt werden. Für längere Textpassagen, sowie jene mit strukturellen
+      Untergliederungen oder sich überschneidenden Hinzufügungen bzw. Löschungen, sollte das
+      <gi>delSpan</gi>-Element benutzt werden.</p>
+    <p>Der gelöschte Text muss zumindest teilweise lesbar
+      sein, um von den Bearbeitern transkribiert werden zu können (außer er wurde in einem
+      <gi>supplied</gi>-Element rekonstruiert). Nicht lesbarer oder nicht mehr vorhandender Text
+      innerhalb einer Löschung kann mit dem <gi>gap</gi>-Element markiert werden, um anzuzeigen, dass
+      Text zwar vorhanden ist aber nicht transkribiert wurde oder nicht mehr sichtbar ist. Im
+      <gi>gap</gi>-Element können Attribute benutzt werden, um, unter anderem, Angaben zur
+      ausgelassenen Textmenge zu machen oder die Gründe für die Auslassung anzugeben. Wenn Text nur
+      teilweise lesbar ist und daher nicht mit Sicherheit entziffert werden kann, sollte das
+      <gi>unclear</gi>-Element (verfügbar im zusätzlichen Tagset für die Transkription von
+      primären Ressourcen) benutzt werden.</p>
+    <p>Das <gi>certainty</gi>-Element (siehe <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/CE.html#CE">21. Certainty, Precision, and Responsibility</ref>) kann benutzt werden, um den Grad
+      an Gewissheit anzugeben, was noch lesbar ist bzw. ob eine Löschung intendiert war oder nicht.</p>
+    <p>Die TEI unterscheidet eindeutig zwischen <gi>del</gi> und <gi>surplus</gi> auf der einen
+      und <gi>gap</gi> und <gi>unclear</gi> auf der anderen Seite. <gi>del</gi> beschreibt eine
+      Löschung in der zu transkribierenden Ressource, die darauf hinweist, dass ein Autor oder
+      späterer Schreiber bewusst Text löschen oder entfernen wollte. Das <gi>surplus</gi>-Element
+      beschreibt Text in der zu transkribierenden Ressource, der gelöscht werden sollte, aber in
+      Wirklichkeit nicht gelöscht wurde. Die Elemente <gi>gap</gi> oder <gi>unclear</gi> hingegen
+      beschreiben eine vom Editor oder Auszeichnenden getroffene Entscheidung, etwas auszulassen oder
+      deren Unvermögen, die Textvorlage zu entziffern. Vergleiche die Abschnitte <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHOM">11.3.1.7. Text Omitted from or Supplied in the Transcription</ref>
+      und <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHCOMB">11.3.3.2. Use of the gap, del, damage, unclear, and
+                  supplied Elements in Combination</ref> zur Beziehung dieser Elemente untereinander und zu anderen,
+      verwandten Elementen und wie diese in einer detaillierten Transkription verwendet werden.</p>
+  </remarks><listRef>
+    <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/CO.html#COEDADD">3.4.3. Additions, Deletions, and Omissions</ref>
   </listRef></elementSpec><elementSpec rend="change" module="core" ident="rs"><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">referencing string</gloss><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">referenzierende Zeichenkette</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">identifies one or more objects by type person, work, dairy entry, and so on.</desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">bezeichnet ein oder mehrere Objekt(e) vom Typ Person, Werk, Tagebucheintrag, usw.</desc><classes><memberOf key="model.nameLike"/><memberOf key="att.typed"/></classes><content><macroRef key="macro.phraseSeq"/></content><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="rs-typeNkey">
                 <desc versionDate="2018-04-24" xml:lang="en">warnings for wrong combination of <att>type</att> and <att>key</att> values.</desc>
                 <desc versionDate="2018-04-24" xml:lang="de">Warnung vor falscher Kombination von <att>type</att> und <att>key</att> Werten.</desc>
@@ -7420,6 +7870,124 @@ means of a <gi>glyph</gi> or <gi>char</gi> element referenced here as <code>#sym
     the intended concept in more detail, using plain text. </p>
   </remarks><listRef>
     <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/ND.html#NDPERSEpc">13.3.2.1. Personal Characteristics</ref>
+  </listRef></elementSpec><classSpec predeclare="true" module="transcr" type="atts" ident="att.global.facs">
+  <desc versionDate="2016-02-15" xml:lang="en">provides an attribute used to express correspondence
+    between an element containing transcribed text and all or part of an image representing that text.</desc>
+  <desc versionDate="2007-12-20" xml:lang="ko"><gi>facsimile</gi> 요소 내에서 이미지 또는 표면부와 관련될 수 있는 요소</desc>
+  <desc versionDate="2008-04-06" xml:lang="es">los elementos que se pueden asociar a una imagen o a una
+    superficie dentro de un <gi>facsímil</gi>.</desc>
+  <desc versionDate="2008-04-06" xml:lang="ja">要素<gi>facsimile</gi>に含まれる画像や紙面に関する要素．</desc>
+  <desc versionDate="2009-11-16" xml:lang="fr">attributs utilisables pour les éléments correspondant à tout ou partie d'une image, parce qu'ils contiennent une représentation alternative de cette image, généralement mais
+    pas nécessairement, une transcription.</desc>
+  <desc versionDate="2007-11-06" xml:lang="it">elementi che possono essere associati a un'immagine o una
+    superficie all'interno dell'elemento facsimile</desc>
+  <attList>
+    <attDef ident="facs" usage="opt">
+      <gloss versionDate="2007-08-26" xml:lang="en">facsimile</gloss>
+      <gloss versionDate="2007-12-20" xml:lang="ko">모사</gloss>
+      <gloss versionDate="2008-04-06" xml:lang="es">facsímil</gloss>
+      <gloss versionDate="2008-03-30" xml:lang="fr">fac-similé</gloss>
+      <desc versionDate="2008-04-05" xml:lang="en">points to all or part of an image which corresponds with the content of the element.</desc>
+      <desc versionDate="2007-12-20" xml:lang="ko">이미지 또는 이 요소와 일치하는 <gi>facsimile</gi> 요소의 부분을 직접 가리킨다.</desc>
+      <desc versionDate="2008-04-06" xml:lang="es">indica directamente a la imagen, o a la parte de un
+          <gi>facsímil</gi> que se corresponde con este elemento.</desc>
+      <desc versionDate="2008-04-06" xml:lang="ja">当該要素に対応する要素<gi>facsimile</gi>にある画像やその部分への 参照．</desc>
+      <desc versionDate="2009-11-16" xml:lang="fr">pointe directement vers une image ou vers une partie
+        d'une image correspondant au contenu de l'élément.</desc>
+      <desc versionDate="2007-11-06" xml:lang="it">indica direttamente un'immagine o una parte di un
+        elemento facsimile corrispondente a tale elemento</desc>
+      <datatype maxOccurs="unbounded"><dataRef key="teidata.pointer"/></datatype>
+    </attDef>
+  </attList>
+  <listRef>
+    <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHFAX">11.1. Digital Facsimiles</ref>
+  </listRef>
+</classSpec><classSpec ident="att.global.change" predeclare="true" module="transcr" type="atts">
+  <desc versionDate="2011-10-31" xml:lang="en">supplies the <att>change</att> attribute, allowing its member
+elements to specify one or more states or revision campaigns with which they are
+associated.</desc>
+  <attList>
+    <attDef ident="change">
+      <desc versionDate="2011-10-31" xml:lang="en">points to one or more <gi>change</gi> elements documenting
+      a state or revision campaign to which the element bearing this
+      attribute and its children have been assigned by the encoder.</desc>
+      <datatype minOccurs="1" maxOccurs="unbounded"><dataRef key="teidata.pointer"/></datatype>
+    </attDef>
+  </attList>
+  
+</classSpec><elementSpec rend="change" module="transcr" ident="subst"><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">substitution</gloss><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">Ersetzung</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">groups one or more deletions with one or more additions when the combination is to be regarded as a single intervention in the text.</desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">gruppiert eine oder mehrere Löschungen mit einem oder mehreren Zusätzen, wenn die Kombination als ein einziger Eingriff in den Text betrachtet werden kann.</desc><classes><memberOf key="model.pPart.editorial"/></classes><content><rng:interleave>
+                    <oneOrMore xmlns="http://relaxng.org/ns/structure/1.0"><ref name="del"/></oneOrMore>
+                    <oneOrMore xmlns="http://relaxng.org/ns/structure/1.0"><ref name="add"/></oneOrMore>
+                </rng:interleave></content><constraintSpec ident="substContents1" scheme="schematron">
+    <constraint>
+      <assert xmlns="http://purl.oclc.org/dsdl/schematron" test="child::tei:add and child::tei:del"><name/> must have at least one child add and at least one child del</assert>
+    </constraint>
+  </constraintSpec><attList/><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">
+... are all included. <del hand="#RG">It is</del>
+         <subst><add>T</add><del>t</del></subst>he expressed
+    </egXML>
+  </exemplum><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">
+      that he and his Sister Miſs D — <lb/>who always lived with him, wd. be <subst><del>very</del><lb/><add>principally</add></subst> remembered in her Will.
+    </egXML>
+  </exemplum><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">
+      <ab>τ<subst><add place="above">ῶν</add><del>α</del></subst>
+        συνκυρόντ<subst><add place="above">ων</add><del>α</del></subst>
+        ἐργαστηρί<subst><add place="above">ων</add><del>α</del></subst>
+         </ab>
+    </egXML>
+  </exemplum><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">
+      <subst>
+        <del>
+          <gap reason="illegible" quantity="5" unit="character"/>
+        </del>
+        <add>apple</add>
+      </subst>
+    </egXML>
+  </exemplum><listRef>
+    <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHSU">11.3.1.5. Substitutions</ref>
+  </listRef></elementSpec><elementSpec rend="change" module="transcr" ident="supplied"><gloss versionDate="2009-11-16" xml:lang="fr">texte restitué</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">signifies text supplied by the transcriber or editor for any reason, typically because the original cannot be read because of physical damage or loss to the original.</desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">bezeichnet hinzugefügten Text des Überschreibenden oder des Editor aus irgendeinem Grund, weil das Original nicht mehr gelesen werden kann (normalerweise wegen physikalischer Beschädigung oder des kompletten Verlusts).</desc><classes><memberOf key="model.pPart.transcriptional"/></classes><content><macroRef key="macro.paraContent"/></content><attList><attDef ident="resp" usage="rec">
+                    <gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2013-11-11" xml:lang="en">responsible party</gloss>
+                    <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2013-11-11" xml:lang="en">indicates the agency responsible for the intervention or interpretation, for example an editor or transcriber.</desc>
+                    <gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2013-11-11" xml:lang="de">verantwortliche Institution</gloss>
+                    <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2013-11-11" xml:lang="de">indiziert die verantwortliche Institution, die für die Intervention oder Interpretation verantwortlich ist, wie zum Beispiel ein Editor oder ein Umkodierer.</desc>
+                    <datatype xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron">
+                        <ref xmlns="http://relaxng.org/ns/structure/1.0" name="staffSignatures.list"/>
+                    </datatype>
+                </attDef><attDef xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" ident="reason" mode="delete"/></attList><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">I am dr Sr yr
+<supplied reason="illegible" source="#amanuensis_copy">very humble Servt</supplied>
+Sydney Smith</egXML>
+  </exemplum><exemplum versionDate="2008-04-06" xml:lang="fr">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">Je reste votre ts he de svt <supplied reason="illegible" source="#amanuensis_copy">très humble et très dévoué serviteur
+        </supplied>Jean Martin </egXML>
+  </exemplum><exemplum xml:lang="zh-TW">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#biblzh-tw_n63">
+       回首向來蕭瑟處，歸<supplied reason="faded-ink" source="#amanuensis_copy">去，</supplied>
+       也無風雨也無晴。</egXML>
+  </exemplum><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples"><supplied reason="omitted-in-original">Dedication</supplied> to the duke of Bejar</egXML>
+  </exemplum><remarks versionDate="2005-01-14" xml:lang="en">
+    <p>The <gi>damage</gi>, <gi>gap</gi>, <gi>del</gi>,
+<gi>unclear</gi> and <gi>supplied</gi> elements may be closely allied
+in use.  See section <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHCOMB">11.3.3.2. Use of the gap, del, damage, unclear, and
+                  supplied Elements in Combination</ref> for discussion of which
+element is appropriate for which circumstance.</p>
+  </remarks><remarks xml:lang="fr" versionDate="2009-11-16">
+    <p>Les éléments <gi>damage</gi>, <gi>gap</gi>, <gi>del</gi>, <gi>unclear</gi> et <gi>supplied</gi> peuvent être étroitement associés. Voir la section <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHCOMB">11.3.3.2. Use of the gap, del, damage, unclear, and
+                  supplied Elements in Combination</ref> pour savoir quel élément est approprié à chaque circonstance.</p>
+  </remarks><remarks xml:lang="ja" versionDate="2008-04-05">
+    <p>
+    要素<gi>damage</gi>, <gi>gap</gi>, <gi>del</gi>, <gi>unclear</gi>,
+    <gi>supplied</gi>と共に使用されるかもしれない．これらのどの要素を
+    使用するかについての詳細は，<ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHCOMB">11.3.3.2. Use of the gap, del, damage, unclear, and
+                  supplied Elements in Combination</ref>を参照のこと．
+    </p>
+  </remarks><listRef>
+    <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHDA">11.3.3.1. Damage, Illegibility, and Supplied Text</ref>
   </listRef></elementSpec><dataSpec rend="add" module="derived-module-wegaPersons" ident="wega.persons.pointer">
             <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" xml:lang="de" versionDate="2017-08-29">definiert das Muster für Personen-IDs innerhalb der WeGA</desc>
             <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" xml:lang="en" versionDate="2017-08-29">defines the possible attribute values for person IDs within the WeGA</desc>
@@ -7706,7 +8274,7 @@ means of a <gi>glyph</gi> or <gi>char</gi> element referenced here as <code>#sym
                 </sch:rule>
             </constraint>
         </constraintSpec>
-    </macroSpec><moduleSpec n="ST" xml:id="DSTTEI2" ident="tei" type="core"/><moduleSpec n="CO" xml:id="DCO" ident="core"/><moduleSpec xmlns:xi="http://www.w3.org/2001/XInclude" n="HD" xml:id="DHD" ident="header"/><moduleSpec n="ND" xml:id="DND" ident="namesdates"/></schemaSpec>
+    </macroSpec><moduleSpec n="ST" xml:id="DSTTEI2" ident="tei" type="core"/><moduleSpec n="CO" xml:id="DCO" ident="core"/><moduleSpec xmlns:xi="http://www.w3.org/2001/XInclude" n="HD" xml:id="DHD" ident="header"/><moduleSpec n="ND" xml:id="DND" ident="namesdates"/><moduleSpec n="PH" xml:id="DPH" ident="transcr"/></schemaSpec>
 				
 				
 				

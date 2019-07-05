@@ -1713,7 +1713,7 @@ belongs, but this <sch:name/> element has no textual content.</sch:assert>
 </classSpec><classSpec rend="change" module="tei" xml:id="GLOBAL" type="atts" ident="att.global"><desc versionDate="2007-10-02" xml:lang="en">provides attributes common to all elements in the TEI encoding scheme.</desc><desc versionDate="2007-12-20" xml:lang="ko">TEI 부호화 스키마의 모든 요소에 공통 속성을 제공한다.</desc><desc versionDate="2007-05-02" xml:lang="zh-TW">提供一組屬性，通用於TEI編碼標準中的所有元素。</desc><desc versionDate="2008-04-05" xml:lang="ja">TEI符号化スキーム中の全要素に共通する属性を示す． </desc><desc versionDate="2007-06-12" xml:lang="fr">fournit un jeu d'attributs communs à tous les éléments
     dans le système de codage TEI.</desc><desc versionDate="2007-05-04" xml:lang="es">proporciona un conjunto de atributos común a todos los
     elementos del esquema de codificación TEI.</desc><desc versionDate="2007-01-21" xml:lang="it">stabilisce un insieme di attributi comuni a tutti gli
-    elementi dello schema di codifica TEI</desc><classes><memberOf key="att.global.rendition"/><memberOf key="att.global.responsibility"/><memberOf key="att.global.source"/></classes><attList><attDef ident="xml:id" usage="opt">
+    elementi dello schema di codifica TEI</desc><classes><memberOf key="att.global.rendition"/><memberOf key="att.global.facs"/><memberOf key="att.global.change"/><memberOf key="att.global.responsibility"/><memberOf key="att.global.source"/></classes><attList><attDef ident="xml:id" usage="opt">
       <gloss versionDate="2007-07-02" xml:lang="en">identifier</gloss>
       <gloss versionDate="2007-12-20" xml:lang="ko">확인소</gloss>
       <gloss versionDate="2008-04-06" xml:lang="es">identificador</gloss>
@@ -3787,6 +3787,52 @@ integer value used as a count.</desc>
         <ref target="http://en.wikipedia.org/wiki/Regular_expression#Basic_concepts">wikipedia</ref>
       </cit>
     </p>
+  </remarks>
+</dataSpec><dataSpec module="tei" ident="teidata.point">
+  <desc versionDate="2010-10-17" xml:lang="en">defines the data type used to express a point in cartesian space.</desc>
+  <content>
+    <dataRef name="token" restriction="(\-?[0-9]+\.?[0-9]*,\-?[0-9]+\.?[0-9]*)"/>
+    
+    
+  </content>
+  <constraintSpec validUntil="2019-02-25" scheme="schematron" type="deprecationWarning" ident="deprecate_trailing_decimal_point">
+    
+    <desc type="deprecationInfo" versionDate="2018-09-14" xml:lang="en">Several standards bodies, including NIST in the USA,
+    strongly recommend against ending the representation of a number
+    with a decimal point. So instead of <q>3.</q> use either <q>3</q>
+    or <q>3.0</q>.</desc>
+    <constraint>
+    
+      <sch:rule context="*[@points]">
+        <sch:report test="matches( @points, '\.[, ]|\.$')">It is considered poor 
+          practice to end a number with a decimal point; as of 2019-02-25 TEI will 
+          consider this @points attribute of <sch:name/> invalid</sch:report>
+      </sch:rule>
+    </constraint>
+  </constraintSpec>
+  <exemplum xml:lang="en">
+      <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#UND">
+         <facsimile>
+            <surface ulx="0" uly="0" lrx="400" lry="280">
+               <zone points="220,100 300,210 170,250 123,234">
+                  <graphic url="handwriting.png "/>
+               </zone>
+            </surface>
+         </facsimile>
+      </egXML>
+  </exemplum>
+  <remarks versionDate="2010-10-17" xml:lang="en">
+      <p>A point is defined by two numeric values, which should be
+      expressed as decimal numbers.</p>
+      
+      <p>Currently, this datatype permits either of the two numeric
+      values to end in a decimal point. This practice is <emph style="color:red;font-style:normal;">deprecated</emph>, and as
+      of <emph style="color:red;font-style:normal;">2019-02-25</emph>
+      this datatype will no longer permit a <emph style="font-weight:bold;">number</emph> to <emph style="font-weight:bold;">end in a decimal</emph>
+      point. E.g., both <val>0.0,84.2</val> and <val>0,84</val> are
+      allowed, but <val>0.,84.</val> will not be.
+      
+      </p>
   </remarks>
 </dataSpec><dataSpec module="tei" ident="teidata.pointer">
   <desc xmlns:tei="http://www.tei-c.org/ns/1.0" versionDate="2013-01-19" xml:lang="en">defines the range of attribute values used to provide a single
@@ -5891,6 +5937,90 @@ should be supplied for the <att>scheme</att> attribute.</p>
       <p>Wenn keine kontrollierte Liste für die verwendeten Schlagwörter existiert, sollte das <att>scheme</att>-Attribute nicht gesetzt werden.</p>
   </remarks><listRef>
     <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/HD.html#HD43">2.4.3. The Text Classification</ref>
+  </listRef></elementSpec><classSpec predeclare="true" module="transcr" type="atts" ident="att.global.facs">
+  <desc versionDate="2016-02-15" xml:lang="en">provides an attribute used to express correspondence
+    between an element containing transcribed text and all or part of an image representing that text.</desc>
+  <desc versionDate="2007-12-20" xml:lang="ko"><gi>facsimile</gi> 요소 내에서 이미지 또는 표면부와 관련될 수 있는 요소</desc>
+  <desc versionDate="2008-04-06" xml:lang="es">los elementos que se pueden asociar a una imagen o a una
+    superficie dentro de un <gi>facsímil</gi>.</desc>
+  <desc versionDate="2008-04-06" xml:lang="ja">要素<gi>facsimile</gi>に含まれる画像や紙面に関する要素．</desc>
+  <desc versionDate="2009-11-16" xml:lang="fr">attributs utilisables pour les éléments correspondant à tout ou partie d'une image, parce qu'ils contiennent une représentation alternative de cette image, généralement mais
+    pas nécessairement, une transcription.</desc>
+  <desc versionDate="2007-11-06" xml:lang="it">elementi che possono essere associati a un'immagine o una
+    superficie all'interno dell'elemento facsimile</desc>
+  <attList>
+    <attDef ident="facs" usage="opt">
+      <gloss versionDate="2007-08-26" xml:lang="en">facsimile</gloss>
+      <gloss versionDate="2007-12-20" xml:lang="ko">모사</gloss>
+      <gloss versionDate="2008-04-06" xml:lang="es">facsímil</gloss>
+      <gloss versionDate="2008-03-30" xml:lang="fr">fac-similé</gloss>
+      <desc versionDate="2008-04-05" xml:lang="en">points to all or part of an image which corresponds with the content of the element.</desc>
+      <desc versionDate="2007-12-20" xml:lang="ko">이미지 또는 이 요소와 일치하는 <gi>facsimile</gi> 요소의 부분을 직접 가리킨다.</desc>
+      <desc versionDate="2008-04-06" xml:lang="es">indica directamente a la imagen, o a la parte de un
+          <gi>facsímil</gi> que se corresponde con este elemento.</desc>
+      <desc versionDate="2008-04-06" xml:lang="ja">当該要素に対応する要素<gi>facsimile</gi>にある画像やその部分への 参照．</desc>
+      <desc versionDate="2009-11-16" xml:lang="fr">pointe directement vers une image ou vers une partie
+        d'une image correspondant au contenu de l'élément.</desc>
+      <desc versionDate="2007-11-06" xml:lang="it">indica direttamente un'immagine o una parte di un
+        elemento facsimile corrispondente a tale elemento</desc>
+      <datatype maxOccurs="unbounded"><dataRef key="teidata.pointer"/></datatype>
+    </attDef>
+  </attList>
+  <listRef>
+    <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHFAX">11.1. Digital Facsimiles</ref>
+  </listRef>
+</classSpec><classSpec ident="att.global.change" predeclare="true" module="transcr" type="atts">
+  <desc versionDate="2011-10-31" xml:lang="en">supplies the <att>change</att> attribute, allowing its member
+elements to specify one or more states or revision campaigns with which they are
+associated.</desc>
+  <attList>
+    <attDef ident="change">
+      <desc versionDate="2011-10-31" xml:lang="en">points to one or more <gi>change</gi> elements documenting
+      a state or revision campaign to which the element bearing this
+      attribute and its children have been assigned by the encoder.</desc>
+      <datatype minOccurs="1" maxOccurs="unbounded"><dataRef key="teidata.pointer"/></datatype>
+    </attDef>
+  </attList>
+  
+</classSpec><elementSpec rend="change" module="transcr" ident="supplied"><gloss versionDate="2009-11-16" xml:lang="fr">texte restitué</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">signifies text supplied by the transcriber or editor for any reason, typically because the original cannot be read because of physical damage or loss to the original.</desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">bezeichnet hinzugefügten Text des Überschreibenden oder des Editor aus irgendeinem Grund, weil das Original nicht mehr gelesen werden kann (normalerweise wegen physikalischer Beschädigung oder des kompletten Verlusts).</desc><classes><memberOf key="model.pPart.transcriptional"/></classes><content><macroRef key="macro.paraContent"/></content><attList><attDef ident="resp" usage="rec">
+                    <gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2013-11-11" xml:lang="en">responsible party</gloss>
+                    <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2013-11-11" xml:lang="en">indicates the agency responsible for the intervention or interpretation, for example an editor or transcriber.</desc>
+                    <gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2013-11-11" xml:lang="de">verantwortliche Institution</gloss>
+                    <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" versionDate="2013-11-11" xml:lang="de">indiziert die verantwortliche Institution, die für die Intervention oder Interpretation verantwortlich ist, wie zum Beispiel ein Editor oder ein Umkodierer.</desc>
+                    <datatype xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron">
+                        <ref xmlns="http://relaxng.org/ns/structure/1.0" name="staffSignatures.list"/>
+                    </datatype>
+                </attDef><attDef xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" ident="reason" mode="delete"/></attList><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">I am dr Sr yr
+<supplied reason="illegible" source="#amanuensis_copy">very humble Servt</supplied>
+Sydney Smith</egXML>
+  </exemplum><exemplum versionDate="2008-04-06" xml:lang="fr">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">Je reste votre ts he de svt <supplied reason="illegible" source="#amanuensis_copy">très humble et très dévoué serviteur
+        </supplied>Jean Martin </egXML>
+  </exemplum><exemplum xml:lang="zh-TW">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#biblzh-tw_n63">
+       回首向來蕭瑟處，歸<supplied reason="faded-ink" source="#amanuensis_copy">去，</supplied>
+       也無風雨也無晴。</egXML>
+  </exemplum><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples"><supplied reason="omitted-in-original">Dedication</supplied> to the duke of Bejar</egXML>
+  </exemplum><remarks versionDate="2005-01-14" xml:lang="en">
+    <p>The <gi>damage</gi>, <gi>gap</gi>, <gi>del</gi>,
+<gi>unclear</gi> and <gi>supplied</gi> elements may be closely allied
+in use.  See section <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHCOMB">11.3.3.2. Use of the gap, del, damage, unclear, and
+                  supplied Elements in Combination</ref> for discussion of which
+element is appropriate for which circumstance.</p>
+  </remarks><remarks xml:lang="fr" versionDate="2009-11-16">
+    <p>Les éléments <gi>damage</gi>, <gi>gap</gi>, <gi>del</gi>, <gi>unclear</gi> et <gi>supplied</gi> peuvent être étroitement associés. Voir la section <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHCOMB">11.3.3.2. Use of the gap, del, damage, unclear, and
+                  supplied Elements in Combination</ref> pour savoir quel élément est approprié à chaque circonstance.</p>
+  </remarks><remarks xml:lang="ja" versionDate="2008-04-05">
+    <p>
+    要素<gi>damage</gi>, <gi>gap</gi>, <gi>del</gi>, <gi>unclear</gi>,
+    <gi>supplied</gi>と共に使用されるかもしれない．これらのどの要素を
+    使用するかについての詳細は，<ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHCOMB">11.3.3.2. Use of the gap, del, damage, unclear, and
+                  supplied Elements in Combination</ref>を参照のこと．
+    </p>
+  </remarks><listRef>
+    <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html#PHDA">11.3.3.1. Damage, Illegibility, and Supplied Text</ref>
   </listRef></elementSpec><dataSpec rend="add" module="derived-module-wegaBiblio" ident="wega.persons.pointer">
             <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" xml:lang="de" versionDate="2017-08-29">definiert das Muster für Personen-IDs innerhalb der WeGA</desc>
             <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" xml:lang="en" versionDate="2017-08-29">defines the possible attribute values for person IDs within the WeGA</desc>
@@ -6131,7 +6261,7 @@ should be supplied for the <att>scheme</att> attribute.</p>
                     </datatype>
                 </attDef>
             </attList>
-        </classSpec><moduleSpec n="ST" xml:id="DSTTEI2" ident="tei" type="core"/><moduleSpec n="CO" xml:id="DCO" ident="core"/><moduleSpec xmlns:xi="http://www.w3.org/2001/XInclude" n="HD" xml:id="DHD" ident="header"/></schemaSpec>
+        </classSpec><moduleSpec n="ST" xml:id="DSTTEI2" ident="tei" type="core"/><moduleSpec n="CO" xml:id="DCO" ident="core"/><moduleSpec xmlns:xi="http://www.w3.org/2001/XInclude" n="HD" xml:id="DHD" ident="header"/><moduleSpec n="PH" xml:id="DPH" ident="transcr"/></schemaSpec>
 				
 				
 				
