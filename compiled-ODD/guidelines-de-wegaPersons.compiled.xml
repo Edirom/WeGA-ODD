@@ -6555,25 +6555,55 @@ psychological significance.
     <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/HD.html#HD27">2.2.6. The Notes Statement</ref>
     <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/CO.html#COBICON">3.11.2.8. Notes and Statement of Language</ref>
     <ref target="http://www.tei-c.org/release/doc/tei-p5-doc/en/html/DI.html#DITPNO">9.3.5.4. Notes within Entries</ref>
-  </listRef></elementSpec><elementSpec xmlns:xi="http://www.w3.org/2001/XInclude" rend="change" module="header" ident="idno"><gloss rend="replace" versionDate="2013-11-11" xml:lang="en">identifier</gloss><gloss rend="replace" versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss><desc rend="replace" versionDate="2013-11-11" xml:lang="en">supplies any form of identifier used to identify some object, such as a bibliographic item, a person, a title, an organization, etc. in a standardized way.</desc><desc rend="replace" versionDate="2013-11-11" xml:lang="de">lieferte jegliche Form eines Bezeichners in einer standardisierten Form, der benutzt werden kann um Objekte zu identifiziert, wie etwa ein bibliographisches Element, eine Organisation, usw.</desc><classes><memberOf key="att.datable"/><memberOf key="att.typed"/><memberOf key="model.nameLike"/></classes><content><choice xmlns="http://relaxng.org/ns/structure/1.0"><ref name="pnd.pattern"/><ref name="viaf.pattern"/><ref name="bd.pattern"/></choice></content><attList><attDef ident="type" mode="replace" usage="req">
-                <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
-                <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</desc>
-                <valList type="closed">
-                    <valItem ident="gnd">
-                        <gloss versionDate="2013-11-11" xml:lang="en">Gemeinsame Normdatei</gloss>
-                        <gloss versionDate="2013-11-11" xml:lang="de">Gemeinsame Normdatei</gloss>
-                    </valItem>
-                    <valItem ident="viaf">
-                        <gloss versionDate="2013-11-11" xml:lang="en">Virtual International Authority File</gloss>
-                        <gloss versionDate="2013-11-11" xml:lang="de">Virtual International Authority File</gloss>
-                    </valItem>
-                    <valItem ident="bd">
-                        <gloss versionDate="2019-01-31" xml:lang="en">Bach Digital Identifier</gloss>
-                        <gloss versionDate="2019-01-31" xml:lang="de">Bach Digital Identifikator</gloss>
-                    </valItem>
-                    
-                </valList>
-            </attDef></attList><exemplum xml:lang="und">
+  </listRef></elementSpec><elementSpec xmlns:xi="http://www.w3.org/2001/XInclude" rend="change" module="header" ident="idno"><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">identifier</gloss><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">supplies any form of identifier used to identify some object, such as a bibliographic item, a person, a title, an organization, etc. in a standardized way.</desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">lieferte jegliche Form eines Bezeichners in einer standardisierten Form, der benutzt werden kann um Objekte zu identifiziert, wie etwa ein bibliographisches Element, eine Organisation, usw.</desc><classes><memberOf key="att.datable"/><memberOf key="att.typed"/><memberOf key="model.nameLike"/></classes><content><choice xmlns="http://relaxng.org/ns/structure/1.0"><ref name="pnd.pattern"/><ref name="viaf.pattern"/><ref name="bd.pattern"/><ref name="geonames.pattern"/></choice></content><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="types-match-external-identifiers">
+                <desc xml:lang="en" versionDate="2019-07-08">assert that provided ID matches the external identifier's pattern for IDs.</desc>
+                <desc xml:lang="de" versionDate="2019-07-08">überprüfe die gegebene ID mit dem Muster für externe Identifikatoren</desc>
+                <constraint>
+                    <sch:rule context="tei:idno[@type='gnd']">
+                        <sch:assert test="matches(., '^1[01]?\d{7}[0-9X]|[47]\d{6}-\d|[1-9]\d{0,7}-[0-9X]|3\d{7}[0-9X]$')">That doesn't look like a valid GND ID.</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:idno[@type='viaf']">
+                        <sch:assert test="matches(., '^[1-9]\d(\d{0,7}|\d{17,20})$')">That doesn't look like a valid VIAF ID.</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:idno[@type='geonames']">
+                        <sch:assert test="matches(., '^[1-9][0-9]{0,8}$')">That doesn't look like a valid Geonames ID.</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="match-external-identifiers">
+                <desc xml:lang="en" versionDate="2019-07-08">report for non-sensible external identifier</desc>
+                <desc xml:lang="de" versionDate="2019-07-08">zeigt nicht-sinnvolle Verknüpfungen mit externen Identifikatoren an</desc>
+                <constraint>
+                    <sch:rule context="tei:idno[parent::tei:place]">
+                        <sch:report test="@type=('bd')">Bach IDs are not meant for places.</sch:report>
+                    </sch:rule>
+                    <sch:rule context="tei:idno[parent::tei:person]">
+                        <sch:report test="@type=('geonames')">Geonames IDs are not meant for persons.</sch:report>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec><attList><attDef ident="type" mode="replace" usage="req">
+                    <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
+                    <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</desc>
+                    <valList type="closed">
+                        <valItem ident="gnd">
+                            <gloss versionDate="2013-11-11" xml:lang="en">Gemeinsame Normdatei</gloss>
+                            <gloss versionDate="2013-11-11" xml:lang="de">Gemeinsame Normdatei</gloss>
+                        </valItem>
+                        <valItem ident="viaf">
+                            <gloss versionDate="2013-11-11" xml:lang="en">Virtual International Authority File</gloss>
+                            <gloss versionDate="2013-11-11" xml:lang="de">Virtual International Authority File</gloss>
+                        </valItem>
+                        <valItem ident="bd">
+                            <gloss versionDate="2019-01-31" xml:lang="en">Bach Digital Identifier</gloss>
+                            <gloss versionDate="2019-01-31" xml:lang="de">Bach Digital Identifikator</gloss>
+                        </valItem>
+                        <valItem ident="geonames">
+                            <desc versionDate="2014-01-08" xml:lang="en">ID taken from http://www.geonames.org/</desc>
+                            <desc versionDate="2014-01-08" xml:lang="de">ID von http://www.geonames.org/</desc>
+                        </valItem>
+                        
+                        
+                    </valList>
+                </attDef></attList><exemplum xml:lang="und">
     <egXML xmlns="http://www.tei-c.org/ns/Examples">
       <idno type="ISBN">978-1-906964-22-1</idno>
       <idno type="ISSN">0143-3385</idno>
@@ -8090,6 +8120,13 @@ element is appropriate for which circumstance.</p>
                 <rng:data type="string">
                     
                     <rng:param name="pattern">[1-9]\d(\d{0,7}|\d{17,20})</rng:param>
+                </rng:data>
+            </content>
+        </macroSpec><macroSpec rend="add" module="derived-module-wegaPersons" ident="geonames.pattern" mode="add">
+            <content xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron">
+                <rng:data type="string">
+                    
+                    <rng:param name="pattern">[1-9][0-9]{0,8}</rng:param>
                 </rng:data>
             </content>
         </macroSpec><macroSpec rend="add" module="derived-module-wegaPersons" ident="bd.pattern" mode="add">
