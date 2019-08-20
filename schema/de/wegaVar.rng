@@ -5,7 +5,7 @@
          xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2019-08-20T09:05:37Z. .
+Schema generated from ODD source 2019-08-20T09:07:52Z. .
 TEI Edition: Version 3.6.0. Last updated on
 	16th July 2019, revision daa3cc0b9
 TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 3.6.0/
@@ -64,6 +64,25 @@ TEI Edition Location: http://www.tei-c.org/Vault/P5/Version 3.6.0/
             <ref name="model.global"/>
          </choice>
       </zeroOrMore>
+   </define>
+   <define name="pages.pattern">
+      <choice>
+         <data type="string">
+            <param name="pattern">\d+([\-–/]\d+)?(, \d+([\-–/]\d+)?)*</param>
+         </data>
+         <data type="string">
+            <param name="pattern">\d+[vr]([\-–/]\d+[vr])?</param>
+         </data>
+         <data type="string">
+            <param name="pattern">\d+(ff?\.)?</param>
+         </data>
+         <data type="string">
+            <param name="pattern">[IVXLC]+([\-–/][IVXLC]+)?</param>
+         </data>
+         <data type="string">
+            <param name="pattern">[IVXLC]+\.\d+</param>
+         </data>
+      </choice>
    </define>
    <define name="thematicCom.target">
       <data type="string">
@@ -1875,6 +1894,7 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
    <define name="model.imprintPart">
       <choice>
          <ref name="publisher"/>
+         <ref name="biblScope"/>
          <ref name="distributor"/>
       </choice>
    </define>
@@ -3428,9 +3448,12 @@ Elements 7.2.5. Speech Contents]</a:documentation>
                   </zeroOrMore>
                </group>
             </zeroOrMore>
+            <ref name="imprint"/>
             <zeroOrMore>
                <choice>
+                  <ref name="imprint"/>
                   <ref name="extent"/>
+                  <ref name="biblScope"/>
                </choice>
             </zeroOrMore>
          </group>
@@ -3461,6 +3484,7 @@ Elements 7.2.5. Speech Contents]</a:documentation>
                <ref name="model.ptrLike"/>
                <ref name="editor"/>
                <ref name="respStmt"/>
+               <ref name="biblScope"/>
                <ref name="idno"/>
                <ref name="textLang"/>
                <ref name="model.global"/>
@@ -3665,6 +3689,45 @@ Elements 7.2.5. Speech Contents]</a:documentation>
          <empty/>
       </element>
    </define>
+   <define name="imprint">
+      <element name="imprint">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">gruppiert Informationen über die Veröffentlichung oder Verbreitung eines bibliographischen Artikels [3.11.2.4. Imprint, Size of a Document, and Reprint Information]</a:documentation>
+         <oneOrMore>
+            <choice>
+               <ref name="model.imprintPart"/>
+               <ref name="model.dateLike"/>
+            </choice>
+            <optional>
+               <element name="note">
+                  <attribute name="type">
+                     <value>additional</value>
+                  </attribute> 
+                  <text/>
+               </element>
+            </optional>
+            <optional>
+               <element name="note">
+                  <attribute name="type">
+                     <value>fontUsage</value>
+                  </attribute> 
+                  <text/>
+               </element>
+            </optional>
+         </oneOrMore>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaVar-imprint-duplicate-biblScope-type-constraint-report-24">
+            <rule context="tei:imprint">
+               <sch:report xmlns:mei="http://www.music-encoding.org/ns/mei"
+                           xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                           xmlns:s="http://www.ascc.net/xml/schematron"
+                           xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                           xmlns="http://www.tei-c.org/ns/1.0"
+                           xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                           test="count(distinct-values(tei:biblScope/@type)) ne count(tei:biblScope/@type)">duplicate value for biblScope</sch:report>
+            </rule>
+         </pattern>
+      </element>
+   </define>
    <define name="publisher">
       <element name="publisher">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Verlag) gibt den Namen der Organisation an, die für die Veröffentlichung und Verbreitung eines bibliografischen Objekts verantwortlich ist. [3.11.2.4. Imprint, Size of a Document, and Reprint Information 2.2.4. Publication, Distribution, Licensing, etc.]</a:documentation>
@@ -3685,6 +3748,32 @@ Elements 7.2.5. Speech Contents]</a:documentation>
          </optional>
          <ref name="att.global.attribute.xmllang"/>
          <ref name="att.global.attribute.xmlid"/>
+         <empty/>
+      </element>
+   </define>
+   <define name="biblScope">
+      <element name="biblScope">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Umfang der bibliographischen Referenz) definiert den Umfang einer bibliographischen Referenz, beispielsweise als eine Liste von Seitenzahlen oder einer benannten Unterteilung eines größeren Werkes. [3.11.2.5. Scopes and Ranges in Bibliographic Citations]</a:documentation>
+         <ref name="pages.pattern"/>
+         <attribute name="unit">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">bezeichnet die Einheit für das Element, z.B. Spalten, Seiten oder Band.</a:documentation>
+            <choice>
+               <value>pp</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Seite) das Element enthält eine Seitenzahl oder einen Seitenzahlenbereich.</a:documentation>
+               <value>leaf</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Blatt) das Element enthält eine Blattzahl oder einen Blattzahlenbereich.</a:documentation>
+               <value>vol</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Band) das Element enthält eine Bandnummer</a:documentation>
+               <value>col</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Spalte) das Element enthält eine Spaltenzahl oder einen Spaltenbereich.</a:documentation>
+               <value>issue</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Heft) das Element enthält die Ausgabennummer bei einer Heftzählung einer Zeitschrift oder Zeitung; nicht zu verwechseln mit "Auflage". Untereinheit von "volume."</a:documentation>
+               <value>jg</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Jahrgang) das Element enthält eine Jahrgangsnummer (z.B. Allgemeine Musikalische Zeitung)</a:documentation>
+               <value>nr</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Nummer) das Element enthält die Ausgabennummer einer Zeitschrift oder Zeitung als Untereinheit von Band bzw. Jahrgang (z.B. Allgemeine Musikalische Zeitung); nicht zu verwechseln mit "Auflage".</a:documentation>
+            </choice>
+         </attribute>
          <empty/>
       </element>
    </define>
@@ -4022,7 +4111,7 @@ Empfohlene Werte sind: 1] ISBN; 2] ISSN; 3] DOI; 4] URI; 5] VIAF; 6] ESTC; 7] OC
                <zeroOrMore>
                   <choice>
                      <ref name="idno"/>
-            
+                     <ref name="biblScope"/>
                   </choice>
                </zeroOrMore>
         
@@ -4041,7 +4130,7 @@ Empfohlene Werte sind: 1] ISBN; 2] ISSN; 3] DOI; 4] URI; 5] VIAF; 6] ESTC; 7] OC
             </choice>
          </oneOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaVar-notesStmt-count-notes-constraint-report-24">
+                  id="wegaVar-notesStmt-count-notes-constraint-report-25">
             <rule context="tei:notesStmt">
                <sch:report xmlns:mei="http://www.music-encoding.org/ns/mei"
                            xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
@@ -4113,7 +4202,7 @@ Empfohlene Werte sind: 1] ISBN; 2] ISSN; 3] DOI; 4] URI; 5] VIAF; 6] ESTC; 7] OC
             <ref name="model.pLike"/>
          </zeroOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaVar-quotation-quotationContents-constraint-report-25">
+                  id="wegaVar-quotation-quotationContents-constraint-report-26">
             <rule context="tei:quotation">
                <report xmlns:xi="http://www.w3.org/2001/XInclude"
                        xmlns:sch="http://purl.oclc.org/dsdl/schematron"
@@ -4367,7 +4456,7 @@ Beispielwerte sind etwa: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5
             </optional>
          </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaVar-div-abstractModel-structure-l-constraint-report-26">
+                  id="wegaVar-div-abstractModel-structure-l-constraint-report-27">
             <rule context="tei:div">
                <report xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                        xmlns:rng="http://relaxng.org/ns/structure/1.0"
@@ -4377,7 +4466,7 @@ Beispielwerte sind etwa: 1] approved; 2] candidate; 3] cleared; 4] deprecated; 5
             </rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaVar-div-abstractModel-structure-p-constraint-report-27">
+                  id="wegaVar-div-abstractModel-structure-p-constraint-report-28">
             <rule context="tei:div">
                <report xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                        xmlns:rng="http://relaxng.org/ns/structure/1.0"
@@ -4963,7 +5052,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
             <ref name="row"/>
          </oneOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaVar-table-collapsible-head-constraint-report-31">
+                  id="wegaVar-table-collapsible-head-constraint-report-32">
             <rule context="tei:table">
                <sch:report xmlns:mei="http://www.music-encoding.org/ns/mei"
                            xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
@@ -5249,7 +5338,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(anonymous block) contains any arbitrary component-level unit of text, acting as an anonymous container for phrase or inter level elements analogous to, but without the semantic baggage of, a paragraph. [16.3. Blocks, Segments, and Anchors]</a:documentation>
          <ref name="macro.paraContent"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaVar-ab-abstractModel-structure-ab-constraint-report-33">
+                  id="wegaVar-ab-abstractModel-structure-ab-constraint-report-34">
             <rule context="tei:ab">
                <report xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                        xmlns:rng="http://relaxng.org/ns/structure/1.0"
@@ -5259,7 +5348,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
             </rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaVar-ab-abstractModel-structure-l-constraint-report-34">
+                  id="wegaVar-ab-abstractModel-structure-l-constraint-report-35">
             <rule context="tei:ab">
                <report xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                        xmlns:rng="http://relaxng.org/ns/structure/1.0"
@@ -5292,7 +5381,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(beliebiges Segment) steht für eine beliebige Segmentierung des Textes unterhalb des ‘chunk’ Levels. [16.3. Blocks, Segments, and Anchors 6.2. Components of the Verse Line 7.2.5. Speech Contents]</a:documentation>
          <ref name="macro.paraContent"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaVar-seg-activeOrPassivePerformance-constraint-report-35">
+                  id="wegaVar-seg-activeOrPassivePerformance-constraint-report-36">
             <rule context="tei:seg">
                <sch:report xmlns:mei="http://www.music-encoding.org/ns/mei"
                            xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
@@ -5304,7 +5393,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
             </rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaVar-seg-AddresseeOrSenderCorrespondence-constraint-report-36">
+                  id="wegaVar-seg-AddresseeOrSenderCorrespondence-constraint-report-37">
             <rule context="tei:seg">
                <sch:report xmlns:mei="http://www.music-encoding.org/ns/mei"
                            xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
