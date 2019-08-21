@@ -630,6 +630,58 @@
                 </valList>
             </content>
         </dataSpec>
+        
+        <dataSpec ident="wega.biblio.types" mode="add">
+            <desc>A closed list of values to be used with a <att>type</att> attribute on e.g. <gi>biblStruct</gi>.</desc>
+            <content>
+                <valList type="closed">
+                    <valItem ident="article">
+                        <desc versionDate="2013-11-11" xml:lang="en">article in a newspaper or magazine.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Zeitungs- oder Zeitschriftenartikel.</desc>
+                    </valItem>
+                    <valItem ident="book">
+                        <desc versionDate="2013-11-11" xml:lang="en">book respectively monograph.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Buch bzw. Monographie.</desc>
+                    </valItem>
+                    <valItem ident="inbook">
+                        <desc versionDate="2013-11-11" xml:lang="en">part (eg. chapters) of a monograph, usually by the same author.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Teil (z.B. Kapitel) einer Monographie, meist vom selben Autor.</desc>
+                    </valItem>
+                    <valItem ident="incollection">
+                        <desc versionDate="2013-11-11" xml:lang="en">part of a book (eg. essay in an anthology) with its own title. Included are yearbooks as the 'Weberiana' particularly.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Teil eines Buches (z.B. Aufsatz in einem Sammelband) mit einem eigenen Titel. Hierunter fallen insbesondere auch die Jahrbücher wie "Weberiana".</desc>
+                    </valItem>
+                    <valItem ident="inproceedings">
+                        <desc versionDate="2013-11-11" xml:lang="en">article in a conference report. The decisive factor is that the reference to the conference in the title of the monograph is mentioned.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Artikel in einem Konferenzbericht. Ausschlaggebend ist, dass der Hinweis auf die Konferenz im Titel der Monographie genannt wird.</desc>
+                    </valItem>
+                    <valItem ident="mastersthesis">
+                        <desc versionDate="2013-11-11" xml:lang="en">Bachelor's or Master's Thesis.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Bachelor-, Master- oder Magisterarbeit.</desc>
+                    </valItem>
+                    <valItem ident="misc">
+                        <desc versionDate="2013-11-11" xml:lang="en">everything else that can not be attached to any category.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Alles, was nicht anders zuzuordnen ist.</desc>
+                    </valItem>
+                    <valItem ident="online">
+                        <desc versionDate="2013-11-11" xml:lang="en">(native) online publications like blog posts, wiki entries or similar.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">(native) online Veröffentlichungen wie Blog-Posts, Wikieinträge o.ä.</desc>
+                    </valItem>
+                    <valItem ident="phdthesis">
+                        <desc versionDate="2013-11-11" xml:lang="en">unpublished (aka 'typed') dissertation.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">ungedruckte (aka "maschinenschriftliche") Dissertation.</desc>
+                    </valItem>
+                    <valItem ident="review">
+                        <desc versionDate="2013-11-11" xml:lang="en">review.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Rezension.</desc>
+                    </valItem>
+                    <valItem ident="score">
+                        <desc versionDate="2013-11-11" xml:lang="en">volume of music (eg. a score or a piano reduction)</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Notenband (z.B. Partitur oder Klavierauszug)</desc>
+                    </valItem>
+                </valList>
+            </content>
+        </dataSpec>
     </specGrp>
     
     <specGrp xml:id="wega-classes">
@@ -757,6 +809,31 @@
             </content>
             <attList>
                 <attRef class="att.global" name="xml:id"/>
+            </attList>
+        </elementSpec>
+        
+        <!-- 
+            hiding biblStruct here so the bibl schema (which has a fairly 
+            different definition of biblStruct) won't inherit 
+        -->
+        <elementSpec ident="biblStruct" mode="change" module="core">
+            <classes mode="change">
+                <memberOf key="att.sortable" mode="delete"/>
+                <memberOf key="att.declarable" mode="delete"/>
+                <memberOf key="att.typed" mode="delete"/>
+                <memberOf key="att.docStatus" mode="delete"/>
+                <memberOf key="att.global" mode="delete"/>
+            </classes>
+            <attList>
+                <attRef class="att.global" name="xml:id"/>
+                <attRef class="att.global" name="n"/>
+                <attDef ident="type" mode="add" usage="opt">
+                    <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
+                    <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</desc>
+                    <datatype>
+                        <dataRef key="wega.biblio.types"/>
+                    </datatype>
+                </attDef>
             </attList>
         </elementSpec>
     </specGrp>
