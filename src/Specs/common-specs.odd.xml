@@ -197,7 +197,8 @@
         <macroSpec ident="pnd.pattern" mode="add">
             <content>
                 <rng:data type="string">
-                    <rng:param name="pattern">[\-0-9]{6,9}[0-9X]</rng:param>
+                    <!-- see https://www.wikidata.org/wiki/Property:P227 "format as a regular expression" -->
+                    <rng:param name="pattern">1[01]?\d{7}[0-9X]|[47]\d{6}-\d|[1-9]\d{0,7}-[0-9X]|3\d{7}[0-9X]</rng:param>
                 </rng:data>
             </content>
         </macroSpec>
@@ -205,7 +206,26 @@
         <macroSpec ident="viaf.pattern" mode="add">
             <content>
                 <rng:data type="string">
-                    <rng:param name="pattern">[0-9]{6,8}</rng:param>
+                    <!-- see https://www.wikidata.org/wiki/Property:P214 "format as a regular expression" -->
+                    <rng:param name="pattern">[1-9]\d(\d{0,7}|\d{17,20})</rng:param>
+                </rng:data>
+            </content>
+        </macroSpec>
+        
+        <macroSpec ident="geonames.pattern" mode="add">
+            <content>
+                <rng:data type="string">
+                    <!-- see https://www.wikidata.org/wiki/Property:P1566 "format as a regular expression" -->
+                    <rng:param name="pattern">[1-9][0-9]{0,8}</rng:param>
+                </rng:data>
+            </content>
+        </macroSpec>
+        
+        <macroSpec ident="bd.pattern" mode="add">
+            <!-- Bach Digital -->
+            <content>
+                <rng:data type="string">
+                    <rng:param name="pattern">BachDigitalPerson_viaf_[0-9]{8}</rng:param>
                 </rng:data>
             </content>
         </macroSpec>
@@ -610,6 +630,58 @@
                 </valList>
             </content>
         </dataSpec>
+        
+        <dataSpec ident="wega.biblio.types" mode="add">
+            <desc>A closed list of values to be used with a <att>type</att> attribute on e.g. <gi>biblStruct</gi>.</desc>
+            <content>
+                <valList type="closed">
+                    <valItem ident="article">
+                        <desc versionDate="2013-11-11" xml:lang="en">article in a newspaper or magazine.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Zeitungs- oder Zeitschriftenartikel.</desc>
+                    </valItem>
+                    <valItem ident="book">
+                        <desc versionDate="2013-11-11" xml:lang="en">book respectively monograph.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Buch bzw. Monographie.</desc>
+                    </valItem>
+                    <valItem ident="inbook">
+                        <desc versionDate="2013-11-11" xml:lang="en">part (eg. chapters) of a monograph, usually by the same author.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Teil (z.B. Kapitel) einer Monographie, meist vom selben Autor.</desc>
+                    </valItem>
+                    <valItem ident="incollection">
+                        <desc versionDate="2013-11-11" xml:lang="en">part of a book (eg. essay in an anthology) with its own title. Included are yearbooks as the 'Weberiana' particularly.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Teil eines Buches (z.B. Aufsatz in einem Sammelband) mit einem eigenen Titel. Hierunter fallen insbesondere auch die Jahrbücher wie "Weberiana".</desc>
+                    </valItem>
+                    <valItem ident="inproceedings">
+                        <desc versionDate="2013-11-11" xml:lang="en">article in a conference report. The decisive factor is that the reference to the conference in the title of the monograph is mentioned.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Artikel in einem Konferenzbericht. Ausschlaggebend ist, dass der Hinweis auf die Konferenz im Titel der Monographie genannt wird.</desc>
+                    </valItem>
+                    <valItem ident="mastersthesis">
+                        <desc versionDate="2013-11-11" xml:lang="en">Bachelor's or Master's Thesis.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Bachelor-, Master- oder Magisterarbeit.</desc>
+                    </valItem>
+                    <valItem ident="misc">
+                        <desc versionDate="2013-11-11" xml:lang="en">everything else that can not be attached to any category.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Alles, was nicht anders zuzuordnen ist.</desc>
+                    </valItem>
+                    <valItem ident="online">
+                        <desc versionDate="2013-11-11" xml:lang="en">(native) online publications like blog posts, wiki entries or similar.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">(native) online Veröffentlichungen wie Blog-Posts, Wikieinträge o.ä.</desc>
+                    </valItem>
+                    <valItem ident="phdthesis">
+                        <desc versionDate="2013-11-11" xml:lang="en">unpublished (aka 'typed') dissertation.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">ungedruckte (aka "maschinenschriftliche") Dissertation.</desc>
+                    </valItem>
+                    <valItem ident="review">
+                        <desc versionDate="2013-11-11" xml:lang="en">review.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Rezension.</desc>
+                    </valItem>
+                    <valItem ident="score">
+                        <desc versionDate="2013-11-11" xml:lang="en">volume of music (eg. a score or a piano reduction)</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">Notenband (z.B. Partitur oder Klavierauszug)</desc>
+                    </valItem>
+                </valList>
+            </content>
+        </dataSpec>
     </specGrp>
     
     <specGrp xml:id="wega-classes">
@@ -652,7 +724,7 @@
             <desc versionDate="2018-06-13" xml:lang="de">überprüft die mit "wega:" präfigierten URIs auf (syntaktische) Validität</desc>
             <constraint>
                 <sch:rule context="*[starts-with(@target, 'wega:')]">
-                    <sch:assert test="matches(@target, '^wega:A[0-9A-F]{6}(#.+)?$')">"wega"-prefixed URIs must follow the pattern "wega:A002068" (i.e. without any file extension)</sch:assert>
+                    <sch:assert test="matches(@target, '^wega:A[0-9A-F]{6}(#.+)?(\s+wega:A[0-9A-F]{6}(#.+)?)*$')">"wega"-prefixed URIs must follow the pattern "wega:A002068" (i.e. without any file extension)</sch:assert>
                 </sch:rule>
             </constraint>
         </constraintSpec>
@@ -737,6 +809,31 @@
             </content>
             <attList>
                 <attRef class="att.global" name="xml:id"/>
+            </attList>
+        </elementSpec>
+        
+        <!-- 
+            hiding biblStruct here so the bibl schema (which has a fairly 
+            different definition of biblStruct) won't inherit 
+        -->
+        <elementSpec ident="biblStruct" mode="change" module="core">
+            <classes mode="change">
+                <memberOf key="att.sortable" mode="delete"/>
+                <memberOf key="att.declarable" mode="delete"/>
+                <memberOf key="att.typed" mode="delete"/>
+                <memberOf key="att.docStatus" mode="delete"/>
+                <memberOf key="att.global" mode="delete"/>
+            </classes>
+            <attList>
+                <attRef class="att.global" name="xml:id"/>
+                <attRef class="att.global" name="n"/>
+                <attDef ident="type" mode="add" usage="opt">
+                    <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
+                    <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</desc>
+                    <datatype>
+                        <dataRef key="wega.biblio.types"/>
+                    </datatype>
+                </attDef>
             </attList>
         </elementSpec>
     </specGrp>
@@ -830,6 +927,8 @@
                 <memberOf key="att.global" mode="delete"/>
                 <memberOf key="att.editLike" mode="delete"/>
                 <memberOf key="att.typed" mode="delete"/>
+                <memberOf key="att.canonical" mode="delete"/>
+                <memberOf key="att.dimensions" mode="delete"/>
                 <memberOf key="att.global.responsibility" mode="add"/>
             </classes>
             <constraintSpec scheme="schematron" ident="dateHeuristics2">
@@ -1412,7 +1511,21 @@
             <constraintSpec scheme="schematron" ident="notesStmt-notes">
                 <constraint>
                     <sch:rule context="tei:note[parent::tei:notesStmt]">
-                        <sch:assert test="@type=('editorial', 'summary', 'thematicCom', 'incipit')">Within the notesStmt only 'editorial', 'summary', or 'thematicCom' are allowed for @type on note.</sch:assert>
+                        <sch:assert test="@type=('editorial', 'summary', 'thematicCom', 'incipit', 'textConst')">Within the notesStmt only 'editorial', 'summary', 'textConst', or 'thematicCom' are allowed for @type on note.</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="schematron" ident="text-notes">
+                <constraint>
+                    <sch:rule context="tei:note[not(parent::tei:notesStmt)]">
+                        <sch:report test="@type=('editorial', 'summary', 'incipit')">The note types 'editorial', 'summary', or 'thematicCom' are not allowed within the text section but only in the notesStmt.</sch:report>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="schematron" ident="structured-content-notes">
+                <constraint>
+                    <sch:rule context="tei:note[parent::tei:notesStmt][tei:p|tei:list|tei:table]">
+                        <sch:report test="text()[matches(., '\w')] or *[not(self::tei:p or self::tei:list or self::tei:table)]">There must be no mixed content when a tei:p, tei:list, or tei:table is present.</sch:report>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
@@ -2426,7 +2539,7 @@
             </content>
             <constraintSpec scheme="schematron" ident="count-notes">
                 <constraint>
-                    <sch:report test="count(tei:note/@type) ne count(distinct-values(tei:note/concat(@type, @xml:lang, @n)))">Only one summary, incipit, editorial and thematicCom are allowed within notesStmt.</sch:report>
+                    <sch:report test="count(tei:note/@type) ne count(distinct-values(tei:note/concat(@type, @xml:lang, @target)))">Only one summary, incipit, and editorial are allowed within notesStmt.</sch:report>
                 </constraint>
             </constraintSpec>
         </elementSpec>
@@ -2788,6 +2901,10 @@
                     <desc versionDate="2013-11-11" xml:lang="en">allows content categorization of the text passage.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">erlaubt die inhaltliche Kategorisierung der Textstelle.</desc>
                     <valList type="closed">
+                        <valItem ident="accounting">
+                            <desc versionDate="2019-02-15" xml:lang="en">marks financial accounting records, mostly as separate sections at the end of the month in the diaries.</desc>
+                            <desc versionDate="2019-02-15" xml:lang="de">markiert die Aufzeichnung von Ein- oder Ausgaben, im Tagebuch meist am Monatsende in einem entsprechenden Abschnitt zusammengefasst.</desc>
+                        </valItem>
                         <valItem ident="chamberMusic">
                             <desc versionDate="2013-11-11" xml:lang="en">marks people playing together in a small (non-public) framework.</desc>
                             <desc versionDate="2013-11-11" xml:lang="de">markiert das gemeinsame Musizieren von Personen im kleinen (nicht-öffentlichen) Rahmen.</desc>
@@ -3140,9 +3257,17 @@
             </constraintSpec>
             <constraintSpec scheme="schematron" ident="sourceNwitness">
                 <constraint>
-                    <sch:rule context="tei:facsimile[preceding::tei:witness]">
+                    <sch:rule context="tei:facsimile[preceding::tei:witness][not(@source)]">
                         <sch:let name="source" value="@source"/>
                         <sch:assert test="@source and preceding::tei:witness/descendant-or-self::tei:*[concat('#',@xml:id) = $source]">A facsimile element must have a @source attribute pointing at the respective witness element (or some descendant thereof)</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="schematron" ident="sourceNmsFrag">
+                <constraint>
+                    <sch:rule context="tei:facsimile[preceding::tei:msFrag][not(@source)]">
+                        <sch:let name="source" value="@source"/>
+                        <sch:assert test="@source and preceding::tei:msFrag/descendant-or-self::tei:*[concat('#',@xml:id) = $source]">A facsimile element must have a @source attribute pointing at the respective msFrag element (or some descendant thereof)</sch:assert>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
@@ -3400,6 +3525,9 @@
                         minOccurs="0"/>
                 </sequence>
             </content>
+            <attList>
+                <attRef class="att.global" name="xml:id"/>
+            </attList>
         </elementSpec>
         
         <elementSpec ident="msIdentifier" mode="change" module="msdescription">
@@ -3695,6 +3823,83 @@
         </elementSpec>
     </specGrp>
     
+    <specGrp xml:id="wega-nameLikeEntities">
+        <elementSpec ident="idno" mode="change" module="header" xml:id="elem-idno">
+            <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
+            <desc versionDate="2013-11-11" xml:lang="en">supplies any form of identifier used to identify some object, such as a bibliographic item, a person, a title, an organization, etc. in a standardized way.</desc>
+            <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
+            <desc versionDate="2013-11-11" xml:lang="de">lieferte jegliche Form eines Bezeichners in einer standardisierten Form, der benutzt werden kann um Objekte zu identifiziert, wie etwa ein bibliographisches Element, eine Organisation, usw.</desc>
+            <classes mode="change">
+                <memberOf key="att.global" mode="delete"/>
+            </classes>
+            <content>
+                <rng:choice>
+                    <rng:ref name="pnd.pattern"/>
+                    <rng:ref name="viaf.pattern"/>
+                    <rng:ref name="bd.pattern"/>
+                    <rng:ref name="geonames.pattern"/>
+                </rng:choice>
+            </content>
+            <constraintSpec scheme="schematron" ident="types-match-external-identifiers">
+                <desc xml:lang="en" versionDate="2019-07-08">assert that provided ID matches the external identifier's pattern for IDs.</desc>
+                <desc xml:lang="de" versionDate="2019-07-08">überprüfe die gegebene ID mit dem Muster für externe Identifikatoren</desc>
+                <constraint>
+                    <sch:rule context="tei:idno[@type='gnd']">
+                        <sch:assert test="matches(., '^1[01]?\d{7}[0-9X]|[47]\d{6}-\d|[1-9]\d{0,7}-[0-9X]|3\d{7}[0-9X]$')">That doesn't look like a valid GND ID.</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:idno[@type='viaf']">
+                        <sch:assert test="matches(., '^[1-9]\d(\d{0,7}|\d{17,20})$')">That doesn't look like a valid VIAF ID.</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:idno[@type='geonames']">
+                        <sch:assert test="matches(., '^[1-9][0-9]{0,8}$')">That doesn't look like a valid Geonames ID.</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="schematron" ident="match-external-identifiers">
+                <desc xml:lang="en" versionDate="2019-07-08">report for non-sensible external identifier</desc>
+                <desc xml:lang="de" versionDate="2019-07-08">zeigt nicht-sinnvolle Verknüpfungen mit externen Identifikatoren an</desc>
+                <constraint>
+                    <sch:rule context="tei:idno[parent::tei:place]">
+                        <sch:report test="@type=('bd')">Bach IDs are not meant for places.</sch:report>
+                    </sch:rule>
+                    <sch:rule context="tei:idno[parent::tei:person]">
+                        <sch:report test="@type=('geonames')">Geonames IDs are not meant for persons.</sch:report>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <attList>
+                <attDef ident="type" mode="replace" usage="req">
+                    <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
+                    <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</desc>
+                    <valList type="closed">
+                        <valItem ident="gnd">
+                            <gloss versionDate="2013-11-11" xml:lang="en">Gemeinsame Normdatei</gloss>
+                            <gloss versionDate="2013-11-11" xml:lang="de">Gemeinsame Normdatei</gloss>
+                        </valItem>
+                        <valItem ident="viaf">
+                            <gloss versionDate="2013-11-11" xml:lang="en">Virtual International Authority File</gloss>
+                            <gloss versionDate="2013-11-11" xml:lang="de">Virtual International Authority File</gloss>
+                        </valItem>
+                        <valItem ident="bd">
+                            <gloss versionDate="2019-01-31" xml:lang="en">Bach Digital Identifier</gloss>
+                            <gloss versionDate="2019-01-31" xml:lang="de">Bach Digital Identifikator</gloss>
+                        </valItem>
+                        <valItem ident="geonames">
+                            <desc versionDate="2014-01-08" xml:lang="en">ID taken from http://www.geonames.org/</desc>
+                            <desc versionDate="2014-01-08" xml:lang="de">ID von http://www.geonames.org/</desc>
+                        </valItem>
+                        <!--<valItem ident="getty">
+                            <desc versionDate="2014-01-08" xml:lang="en">ID taken from http://www.getty.edu/research/tools/vocabularies/tgn/</desc>
+                            <desc versionDate="2014-01-08" xml:lang="de">ID von http://www.getty.edu/research/tools/vocabularies/tgn/</desc>
+                        </valItem>-->
+                        <!--<valItem ident="lccn">
+                        <gloss>Library of Congress Control Number</gloss>
+                    </valItem>-->
+                    </valList>
+                </attDef>
+            </attList>
+        </elementSpec>
+    </specGrp>
         
         <!--<elementSpec ident="footNoteMark" mode="add">
             <equiv name="footNoteMark" filter="WeGA-equiv.xsl" mimeType="text/xsl"/>

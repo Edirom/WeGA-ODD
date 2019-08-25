@@ -7,7 +7,7 @@
     exclude-result-prefixes="xs wega"
     version="2.0">
     
-    <xsl:param name="current-tei-version" as="xs:string">3.4.0</xsl:param>
+    <xsl:param name="current-tei-version" as="xs:string">3.6.0</xsl:param>
     <xsl:param name="facsimileWhiteList" as="xs:string">D-B</xsl:param>
     
     <xsl:output media-type="application/tei+xml" encoding="UTF-8" indent="no" method="xml"/>
@@ -351,14 +351,6 @@
         </xsl:element>
     </xsl:template>
     
-    <xsl:template match="date[parent::publicationStmt]">
-        <xsl:element name="p">
-            <xsl:copy>
-                <xsl:apply-templates select="@*|node()"/>
-            </xsl:copy>
-        </xsl:element>
-    </xsl:template>
-    
     <xsl:template match="ab[parent::document-node()]" mode="#default">
         <xsl:apply-templates select="$diariesWrapper" mode="diaries">
             <xsl:with-param name="curNode" select="." tunnel="yes"/>
@@ -415,27 +407,49 @@
         <xsl:apply-templates select="$duplicatesWrapper"/>
     </xsl:template>
     
-    <xsl:template match="teiHeader">
+    <xsl:template match="teiHeader" mode="#all">
         <xsl:copy>
             <xsl:choose>
                 <xsl:when test="encodingDesc">
-                    <xsl:apply-templates/>
+                    <xsl:apply-templates mode="#default"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:apply-templates select="node() except revisionDesc"/>
                     <xsl:element name="encodingDesc">
-                        <xsl:apply-templates select="$tagsDecl"/>
+                        <xsl:apply-templates select="$tagsDecl" mode="#default"/>
                     </xsl:element>
-                    <xsl:apply-templates select="revisionDesc"/>
+                    <xsl:apply-templates select="revisionDesc" mode="#default"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="encodingDesc">
+    <xsl:template match="publicationStmt[parent::fileDesc]" mode="#all">
+        <xsl:param name="curNode" tunnel="yes"/>
+        <xsl:variable name="id">
+            <xsl:choose>
+                <xsl:when test="$curNode">
+                    <xsl:value-of select="$curNode/@xml:id"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="./root()/*/@xml:id"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:copy>
+            <xsl:apply-templates select="@* | node() except idno[@type='WeGA']" mode="#default"/>
+            <idno type="WeGA">
+                <xsl:comment> *** This is the permanent identifier for this document *** </xsl:comment>
+                <xsl:comment> *** Please cite this URI when referring to it *** </xsl:comment>
+                <xsl:value-of select="concat('http://weber-gesamtausgabe.de/', $id)"/>
+            </idno>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="encodingDesc" mode="#all">
         <xsl:copy>
             <xsl:apply-templates/>
-            <xsl:apply-templates select="$tagsDecl"/>
+            <xsl:apply-templates select="$tagsDecl" mode="#default"/>
         </xsl:copy>
     </xsl:template>
     

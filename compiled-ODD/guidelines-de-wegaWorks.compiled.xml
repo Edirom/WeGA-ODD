@@ -2592,7 +2592,7 @@
               must be immediately preceded by a label.</sch:assert>
           </sch:rule>
         </constraint>
-      </constraintSpec><attList><attDef xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="form" usage="opt">
+      </constraintSpec><attList><attDef ident="form" usage="opt">
           <desc>Used to indicate the format of a list. In a "simple" list, <gi scheme="MEI">li</gi>
             elements are not numbered or bulleted. In a "marked" list, the sequence of the list
             items is not critical, and a bullet, box, dash, or other character is displayed at the
@@ -2610,7 +2610,7 @@
               <desc>Each item is numbered or lettered.</desc>
             </valItem>
           </valList>
-        </attDef><attDef xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="type" usage="opt">
+        </attDef><attDef ident="type" usage="opt">
           <desc>Captures the nature of the content of a list.</desc>
           <datatype>
             <rng:data type="NMTOKEN"/>
@@ -5448,17 +5448,13 @@
           movements of a symphony, there may be multiple <gi scheme="MEI">mdiv</gi> elements within
             <gi scheme="MEI">body</gi>. This is the highest level indication of the structure of the
           music.</p>
-      </remarks></elementSpec><elementSpec rend="add" ident="creation" module="MEI.shared"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Non-bibliographic details of the creation of an intellectual entity, in narrative form,
+      </remarks></elementSpec><elementSpec rend="add" ident="creation" module="MEI.shared" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Non-bibliographic details of the creation of an intellectual entity, in narrative form,
         such as the date, place, and circumstances of its composition. More detailed information may
-        be captured within the history element.</desc><classes xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
-        <memberOf key="att.common"/>
-        <memberOf key="att.bibl"/>
-        
-        <memberOf key="att.lang"/>
-        
-      </classes><content xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
-        <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><rng:text xmlns="http://www.tei-c.org/ns/1.0"/><ref name="date"/><ref name="model.nameLike"/></choice></zeroOrMore>
-      </content><remarks xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+        be captured within the history element.</desc><classes><memberOf key="att.common"/><memberOf key="att.bibl"/><memberOf key="att.lang"/></classes><content><elementRef key="geogName" minOccurs="0" maxOccurs="1"/><elementRef key="date"/></content><constraintSpec scheme="schematron" ident="check_creationDateHasText" mode="add">
+            <constraint>
+                <sch:assert test="mei:date/text()">The creation date should have human readable text as content.</sch:assert>
+            </constraint>
+        </constraintSpec><attList/><remarks xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <p>This element is modelled on an element in the Text Encoding Initiative (TEI).</p>
       </remarks></elementSpec><elementSpec rend="add" ident="date" module="MEI.shared" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A string identifying a point in time or the time period between two such points.</desc><classes><memberOf key="att.calendared"/><memberOf key="att.datable"/><memberOf key="att.edit"/><memberOf key="att.typed"/><memberOf key="model.dateLike"/></classes><content><zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><rng:text xmlns="http://www.tei-c.org/ns/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/><ref name="model.textphraseLike"/></choice></zeroOrMore></content><constraintSpec scheme="schematron" ident="dateHeuristics1">
             <desc versionDate="2014-04-25" xml:lang="en">checks for the existence of an <att>notbefore</att> with a <emph>larger</emph> value than its corresponding <att>notafter</att> (for dates AC)</desc>
@@ -5624,7 +5620,7 @@
         <memberOf key="model.lbLike"/>
       </classes><content xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <rng:empty/>
-      </content><attList><attDef xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="func" usage="opt">
+      </content><attList><attDef ident="func" usage="opt">
           <desc>States whether the line break follows a single line or a line group.</desc>
           <valList type="closed">
             <valItem ident="line"/>
@@ -5933,7 +5929,7 @@
             </sch:rule>
           </sch:pattern>
         </constraint>
-      </constraintSpec><attList><attDef xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="n" usage="opt">
+      </constraintSpec><attList><attDef ident="n" usage="opt">
           <desc>A non-negative integer value functioning as a "name".</desc>
           <datatype>
             <rng:data type="nonNegativeInteger"/>
@@ -5966,7 +5962,13 @@
         <p>System is the more proper name for this concept (Read, p. 37-38). Bracketed staff groups
           may contain other bracketed or braced staff groups or single staves. See Read, p. 35-38,
           examples p. 434, 438.</p>
-      </remarks></elementSpec><elementSpec rend="add" ident="title" module="MEI.shared" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Title of a bibliographic entity.</desc><classes><memberOf key="att.common"/><memberOf key="att.filing"/><memberOf key="att.lang"/><memberOf key="model.titleLike"/></classes><content><oneOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><rng:text xmlns="http://www.tei-c.org/ns/1.0"/><ref name="lb"/><ref name="persName"/></choice></oneOrMore></content><attList><attDef ident="label" mode="delete"/><attDef ident="xml:base" mode="delete"/><attDef xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="level" usage="opt">
+      </remarks></elementSpec><elementSpec rend="add" ident="title" module="MEI.shared" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Title of a bibliographic entity.</desc><classes><memberOf key="att.common"/><memberOf key="att.filing"/><memberOf key="att.lang"/><memberOf key="model.titleLike"/></classes><content><oneOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><rng:text xmlns="http://www.tei-c.org/ns/1.0"/><ref name="lb"/><ref name="persName"/></choice></oneOrMore></content><constraintSpec scheme="schematron" ident="work-subtitles-map-xmllang">
+            <constraint>
+                <sch:rule context="mei:title[@type='sub'][parent::mei:titleStmt]">
+                    <sch:assert test="string(@xml:lang) = preceding-sibling::mei:title/string(@xml:lang)">Make sure that this subtitle has a proper xml:lang attribute matching a preceding title's xml:lang</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec><attList><attDef ident="label" mode="delete"/><attDef ident="xml:base" mode="delete"/><attDef ident="level" usage="opt">
           <desc>Indicates the bibliographic level for a title.</desc>
           <valList type="closed">
             <valItem ident="a">
@@ -5987,8 +5989,8 @@
                 press).</desc>
             </valItem>
           </valList>
-        </attDef><attDef ident="type" usage="opt"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Characterizes the element in some sense, using any convenient classification scheme
-            or typology.</desc><datatype xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+        </attDef><attDef ident="type" usage="opt"><desc>Characterizes the element in some sense, using any convenient classification scheme
+            or typology.</desc><datatype>
             <rng:data type="NMTOKEN"/>
           </datatype><valList type="closed"><valItem ident="sub">
                         <desc versionDate="2014-04-30" xml:lang="de">Markiert einen Untertitel.</desc>
@@ -6003,7 +6005,7 @@
                         <gloss versionDate="2014-04-30" xml:lang="en">number</gloss>
                         <desc versionDate="2014-04-30" xml:lang="de">Markiert einen Titel einer musikalischen Nummer (z.B. Szene, Arie).</desc>
                         <desc versionDate="2014-04-30" xml:lang="en">marks a title of a musical division (e.g. scene, aria).</desc>
-                    </valItem></valList></attDef><attDef xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="subtype" usage="opt">
+                    </valItem></valList></attDef><attDef ident="subtype" usage="opt">
           <desc>Provide any sub-classification for the element, additional to that given by its type
             attribute.</desc>
           <datatype>
@@ -6241,7 +6243,7 @@
         <memberOf key="att.responsibility"/>
       </classes><content xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><rng:text xmlns="http://www.tei-c.org/ns/1.0"/><ref name="model.textphraseLike.limited"/></choice></zeroOrMore>
-      </content><attList><attDef xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="initial" usage="opt">
+      </content><attList><attDef ident="initial" usage="opt">
           <desc>Marks this hand as the first one of the document.</desc>
           <datatype>
             <ref xmlns="http://relaxng.org/ns/structure/1.0" name="data.BOOLEAN"/>
@@ -6311,7 +6313,7 @@
         <p>This element is modelled on an element in the Text Encoding Initiative (TEI)
           standard.</p>
       </remarks></elementSpec><elementSpec rend="add" ident="meiHead" module="MEI.header" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(MEI header) – Supplies the descriptive and declarative metadata prefixed to every
-        MEI-conformant text.</desc><classes><memberOf key="att.bibl"/><memberOf key="att.common"/><memberOf key="att.lang"/><memberOf key="att.meiversion"/></classes><content><zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><ref name="altId"/></zeroOrMore><ref xmlns="http://relaxng.org/ns/structure/1.0" name="fileDesc"/><ref xmlns="http://relaxng.org/ns/structure/1.0" name="workDesc"/><ref xmlns="http://relaxng.org/ns/structure/1.0" name="revisionDesc"/></content><attList><attDef xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="type" usage="opt">
+        MEI-conformant text.</desc><classes><memberOf key="att.bibl"/><memberOf key="att.common"/><memberOf key="att.lang"/><memberOf key="att.meiversion"/></classes><content><zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><ref name="altId"/></zeroOrMore><ref xmlns="http://relaxng.org/ns/structure/1.0" name="fileDesc"/><ref xmlns="http://relaxng.org/ns/structure/1.0" name="workDesc"/><ref xmlns="http://relaxng.org/ns/structure/1.0" name="revisionDesc"/></content><attList><attDef ident="type" usage="opt">
           <desc>Specifies the kind of document to which the header is attached, for example whether
             it is a corpus or individual text.</desc>
           <valList type="closed">
@@ -6365,12 +6367,12 @@
         <memberOf key="att.lang"/>
       </classes><content xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><rng:text xmlns="http://www.tei-c.org/ns/1.0"/><ref name="perfRes"/></choice></zeroOrMore>
-      </content><attList><attDef xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="count" usage="opt">
+      </content><attList><attDef ident="count" usage="opt">
           <desc>Indicates the number of performers.</desc>
           <datatype>
             <rng:data type="positiveInteger"/>
           </datatype>
-        </attDef><attDef xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="solo" usage="opt">
+        </attDef><attDef ident="solo" usage="opt">
           <desc>Marks this instrument or vocal part as a soloist. Do not use this attribute for a
             solo instrument which is not accompanied.</desc>
           <datatype>
@@ -6386,7 +6388,7 @@
       </classes><content xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><ref name="model.headLike"/></zeroOrMore>
         <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><ref name="perfRes"/><ref name="perfResList"/></choice></zeroOrMore>
-      </content><attList><attDef xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="count" usage="opt">
+      </content><attList><attDef ident="count" usage="opt">
           <desc>Indicates the number of performers.</desc>
           <datatype>
             <rng:data type="positiveInteger"/>
@@ -6444,7 +6446,7 @@
         <memberOf key="att.lang"/>
       </classes><content xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><rng:text xmlns="http://www.tei-c.org/ns/1.0"/><ref name="model.textphraseLike.limited"/></choice></zeroOrMore>
-      </content><attList><attDef xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="amount" usage="opt">
+      </content><attList><attDef ident="amount" usage="opt">
           <desc>Numeric value capturing a cost. Can only be interpreted in combination with the
             currency attribute.</desc>
           <datatype>
@@ -6452,7 +6454,7 @@
               <rng:param name="pattern">[0-9]+\.[0-9]{2}</rng:param>
             </rng:data>
           </datatype>
-        </attDef><attDef xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="currency" usage="opt">
+        </attDef><attDef ident="currency" usage="opt">
           <desc>Monetary unit.</desc>
           <datatype>
             <rng:data type="NMTOKEN"/>
@@ -6548,7 +6550,13 @@
       </remarks><remarks xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <p>This element is modelled on an element in the Text Encoding Initiative (TEI)
           standard.</p>
-      </remarks></elementSpec><elementSpec rend="add" ident="termList" module="MEI.header" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Collection of text phrases which describe a resource.</desc><classes><memberOf key="att.common"/><memberOf key="att.bibl"/><memberOf key="att.classcodeident"/><memberOf key="att.typed"/></classes><content><oneOrMore xmlns="http://relaxng.org/ns/structure/1.0"><ref name="term"/></oneOrMore></content><attList/></elementSpec><elementSpec rend="add" ident="titleStmt" module="MEI.header" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(title statement) – Container for title and responsibility meta-data.</desc><classes><memberOf key="att.bibl"/><memberOf key="att.common"/></classes><content><oneOrMore xmlns="http://relaxng.org/ns/structure/1.0"><ref name="title"/></oneOrMore><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="respStmt"/></optional></content><attList><attDef ident="label" mode="delete"/><attDef ident="xml:base" mode="delete"/><attDef ident="n" mode="delete"/></attList><remarks xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+      </remarks></elementSpec><elementSpec rend="add" ident="termList" module="MEI.header" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Collection of text phrases which describe a resource.</desc><classes><memberOf key="att.common"/><memberOf key="att.bibl"/><memberOf key="att.classcodeident"/><memberOf key="att.typed"/></classes><content><oneOrMore xmlns="http://relaxng.org/ns/structure/1.0"><ref name="term"/></oneOrMore></content><attList/></elementSpec><elementSpec rend="add" ident="titleStmt" module="MEI.header" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(title statement) – Container for title and responsibility meta-data.</desc><classes><memberOf key="att.bibl"/><memberOf key="att.common"/></classes><content><oneOrMore xmlns="http://relaxng.org/ns/structure/1.0"><ref name="title"/></oneOrMore><optional xmlns="http://relaxng.org/ns/structure/1.0"><ref name="respStmt"/></optional></content><constraintSpec scheme="schematron" ident="multiple-same-language-titles">
+            <constraint>
+                <sch:rule context="mei:titleStmt[not(@analog)]">
+                    <sch:report test="some $title in mei:title[not(@type)] satisfies ($title/string(@xml:lang) = $title/following-sibling::mei:title[not(@type)]/string(@xml:lang))">Multiple title with the same xml:lang detected</sch:report>
+                </sch:rule>
+            </constraint>
+        </constraintSpec><attList><attDef ident="label" mode="delete"/><attDef ident="xml:base" mode="delete"/><attDef ident="n" mode="delete"/></attList><remarks xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <p>This element is modelled on an element in the Text Encoding Initiative (TEI)
           standard.</p>
       </remarks></elementSpec><elementSpec rend="add" ident="useRestrict" module="MEI.header"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(usage restrictions) – Container for information about the conditions that affect use of
@@ -6649,19 +6657,21 @@
       </remarks><remarks xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <p>This element is modelled on an element in the Encoded Archival Description (EAD)
           standard.</p>
-      </remarks></elementSpec><elementSpec rend="add" ident="geogName" module="MEI.namesdates"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(geographic name) – The proper noun designation for a place, natural feature, or
-        political jurisdiction.</desc><classes xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
-        <memberOf key="att.bibl"/>
-        <memberOf key="att.common"/>
-        <memberOf key="att.edit"/>
-        
-        <memberOf key="att.lang"/>
-        <memberOf key="att.name"/>
-        <memberOf key="att.typed"/>
-        <memberOf key="model.nameLike.geogName"/>
-      </classes><content xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
-        <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><rng:text xmlns="http://www.tei-c.org/ns/1.0"/><ref name="model.textphraseLike"/><ref name="model.editLike"/><ref name="model.transcriptionLike"/></choice></zeroOrMore>
-      </content><remarks xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+      </remarks></elementSpec><elementSpec rend="add" ident="geogName" module="MEI.namesdates" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(geographic name) – The proper noun designation for a place, natural feature, or
+        political jurisdiction.</desc><classes><memberOf key="att.typed"/><memberOf key="model.nameLike.geogName"/></classes><content><zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><rng:text xmlns="http://www.tei-c.org/ns/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/><ref name="model.textphraseLike"/><ref name="model.editLike"/><ref name="model.transcriptionLike"/></choice></zeroOrMore></content><attList><attDef ident="dbkey" usage="rec">
+                <datatype>
+                    <dataRef key="wega.places.pointer"/>
+                </datatype>
+            </attDef><attDef ident="type" mode="change" usage="req">
+                <valList type="closed" mode="add">
+                    
+                    <valItem ident="settlement"/>
+                    <valItem ident="theatre"/>
+                    <valItem ident="country"/>
+                    <valItem ident="building"/>
+                    <valItem ident="sacral-building"/>
+                </valList>
+            </attDef><attDef ident="subtype" mode="delete"/></attList><remarks xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <p>Examples include Black Forest; Baltimore, Maryland; and Quartier Latin, Paris. Geographic
           name parts can be encoded using <gi scheme="MEI">geogName</gi> sub-elements. For greater
           specificity, however, use <gi scheme="MEI">district</gi>, <gi scheme="MEI">settlement</gi>, <gi scheme="MEI">region</gi>, <gi scheme="MEI">country</gi>, and <gi scheme="MEI">bloc</gi> sub-elements. The name of the list from which a controlled value
@@ -6701,7 +6711,7 @@
                 <desc versionDate="2013-11-11" xml:lang="en">signifies the degree of certainty or precision of identifying this person.</desc>
                 <desc versionDate="2013-11-11" xml:lang="en">besagt den Grad der Gewissheit oder Präzision der Identifikation der Person.</desc>
                 <datatype>
-                    <ref xmlns="http://relaxng.org/ns/structure/1.0" name="data.CERTAINTY"/>
+                    <dataRef key="teidata.certainty"/>
                 </datatype>
             </attDef></attList><remarks xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <p>Parts of a personal name may be captured using <gi scheme="MEI">persName</gi>
@@ -8839,7 +8849,7 @@
         <memberOf key="model.transcriptionLike"/>
       </classes><content xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><rng:text xmlns="http://www.tei-c.org/ns/1.0"/><ref name="model.textphraseLike"/><ref name="model.eventLike"/><ref name="model.eventLike.neumes"/><ref name="model.controleventLike"/><ref name="model.lyricsLike"/><ref name="model.midiLike"/><ref name="model.editLike"/><ref name="model.transcriptionLike"/><ref name="model.eventLike.measureFilling"/><ref name="model.noteModifierLike"/><ref name="model.sectionLike"/><ref name="model.measureLike"/><ref name="model.staffLike"/><ref name="model.layerLike"/><ref name="model.graphicprimitiveLike"/><ref name="model.fLike"/></choice></zeroOrMore>
-      </content><attList><attDef xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="method" usage="opt">
+      </content><attList><attDef ident="method" usage="opt">
           <desc>Contains an indication of how the addition was accomplished.</desc>
           <datatype>
             <rng:data type="NMTOKEN"/>
@@ -8878,7 +8888,7 @@
         <memberOf key="model.transcriptionLike"/>
       </classes><content xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><rng:text xmlns="http://www.tei-c.org/ns/1.0"/><ref name="model.textphraseLike"/><ref name="model.eventLike"/><ref name="model.eventLike.neumes"/><ref name="model.controleventLike"/><ref name="model.lyricsLike"/><ref name="model.midiLike"/><ref name="model.editLike"/><ref name="model.transcriptionLike"/><ref name="model.eventLike.measureFilling"/><ref name="model.noteModifierLike"/><ref name="model.sectionLike"/><ref name="model.measureLike"/><ref name="model.staffLike"/><ref name="model.layerLike"/><ref name="model.graphicprimitiveLike"/><ref name="model.fLike"/></choice></zeroOrMore>
-      </content><attList><attDef xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="degree" usage="opt">
+      </content><attList><attDef ident="degree" usage="opt">
           <desc>Records the degree of damage.</desc>
           <datatype>
             <rng:data type="string"/>
@@ -8897,7 +8907,7 @@
         <memberOf key="model.transcriptionLike"/>
       </classes><content xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><rng:text xmlns="http://www.tei-c.org/ns/1.0"/><ref name="model.textphraseLike"/><ref name="model.eventLike"/><ref name="model.eventLike.neumes"/><ref name="model.controleventLike"/><ref name="model.lyricsLike"/><ref name="model.midiLike"/><ref name="model.editLike"/><ref name="model.transcriptionLike"/><ref name="model.eventLike.measureFilling"/><ref name="model.noteModifierLike"/><ref name="model.sectionLike"/><ref name="model.measureLike"/><ref name="model.staffLike"/><ref name="model.layerLike"/><ref name="model.graphicprimitiveLike"/><ref name="model.fLike"/></choice></zeroOrMore>
-      </content><attList><attDef xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="rend" usage="opt">
+      </content><attList><attDef ident="rend" usage="opt">
           <desc>Captures the appearance of the source material using MEI-defined descriptors.</desc>
           <datatype maxOccurs="unbounded">
             <ref xmlns="http://relaxng.org/ns/structure/1.0" name="data.TEXTRENDITION"/>
@@ -8954,7 +8964,7 @@
         <memberOf key="model.transcriptionLike"/>
       </classes><content xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
         <zeroOrMore xmlns="http://relaxng.org/ns/structure/1.0"><choice><rng:text xmlns="http://www.tei-c.org/ns/1.0"/><ref name="model.textphraseLike"/><ref name="model.eventLike"/><ref name="model.eventLike.neumes"/><ref name="model.controleventLike"/><ref name="model.lyricsLike"/><ref name="model.midiLike"/><ref name="model.editLike"/><ref name="model.transcriptionLike"/><ref name="model.eventLike.measureFilling"/><ref name="model.noteModifierLike"/><ref name="model.sectionLike"/><ref name="model.measureLike"/><ref name="model.staffLike"/><ref name="model.layerLike"/><ref name="model.graphicprimitiveLike"/><ref name="model.fLike"/></choice></zeroOrMore>
-      </content><attList><attDef xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" ident="desc" usage="opt">
+      </content><attList><attDef ident="desc" usage="opt">
           <desc>Provides a description of the means of restoration, 'stet' or 'strike-down', for
             example.</desc>
           <datatype>
@@ -9084,6 +9094,12 @@
             <content xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron">
                 <dataRef name="string" restriction="A22\d{4}"/>
             </content>
+        </dataSpec><dataSpec rend="add" module="derived-module-wegaWorks" ident="wega.addenda.pointer">
+            <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" xml:lang="de" versionDate="2018-11-16">definiert das Muster für Addenda-Dokument-IDs innerhalb der WeGA</desc>
+            <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" xml:lang="en" versionDate="2018-11-16">defines the possible attribute values for addenda document IDs within the WeGA</desc>
+            <content xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron">
+                <dataRef name="string" restriction="A12\d{4}"/>
+            </content>
         </dataSpec><macroSpec rend="add" module="derived-module-wegaWorks" ident="rism.pattern" mode="add">
             <content xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron">
                 <rng:data type="string">
@@ -9163,6 +9179,10 @@
                             <desc versionDate="2013-11-11" xml:lang="en">small caps.</desc>
                             <desc versionDate="2013-11-11" xml:lang="de">Kapitälchen.</desc>
                         </valItem>
+                        <valItem ident="smaller">
+                            <desc versionDate="2018-11-27" xml:lang="en">smaller font.</desc>
+                            <desc versionDate="2018-11-27" xml:lang="de">kleinere Schrift(type).</desc>
+                        </valItem>
                     </valList>
                 </attDef>
                 <attDef ident="n" mode="add" usage="opt">
@@ -9171,7 +9191,7 @@
                     <gloss versionDate="2013-11-11" xml:lang="de">Zahl</gloss>
                     <desc versionDate="2014-06-16" xml:lang="de">gibt die Anzahl der Unterstreichungen an (d.h., @n kann nur in Kombination mit hi@rend='underline' auftreten).</desc>
                     <datatype>
-                        <ref xmlns="http://relaxng.org/ns/structure/1.0" name="data.count"/>
+                        <dataRef key="teidata.count"/>
                     </datatype>
                 </attDef>
             </attList>

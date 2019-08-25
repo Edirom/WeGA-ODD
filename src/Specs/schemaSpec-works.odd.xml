@@ -392,6 +392,13 @@
                 <rng:ref name="respStmt"/>
             </rng:optional>
         </content>
+        <constraintSpec scheme="schematron" ident="multiple-same-language-titles">
+            <constraint>
+                <sch:rule context="mei:titleStmt[not(@analog)]">
+                    <sch:report test="some $title in mei:title[not(@type)] satisfies ($title/string(@xml:lang) = $title/following-sibling::mei:title[not(@type)]/string(@xml:lang))">Multiple title with the same xml:lang detected</sch:report>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
         <attList>
             <attDef ident="label" mode="delete"/>
             <attDef ident="xml:base" mode="delete"/>
@@ -415,6 +422,13 @@
                 </rng:choice>
             </rng:oneOrMore>
         </content>
+        <constraintSpec scheme="schematron" ident="work-subtitles-map-xmllang">
+            <constraint>
+                <sch:rule context="mei:title[@type='sub'][parent::mei:titleStmt]">
+                    <sch:assert test="string(@xml:lang) = preceding-sibling::mei:title/string(@xml:lang)">Make sure that this subtitle has a proper xml:lang attribute matching a preceding title's xml:lang</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
         <attList>
             <attDef ident="label" mode="delete"/>
             <attDef ident="xml:base" mode="delete"/>
@@ -531,4 +545,44 @@
         <constraintSpec scheme="isoschematron" ident="check_respStmt" mode="delete"/>
     </elementSpec>
     
+    <elementSpec ident="creation" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <content>
+            <elementRef key="geogName" minOccurs="0" maxOccurs="1"/>
+            <elementRef key="date"/>
+        </content>
+        <constraintSpec scheme="schematron" ident="check_creationDateHasText" mode="add">
+            <constraint>
+                <sch:assert test="mei:date/text()">The creation date should have human readable text as content.</sch:assert>
+            </constraint>
+        </constraintSpec>
+    </elementSpec>
+    
+    <elementSpec ident="geogName" module="MEI.namesdates" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <classes mode="change">
+            <memberOf key="att.bibl" mode="delete"/>
+            <memberOf key="att.common" mode="delete"/>
+            <memberOf key="att.edit" mode="delete"/>
+            <memberOf key="att.facsimile" mode="delete"/>
+            <memberOf key="att.lang" mode="delete"/>
+            <memberOf key="att.name" mode="delete"/>
+        </classes>
+        <attList>
+            <attDef ident="type" mode="change" usage="req">
+                <valList type="closed" mode="add">
+                    <!-- Should be harmonized with tei:placeName/@type -->
+                    <valItem ident="settlement"/>
+                    <valItem ident="theatre"/>
+                    <valItem ident="country"/>
+                    <valItem ident="building"/>
+                    <valItem ident="sacral-building"/>
+                </valList>
+            </attDef>
+            <attDef ident="subtype" mode="delete"/>
+            <attDef ident="dbkey" mode="add" usage="rec">
+                <datatype>
+                    <dataRef key="wega.places.pointer"/>
+                </datatype>
+            </attDef>
+        </attList>
+    </elementSpec>
 </schemaSpec>

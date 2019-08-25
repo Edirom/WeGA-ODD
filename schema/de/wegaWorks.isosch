@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2017-11-01T20:17:46Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2019-08-12T12:50:13Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -11,7 +11,7 @@
    <!-- ********************* -->
    <!-- namespaces, implicit: -->
    <!-- ********************* -->
-   <ns prefix="rng" uri="http://relaxng.org/ns/structure/1.0"/>
+
 
    <!-- ************ -->
    <!-- constraints: -->
@@ -152,40 +152,45 @@
               used.</assert>
           </rule>
         </pattern>
-   <pattern id="schematron-constraint-wegaWorks-date-dateHeuristics1-18">
+   <pattern id="schematron-constraint-wegaWorks-creation-check_creationDateHasText-18">
+      <rule context="mei:creation">
+                <assert test="mei:date/text()">The creation date should have human readable text as content.</assert>
+            </rule>
+   </pattern>
+   <pattern id="schematron-constraint-wegaWorks-date-dateHeuristics1-19">
       <rule context="mei:date">
                 <report test="(@notbefore gt @notafter) and not(starts-with(@notbefore, '-'))">value of notBefore greater than notAfter</report>
             </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaWorks-date-dateHeuristics3-19">
+   <pattern id="schematron-constraint-wegaWorks-date-dateHeuristics3-20">
       <rule context="mei:date">
                 <report test="(@startdate or @enddate) and (@isodate or @notafter or @notbefore)">cooccurence of date and duration attributes</report>
             </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaWorks-date-dateHeuristics4-20">
+   <pattern id="schematron-constraint-wegaWorks-date-dateHeuristics4-21">
       <rule context="mei:date">
                 <report test="@isodate and (@notafter or @notbefore)">cooccurence of exact and uncertain date attributes</report>
             </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaWorks-date-dateHeuristics5-21">
+   <pattern id="schematron-constraint-wegaWorks-date-dateHeuristics5-22">
       <rule context="mei:date">
                 <assert test="@isodate or @notbefore or @notafter or @startdate or @enddate or @cert='unknown' or matches(., '0000|o\.J\.|unknown')">mei:date benötigt ein Attribut @isodate, @notbefore o.ä.</assert>
             </rule>
    </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-mei-Check_staff-22">
+   <pattern id="isoschematron-constraint-wegaWorks-mei-Check_staff-23">
           <rule context="mei:*[@staff]">
             <assert test="every $i in tokenize(@staff, '\s+') satisfies $i=//mei:staffDef/@n">The values in @staff must correspond to @n attribute of a staffDef
               element.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-section-Check_sectionexpansion-23">
+   <pattern id="isoschematron-constraint-wegaWorks-section-Check_sectionexpansion-24">
           <rule context="mei:section[mei:expansion]">
             <assert test="descendant::mei:section|descendant::mei:ending|descendant::mei:rdg">A
               section containing an expansion element must have descendant section, ending, or rdg
               elements.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_staffDefn-24">
+   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_staffDefn-25">
           <rule context="mei:staffDef">
             <let name="thisstaff" value="@n"/>
             <assert test="@n">A staffDef must have an n attribute.</assert>
@@ -195,20 +200,20 @@
               is permitted.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_ancestor_staff-25">
+   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_ancestor_staff-26">
           <rule context="mei:staffDef[ancestor::mei:staff]">
             <let name="thisstaff" value="@n"/>
             <assert test="ancestor::mei:staff/@n eq $thisstaff">If a staffDef appears in a
               staff, it must bear the same @n as this staff.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_clef_position_staffDef-26">
+   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_clef_position_staffDef-27">
           <rule context="mei:staffDef[@clef.line and @lines]">
             <assert test="number(@clef.line) &lt;= number(@lines)">The clef position must be
               less than or equal to the number of lines on the staff.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_clef_position_staffDef_nolines-27">
+   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_clef_position_staffDef_nolines-28">
           <rule context="mei:staffDef[@clef.line and not(@lines)]">
             <let name="thisstaff" value="@n"/>
             <let name="stafflines"
@@ -217,7 +222,7 @@
               be less than or equal to the number of lines on the staff.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_tab_strings_lines-28">
+   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_tab_strings_lines-29">
           <rule context="mei:staffDef[@tab.strings and @lines]">
             <let name="countTokens"
               value="count(tokenize(normalize-space(@tab.strings), '\s'))"/>
@@ -225,7 +230,7 @@
               must have the same number of values as there are staff lines.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_tab_strings_nolines-29">
+   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_tab_strings_nolines-30">
           <rule context="mei:staffDef[@tab.strings and not(@lines)]">
             <let name="countTokens"
               value="count(tokenize(normalize-space(@tab.strings), '\s'))"/>
@@ -268,7 +273,7 @@
                 the value of ppq on a preceding scoreDef.</assert>
             </rule>
           </pattern>
-        <pattern id="isoschematron-constraint-wegaWorks-staffGrp-Check_staffGrp_unique_staff_n_values-33">
+        <pattern id="isoschematron-constraint-wegaWorks-staffGrp-Check_staffGrp_unique_staff_n_values-34">
           <rule context="mei:staffGrp">
             <let name="countstaves" value="count(descendant::mei:staffDef)"/>
             <let name="countuniqstaves"
@@ -277,7 +282,12 @@
               value for the n attribute.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-change-change_requirements-34">
+   <pattern id="schematron-constraint-wegaWorks-title-work-subtitles-map-xmllang-35">
+                <rule context="mei:title[@type='sub'][parent::mei:titleStmt]">
+                    <assert test="string(@xml:lang) = preceding-sibling::mei:title/string(@xml:lang)">Make sure that this subtitle has a proper xml:lang attribute matching a preceding title's xml:lang</assert>
+                </rule>
+            </pattern>
+   <pattern id="isoschematron-constraint-wegaWorks-change-change_requirements-36">
           <rule context="mei:change">
             <assert test="@isodate or mei:date">The date of the change must be recorded in an
               isodate attribute or date element.</assert>
@@ -285,20 +295,25 @@
               recorded in a resp attribute or respStmt element.</assert>
           </rule>
         </pattern>
-   <pattern id="schematron-constraint-wegaWorks-source-id-check-35">
+   <pattern id="schematron-constraint-wegaWorks-source-id-check-37">
                 <rule context="mei:source">
                     <assert test="@xml:id or ancestor::mei:source">
                         Am Wurzelelement muss eine XML-ID angegeben sein.
                     </assert>
                 </rule>
             </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-beam-When_not_copyof_beam_content-36">
+   <pattern id="schematron-constraint-wegaWorks-titleStmt-multiple-same-language-titles-38">
+                <rule context="mei:titleStmt[not(@analog)]">
+                    <report test="some $title in mei:title[not(@type)] satisfies ($title/string(@xml:lang) = $title/following-sibling::mei:title[not(@type)]/string(@xml:lang))">Multiple title with the same xml:lang detected</report>
+                </rule>
+            </pattern>
+   <pattern id="isoschematron-constraint-wegaWorks-beam-When_not_copyof_beam_content-39">
           <rule context="mei:beam[not(@copyof)]">
             <assert test="count(descendant::*[local-name()='note' or local-name()='rest' or               local-name()='chord' or local-name()='space']) &gt; 1">A beam without a copyof attribute must have at least 2 note, rest, chord, or space
               descendants.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-beamSpan-beamspan_start-_and_end-type_attributes_required-37">
+   <pattern id="isoschematron-constraint-wegaWorks-beamSpan-beamspan_start-_and_end-type_attributes_required-40">
           <rule context="mei:beamSpan">
             <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real.</assert>
@@ -306,7 +321,7 @@
               attributes: dur, dur.ges, endid, or tstamp2.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-bend-bend_start-_and_end-type_attributes_required-38">
+   <pattern id="isoschematron-constraint-wegaWorks-bend-bend_start-_and_end-type_attributes_required-41">
           <rule context="mei:bend">
             <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real.</assert>
@@ -314,19 +329,19 @@
               attributes: dur, dur.ges, endid, or tstamp2.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-breath-breath_start-type_attributes_required-39">
+   <pattern id="isoschematron-constraint-wegaWorks-breath-breath_start-type_attributes_required-42">
           <rule context="mei:breath">
             <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-fermata-fermata_start-type_attributes_required-40">
+   <pattern id="isoschematron-constraint-wegaWorks-fermata-fermata_start-type_attributes_required-43">
           <rule context="mei:fermata">
             <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-gliss-gliss_start-_and_end-type_attributes_required-41">
+   <pattern id="isoschematron-constraint-wegaWorks-gliss-gliss_start-_and_end-type_attributes_required-44">
           <rule context="mei:gliss">
             <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real.</assert>
@@ -334,7 +349,7 @@
               attributes: dur, dur.ges, endid, or tstamp2.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-hairpin-hairpin_start-_and_end-type_attributes_required-42">
+   <pattern id="isoschematron-constraint-wegaWorks-hairpin-hairpin_start-_and_end-type_attributes_required-45">
           <rule context="mei:hairpin">
             <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real.</assert>
@@ -342,13 +357,13 @@
               attributes: dur, dur.ges, endid, or tstamp2.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-harpPedal-harpPedal_start-type_attributes_required-43">
+   <pattern id="isoschematron-constraint-wegaWorks-harpPedal-harpPedal_start-type_attributes_required-46">
           <rule context="mei:harpPedal">
             <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-octave-octave_start-_and_end-type_attributes_required-44">
+   <pattern id="isoschematron-constraint-wegaWorks-octave-octave_start-_and_end-type_attributes_required-47">
           <rule context="mei:octave">
             <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real.</assert>
@@ -366,13 +381,13 @@
                 layer elements.</assert>
             </rule>
           </pattern>
-        <pattern id="isoschematron-constraint-wegaWorks-pedal-pedal_start-type_attributes_required-46">
+        <pattern id="isoschematron-constraint-wegaWorks-pedal-pedal_start-type_attributes_required-49">
           <rule context="mei:pedal">
             <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-slur-slur_start-_and_end-type_attributes_required-47">
+   <pattern id="isoschematron-constraint-wegaWorks-slur-slur_start-_and_end-type_attributes_required-50">
           <rule context="mei:slur">
             <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real.</assert>
@@ -380,7 +395,7 @@
               attributes: dur, dur.ges, endid, or tstamp2.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-slur-slur_containing_curve-48">
+   <pattern id="isoschematron-constraint-wegaWorks-slur-slur_containing_curve-51">
           <rule context="mei:slur[mei:curve[@bezier or @bulge or @curvedir or @lform or @lwidth or              @ho or @startho or @endho or @to or @startto or @endto or @vo or @startvo or @endvo or              @x or @y or @x2 or @y2]]">
             <assert test="not(@bezier or @bulge or @curvedir or @lform or @lwidth or @ho or @startho or                @endho or @to or @startto or @endto or @vo or @startvo or @endvo or @x or @y or @x2 or @y2)"
                  role="warning">The visual attributes of the slur (@bezier, @bulge, @curvedir, @lform,
@@ -389,7 +404,7 @@
               elements.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-tie-tie_start-_and_end-type_attributes_required-49">
+   <pattern id="isoschematron-constraint-wegaWorks-tie-tie_start-_and_end-type_attributes_required-52">
           <rule context="mei:tie">
             <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real.</assert>
@@ -397,7 +412,7 @@
               attributes: dur, dur.ges, endid, or tstamp2.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-tie-tie_containing_curve-50">
+   <pattern id="isoschematron-constraint-wegaWorks-tie-tie_containing_curve-53">
           <rule context="mei:tie[mei:curve[@bezier or @bulge or @curvedir or @lform or @lwidth or              @ho or @startho or @endho or @to or @startto or @endto or @vo or @startvo or              @endvo or @x or @y or @x2 or @y2]]">
             <assert test="not(@bezier or @bulge or @curvedir or @lform or @lwidth or @ho or @startho or                @endho or @to or @startto or @endto or @vo or @startvo or @endvo or @x or @y or @x2 or @y2)"
                  role="warning">The visual attributes of the tie (@bezier, @bulge, @curvedir, @lform,
@@ -406,13 +421,13 @@
               elements.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-tuplet-When_not_copyof_tuplet_content-51">
+   <pattern id="isoschematron-constraint-wegaWorks-tuplet-When_not_copyof_tuplet_content-54">
           <rule context="mei:tuplet[not(@copyof)]">
             <assert test="count(descendant::*[local-name()='note' or local-name()='rest' or               local-name()='chord']) &gt; 1">A tuplet without a copyof attribute must have at least 2 note, rest, or chord
               descendants.</assert>
           </rule>
         </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-tupletSpan-tupletSpan_start-_and_end-type_attributes_required-52">
+   <pattern id="isoschematron-constraint-wegaWorks-tupletSpan-tupletSpan_start-_and_end-type_attributes_required-55">
           <rule context="mei:tupletSpan">
             <assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of
               the attributes: startid, tstamp, tstamp.ges or tstamp.real.</assert>
@@ -420,13 +435,13 @@
               attributes: dur, dur.ges, endid, or tstamp2.</assert>
           </rule>
         </pattern>
-   <pattern id="schematron-constraint-wegaWorks-styleguide-document-node-content-53">
+   <pattern id="schematron-constraint-wegaWorks-styleguide-document-node-content-56">
                 <rule context="document-node()">
                     <report test="count(processing-instruction()) ne 2">WeGA styleguide error: there should exactly be two processing instructions before the root element</report>
                     <report test="comment()">WeGA styleguide error: there should be no comments outside the root element</report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaWorks-att.wega.rend-underline-n-54">
+   <pattern id="schematron-constraint-wegaWorks-att.wega.rend-underline-n-57">
                     <rule context="*:hi[@n] | *:rend[@n]">
                         <report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</report>
                     </rule>
