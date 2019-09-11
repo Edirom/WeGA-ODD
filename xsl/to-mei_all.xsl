@@ -49,7 +49,7 @@
     
     <xsl:template match="document-node()">
         <xsl:call-template name="inject-schema-references">
-            <xsl:with-param name="schema-URL">http://www.tei-c.org/Vault/P5/<xsl:value-of select="$current-mei-version"/>/xml/tei/custom/schema/relaxng/tei_all.rng</xsl:with-param>
+            <xsl:with-param name="schema-URL">https://music-encoding.org/schema/<xsl:value-of select="$current-mei-version"/>/mei-all.rng</xsl:with-param>
         </xsl:call-template>
         <xsl:apply-templates/>
     </xsl:template>
