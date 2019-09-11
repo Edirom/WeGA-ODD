@@ -58,6 +58,20 @@
         <xsl:apply-templates select="$duplicatesWrapper"/>
     </xsl:template>
     
+    <xsl:template match="pubStmt">
+        <xsl:copy>
+            <xsl:text>&#10;            </xsl:text>
+            <xsl:element name="identifier">
+                <xsl:attribute name="type">WeGA</xsl:attribute>
+                <xsl:attribute name="authURI">https://weber-gesamtausgabe.de/</xsl:attribute>
+                <xsl:value-of select="ancestor::mei/@xml:id"/>
+            </xsl:element>
+            <xsl:text>&#10;            </xsl:text>
+            <xsl:element name="distributor">Carl-Maria-von-Weber-Gesamtausgabe</xsl:element>
+            <xsl:apply-templates select="node() except identifier[@type='WeGA'] | @*"/>
+        </xsl:copy>
+    </xsl:template>
+    
     <xsl:template match="@meiversion">
         <xsl:attribute name="meiversion" select="$current-mei-version"/>
     </xsl:template>
