@@ -338,6 +338,7 @@
                     <rng:value>LS</rng:value><a:documentation>Lena Schubert</a:documentation><!-- lena -->
                     <rng:value>CJ</rng:value><a:documentation>Charlene Jakob</a:documentation><!-- jakob -->
                     <rng:value>IK</rng:value><a:documentation>Ina Klare</a:documentation><!-- ina -->
+                    <rng:value>FS</rng:value><a:documentation>Fabian Schmidt</a:documentation><!-- fabian -->
                 </rng:choice>
             </content>
         </macroSpec>
@@ -738,6 +739,16 @@
                 </sch:rule>
             </constraint>
         </constraintSpec>
+        <constraintSpec scheme="schematron" ident="sourceMustResolve">
+            <desc versionDate="2019-09-09" xml:lang="en">Report non resolving local references provided by @source</desc>
+            <desc versionDate="2019-09-09" xml:lang="de">Meldet lokale Referenzen (angegeben an @source), die nicht aufgelöst werden können</desc>
+            <constraint>
+                <sch:rule context="*[starts-with(@source, '#')]">
+                    <sch:let name="source" value="@source"/>
+                    <sch:assert test="id(substring($source,2))">Unable to locate the reference provided by the @source attribute.</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
     </specGrp>
     
     <specGrp xml:id="wega-styleguides">
@@ -811,7 +822,9 @@
                 <attRef class="att.global" name="xml:id"/>
             </attList>
         </elementSpec>
-        
+    </specGrp>
+    
+    <specGrp xml:id="wega-biblStruct">
         <!-- 
             hiding biblStruct here so the bibl schema (which has a fairly 
             different definition of biblStruct) won't inherit 

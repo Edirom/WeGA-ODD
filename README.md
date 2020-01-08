@@ -1,7 +1,12 @@
 WeGA ODD files
 ================
 
-Files for documenting the Digital Edition of the [Carl-Maria-von-Weber-Gesamtausgabe](http://www.weber-gesamtausgabe.de) in the [ODD format](http://www.tei-c.org/Guidelines/Customization/odds.xml). 
+[![](https://img.shields.io/badge/license-BSD2-green.svg)](https://github.com/Edirom/WeGA-ODD/blob/develop/LICENSE)
+[![](https://img.shields.io/badge/license-CC--BY--4.0-green.svg)](https://github.com/Edirom/WeGA-ODD/blob/develop/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/edirom/WeGA-ODD.svg)](https://github.com/Edirom/WeGA-ODD/releases)
+[![DOI](https://zenodo.org/badge/7000665.svg)](https://zenodo.org/badge/latestdoi/7000665)
+
+Files for documenting the Digital Edition of the [Carl-Maria-von-Weber-Gesamtausgabe](http://www.weber-gesamtausgabe.de) in the [ODD format](https://tei-c.org/guidelines/customization/getting-started-with-p5-odds/). 
 
 
 
