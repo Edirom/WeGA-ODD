@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2019-09-09T10:58:53Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2020-01-21T07:38:57Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -467,15 +467,15 @@ On <name/>, either the @marks attribute should be used, or a paragraph of descri
                 </rule>
    </pattern>
    <pattern id="schematron-constraint-wega_all-facsimile-sourceNwitness-66">
-                    <rule context="tei:facsimile[preceding::tei:witness][not(@source)]">
+                    <rule context="tei:facsimile[preceding::tei:witness or preceding::tei:msFrag or preceding-sibling::tei:facsimile or following-sibling::tei:facsimile]">
                         <let name="source" value="@source"/>
-                        <assert test="@source and preceding::tei:witness/descendant-or-self::tei:*[concat('#',@xml:id) = $source]">A facsimile element must have a @source attribute pointing at the respective witness element (or some descendant thereof)</assert>
+                        <assert test="@source and preceding::tei:sourceDesc//tei:*[concat('#',@xml:id) = $source]">A facsimile element must have a @source attribute pointing at the respective element in the sourceDesc</assert>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wega_all-facsimile-sourceNmsFrag-67">
-                    <rule context="tei:facsimile[preceding::tei:msFrag][not(@source)]">
+   <pattern id="schematron-constraint-wega_all-facsimile-sourcePattern-67">
+                    <rule context="tei:facsimile[@source]">
                         <let name="source" value="@source"/>
-                        <assert test="@source and preceding::tei:msFrag/descendant-or-self::tei:*[concat('#',@xml:id) = $source]">A facsimile element must have a @source attribute pointing at the respective msFrag element (or some descendant thereof)</assert>
+                        <assert test="matches(@source, '^https?|#')">The source attribute must be a local reference (starting with '#') or a pointer to an online resource (starting with http)</assert>
                     </rule>
                 </pattern>
    <pattern id="schematron-constraint-wega_all-addSpan-spanTo-68">

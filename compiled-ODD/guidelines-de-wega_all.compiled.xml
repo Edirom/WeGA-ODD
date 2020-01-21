@@ -20768,16 +20768,16 @@ associated.</desc>
                 </constraint>
             </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="sourceNwitness">
                 <constraint>
-                    <sch:rule context="tei:facsimile[preceding::tei:witness][not(@source)]">
+                    <sch:rule context="tei:facsimile[preceding::tei:witness or preceding::tei:msFrag or preceding-sibling::tei:facsimile or following-sibling::tei:facsimile]">
                         <sch:let name="source" value="@source"/>
-                        <sch:assert test="@source and preceding::tei:witness/descendant-or-self::tei:*[concat('#',@xml:id) = $source]">A facsimile element must have a @source attribute pointing at the respective witness element (or some descendant thereof)</sch:assert>
+                        <sch:assert test="@source and preceding::tei:sourceDesc//tei:*[concat('#',@xml:id) = $source]">A facsimile element must have a @source attribute pointing at the respective element in the sourceDesc</sch:assert>
                     </sch:rule>
                 </constraint>
-            </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="sourceNmsFrag">
+            </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="sourcePattern">
                 <constraint>
-                    <sch:rule context="tei:facsimile[preceding::tei:msFrag][not(@source)]">
+                    <sch:rule context="tei:facsimile[@source]">
                         <sch:let name="source" value="@source"/>
-                        <sch:assert test="@source and preceding::tei:msFrag/descendant-or-self::tei:*[concat('#',@xml:id) = $source]">A facsimile element must have a @source attribute pointing at the respective msFrag element (or some descendant thereof)</sch:assert>
+                        <sch:assert test="matches(@source, '^https?|#')">The source attribute must be a local reference (starting with '#') or a pointer to an online resource (starting with http)</sch:assert>
                     </sch:rule>
                 </constraint>
             </constraintSpec><attList><attDef ident="sameAs">
