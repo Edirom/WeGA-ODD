@@ -8,11 +8,12 @@
     xmlns:sch="http://purl.oclc.org/dsdl/schematron">
     <moduleRef key="MEI"/>
     <moduleRef key="MEI.text"/> <!-- needed to get model.listLike -->
-    <moduleRef key="MEI.frbr" include="componentGrp item itemList"/>
-    <moduleRef key="MEI.shared" include="addrLine address annot body creation date edition event eventList extent group head identifier incip lb mdiv mei music p physLoc pubPlace publisher rend repository respStmt score scoreDef section staffDef staffGrp title titlePage"/>
-    <moduleRef key="MEI.header" include="altId availability change changeDesc classCode classification condition dimensions editionStmt fileDesc hand handList history inscription language langUsage meiHead notesStmt perfMedium perfRes perfResList physDesc physMedium plateNum price provenance pubStmt revisionDesc seriesStmt source term termList titleStmt useRestrict watermark work workDesc"/>
+    <moduleRef key="MEI.frbr" include="expression item itemList"/>
+    <moduleRef key="MEI.shared" include="addrLine address annot body creation date dimensions edition event eventList extent group head identifier incip lb mdiv mei music p physLoc pubPlace publisher rend repository respStmt score scoreDef section staffDef staffGrp term title titlePage"/>
+    <moduleRef key="MEI.header" include="altId availability change changeDesc classification componentList condition editionStmt fileDesc hand handList history inscription language langUsage meiHead notesStmt perfMedium perfRes perfResList physDesc physMedium plateNum price provenance pubStmt revisionDesc seriesStmt source termList titleStmt useRestrict watermark work workList"/>
     <moduleRef key="MEI.namesdates" include="corpName geogName periodName persName"/>
     <moduleRef key="MEI.cmn"/> <!-- for future use  -->
+    <moduleRef key="MEI.analytical"/>
     <moduleRef key="MEI.edittrans" include="add damage del gap restore sic subst supplied"/>
     
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-patterns"/>
@@ -123,68 +124,29 @@
                 <rng:ref name="altId"/>
             </rng:zeroOrMore>
             <rng:ref name="fileDesc"/>
-            <rng:ref name="workDesc"/>
+            <rng:ref name="workList"/>
             <rng:ref name="revisionDesc"/>                            
         </content>
     </elementSpec>
     
     <elementSpec ident="work" module="MEI.header" mode="change" ns="http://www.music-encoding.org/ns/mei">
         <content>
-            <!--<rng:zeroOrMore>
-                <rng:ref name="model.identifierLike" />
-            </rng:zeroOrMore>-->
-            <rng:optional>
-                <rng:ref name="titleStmt" />
-            </rng:optional>
+            <rng:oneOrMore>
+                <rng:ref name="model.titleLike" />
+            </rng:oneOrMore>
             <rng:zeroOrMore>
                 <rng:ref name="model.workIdent" />
             </rng:zeroOrMore>
-            <!--<rng:zeroOrMore>
-                <rng:ref name="otherChar" />
-            </rng:zeroOrMore>-->
             <rng:optional>
                 <rng:ref name="creation" />
             </rng:optional>
             <rng:optional>
                 <rng:ref name="history" />
             </rng:optional>
-            <!--<rng:optional>
-                <rng:ref name="langUsage" />
-            </rng:optional>-->
             <rng:optional>
                 <rng:ref name="perfMedium" />
             </rng:optional>
-            <!--<rng:optional>
-                <rng:ref name="perfDuration" />
-            </rng:optional>-->
-            <!--<rng:optional>
-                <rng:ref name="audience" />
-            </rng:optional>-->
-            <!--<rng:optional>
-                <rng:ref name="contents" />
-            </rng:optional>-->
-            <!--<rng:optional>
-                <rng:ref name="context" />
-            </rng:optional>-->
-            <!--<rng:zeroOrMore>
-                <rng:ref name="biblList" />
-            </rng:zeroOrMore>-->
-            <!--<rng:optional>
-                <rng:ref name="notesStmt" />
-            </rng:optional>-->
             <rng:ref name="classification" />
-            <!--<rng:optional>
-                <rng:ref name="expressionList" />
-            </rng:optional>-->
-            <!--<rng:optional>
-                <rng:ref name="componentGrp" />
-            </rng:optional>-->
-            <!--<rng:optional>
-                <rng:ref name="relationList" />
-            </rng:optional>-->
-            <!--<rng:zeroOrMore>
-                <rng:ref name="extMeta" />
-            </rng:zeroOrMore>-->
         </content>
     </elementSpec>
     
@@ -260,7 +222,7 @@
                 <rng:ref name="itemList"/>
             </rng:optional>
             <rng:optional>
-                <rng:ref name="componentGrp"/>
+                <rng:ref name="componentList"/>
             </rng:optional>
             <rng:optional>
                 <rng:ref name="relationList"/>
@@ -379,6 +341,12 @@
                         <desc versionDate="2014-04-30" xml:lang="en">marks a number from the WeV.</desc>
                     </valItem>
                 </valList>
+            </attDef>
+            <attDef ident="subtype" mode="add" usage="opt">
+                <!-- reintroduced after the removal in MEI4 -->
+                <datatype>
+                    <dataRef key="teidata.word"/>
+                </datatype>
             </attDef>
         </attList>
     </elementSpec>
@@ -506,9 +474,9 @@
     </elementSpec>
     
     <!-- need to replace this attribute class to get rid of the constraintSpec -->
-    <classSpec ident="att.classcodeident" module="MEI.shared" type="atts" mode="replace">
+    <classSpec ident="att.classed" module="MEI.shared" type="atts" mode="replace">
         <attList>
-            <attDef ident="classcode" mode="change" usage="rec">
+            <attDef ident="class" mode="change" usage="rec">
                 <valList mode="replace" type="closed">
                     <valItem ident="http://d-nb.info/standards/elementset/gnd#MusicalWork">
                         <gloss versionDate="2016-10-19" xml:lang="en">musical work</gloss>
@@ -567,7 +535,7 @@
             <memberOf key="att.name" mode="delete"/>
         </classes>
         <attList>
-            <attDef ident="type" mode="change" usage="req">
+            <attDef ident="type" mode="add" usage="req">
                 <valList type="closed" mode="add">
                     <!-- Should be harmonized with tei:placeName/@type -->
                     <valItem ident="settlement"/>
@@ -577,10 +545,20 @@
                     <valItem ident="sacral-building"/>
                 </valList>
             </attDef>
-            <attDef ident="subtype" mode="delete"/>
             <attDef ident="dbkey" mode="add" usage="rec">
                 <datatype>
                     <dataRef key="wega.places.pointer"/>
+                </datatype>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="staffDef" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <attList>
+            <attDef ident="label.abbr" mode="add" usage="opt">
+                <!-- reintroduced after the removal in MEI4 -->
+                <datatype>
+                    <dataRef key="teidata.word"/>
                 </datatype>
             </attDef>
         </attList>
