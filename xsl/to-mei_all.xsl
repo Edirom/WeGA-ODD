@@ -7,13 +7,13 @@
     exclude-result-prefixes="xs wega"
     version="2.0">
     
-    <xsl:param name="current-mei-version" as="xs:string">3.0.0</xsl:param>
+    <xsl:param name="current-mei-version" as="xs:string">4.0.1</xsl:param>
     
     <xsl:output media-type="application/tei+xml" encoding="UTF-8" indent="no" method="xml"/>
     <xsl:preserve-space elements="*"/>
     
     <xsl:variable name="duplicatesWrapper" as="element()">
-        <mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="3.0.0">
+        <mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="4.0.1">
             <meiHead>
                 <fileDesc>
                     <titleStmt xml:id="titleStmt">
@@ -63,7 +63,7 @@
             <xsl:text>&#10;            </xsl:text>
             <xsl:element name="identifier">
                 <xsl:attribute name="type">WeGA</xsl:attribute>
-                <xsl:attribute name="authURI">https://weber-gesamtausgabe.de/</xsl:attribute>
+                <xsl:attribute name="auth.uri">https://weber-gesamtausgabe.de/</xsl:attribute>
                 <xsl:value-of select="ancestor::mei/@xml:id"/>
             </xsl:element>
             <xsl:text>&#10;            </xsl:text>
@@ -76,8 +76,16 @@
         <xsl:attribute name="meiversion" select="$current-mei-version"/>
     </xsl:template>
     
-    <xsl:template match="@dbkey[matches(., 'A[A-F0-9]{6}')]" mode="#all">
-        <xsl:attribute name="authURI">https://weber-gesamtausgabe.de/</xsl:attribute>
+    <xsl:template match="altId[@subtype]">
+        <xsl:copy>
+            <xsl:apply-templates select="@* except @subtype except @type"/>
+            <xsl:attribute name="type" select="@type, @subtype"/>
+            <xsl:apply-templates/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="@codedval[matches(., 'A[A-F0-9]{6}')]" mode="#all">
+        <xsl:attribute name="auth.uri">https://weber-gesamtausgabe.de/</xsl:attribute>
         <xsl:attribute name="codedval" select="."/>
     </xsl:template>
     

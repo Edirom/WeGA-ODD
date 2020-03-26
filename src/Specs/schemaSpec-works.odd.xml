@@ -2,18 +2,19 @@
 <schemaSpec ident="wegaWorks" 
     xml:lang="en" 
     ns="http://www.music-encoding.org/ns/mei" 
-    start="mei source"
+    start="mei manifestation"
     xmlns="http://www.tei-c.org/ns/1.0" 
     xmlns:rng="http://relaxng.org/ns/structure/1.0"
     xmlns:sch="http://purl.oclc.org/dsdl/schematron">
-    <moduleRef key="MEI"/>
-    <moduleRef key="MEI.text"/> <!-- needed to get model.listLike -->
-    <moduleRef key="MEI.frbr" include="componentGrp item itemList"/>
-    <moduleRef key="MEI.shared" include="addrLine address annot body creation date edition event eventList extent group head identifier incip lb mdiv mei music p physLoc pubPlace publisher rend repository respStmt score scoreDef section staffDef staffGrp title titlePage"/>
-    <moduleRef key="MEI.header" include="altId availability change changeDesc classCode classification condition dimensions editionStmt fileDesc hand handList history inscription language langUsage meiHead notesStmt perfMedium perfRes perfResList physDesc physMedium plateNum price provenance pubStmt revisionDesc seriesStmt source term termList titleStmt useRestrict watermark work workDesc"/>
-    <moduleRef key="MEI.namesdates" include="corpName geogName periodName persName"/>
-    <moduleRef key="MEI.cmn"/> <!-- for future use  -->
+    
     <moduleRef key="MEI.edittrans" include="add damage del gap restore sic subst supplied"/>
+    <moduleRef key="MEI.frbr" include="expression item itemList manifestation"/>
+    <moduleRef key="MEI.header" include="altId availability change changeDesc classification componentList condition editionStmt fileDesc hand handList history langUsage language meiHead notesStmt perfMedium perfRes perfResList physDesc physMedium plateNum price provenance pubStmt revisionDesc seriesStmt termList titleStmt useRestrict watermark work workList"/>
+    <moduleRef key="MEI.namesdates" include="corpName geogName persName"/>
+    <moduleRef key="MEI.ptrref" include="ref"/>
+    <moduleRef key="MEI.shared" include="addrLine address annot creation date dimensions edition event eventList extent head identifier incip labelAbbr lb mei music p physLoc pubPlace publisher relation relationList rend repository respStmt score scoreDef section staffDef staffGrp term title titlePage"/>
+    <moduleRef key="MEI.text" include="quote"/>
+    <moduleRef key="MEI.analytical"/>
     
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-patterns"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-styleguides"/>
@@ -123,68 +124,29 @@
                 <rng:ref name="altId"/>
             </rng:zeroOrMore>
             <rng:ref name="fileDesc"/>
-            <rng:ref name="workDesc"/>
+            <rng:ref name="workList"/>
             <rng:ref name="revisionDesc"/>                            
         </content>
     </elementSpec>
     
     <elementSpec ident="work" module="MEI.header" mode="change" ns="http://www.music-encoding.org/ns/mei">
         <content>
-            <!--<rng:zeroOrMore>
-                <rng:ref name="model.identifierLike" />
-            </rng:zeroOrMore>-->
-            <rng:optional>
-                <rng:ref name="titleStmt" />
-            </rng:optional>
+            <rng:oneOrMore>
+                <rng:ref name="model.titleLike" />
+            </rng:oneOrMore>
             <rng:zeroOrMore>
                 <rng:ref name="model.workIdent" />
             </rng:zeroOrMore>
-            <!--<rng:zeroOrMore>
-                <rng:ref name="otherChar" />
-            </rng:zeroOrMore>-->
             <rng:optional>
                 <rng:ref name="creation" />
             </rng:optional>
             <rng:optional>
                 <rng:ref name="history" />
             </rng:optional>
-            <!--<rng:optional>
-                <rng:ref name="langUsage" />
-            </rng:optional>-->
             <rng:optional>
                 <rng:ref name="perfMedium" />
             </rng:optional>
-            <!--<rng:optional>
-                <rng:ref name="perfDuration" />
-            </rng:optional>-->
-            <!--<rng:optional>
-                <rng:ref name="audience" />
-            </rng:optional>-->
-            <!--<rng:optional>
-                <rng:ref name="contents" />
-            </rng:optional>-->
-            <!--<rng:optional>
-                <rng:ref name="context" />
-            </rng:optional>-->
-            <!--<rng:zeroOrMore>
-                <rng:ref name="biblList" />
-            </rng:zeroOrMore>-->
-            <!--<rng:optional>
-                <rng:ref name="notesStmt" />
-            </rng:optional>-->
             <rng:ref name="classification" />
-            <!--<rng:optional>
-                <rng:ref name="expressionList" />
-            </rng:optional>-->
-            <!--<rng:optional>
-                <rng:ref name="componentGrp" />
-            </rng:optional>-->
-            <!--<rng:optional>
-                <rng:ref name="relationList" />
-            </rng:optional>-->
-            <!--<rng:zeroOrMore>
-                <rng:ref name="extMeta" />
-            </rng:zeroOrMore>-->
         </content>
     </elementSpec>
     
@@ -202,6 +164,7 @@
             <memberOf key="att.lang" mode="delete"/>
             <memberOf key="att.name" mode="delete"/>
             <memberOf key="att.typed" mode="delete"/>
+            <memberOf key="att.canonical" mode="add"/>
         </classes>
         <attList>
             <attDef ident="role" mode="add" usage="rec">
@@ -211,7 +174,7 @@
                     <rng:ref name="marcRelator.list"/>
                 </datatype>
             </attDef>
-            <attDef ident="dbkey" mode="add" usage="opt">
+            <attDef ident="codedval" mode="change" usage="opt">
                 <desc versionDate="2013-11-11" xml:lang="en">The WeGA ID of this person, e.g. "A002068" for Carl Maria von Weber</desc>
                 <desc versionDate="2013-11-11" xml:lang="de">Die WeGA ID der jeweiligen Person, z.B. "A002068" für Carl Maria von Weber</desc>
                 <datatype>
@@ -228,7 +191,7 @@
         </attList>
     </elementSpec>
     
-    <elementSpec ident="source" module="MEI.header" mode="change" ns="http://www.music-encoding.org/ns/mei">
+    <elementSpec ident="manifestation" module="MEI.frbr" mode="change" ns="http://www.music-encoding.org/ns/mei">
         <content>
             <rng:zeroOrMore>
                 <rng:ref name="model.identifierLike"/>
@@ -237,7 +200,6 @@
                 <rng:ref name="titleStmt"/>
             </rng:optional>
             <rng:ref name="macro.bibldescPart"/>
-            <!-- Adding creation to source -->
             <rng:optional>
                 <rng:ref name="creation"/>
             </rng:optional>
@@ -260,7 +222,7 @@
                 <rng:ref name="itemList"/>
             </rng:optional>
             <rng:optional>
-                <rng:ref name="componentGrp"/>
+                <rng:ref name="componentList"/>
             </rng:optional>
             <rng:optional>
                 <rng:ref name="relationList"/>
@@ -268,8 +230,8 @@
         </content>
         <constraintSpec scheme="schematron" ident="id-check">
             <constraint>
-                <sch:rule context="mei:source">
-                    <sch:assert test="@xml:id or ancestor::mei:source">
+                <sch:rule context="mei:manifestation">
+                    <sch:assert test="@xml:id or ancestor::mei:manifestation">
                         Am Wurzelelement muss eine XML-ID angegeben sein.
                     </sch:assert>
                 </sch:rule>
@@ -284,7 +246,7 @@
         </attList>
     </elementSpec>
     
-    <macroSpec ident="data.ISODATE" module="MEI" type="dt" mode="change">
+    <macroSpec ident="data.ISODATE" module="MEI" mode="change">
         <content>
             <rng:ref name="wega.data.temporal.iso"/>
         </content>
@@ -379,6 +341,12 @@
                         <desc versionDate="2014-04-30" xml:lang="en">marks a number from the WeV.</desc>
                     </valItem>
                 </valList>
+            </attDef>
+            <attDef ident="subtype" mode="add" usage="opt">
+                <!-- reintroduced after the removal in MEI4 -->
+                <datatype>
+                    <dataRef key="teidata.word"/>
+                </datatype>
             </attDef>
         </attList>
     </elementSpec>
@@ -506,9 +474,9 @@
     </elementSpec>
     
     <!-- need to replace this attribute class to get rid of the constraintSpec -->
-    <classSpec ident="att.classcodeident" module="MEI.shared" type="atts" mode="replace">
+    <classSpec ident="att.classed" module="MEI.shared" type="atts" mode="replace">
         <attList>
-            <attDef ident="classcode" mode="change" usage="rec">
+            <attDef ident="class" mode="change" usage="rec">
                 <valList mode="replace" type="closed">
                     <valItem ident="http://d-nb.info/standards/elementset/gnd#MusicalWork">
                         <gloss versionDate="2016-10-19" xml:lang="en">musical work</gloss>
@@ -565,9 +533,10 @@
             <memberOf key="att.facsimile" mode="delete"/>
             <memberOf key="att.lang" mode="delete"/>
             <memberOf key="att.name" mode="delete"/>
+            <memberOf key="att.canonical" mode="add"/>
         </classes>
         <attList>
-            <attDef ident="type" mode="change" usage="req">
+            <attDef ident="type" mode="add" usage="req">
                 <valList type="closed" mode="add">
                     <!-- Should be harmonized with tei:placeName/@type -->
                     <valItem ident="settlement"/>
@@ -577,12 +546,27 @@
                     <valItem ident="sacral-building"/>
                 </valList>
             </attDef>
-            <attDef ident="subtype" mode="delete"/>
-            <attDef ident="dbkey" mode="add" usage="rec">
+            <attDef ident="codedval" mode="change" usage="rec">
                 <datatype>
                     <dataRef key="wega.places.pointer"/>
                 </datatype>
             </attDef>
         </attList>
     </elementSpec>
+    
+    <elementSpec ident="relation" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <attList>
+            <attDef ident="target" mode="change">
+                <datatype>
+                    <dataRef key="wega.works.prefixed.pointer"/>
+                </datatype>
+            </attDef>
+            <attDef ident="rel" mode="change" usage="req">
+                <valList mode="change" type="semi">
+                    <valItem ident="isAssociatedWith" mode="add"/>
+                </valList>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
 </schemaSpec>
