@@ -5,10 +5,10 @@
          xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2020-06-05T12:32:45Z. .
-TEI Edition: Version 4.0.0. Last updated on
-	13th February 2020, revision ccd19b0ba
-TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.0.0/
+Schema generated from ODD source 2020-08-20T16:17:39Z. .
+TEI Edition: Version 4.1.0. Last updated on
+	19th August 2020, revision b414ba550
+TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
   
 --><!--This work is licensed under a  Creative Commons Attribution 3.0 Unported License (CC BY 3.0) .-->
    <sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron"
@@ -39,11 +39,11 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.0.0/
    <define name="macro.phraseSeq">
       <zeroOrMore>
          <choice>
-            <text/> 
-            <ref name="model.gLike"/> 
-            <ref name="model.phrase"/> 
-            <ref name="model.global"/> 
-            <ref name="model.qLike"/>
+            <text/>
+            <ref name="model.gLike"/>
+            <ref name="model.attributable"/>
+            <ref name="model.phrase"/>
+            <ref name="model.global"/>
          </choice>
       </zeroOrMore>
    </define>
@@ -983,29 +983,41 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
    <define name="model.hiLike">
       <choice>
          <ref name="hi"/>
+         <ref name="q"/>
       </choice>
    </define>
    <define name="model.hiLike_alternation">
       <choice>
          <ref name="hi"/>
+         <ref name="q"/>
       </choice>
    </define>
    <define name="model.hiLike_sequence">
       <ref name="hi"/>
+      <ref name="q"/>
    </define>
    <define name="model.hiLike_sequenceOptional">
       <optional>
          <ref name="hi"/>
+      </optional>
+      <optional>
+         <ref name="q"/>
       </optional>
    </define>
    <define name="model.hiLike_sequenceOptionalRepeatable">
       <zeroOrMore>
          <ref name="hi"/>
       </zeroOrMore>
+      <zeroOrMore>
+         <ref name="q"/>
+      </zeroOrMore>
    </define>
    <define name="model.hiLike_sequenceRepeatable">
       <oneOrMore>
          <ref name="hi"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="q"/>
       </oneOrMore>
    </define>
    <define name="model.emphLike">
@@ -1439,10 +1451,9 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
          <ref name="quote"/>
       </oneOrMore>
    </define>
-   <define name="model.qLike">
+   <define name="model.attributable">
       <choice>
          <ref name="model.quoteLike"/>
-         <ref name="q"/>
       </choice>
    </define>
    <define name="model.respLike">
@@ -1623,7 +1634,7 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
          <ref name="model.labelLike"/>
          <ref name="model.listLike"/>
          <ref name="model.stageLike"/>
-         <ref name="model.qLike"/>
+         <ref name="model.attributable"/>
       </choice>
    </define>
    <define name="model.phrase">
@@ -3343,7 +3354,7 @@ Elements 7.2.5. Speech Contents]</a:documentation>
    </define>
    <define name="org">
       <element name="org">
-         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(organization) enthält Informationen über eine Organisation oder Körperschaft [13.2.2. Organizational Names]</a:documentation>
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(organization) enthält Informationen über eine Organisation oder Körperschaft [13.3.3. Organizational Data]</a:documentation>
          <choice>
             <element name="ref">
                <attribute name="type">
@@ -3451,8 +3462,8 @@ Elements 7.2.5. Speech Contents]</a:documentation>
                <assert xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                        xmlns:xi="http://www.w3.org/2001/XInclude"
                        xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                       test="child::tei:add and child::tei:del">
-                  <name/> must have at least one child add and at least one child del</assert>
+                       test="child::tei:add and (child::tei:del or child::tei:surplus)">
+                  <name/> must have at least one child add and at least one child del or surplus</assert>
             </rule>
          </pattern>
       </element>
