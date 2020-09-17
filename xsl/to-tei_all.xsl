@@ -328,21 +328,6 @@
         </xsl:element>
     </xsl:template>
     
-    <xsl:template match="
-        q[ancestor::rs or ancestor::persName or ancestor::placeName or ancestor::settlement or ancestor::country or ancestor::region or ancestor::workName or ancestor::characterName] | 
-        quote[ancestor::rs or ancestor::persName or ancestor::placeName or ancestor::settlement or ancestor::country or ancestor::region or ancestor::workName or ancestor::characterName]
-        " mode="#all">
-        <xsl:element name="hi">
-            <xsl:choose>
-                <xsl:when test="@rend"/>
-                <xsl:otherwise>
-                    <xsl:attribute name="rendition">#double-quotes-before #double-quotes-after</xsl:attribute>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:apply-templates select="@*|node()"/>
-        </xsl:element>
-    </xsl:template>
-    
     <xsl:template match="address[parent::div]" mode="#all">
         <xsl:element name="ab">
             <xsl:copy>
