@@ -73,6 +73,14 @@
             </content>
         </dataSpec>
         
+        <dataSpec ident="wega.works.prefixed.pointer">
+            <desc xml:lang="de" versionDate="2020-03-23">definiert das Muster für Werk-IDs innerhalb der WeGA</desc>
+            <desc xml:lang="en" versionDate="2020-03-23">defines the possible attribute values for work IDs within the WeGA</desc>
+            <content>
+                <dataRef name="string" restriction="wega:A02\d{4}"/>
+            </content>
+        </dataSpec>
+        
         <dataSpec ident="wega.writings.pointer">
             <desc xml:lang="de" versionDate="2017-08-29">definiert das Muster für Schriften-IDs innerhalb der WeGA</desc>
             <desc xml:lang="en" versionDate="2017-08-29">defines the possible attribute values for writing IDs within the WeGA</desc>
@@ -198,7 +206,7 @@
             <content>
                 <rng:data type="string">
                     <!-- see https://www.wikidata.org/wiki/Property:P227 "format as a regular expression" -->
-                    <rng:param name="pattern">1[01]?\d{7}[0-9X]|[47]\d{6}-\d|[1-9]\d{0,7}-[0-9X]|3\d{7}[0-9X]</rng:param>
+                    <rng:param name="pattern">1[012]?\d{7}[0-9X]|[47]\d{6}-\d|[1-9]\d{0,7}-[0-9X]|3\d{7}[0-9X]</rng:param>
                 </rng:data>
             </content>
         </macroSpec>
@@ -591,21 +599,7 @@
         
     </specGrp>
     
-    <specGrp xml:id="wega-tei-macros">
-        <macroSpec ident="macro.phraseSeq" module="tei" mode="change">
-            <content>
-                <rng:zeroOrMore>
-                    <rng:choice>
-                        <rng:text/>
-                        <rng:ref name="model.gLike"/>
-                        <rng:ref name="model.phrase"/>
-                        <rng:ref name="model.global"/>
-                        <rng:ref name="model.qLike"/>
-                    </rng:choice>
-                </rng:zeroOrMore>
-            </content>
-        </macroSpec>
-    </specGrp>
+    <specGrp xml:id="wega-tei-macros"/>
     
     <specGrp xml:id="wega-datatypes">
         <dataSpec ident="wegadata.textAlignment" mode="add">
@@ -911,6 +905,20 @@
                 <desc versionDate="2014-11-24" xml:lang="de">warnt bei Satzendezeichen am Ende des Titels (denn Interpunktion wird beim Rendern automatisch hinzugefügt)</desc>
                 <constraint>
                     <sch:report test="matches(normalize-space(self::tei:title), '[\.,;]$') and not(matches(normalize-space(self::tei:title), '((\p{Lu})|(\setc)|(\sal)|([\s\.]a)|(\sBl)|(\sAufl))\.$'))">Found a non-valid punctuation mark at the end of <sch:name/> </sch:report>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="schematron" ident="report-leading-zeros">
+                <desc versionDate="2020-09-14" xml:lang="en">report leading zeros in dates</desc>
+                <desc versionDate="2020-09-14" xml:lang="de">warnt bei führenden Nullen in Datumsangaben</desc>
+                <constraint>
+                    <sch:report test="matches(., '\s0\d+\.')">please do not prefix numbers with a zero</sch:report>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="schematron" ident="report-quotation-marks">
+                <desc versionDate="2020-09-14" xml:lang="en">report literal quotation marks which should be replaced by tags</desc>
+                <desc versionDate="2020-09-14" xml:lang="de">weist auf Anführungszeichen hin die durch Tags ersetzt werden sollten</desc>
+                <constraint>
+                    <sch:report test="matches(., '&quot;“„')">please replace literal quotation marks with q-tags</sch:report>
                 </constraint>
             </constraintSpec>
             <attList>
@@ -1518,6 +1526,13 @@
                 <constraint>
                     <sch:rule context="tei:note[@type='thematicCom' or @target]">
                         <sch:assert test="@type='thematicCom' and @target">You need to provide thematic commentary targets (Only @type='thematicCom' and @target go together!).</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="schematron" ident="thematicCom-must-be-empty">
+                <constraint>
+                    <sch:rule context="tei:note[@type='thematicCom' or @target]">
+                        <sch:report test="normalize-space() ne''">Thematic commentaries must not contain any text.</sch:report>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
@@ -2454,7 +2469,8 @@
             <desc versionDate="2013-11-11" xml:lang="de">dokumentiert eine Änderung oder eine Reihe von Änderungen, die bei der Produktion von einer Quelle oder bei der Überarbeitung einer elektronischen Datei vorgenommen wurden.</desc>
             <classes mode="change">
                 <memberOf key="att.global" mode="delete"/>
-                <!--            <memberOf key="att.datable" mode="delete"/>-->
+                <memberOf key="att.typed" mode="delete"/>
+                <memberOf key="att.datable" mode="delete"/>
                 <!--            <memberOf key="att.datable.w3c" mode="add"/>-->
             </classes>
             <attList>
@@ -2465,6 +2481,9 @@
                         <rng:ref name="staffSignatures.list"/>
                     </datatype>
                 </attDef>
+                <attRef name="when" class="att.datable.w3c"/>
+                <attDef ident="calendar" mode="delete"/>
+                <attDef ident="target" mode="delete"/>
             </attList>
         </elementSpec>
         
@@ -2881,6 +2900,7 @@
                         <dataRef key="wega.orgs.pointer"/>
                     </datatype>
                 </attDef>
+                <attRef name="cert" class="att.global.responsibility"/>
             </attList>
         </elementSpec>
     </specGrp>
@@ -3270,17 +3290,17 @@
             </constraintSpec>
             <constraintSpec scheme="schematron" ident="sourceNwitness">
                 <constraint>
-                    <sch:rule context="tei:facsimile[preceding::tei:witness][not(@source)]">
+                    <sch:rule context="tei:facsimile[preceding::tei:witness or preceding::tei:msFrag or preceding-sibling::tei:facsimile or following-sibling::tei:facsimile]">
                         <sch:let name="source" value="@source"/>
-                        <sch:assert test="@source and preceding::tei:witness/descendant-or-self::tei:*[concat('#',@xml:id) = $source]">A facsimile element must have a @source attribute pointing at the respective witness element (or some descendant thereof)</sch:assert>
+                        <sch:assert test="@source and preceding::tei:sourceDesc//tei:*[concat('#',@xml:id) = $source]">A facsimile element must have a @source attribute pointing at the respective element in the sourceDesc</sch:assert>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
-            <constraintSpec scheme="schematron" ident="sourceNmsFrag">
+            <constraintSpec scheme="schematron" ident="sourcePattern">
                 <constraint>
-                    <sch:rule context="tei:facsimile[preceding::tei:msFrag][not(@source)]">
+                    <sch:rule context="tei:facsimile[@source]">
                         <sch:let name="source" value="@source"/>
-                        <sch:assert test="@source and preceding::tei:msFrag/descendant-or-self::tei:*[concat('#',@xml:id) = $source]">A facsimile element must have a @source attribute pointing at the respective msFrag element (or some descendant thereof)</sch:assert>
+                        <sch:assert test="matches(@source, '^https?|#')">The source attribute must be a local reference (starting with '#') or a pointer to an online resource (starting with http)</sch:assert>
                     </sch:rule>
                 </constraint>
             </constraintSpec>

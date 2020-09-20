@@ -7,7 +7,7 @@
     exclude-result-prefixes="xs wega"
     version="2.0">
     
-    <xsl:param name="current-tei-version" as="xs:string">3.6.0</xsl:param>
+    <xsl:param name="current-tei-version" as="xs:string">4.1.0</xsl:param>
     <xsl:param name="facsimileWhiteList" as="xs:string">D-B</xsl:param>
     
     <xsl:output media-type="application/tei+xml" encoding="UTF-8" indent="no" method="xml"/>
@@ -324,21 +324,6 @@
         <xsl:element name="note">
             <xsl:attribute name="type">original</xsl:attribute>
             <xsl:attribute name="place">bottom</xsl:attribute>
-            <xsl:apply-templates select="@*|node()"/>
-        </xsl:element>
-    </xsl:template>
-    
-    <xsl:template match="
-        q[ancestor::rs or ancestor::persName or ancestor::placeName or ancestor::settlement or ancestor::country or ancestor::region or ancestor::workName or ancestor::characterName] | 
-        quote[ancestor::rs or ancestor::persName or ancestor::placeName or ancestor::settlement or ancestor::country or ancestor::region or ancestor::workName or ancestor::characterName]
-        " mode="#all">
-        <xsl:element name="hi">
-            <xsl:choose>
-                <xsl:when test="@rend"/>
-                <xsl:otherwise>
-                    <xsl:attribute name="rendition">#double-quotes-before #double-quotes-after</xsl:attribute>
-                </xsl:otherwise>
-            </xsl:choose>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:element>
     </xsl:template>
