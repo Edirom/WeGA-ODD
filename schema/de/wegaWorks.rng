@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2020-10-07T15:43:28Z. 
+Schema generated from ODD source 2020-10-15T22:02:16Z. 
 Edition: 2013 Release
 Edition Location: http://www.tei-c.org/Vault/P5//
   
@@ -3968,6 +3968,7 @@ Edition Location: http://www.tei-c.org/Vault/P5//
       <ref name="dynam"/>
       <ref name="tempo"/>
       <ref name="model.controleventLike.cmn"/>
+      <ref name="cpMark"/>
     </choice>
   </define>
   <define name="model.dateLike">
@@ -4004,22 +4005,44 @@ Edition Location: http://www.tei-c.org/Vault/P5//
     </choice>
   </define>
   <define name="model.editorialLike">
-    <notAllowed/>
+    <choice>
+      <ref name="abbr"/>
+      <ref name="expan"/>
+    </choice>
   </define>
   <define name="model.editorialLike_alternation">
-    <notAllowed/>
+    <choice>
+      <ref name="abbr"/>
+      <ref name="expan"/>
+    </choice>
   </define>
   <define name="model.editorialLike_sequence">
-    <empty/>
+    <ref name="abbr"/>
+    <ref name="expan"/>
   </define>
   <define name="model.editorialLike_sequenceOptional">
-    <empty/>
+    <optional>
+      <ref name="abbr"/>
+    </optional>
+    <optional>
+      <ref name="expan"/>
+    </optional>
   </define>
   <define name="model.editorialLike_sequenceOptionalRepeatable">
-    <empty/>
+    <zeroOrMore>
+      <ref name="abbr"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="expan"/>
+    </zeroOrMore>
   </define>
   <define name="model.editorialLike_sequenceRepeatable">
-    <notAllowed/>
+    <oneOrMore>
+      <ref name="abbr"/>
+    </oneOrMore>
+    <oneOrMore>
+      <ref name="expan"/>
+    </oneOrMore>
   </define>
   <define name="model.endingLike">
     <notAllowed/>
@@ -4093,6 +4116,7 @@ Edition Location: http://www.tei-c.org/Vault/P5//
   <define name="model.labelLike">
     <choice>
       <ref name="label"/>
+      <ref name="labelAbbr"/>
     </choice>
   </define>
   <define name="model.layerDefLike">
@@ -8442,8 +8466,16 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
     <ref name="att.handident.attributes"/>
     <ref name="att.sequence.attributes"/>
   </define>
+  <define name="model.choicePart">
+    <choice>
+      <ref name="model.editorialLike"/>
+      <ref name="model.editLike"/>
+      <ref name="sic"/>
+    </choice>
+  </define>
   <define name="model.editLike">
     <choice>
+      <ref name="choice"/>
       <ref name="subst"/>
     </choice>
   </define>
@@ -8457,6 +8489,40 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
       <ref name="sic"/>
       <ref name="supplied"/>
     </choice>
+  </define>
+  <define name="abbr">
+    <element name="abbr">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(abbreviation) – A generic element for 1) a shortened form of a word, including an acronym or 2) a shorthand notation.</a:documentation>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="model.textphraseLike"/>
+          <ref name="model.eventLike"/>
+          <ref name="model.controleventLike"/>
+          <ref name="model.lyricsLike"/>
+          <ref name="model.editLike"/>
+          <ref name="model.transcriptionLike"/>
+          <ref name="model.eventLike.measureFilling"/>
+          <ref name="model.noteModifierLike"/>
+          <ref name="model.sectionLike"/>
+          <ref name="model.measureLike"/>
+          <ref name="model.staffLike"/>
+          <ref name="model.layerLike"/>
+        </choice>
+      </zeroOrMore>
+      <ref name="att.common.attributes"/>
+      <ref name="att.edit.attributes"/>
+      <ref name="att.lang.attributes"/>
+      <ref name="att.trans.attributes"/>
+      <ref name="att.typed.attributes"/>
+      <optional>
+        <attribute name="expan">
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">records the expansion of a text abbreviation.</a:documentation>
+          <text/>
+        </attribute>
+      </optional>
+      <empty/>
+    </element>
   </define>
   <define name="add">
     <element name="add">
@@ -8481,6 +8547,16 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
       <ref name="att.common.attributes"/>
       <ref name="att.edit.attributes"/>
       <ref name="att.trans.attributes"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="choice">
+    <element name="choice">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Groups a number of alternative encodings for the same point in a text. </a:documentation>
+      <zeroOrMore>
+        <ref name="model.choicePart"/>
+      </zeroOrMore>
+      <ref name="att.common.attributes"/>
       <empty/>
     </element>
   </define>
@@ -8543,6 +8619,40 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
       <optional>
         <attribute name="rend">
           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">contains an indication of how the deletion should be rendered.</a:documentation>
+          <text/>
+        </attribute>
+      </optional>
+      <empty/>
+    </element>
+  </define>
+  <define name="expan">
+    <element name="expan">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(expansion) – Contains the expansion of an abbreviation.</a:documentation>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="model.textphraseLike"/>
+          <ref name="model.eventLike"/>
+          <ref name="model.controleventLike"/>
+          <ref name="model.lyricsLike"/>
+          <ref name="model.editLike"/>
+          <ref name="model.transcriptionLike"/>
+          <ref name="model.eventLike.measureFilling"/>
+          <ref name="model.noteModifierLike"/>
+          <ref name="model.sectionLike"/>
+          <ref name="model.measureLike"/>
+          <ref name="model.staffLike"/>
+          <ref name="model.layerLike"/>
+        </choice>
+      </zeroOrMore>
+      <ref name="att.common.attributes"/>
+      <ref name="att.edit.attributes"/>
+      <ref name="att.lang.attributes"/>
+      <ref name="att.trans.attributes"/>
+      <ref name="att.typed.attributes"/>
+      <optional>
+        <attribute name="abbr">
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">captures the unabbreviated form of the text.</a:documentation>
           <text/>
         </attribute>
       </optional>
@@ -8656,6 +8766,35 @@ Empfohlene Werte sind: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score;
       <ref name="att.common.attributes"/>
       <ref name="att.edit.attributes"/>
       <ref name="att.reasonident.attributes"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="labelAbbr">
+    <element name="labelAbbr" ns="http://www.music-encoding.org/ns/mei">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="model.editLike"/>
+          <ref name="model.transcriptionLike"/>
+        </choice>
+      </zeroOrMore>
+      <ref name="att.common.attributes"/>
+      <ref name="att.lang.attributes"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="cpMark">
+    <element name="cpMark" ns="http://www.music-encoding.org/ns/mei">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="model.editLike"/>
+          <ref name="model.transcriptionLike"/>
+        </choice>
+      </zeroOrMore>
+      <ref name="att.common.attributes"/>
       <empty/>
     </element>
   </define>
