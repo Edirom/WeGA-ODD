@@ -11,7 +11,7 @@
     <moduleRef key="MEI.edittrans" include="add damage del gap restore sic subst supplied"/>
     <moduleRef key="MEI.frbr" include="expression item itemList manifestation"/>
     <moduleRef key="MEI.header" include="altId availability change changeDesc classification componentList condition editionStmt fileDesc hand handList history langUsage language meiHead notesStmt perfMedium perfRes perfResList physDesc physMedium plateNum price provenance pubStmt revisionDesc seriesStmt termList titleStmt useRestrict watermark work workList"/>
-    <moduleRef key="MEI.namesdates" include="corpName geogName persName"/>
+    <moduleRef key="MEI.namesdates" include="corpName country geogName persName region settlement"/>
     <moduleRef key="MEI.ptrref" include="ref"/>
     <moduleRef key="MEI.shared" include="addrLine address annot creation date dimensions edition event eventList extent head identifier incip labelAbbr lb mei music p physLoc pubPlace publisher relation relationList rend repository respStmt score scoreDef section staffDef staffGrp term title titlePage"/>
     <moduleRef key="MEI.text" include="q quote"/>
@@ -548,7 +548,10 @@
     
     <elementSpec ident="creation" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
         <content>
-            <elementRef key="geogName" minOccurs="0" maxOccurs="1"/>
+            <alternate minOccurs="0" maxOccurs="1">
+                <elementRef key="geogName"/>
+                <classRef key="model.geogNamePart"/>
+            </alternate>
             <elementRef key="date"/>
         </content>
         <constraintSpec scheme="schematron" ident="check_creationDateHasText" mode="add">
@@ -570,14 +573,9 @@
         </classes>
         <attList>
             <attDef ident="type" mode="add" usage="req">
-                <valList type="closed" mode="add">
-                    <!-- Should be harmonized with tei:placeName/@type -->
-                    <valItem ident="settlement"/>
-                    <valItem ident="theatre"/>
-                    <valItem ident="country"/>
-                    <valItem ident="building"/>
-                    <valItem ident="sacral-building"/>
-                </valList>
+                <datatype>
+                    <dataRef key="wega.place.type"/>
+                </datatype>
             </attDef>
             <attDef ident="codedval" mode="change" usage="rec">
                 <datatype>
@@ -638,6 +636,32 @@
                 </valList>
             </attDef>
         </attList>
+    </elementSpec>
+    
+    <elementSpec ident="settlement" module="MEI.namesdates" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <classes mode="change">
+            <memberOf key="model.nameLike.agent" mode="add"/>
+            <memberOf key="att.canonical" mode="add"/>
+        </classes>
+        <attList>
+            <attDef ident="codedval" mode="change" usage="rec">
+                <datatype>
+                    <dataRef key="wega.places.pointer"/>
+                </datatype>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="region" module="MEI.namesdates" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <classes mode="change">
+            <memberOf key="model.nameLike.agent" mode="add"/>
+        </classes>
+    </elementSpec>
+    
+    <elementSpec ident="country" module="MEI.namesdates" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <classes mode="change">
+            <memberOf key="model.nameLike.agent" mode="add"/>
+        </classes>
     </elementSpec>
     
 </schemaSpec>

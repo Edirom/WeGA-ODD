@@ -5,7 +5,7 @@
          xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.music-encoding.org/ns/mei"><!--
-Schema generated from ODD source 2020-12-02T12:03:40Z. .
+Schema generated from ODD source 2020-12-02T20:38:39Z. .
 TEI Edition: Version 4.0.0
 TEI Edition Location: https://www.tei-c.org/Vault/P5//
   
@@ -1812,45 +1812,97 @@ Suggested values include: 1] gnd (Gemeinsame Normdatei); 2] JV (Jähns-Verzeichn
       </oneOrMore>
    </define>
    <define name="model.geogNamePart">
-      <notAllowed/>
+      <choice>
+         <ref name="country"/>
+         <ref name="region"/>
+         <ref name="settlement"/>
+      </choice>
    </define>
    <define name="model.geogNamePart_alternation">
-      <notAllowed/>
+      <choice>
+         <ref name="country"/>
+         <ref name="region"/>
+         <ref name="settlement"/>
+      </choice>
    </define>
    <define name="model.geogNamePart_sequence">
-      <empty/>
+      <ref name="country"/>
+      <ref name="region"/>
+      <ref name="settlement"/>
    </define>
    <define name="model.geogNamePart_sequenceOptional">
-      <empty/>
+      <optional>
+         <ref name="country"/>
+      </optional>
+      <optional>
+         <ref name="region"/>
+      </optional>
+      <optional>
+         <ref name="settlement"/>
+      </optional>
    </define>
    <define name="model.geogNamePart_sequenceOptionalRepeatable">
-      <empty/>
+      <zeroOrMore>
+         <ref name="country"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="region"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="settlement"/>
+      </zeroOrMore>
    </define>
    <define name="model.geogNamePart_sequenceRepeatable">
-      <notAllowed/>
+      <oneOrMore>
+         <ref name="country"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="region"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="settlement"/>
+      </oneOrMore>
    </define>
    <define name="model.nameLike.agent">
       <choice>
          <ref name="corpName"/>
+         <ref name="country"/>
          <ref name="persName"/>
+         <ref name="region"/>
+         <ref name="settlement"/>
       </choice>
    </define>
    <define name="model.nameLike.agent_alternation">
       <choice>
          <ref name="corpName"/>
+         <ref name="country"/>
          <ref name="persName"/>
+         <ref name="region"/>
+         <ref name="settlement"/>
       </choice>
    </define>
    <define name="model.nameLike.agent_sequence">
       <ref name="corpName"/>
+      <ref name="country"/>
       <ref name="persName"/>
+      <ref name="region"/>
+      <ref name="settlement"/>
    </define>
    <define name="model.nameLike.agent_sequenceOptional">
       <optional>
          <ref name="corpName"/>
       </optional>
       <optional>
+         <ref name="country"/>
+      </optional>
+      <optional>
          <ref name="persName"/>
+      </optional>
+      <optional>
+         <ref name="region"/>
+      </optional>
+      <optional>
+         <ref name="settlement"/>
       </optional>
    </define>
    <define name="model.nameLike.agent_sequenceOptionalRepeatable">
@@ -1858,7 +1910,16 @@ Suggested values include: 1] gnd (Gemeinsame Normdatei); 2] JV (Jähns-Verzeichn
          <ref name="corpName"/>
       </zeroOrMore>
       <zeroOrMore>
+         <ref name="country"/>
+      </zeroOrMore>
+      <zeroOrMore>
          <ref name="persName"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="region"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="settlement"/>
       </zeroOrMore>
    </define>
    <define name="model.nameLike.agent_sequenceRepeatable">
@@ -1866,7 +1927,16 @@ Suggested values include: 1] gnd (Gemeinsame Normdatei); 2] JV (Jähns-Verzeichn
          <ref name="corpName"/>
       </oneOrMore>
       <oneOrMore>
+         <ref name="country"/>
+      </oneOrMore>
+      <oneOrMore>
          <ref name="persName"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="region"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="settlement"/>
       </oneOrMore>
    </define>
    <define name="model.nameLike.geogName">
@@ -1976,6 +2046,24 @@ Suggested values include: 1] gnd (Gemeinsame Normdatei); 2] JV (Jähns-Verzeichn
          <empty/>
       </element>
    </define>
+   <define name="country">
+      <element name="country" ns="http://www.music-encoding.org/ns/mei">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Contains the name of a geopolitical unit, such as a nation, country, colony, or commonwealth, larger than or administratively superior to a region and smaller than a bloc.</a:documentation>
+         <zeroOrMore>
+            <choice>
+               <text/>
+               <ref name="model.textPhraseLike"/>
+               <ref name="model.editLike"/>
+               <ref name="model.transcriptionLike"/>
+            </choice>
+         </zeroOrMore>
+         <ref name="att.common.attributes"/>
+         <ref name="att.bibl.attributes"/>
+         <ref name="att.edit.attributes"/>
+         <ref name="att.lang.attributes"/>
+         <empty/>
+      </element>
+   </define>
    <define name="geogName">
       <element name="geogName" ns="http://www.music-encoding.org/ns/mei">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(geographic name) – The proper noun designation for a place, natural feature, or political jurisdiction.</a:documentation>
@@ -1998,16 +2086,24 @@ Suggested values include: 1] gnd (Gemeinsame Normdatei); 2] JV (Jähns-Verzeichn
          <attribute name="type">
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
             <choice>
-               <value>settlement</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
                <value>theatre</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-               <value>country</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes buildings designed for performing plays, operas etc. (e.g. (amphi)theatres, operas, ball rooms).</a:documentation>
                <value>building</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes all sorts of building where no other category is applicable (e.g. bath, bookshop, office).</a:documentation>
+               <value>hospitality</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes buildings designed for lodging, serving food, drinks, etc. (e.g. hotels, bars, inns).</a:documentation>
                <value>sacral-building</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes buildings serving religious purposes (e.g. churches, abbeys).</a:documentation>
+               <value>administrative-building</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes buildings designed for government administration (e.g. city hall, castle, police station, custom office).</a:documentation>
+               <value>art-building</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes buildings designed for (art) exhibitions (e.g. museums, galleries).</a:documentation>
+               <value>shop</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes buildings designed for selling goods and services to the end-user (e.g. markets, shops).</a:documentation>
+               <value>street</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes a street or a street name.</a:documentation>
+               <value>park</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes a botanical or zoological garden, or any other park area.</a:documentation>
             </choice>
          </attribute>
          <empty/>
@@ -2041,6 +2137,50 @@ Suggested values include: 1] gnd (Gemeinsame Normdatei); 2] JV (Jähns-Verzeichn
          <optional>
             <attribute name="cert">
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">signifies the degree of certainty or precision of identifying this person.besagt den Grad der Gewissheit oder Präzision der Identifikation der Person.</a:documentation>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="region">
+      <element name="region" ns="http://www.music-encoding.org/ns/mei">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Contains the name of an administrative unit such as a state, province, or county, larger than a settlement, but smaller than a country.</a:documentation>
+         <zeroOrMore>
+            <choice>
+               <text/>
+               <ref name="model.textPhraseLike"/>
+               <ref name="model.editLike"/>
+               <ref name="model.transcriptionLike"/>
+            </choice>
+         </zeroOrMore>
+         <ref name="att.common.attributes"/>
+         <ref name="att.bibl.attributes"/>
+         <ref name="att.edit.attributes"/>
+         <ref name="att.lang.attributes"/>
+         <empty/>
+      </element>
+   </define>
+   <define name="settlement">
+      <element name="settlement" ns="http://www.music-encoding.org/ns/mei">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Contains the name of a settlement such as a city, town, or village identified as a single geopolitical or administrative unit.</a:documentation>
+         <zeroOrMore>
+            <choice>
+               <text/>
+               <ref name="model.textPhraseLike"/>
+               <ref name="model.editLike"/>
+               <ref name="model.transcriptionLike"/>
+            </choice>
+         </zeroOrMore>
+         <ref name="att.common.attributes"/>
+         <ref name="att.bibl.attributes"/>
+         <ref name="att.edit.attributes"/>
+         <ref name="att.lang.attributes"/>
+         <optional>
+            <attribute name="codedval">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A value that represents or identifies other data. Often, it is a primary key in the database or a unique value in the coded list identified by the <code xmlns="http://www.w3.org/1999/xhtml">@auth</code> or <code xmlns="http://www.w3.org/1999/xhtml">@auth.uri</code> attributes.</a:documentation>
+               <data type="string">
+                  <param name="pattern">A13\d{4}</param>
+               </data>
             </attribute>
          </optional>
          <empty/>
@@ -3916,7 +4056,10 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
       <element name="creation" ns="http://www.music-encoding.org/ns/mei">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Non-bibliographic details of the creation of an intellectual entity, in narrative form, such as the date, place, and circumstances of its composition. More detailed information may be captured within the history element.</a:documentation>
          <optional>
-            <ref name="geogName"/>
+            <choice>
+               <ref name="geogName"/>
+               <ref name="model.geogNamePart"/>
+            </choice>
          </optional>
          <ref name="date"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
