@@ -58,6 +58,13 @@
         <xsl:apply-templates select="$duplicatesWrapper"/>
     </xsl:template>
     
+    <xsl:template match="q[parent::title]">
+        <xsl:element name="rend">
+            <xsl:attribute name="rend">quotedbl</xsl:attribute>
+            <xsl:apply-templates/>
+        </xsl:element>
+    </xsl:template>
+    
     <xsl:template match="pubStmt">
         <xsl:copy>
             <xsl:text>&#10;            </xsl:text>
