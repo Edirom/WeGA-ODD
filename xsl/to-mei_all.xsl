@@ -96,6 +96,14 @@
         <xsl:attribute name="codedval" select="."/>
     </xsl:template>
     
+    <xsl:template match="settlement[parent::event] | country[parent::event] | region[parent::event]">
+        <xsl:element name="geogName">
+            <xsl:copy>
+                <xsl:apply-templates select="@* | node()"/>
+            </xsl:copy>
+        </xsl:element>
+    </xsl:template>
+    
     <xsl:template name="inject-schema-references">
         <xsl:param name="schema-URL" as="xs:string"/>
         <xsl:text>&#10;</xsl:text>
