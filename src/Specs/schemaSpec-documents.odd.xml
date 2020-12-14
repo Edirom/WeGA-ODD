@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemaSpec ident="wegaDocuments" xml:lang="en" start="TEI"
+    xmlns="http://www.tei-c.org/ns/1.0" 
+    xmlns:rng="http://relaxng.org/ns/structure/1.0"
+    xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+    <moduleRef key="core" include="abbr add address analytic author bibl biblScope biblStruct cb choice corr date del desc editor expan gap graphic head hi imprint item l label lb lg list listBibl monogr name note p pb postCode ptr pubPlace publisher q quote ref relatedItem resp respStmt rs sic street title unclear"/>
+    <moduleRef key="tei"/>
+    <moduleRef key="header" include="availability change creation edition editionStmt editorialDecl encodingDesc fileDesc handNote idno keywords langUsage language licence notesStmt profileDesc projectDesc publicationStmt revisionDesc seriesStmt sourceDesc teiHeader textClass titleStmt"/>
+    <moduleRef key="textstructure" include="TEI body closer dateline div floatingText opener postscript signed text"/>
+    <moduleRef key="namesdates" include="country geogName orgName persName placeName region settlement"/>
+    <moduleRef key="figures" include="cell figDesc figure notatedMusic row table"/>
+    <moduleRef key="transcr" include="addSpan facsimile handNotes space subst supplied"/>
+    <moduleRef key="msdescription" include="acquisition additional accMat collection history msDesc msFrag msIdentifier msName physDesc provenance repository"/>
+    <moduleRef key="linking" include="anchor seg"/>
+    <moduleRef key="textcrit" include="app lem listWit rdg witness"/>
+    <moduleRef key="gaiji" include="g"/>
+    
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-patterns"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-styleguides"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-lists"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-classes"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-element-additions"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-constraints"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-atts"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-tei-atts"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-core"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-header"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-textstructure"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-namesdates"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-figures"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-transcr"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-msdescription"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-linking"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-textcrit"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-gaiji"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-tei-macros"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-datatypes"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-biblStruct"/>
+    
+    <elementSpec ident="TEI" mode="change" module="textstructure">
+        <gloss versionDate="2013-11-11" xml:lang="en">TEI document</gloss>
+        <desc versionDate="2013-11-11" xml:lang="en">contains a single TEI-conformant document, comprising a TEI header and a text, either in isolation or as part of a <gi>teiCorpus</gi> element.</desc>
+        <gloss versionDate="2013-11-11" xml:lang="de">TEI Dokument</gloss>
+        <desc versionDate="2013-11-11" xml:lang="de">enthält ein einzelnes TEI-konformes Dokument, TEI header und text einschließend, entweder einzeln oder als Teile des <gi>teiCorpus</gi> Elements.</desc>
+        <classes mode="change">
+            <memberOf key="att.global" mode="delete"/>
+        </classes>
+        <content>
+            <rng:choice>
+                <!--   Ordentlicher Eintrag   -->
+                <rng:group>
+                    <rng:ref name="teiHeader"/>
+                    <rng:choice>
+                        <rng:group>
+                            <rng:oneOrMore>
+                                <rng:ref name="model.resource"/>
+                            </rng:oneOrMore>
+                            <rng:optional>
+                                <rng:ref name="text"/>
+                            </rng:optional>
+                        </rng:group>
+                        <rng:ref name="text"/>
+                    </rng:choice>
+                </rng:group>
+                <!--  Dubletten  -->
+                <rng:element name="ref">
+                    <rng:attribute name="type">
+                        <rng:value>duplicate</rng:value>
+                    </rng:attribute>
+                    <rng:attribute name="target">
+                        <alternate>
+                            <dataRef key="wega.writings.pointer"/>
+                            <dataRef key="wega.letters.pointer"/>
+                            <dataRef key="wega.documents.pointer"/>
+                        </alternate>
+                    </rng:attribute>
+                    <rng:empty/>
+                </rng:element>
+            </rng:choice>
+        </content>
+        <attList>
+            <attDef ident="version" mode="delete"/>
+            <attDef ident="xml:id" mode="add" usage="req">
+                <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
+                <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
+                <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
+                <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element mit dem Attribut.</desc>
+                <datatype>
+                    <dataRef key="wega.documents.pointer"/>
+                </datatype>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="teiHeader" module="header" mode="change">
+        <content>
+            <sequence>
+                <elementRef key="fileDesc"/>
+                <elementRef key="encodingDesc"/>
+                <elementRef key="profileDesc"/>
+                <elementRef key="revisionDesc"/>
+            </sequence>
+        </content>
+        <constraintSpec scheme="isoschematron" ident="seriesTitle">
+            <constraint>
+                <sch:rule context="tei:fileDesc/tei:titleStmt/tei:title[@level='s']">
+                    <sch:assert test=".='WeGA, Dokumente, Digitale Edition'">The series title must be 
+                        "WeGA, Dokumente, Digitale Edition".</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
+    </elementSpec>
+    
+    <elementSpec ident="text" mode="change" module="textstructure">
+        <desc versionDate="2013-11-11" xml:lang="en">contains a single text of any kind, whether unitary or composite, for example a poem or drama, a collection of essays, a novel, a dictionary, or a corpus sample.</desc>
+        <desc versionDate="2013-11-11" xml:lang="de">enthält einen einzelnen Text jeglicher Art, ob einheitlich oder zusammengesetzt, beispielsweise ein Gedicht, ein Drama, eine Sammlung von Aufätzen, ein Roman, ein Wörterbuch, oder eine Sammlung.</desc>
+        <classes mode="change">
+            <memberOf key="att.declaring" mode="delete"/>
+            <memberOf key="att.typed" mode="delete"/>
+            <memberOf key="att.global" mode="delete"/>
+        </classes>
+        <content>
+            <rng:ref name="body"/>
+        </content>
+        <attList>
+            <attDef ident="type" mode="add" usage="req">
+                <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
+                <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</desc>
+                <valList type="closed">
+                    <valItem ident="personal_document">
+                        <desc versionDate="2016-10-25" xml:lang="en">genealogic, personal documents, e.g. passports, baptismal certificates.</desc>
+                        <desc versionDate="2016-10-25" xml:lang="de">genealogische, personengebundene/personenbezogene Dokumente im engeren Sinne: Pässe, Anstellungsdekrete, Taufscheine, Taufeinträge etc.</desc>
+                    </valItem>
+                    <valItem ident="financial_document">
+                        <desc versionDate="2016-10-25" xml:lang="en">receipts, bills, etc.</desc>
+                        <desc versionDate="2016-10-25" xml:lang="de">Rechnungsbelege, Quittungen, Werkbelege aus dem Ausgabenbuch etc.</desc>
+                    </valItem>
+                    <valItem ident="varia_document">
+                        <desc versionDate="2016-10-25" xml:lang="en">business cards, tickets, entrance cards, etc.</desc>
+                        <desc versionDate="2016-10-25" xml:lang="de">Visitenkarten, Eintrittskarten, Fahrkarten, Postscheine, Logendokumente etc.</desc>
+                    </valItem>
+                    <valItem ident="notification_document">
+                        <desc versionDate="2016-10-25" xml:lang="en">notifications of visits or other announcements in journals and news papers.</desc>
+                        <desc versionDate="2016-10-25" xml:lang="de">Fremdenanzeigen oder sonstige Anzeigen in Periodika.</desc>
+                    </valItem>
+                    <valItem ident="konzertzettel_document">
+                        <desc versionDate="2016-10-25" xml:lang="en">Konzertzettel, Theaterzettel</desc>
+                        <desc versionDate="2016-10-25" xml:lang="de">Konzertzettel, Theaterzettel.</desc>
+                    </valItem>
+                    <valItem ident="work-related_document">
+                        <desc versionDate="2016-10-25" xml:lang="en">documents related to musical works.</desc>
+                        <desc versionDate="2016-10-25" xml:lang="de">Ausgabenbuch, Danzis Gutachen, Gutachten über Euryanthe.</desc>
+                    </valItem>
+                    <valItem ident="legal_document">
+                        <desc versionDate="2018-06-22" xml:lang="en">legal document or administrative deed.</desc>
+                        <desc versionDate="2018-06-22" xml:lang="de">Aktenstück (Protokolle und Verwaltungsakten).</desc>
+                    </valItem>
+                    <valItem ident="theater_document">
+                        <desc versionDate="2018-06-22" xml:lang="en">theater document or record.</desc>
+                        <desc versionDate="2018-06-22" xml:lang="de">Theaterakte.</desc>
+                    </valItem>
+                </valList>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="body" mode="change" module="textstructure">
+        <gloss versionDate="2013-11-11" xml:lang="en">text body</gloss>
+        <desc versionDate="2013-11-11" xml:lang="en">contains the whole body of a single unitary text, excluding any front or back matter.</desc>
+        <gloss versionDate="2013-11-11" xml:lang="de">Textkörper</gloss>
+        <desc versionDate="2013-11-11" xml:lang="de">enthält den kompletten Hauptteil eines einzelnen einheitlichen Textes, ausschließlich jeglicher front oder back Materialien.</desc>
+        <classes mode="change">
+            <memberOf key="att.declaring" mode="delete"/>
+            <memberOf key="att.global" mode="delete"/>
+        </classes>
+        <content>
+            <rng:oneOrMore>
+                <rng:ref name="div"/>
+            </rng:oneOrMore>
+        </content>
+    </elementSpec>
+    
+    <elementSpec ident="div" mode="change" module="textstructure">
+        <gloss versionDate="2013-11-11" xml:lang="en">text division</gloss>
+        <desc versionDate="2013-11-11" xml:lang="en">contains a subdivision of the front, body, or back of a text.</desc>
+        <gloss versionDate="2013-11-11" xml:lang="de">Textbereich</gloss>
+        <desc versionDate="2013-11-11" xml:lang="de">enthält einen Subdivision des front, body oder back Bereichs eines Textes.</desc>
+        <classes mode="change">
+            <memberOf key="att.declaring" mode="delete"/>
+            <memberOf key="att.global" mode="delete"/>
+            <memberOf key="att.typed" mode="delete"/>
+            <memberOf key="att.divLike" mode="delete"/>
+        </classes>
+        <attList>
+            <attDef ident="decls" mode="add" usage="opt">
+                <desc versionDate="2013-11-11" xml:lang="en">identifies one or more <hi rend="italic">declarable elements</hi> within the header, which are understood to apply to the element bearing this attribute and its content.</desc>
+                <desc versionDate="2013-11-11" xml:lang="en">beschreibt ein oder mehrere <hi rend="italic">deklarationspflichtige Elemente</hi> im header, die auf das Element, dass das Attribut und dessen Inhalt trägt, bezogen werden sollen.</desc>
+                <datatype>
+                    <dataRef key="teidata.pointer"/>
+                </datatype>
+            </attDef>
+            <attDef ident="xml:id" mode="add" usage="opt">
+                <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
+                <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
+                <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
+                <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element mit dem Attribut.</desc>
+                <datatype>
+                    <rng:data type="ID"/>
+                </datatype>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+</schemaSpec>

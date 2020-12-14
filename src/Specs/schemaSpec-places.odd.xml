@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemaSpec ident="wegaPlaces" xml:lang="en" start="place"
+    xmlns="http://www.tei-c.org/ns/1.0" 
+    xmlns:rng="http://relaxng.org/ns/structure/1.0"
+    xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+    <moduleRef key="tei"/>
+    <moduleRef key="header" include="idno"/>
+    <moduleRef key="namesdates" include="country geo location place placeName"/>
+    
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-patterns"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-styleguides"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-constraints"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-nameLikeEntities"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-tei-atts"/>
+    
+    <elementSpec ident="place" mode="change" module="namesdates">
+        <desc versionDate="2013-11-11" xml:lang="en">contains data about a geographic location.</desc>
+        <desc versionDate="2013-11-11" xml:lang="de">enthält Daten eines geographischen Ortes.</desc>
+        <classes mode="change">
+            <memberOf key="att.global" mode="delete"/>
+            <memberOf key="att.typed" mode="delete"/>
+            <memberOf key="att.editLike" mode="delete"/>
+            <memberOf key="att.dimensions" mode="delete"/>
+            <memberOf key="att.ranging" mode="delete"/>
+            <memberOf key="att.responsibility" mode="delete"/>
+            <memberOf key="att.sortable" mode="delete"/>
+            <memberOf key="att.docStatus" mode="add"/>
+        </classes>
+        <content>
+            <rng:choice>
+                <rng:element name="ref">
+                    <rng:attribute name="type">
+                        <rng:choice>
+                            <rng:value>duplicate</rng:value>
+                            <rng:value>deletion</rng:value>
+                        </rng:choice>
+                    </rng:attribute>
+                    <rng:attribute name="target">
+                        <dataRef key="wega.places.pointer"/>
+                    </rng:attribute>
+                    <rng:empty/>
+                </rng:element>
+                <rng:group>
+                    <rng:oneOrMore>
+                        <rng:ref name="placeName"/>
+                    </rng:oneOrMore>
+                    <rng:optional>
+                        <rng:ref name="location"/>
+                    </rng:optional>
+                    <rng:zeroOrMore>
+                        <rng:ref name="idno"/>
+                    </rng:zeroOrMore>
+                </rng:group>
+            </rng:choice>
+        </content>
+        <constraintSpec scheme="schematron" ident="placeName_reg">
+            <desc versionDate="2013-11-11" xml:lang="en"></desc>
+            <desc  versionDate="2013-11-11" xml:lang="de"></desc>
+            <constraint>
+                <sch:assert test="(tei:placeName[1][@type='reg'] and count(./tei:placeName[@type='reg']) = 1) or tei:ref">tei:place muss (genau) ein placeName@type="reg" enthalten</sch:assert>
+            </constraint>
+        </constraintSpec>
+        <attList>
+            <attDef ident="xml:id" mode="add" usage="req">
+                <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
+                <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
+                <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
+                <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element mit dem Attribut.</desc>
+                <datatype>
+                    <dataRef key="wega.places.pointer"/>
+                </datatype>
+            </attDef>
+            <attDef ident="status" usage="req" mode="change"/>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="placeName" mode="change" module="namesdates">
+        <desc versionDate="2013-11-11" xml:lang="en">contains an absolute or relative place name.</desc>
+        <desc versionDate="2013-11-11" xml:lang="de">enthält einen absoluten oder relativen Ortsnamen.</desc>
+        <classes mode="change">
+            <memberOf key="att.global" mode="delete"/>
+            <memberOf key="att.naming" mode="delete"/>
+            <memberOf key="att.canonical" mode="delete"/>
+            <memberOf key="att.typed" mode="delete"/>
+            <memberOf key="att.datable" mode="delete"/>
+            <memberOf key="att.editLike" mode="delete"/>
+            <memberOf key="att.dimensions" mode="delete"/>
+            <memberOf key="att.ranging" mode="delete"/>
+            <memberOf key="att.responsibility" mode="delete"/>
+            <memberOf key="att.source" mode="delete"/>
+            <memberOf key="att.personal" mode="delete"/>
+        </classes>
+        <content>
+            <rng:text/>
+        </content>
+        <constraintSpec scheme="schematron" ident="count-modern-names">
+            <constraint>
+                <sch:rule context="tei:placeName[@type='modern']">
+                    <sch:let name="lang" value="string(@xml:lang)"/> <!-- use string values so comparing non-existing attributes will return true -->
+                    <sch:report test="following-sibling::tei:placeName[@type='modern'][string(@xml:lang)=$lang]">Only one modern name per xml:lang allowed.</sch:report>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
+        <attList>
+            <attDef ident="type" mode="add" usage="req">
+                <desc versionDate="2014-01-08" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
+                <desc versionDate="2014-01-08" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</desc>
+                <valList type="closed">
+                    <valItem ident="reg">
+                        <gloss versionDate="2013-11-11" xml:lang="en">regular</gloss>
+                        <gloss versionDate="2013-11-11" xml:lang="de">regulär</gloss>
+                        <desc versionDate="2016-03-07" xml:lang="en">the canonical name of the WeGA, i.e. the historic version known by Weber.</desc>
+                        <desc versionDate="2016-03-07" xml:lang="de">die Ansetzungsform der WeGA basierend auf der historischen Bezeichnung Webers.</desc>
+                    </valItem>
+                    <valItem ident="alt">
+                        <gloss versionDate="2014-01-08" xml:lang="en">alternative</gloss>
+                        <gloss versionDate="2014-01-08" xml:lang="de">Alternative</gloss>
+                    </valItem>
+                    <valItem ident="modern">
+                        <desc versionDate="2016-03-07" xml:lang="en">the current, official version of the name.</desc>
+                        <desc versionDate="2016-03-07" xml:lang="de">die atuelle, verwaltungssprachliche Namensform.</desc>
+                    </valItem>
+                </valList>
+            </attDef>
+            <attRef class="att.global" name="xml:lang"/>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="location" mode="change" module="namesdates">
+        <desc versionDate="2013-11-11" xml:lang="en">defines the location of a place as a set of geographical coordinates, in terms of other named geo-political entities, or as an address.</desc>
+        <desc versionDate="2013-11-11" xml:lang="de">definiert die Lage eines Ortes in einer Reihe von geographischen Koordinaten, in Bezug auf die anderen genannten geo-politische Einheiten, oder als eine Adresse.</desc>
+        <classes mode="change">
+            <memberOf key="att.global" mode="delete"/>
+            <memberOf key="att.typed" mode="delete"/>
+            <memberOf key="att.datable" mode="delete"/>
+            <memberOf key="att.editLike" mode="delete"/>
+            <memberOf key="att.dimensions" mode="delete"/>
+            <memberOf key="att.ranging" mode="delete"/>
+            <memberOf key="att.responsibilty" mode="delete"/>
+            <memberOf key="att.source" mode="delete"/>
+        </classes>
+        <content>
+            <rng:ref name="geo"/>
+        </content>
+    </elementSpec>
+    
+    <elementSpec ident="geo" mode="change" module="namesdates">
+        <gloss versionDate="2013-11-11" xml:lang="en">geographical coordinates</gloss>
+        <desc versionDate="2013-11-11" xml:lang="en">contains any expression of a set of geographic coordinates, representing a point, line, or area on the surface of the earth in some notation.</desc>
+        <gloss versionDate="2018-03-29" xml:lang="de">geographische Koordinaten</gloss>
+        <desc versionDate="2013-11-11" xml:lang="de">enthält einen Terminus eines Sets von geographischen Koordinaten, die einen Punkt, eine Linie oder einen Bereich der Erde in einer bestimmten Schreibweise darstellen.</desc>
+        <classes mode="change">
+            <memberOf key="att.global" mode="delete"/>
+            <memberOf key="att.declaring" mode="delete"/>
+        </classes>
+        <constraintSpec scheme="schematron" ident="whitespace-separated-coordinates">
+            <constraint>
+                <sch:assert test="matches(., '^\-?\d+(\.\d+)? \-?\d+(\.\d+)?$')">There must be two coordinates, separated with a whitespace only (no comma!)</sch:assert>
+            </constraint>
+        </constraintSpec>
+    </elementSpec>
+    
+</schemaSpec>

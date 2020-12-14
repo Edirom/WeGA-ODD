@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemaSpec ident="wegaWorks" 
+    xml:lang="en" 
+    ns="http://www.music-encoding.org/ns/mei" 
+    start="mei manifestation"
+    xmlns="http://www.tei-c.org/ns/1.0" 
+    xmlns:rng="http://relaxng.org/ns/structure/1.0"
+    xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+    
+    <moduleRef key="MEI"/>
+    <moduleRef key="MEI.edittrans" include="add damage del gap restore sic subst supplied"/>
+    <moduleRef key="MEI.frbr" include="expression item itemList manifestation"/>
+    <moduleRef key="MEI.header" include="altId availability change changeDesc classification componentList condition editionStmt fileDesc hand handList history langUsage language meiHead notesStmt perfMedium perfRes perfResList physDesc physMedium plateNum price provenance pubStmt revisionDesc seriesStmt termList titleStmt useRestrict watermark work workList"/>
+    <moduleRef key="MEI.namesdates" include="corpName country geogName persName region settlement"/>
+    <moduleRef key="MEI.ptrref" include="ref"/>
+    <moduleRef key="MEI.shared" include="addrLine address annot creation date dimensions edition event eventList extent head identifier incip labelAbbr lb mei music p physLoc pubPlace publisher relation relationList rend repository respStmt score scoreDef section staffDef staffGrp term title titlePage"/>
+    <moduleRef key="MEI.text" include="q quote"/>
+    <moduleRef key="MEI.analytical"/>
+    
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-patterns"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-styleguides"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-lists"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-atts"/>
+    
+    <!--<macroSpec ident="macro.availabilityPart" mode="change">
+        <content>
+            <rng:optional>
+                <rng:ref name="useRestrict"/>
+            </rng:optional>
+        </content>
+    </macroSpec>-->
+    
+    <constraintSpec ident="set_ns" scheme="isoschematron" mode="add">
+        <constraint>
+            <sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron" prefix="mei"
+                uri="http://www.music-encoding.org/ns/mei"/>
+            <!--<sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron" prefix="xlink"
+                uri="http://www.w3.org/1999/xlink"/>-->
+        </constraint>
+    </constraintSpec>
+    
+    <!-- remove unused classes and datatypes to get rid of annoying schematron complaints 
+        like: "The child axis starting at an attribute node will never select anything" -->
+    <dataSpec ident="data.ARTICULATION" mode="delete"/>
+    <dataSpec ident="data.PLACEMENT" mode="delete"/>
+    <classSpec type="atts" ident="att.dataPointing" mode="delete"/>
+    <classSpec type="atts" ident="att.metadataPointing" mode="delete"/>
+    <classSpec type="atts" ident="att.linking" mode="delete"/>
+    <classSpec type="atts" ident="att.name" mode="delete"/>
+    <classSpec type="atts" ident="att.extent" mode="delete"/>
+    <classSpec type="atts" ident="att.handIdent" mode="delete"/>
+    <classSpec type="atts" ident="att.plist" mode="delete"/>
+    <classSpec type="atts" ident="att.ranging" mode="delete"/>
+    <classSpec type="atts" ident="att.responsibility" mode="delete"/>
+    <classSpec type="atts" ident="att.source" mode="delete"/>
+    
+    <classSpec type="model" ident="model.qLike" module="MEI.text" mode="change">
+        <classes mode="change">
+            <memberOf key="model.rendLike" mode="add"/>
+        </classes>
+    </classSpec>
+    
+    <macroSpec ident="macro.titlePart" module="MEI.shared" mode="change">
+        <content>
+            <alternate maxOccurs="unbounded">
+                <textNode/>
+                <classRef key="model.rendLike"/>
+                <classRef key="model.nameLike"/>
+                <classRef key="model.lbLike"/>
+            </alternate>
+        </content>
+    </macroSpec>
+    
+    <classSpec type="atts" ident="att.measurement" module="MEI.shared" mode="change">
+        <attList>
+            <attDef ident="unit" usage="opt" mode="change">
+                <desc versionDate="2014-05-25" xml:lang="en">indicates the unit used for a measurement of size.</desc>
+                <desc versionDate="2014-05-25" xml:lang="de">Gibt die zugrundeliegende Einheit für das markierte Maß an.</desc>
+                <valList type="closed" mode="replace">
+                    <valItem ident="pp">
+                        <gloss versionDate="2013-11-11" xml:lang="en">page</gloss>
+                        <desc versionDate="2013-11-11" xml:lang="en">the element contains a page number or a block of text.</desc>
+                        <gloss versionDate="2013-11-11" xml:lang="de">Seite</gloss>
+                        <desc versionDate="2013-11-11" xml:lang="de">das Element enthält eine Seitenzahl oder einen Seitenbereich.</desc>
+                    </valItem>
+                    <valItem ident="vol">
+                        <gloss versionDate="2013-11-11" xml:lang="en">volume</gloss>
+                        <desc versionDate="2013-11-11" xml:lang="en">the element contains a number of a volume</desc>
+                        <gloss versionDate="2013-11-11" xml:lang="de">Band</gloss>
+                        <desc versionDate="2013-11-11" xml:lang="de">das Element enthält eine Bandnummer</desc>
+                    </valItem>
+                    <valItem ident="col">
+                        <gloss versionDate="2013-11-11" xml:lang="en">column</gloss>
+                        <desc versionDate="2013-11-11" xml:lang="en">the element contains a number of columns or a block of columns.</desc>
+                        <gloss versionDate="2013-11-11" xml:lang="de">Spalte</gloss>
+                        <desc versionDate="2013-11-11" xml:lang="de">das Element enthält eine Spaltenzahl oder einen Spaltenbereich.</desc>
+                    </valItem>
+                    <valItem ident="fol">
+                        <gloss versionDate="2013-11-11" xml:lang="en">folio</gloss>
+                        <desc versionDate="2013-11-11" xml:lang="en">the element contains a folio number or a block of folios.</desc>
+                        <gloss versionDate="2013-11-11" xml:lang="de">Folio</gloss>
+                        <desc versionDate="2013-11-11" xml:lang="de">das Element enthält eine Foliozahl oder einen Foliobereich.</desc>
+                    </valItem>
+                    <valItem ident="cm">
+                        <gloss versionDate="2013-11-11" xml:lang="en">centimeter</gloss>
+                        <desc versionDate="2013-11-11" xml:lang="en">the element contains the ammount of centimeters.</desc>
+                        <gloss versionDate="2013-11-11" xml:lang="de">Zentimeter</gloss>
+                        <desc versionDate="2013-11-11" xml:lang="de">das Element enthält eine Zentimeterangabe.</desc>
+                    </valItem>
+                </valList>
+            </attDef>
+        </attList>
+    </classSpec>
+    
+    <elementSpec ident="mei" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <desc versionDate="2013-11-11" xml:lang="en">contains a single MEI-conformant document, consisting of an MEI header and a musical text, either in isolation or as part of an meiCorpus element. </desc>
+        <desc versionDate="2013-11-11" xml:lang="de">enthält ein einzelenes MEI-konformes Dokument, dass aus einem MEI header und muskialischem Text, entweder alleinstehend oder als Teil eines meiCorpus Elements, besteht.</desc>
+        <content>
+            <rng:choice>
+                <rng:group>
+                    <rng:ref name="meiHead"/>
+                    <rng:ref name="music"/>
+                </rng:group>
+                <!--  Dubletten  -->
+                <rng:element name="ref">
+                    <rng:attribute name="type">
+                        <rng:choice>
+                            <rng:value>duplicate</rng:value>
+                            <rng:value>deletion</rng:value>
+                        </rng:choice>
+                    </rng:attribute>
+                    <rng:attribute name="target">
+                        <rng:choice>
+                            <rng:ref name="wega.works.pointer"/>
+                        </rng:choice>
+                    </rng:attribute>
+                    <rng:empty/>
+                </rng:element>
+            </rng:choice>
+        </content>
+        <attList>
+            <attDef ident="xml:id" mode="replace" usage="req">
+                <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
+                <desc versionDate="2013-11-11" xml:lang="en">supplies any form of identifier used to identify some object, such as a bibliographic item, a person, a title, an organization, etc. in a standardized way.</desc>
+                <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
+                <desc versionDate="2013-11-11" xml:lang="de">lieferte jegliche Form eines Bezeichners in einer standardisierten Form, der benutzt werden kann um Objekte zu identifiziert, wie etwa ein bibliographisches Element, eine Organisation, usw.</desc>
+                <datatype>
+                    <rng:ref name="wega.works.pointer"/>
+                </datatype>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="meiHead" module="MEI.header" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <content>
+            <rng:zeroOrMore>
+                <rng:ref name="altId"/>
+            </rng:zeroOrMore>
+            <rng:ref name="fileDesc"/>
+            <rng:ref name="workList"/>
+            <rng:ref name="revisionDesc"/>                            
+        </content>
+    </elementSpec>
+    
+    <elementSpec ident="work" module="MEI.header" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <content>
+            <rng:oneOrMore>
+                <rng:ref name="model.titleLike" />
+            </rng:oneOrMore>
+            <rng:zeroOrMore>
+                <rng:ref name="model.workIdent" />
+            </rng:zeroOrMore>
+            <rng:optional>
+                <rng:ref name="creation" />
+            </rng:optional>
+            <rng:optional>
+                <rng:ref name="history" />
+            </rng:optional>
+            <rng:optional>
+                <rng:ref name="perfMedium" />
+            </rng:optional>
+            <rng:ref name="classification" />
+        </content>
+    </elementSpec>
+    
+    <elementSpec ident="persName" module="MEI.namesdates" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <gloss versionDate="2013-11-11" xml:lang="en">personal name</gloss>
+        <desc versionDate="2013-11-11" xml:lang="en">contains a proper noun or proper-noun phrase referring to a person, possibly including one or more of the person's forenames, surnames, honorifics, added names, etc.</desc>
+        <gloss versionDate="2013-11-11" xml:lang="de">Personenname</gloss>
+        <desc versionDate="2013-11-11" xml:lang="de">enthält einen Eigennamen oder ein Nominalphrase im Bezug auf eine Person, möglicherweise einschließlich einer oder mehrerer Vornamen, Nachnamen, Höflichkeitsformen, hinzugefügten Namen, usw.</desc>
+        <classes mode="change">
+            <memberOf key="att.bibl" mode="delete"/>
+            <memberOf key="att.common" mode="delete"/>
+            <memberOf key="att.datable" mode="delete"/>
+            <memberOf key="att.edit" mode="delete"/>
+            <memberOf key="att.facsimile" mode="delete"/>
+            <memberOf key="att.lang" mode="delete"/>
+            <memberOf key="att.name" mode="delete"/>
+            <memberOf key="att.typed" mode="delete"/>
+            <memberOf key="att.canonical" mode="add"/>
+        </classes>
+        <attList>
+            <attDef ident="role" mode="add" usage="rec">
+                <desc versionDate="2013-11-11" xml:lang="en">The role or relation of this person with the text/score. Values are taken from the <ref target="http://www.loc.gov/marc/relators/relaterm.html">MARC Code List for Relators</ref>.</desc>
+                <desc versionDate="2013-11-11" xml:lang="de">Die Rolle oder Beziehung der Person mit dem Text/der Partitur. Werte werden von der <ref target="http://www.loc.gov/marc/relators/relaterm.html">MARC Code List for Relators</ref> genommen.</desc>
+                <datatype>
+                    <rng:ref name="marcRelator.list"/>
+                </datatype>
+            </attDef>
+            <attDef ident="codedval" mode="change" usage="opt">
+                <desc versionDate="2013-11-11" xml:lang="en">The WeGA ID of this person, e.g. "A002068" for Carl Maria von Weber</desc>
+                <desc versionDate="2013-11-11" xml:lang="de">Die WeGA ID der jeweiligen Person, z.B. "A002068" für Carl Maria von Weber</desc>
+                <datatype>
+                    <rng:ref name="wega.persons.pointer"/>
+                </datatype>
+            </attDef>
+            <attDef ident="cert" mode="add" usage="opt">
+                <desc versionDate="2013-11-11" xml:lang="en">signifies the degree of certainty or precision of identifying this person.</desc>
+                <desc versionDate="2013-11-11" xml:lang="en">besagt den Grad der Gewissheit oder Präzision der Identifikation der Person.</desc>
+                <datatype>
+                    <dataRef key="teidata.certainty"/>
+                </datatype>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="manifestation" module="MEI.frbr" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <content>
+            <rng:zeroOrMore>
+                <rng:ref name="model.identifierLike"/>
+            </rng:zeroOrMore>
+            <rng:optional>
+                <rng:ref name="titleStmt"/>
+            </rng:optional>
+            <rng:ref name="macro.bibldescPart"/>
+            <rng:optional>
+                <rng:ref name="creation"/>
+            </rng:optional>
+            <rng:optional>
+                <rng:ref name="history"/>
+            </rng:optional>
+            <rng:optional>
+                <rng:ref name="langUsage"/>
+            </rng:optional>
+            <rng:optional>
+                <rng:ref name="contents"/>
+            </rng:optional>
+            <rng:optional>
+                <rng:ref name="notesStmt"/>
+            </rng:optional>
+            <rng:optional>
+                <rng:ref name="classification"/>
+            </rng:optional>
+            <rng:optional>
+                <rng:ref name="itemList"/>
+            </rng:optional>
+            <rng:optional>
+                <rng:ref name="componentList"/>
+            </rng:optional>
+            <rng:optional>
+                <rng:ref name="relationList"/>
+            </rng:optional>
+        </content>
+        <constraintSpec scheme="schematron" ident="id-check">
+            <constraint>
+                <sch:rule context="mei:manifestation">
+                    <sch:assert test="@xml:id or ancestor::mei:manifestation">
+                        Am Wurzelelement muss eine XML-ID angegeben sein.
+                    </sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
+        <attList>
+            <attDef ident="xml:id" mode="change" usage="opt">
+                <datatype>
+                    <rng:ref name="wega.sources.pointer"/>
+                </datatype>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <macroSpec ident="data.ISODATE" module="MEI" mode="change">
+        <content>
+            <rng:ref name="wega.data.temporal.iso"/>
+        </content>
+    </macroSpec>
+    
+    <elementSpec ident="date" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <classes mode="change">
+            <memberOf key="att.bibl" mode="delete"/>
+            <memberOf key="att.common" mode="delete"/>
+            <memberOf key="att.facsimile" mode="delete"/>
+            <memberOf key="att.lang" mode="delete"/>
+        </classes>
+        <constraintSpec scheme="schematron" ident="dateHeuristics1">
+            <desc versionDate="2014-04-25" xml:lang="en">checks for the existence of an <att>notbefore</att> with a <emph>larger</emph> value than its corresponding <att>notafter</att> (for dates AC)</desc>
+            <desc versionDate="2014-04-25" xml:lang="de">sucht nach der Existenz eines <att>notbefore</att> mit einem <emph>größeren</emph> Wert als sein entsprechendes <att>notafter</att> (für Daten n.Chr.)</desc>
+            <constraint>
+                <sch:report
+                    test="(@notbefore gt @notafter) and not(starts-with(@notbefore, '-'))"
+                    >value of notBefore greater than notAfter</sch:report>
+            </constraint>
+        </constraintSpec>
+        <constraintSpec scheme="schematron" ident="dateHeuristics3">
+            <desc versionDate="2014-04-25" xml:lang="en">checks for the cooccurence of date and duration attributes</desc>
+            <desc versionDate="2014-04-25" xml:lang="de">sucht nach der Kookkurenz von Datums- und Zeitattributen</desc>
+            <constraint>
+                <sch:report
+                    test="(@startdate or @enddate) and (@isodate or @notafter or @notbefore)"
+                    >cooccurence of date and duration attributes</sch:report>
+            </constraint>
+        </constraintSpec>
+        <constraintSpec scheme="schematron" ident="dateHeuristics4">
+            <desc versionDate="2014-04-25" xml:lang="en">checks for the cooccurence of exact and uncertain date attributes</desc>
+            <desc versionDate="2014-04-25" xml:lang="de">sucht nach der Kookkurenz von exaten und ungenauen Datumsattributen</desc>
+            <constraint>
+                <sch:report
+                    test="@isodate and (@notafter or @notbefore)"
+                    >cooccurence of exact and uncertain date attributes</sch:report>
+            </constraint>
+        </constraintSpec>
+        <constraintSpec scheme="schematron" ident="dateHeuristics5">
+            <desc versionDate="2014-04-25" xml:lang="en">If a <gi>date</gi> is present it must either have an attribute 
+                <att>isodate</att>, <att>notbefore</att>, <att>notafter</att>, <att>startdate</att> or <att>enddate</att>.
+                Alternatively the content of <gi>date</gi> may contain at least four zeros, "unknown" or "o.J.", which qualifies as undated.
+            </desc>
+            <desc versionDate="2014-04-25" xml:lang="de">Wenn ein <gi>date</gi> vorhanden ist, muss es entweder die Attribute
+                <att>isodate</att>, <att>notbefore</att>, <att>notafter</att>, <att>startdate</att> oder <att>enddate</att> haben.
+                Alternativ kann der Inhalt von <gi>date</gi> mindestens vier Nullen, "unbekannt" oder "oJ" enthalten, die die Quellen dann als undatiert bezeichnen.
+            </desc>
+            <constraint>
+                <sch:assert test="@isodate or @notbefore or @notafter or @startdate or @enddate or @cert='unknown' or matches(., '0000|o\.J\.|unknown')">mei:date benötigt ein Attribut @isodate, @notbefore o.ä.</sch:assert>
+            </constraint>
+        </constraintSpec>
+    </elementSpec>
+    
+    <elementSpec ident="altId" module="MEI.header" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <classes mode="change">
+            <memberOf key="att.bibl" mode="delete"/>
+        </classes>
+        <content>
+            <rng:text/>
+        </content>
+        <attList>
+            <attDef ident="xml:base" mode="delete"/>
+            <attDef ident="type" mode="change" usage="req">
+                <valList mode="replace" type="semi">
+                    <valItem ident="gnd">
+                        <gloss versionDate="2014-04-30" xml:lang="de">Gemeinsame Normdatei</gloss>
+                        <gloss versionDate="2014-04-30" xml:lang="en">Gemeinsame Normdatei</gloss>
+                        <desc versionDate="2014-04-30" xml:lang="de">Markiert Angaben (ID sowie Einheitssachtitel) nach der Gemeinsamen Normdatei.</desc>
+                        <desc versionDate="2014-04-30" xml:lang="en">marks information (ID and title) from the German authority file "Gemeinsamen Normdatei".</desc>
+                    </valItem>
+                    <valItem ident="JV">
+                        <gloss versionDate="2014-04-30" xml:lang="de">Jähns-Verzeichnis</gloss>
+                        <gloss versionDate="2014-04-30" xml:lang="en">Jähns-Verzeichnis</gloss>
+                        <desc versionDate="2014-04-30" xml:lang="de">Markiert eine Verzeichnisnummer nach Jähns.</desc>
+                        <desc versionDate="2014-04-30" xml:lang="en">marks a number from the Jähns-Verzeichnis.</desc>
+                    </valItem>
+                    <valItem ident="KS">
+                        <gloss versionDate="2014-04-30" xml:lang="de">Kaiser-Schriften</gloss>
+                        <gloss versionDate="2014-04-30" xml:lang="en">Kaiser-Schriften</gloss>
+                        <desc versionDate="2014-04-30" xml:lang="de">Markiert eine Verzeichnisnummer nach Kaiser.</desc>
+                        <desc versionDate="2014-04-30" xml:lang="en">marks a number from the Kaiser-Schriften.</desc>
+                    </valItem>
+                    <valItem ident="opus">
+                        <desc versionDate="2014-04-30" xml:lang="de">Markiert eine Opuszahl.</desc>
+                        <desc versionDate="2014-04-30" xml:lang="en">marks an opus number.</desc>
+                    </valItem>
+                    <valItem ident="WeV">
+                        <gloss versionDate="2014-04-30" xml:lang="de">Weber Werkverzeichnis</gloss>
+                        <gloss versionDate="2014-04-30" xml:lang="en">Weber Werkverzeichnis</gloss>
+                        <desc versionDate="2014-04-30" xml:lang="de">Markiert eine Verzeichnisnummer des WeV.</desc>
+                        <desc versionDate="2014-04-30" xml:lang="en">marks a number from the WeV.</desc>
+                    </valItem>
+                </valList>
+            </attDef>
+            <attDef ident="subtype" mode="add" usage="opt">
+                <!-- reintroduced after the removal in MEI4 -->
+                <datatype>
+                    <dataRef key="teidata.word"/>
+                </datatype>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="titleStmt" module="MEI.header" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <content>
+            <rng:oneOrMore>
+                <rng:ref name="title"/>
+            </rng:oneOrMore>
+            <rng:optional>
+                <rng:ref name="respStmt"/>
+            </rng:optional>
+        </content>
+        <constraintSpec scheme="schematron" ident="multiple-same-language-titles">
+            <constraint>
+                <sch:rule context="mei:titleStmt[not(@analog)]">
+                    <sch:report test="some $title in mei:title[not(@type)] satisfies ($title/string(@xml:lang) = $title/following-sibling::mei:title[not(@type)]/string(@xml:lang))">Multiple title with the same xml:lang detected</sch:report>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
+        <attList>
+            <attDef ident="label" mode="delete"/>
+            <attDef ident="xml:base" mode="delete"/>
+            <attDef ident="n" mode="delete"/>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="title" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <classes mode="change">
+            <memberOf key="att.authorized" mode="delete"/>
+            <memberOf key="att.canonical" mode="delete"/>
+            <memberOf key="att.bibl" mode="delete"/>
+            <memberOf key="att.facsimile" mode="delete"/>
+        </classes>
+        <content>
+            <macroRef key="macro.titlePart"/>
+            <!--<alternate maxOccurs="unbounded">
+                <textNode/>
+                <elementRef key="lb"/>
+                <elementRef key="persName"/>
+                <elementRef key="q"/>
+            </alternate>-->
+        </content>
+        <constraintSpec scheme="schematron" ident="work-subtitles-map-xmllang">
+            <constraint>
+                <sch:rule context="mei:title[@type='sub'][parent::mei:titleStmt]">
+                    <sch:assert test="string(@xml:lang) = preceding-sibling::mei:title/string(@xml:lang)">Make sure that this subtitle has a proper xml:lang attribute matching a preceding title's xml:lang</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
+        <attList>
+            <attDef ident="label" mode="delete"/>
+            <attDef ident="xml:base" mode="delete"/>
+            <attDef ident="type" mode="change" usage="opt">
+                <valList mode="replace" type="closed">
+                    <valItem ident="sub">
+                        <desc versionDate="2014-04-30" xml:lang="de">Markiert einen Untertitel.</desc>
+                        <desc versionDate="2014-04-30" xml:lang="en">marks a subtitle.</desc>
+                    </valItem>
+                    <valItem ident="alt">
+                        <gloss versionDate="2014-04-30" xml:lang="de">alternativ</gloss>
+                        <gloss versionDate="2014-04-30" xml:lang="en">alternative</gloss>
+                        <desc versionDate="2014-04-30" xml:lang="de">Markiert einen alternativen Titel, meist in Übersetzung (siehe <att>xml:lang</att>).</desc>
+                        <desc versionDate="2014-04-30" xml:lang="en">marks an alternative title, most frequently translated (cf. <att>xml:lang</att>).</desc>
+                    </valItem>
+                    <valItem ident="div">
+                        <gloss versionDate="2014-04-30" xml:lang="de">Nummer</gloss>
+                        <gloss versionDate="2014-04-30" xml:lang="en">number</gloss>
+                        <desc versionDate="2014-04-30" xml:lang="de">Markiert einen Titel einer musikalischen Nummer (z.B. Szene, Arie).</desc>
+                        <desc versionDate="2014-04-30" xml:lang="en">marks a title of a musical division (e.g. scene, aria).</desc>
+                    </valItem>
+                </valList>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="rend" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <classes mode="change">
+            <memberOf key="att.color" mode="delete"/>
+            <memberOf key="att.common" mode="delete"/>
+            <memberOf key="att.lang" mode="delete"/>
+            <memberOf key="att.typography" mode="delete"/>
+            <memberOf key="att.horizontalalign" mode="delete"/>
+            <memberOf key="att.whitespace" mode="delete"/>
+            <memberOf key="att.wega.rend" mode="add"/>
+        </classes>
+        <attList>
+            <attDef ident="rend" mode="delete"/>
+            <attDef ident="altrend" mode="delete"/>
+            <attDef ident="valign" mode="delete"/>
+            <attDef ident="rotation" mode="delete"/>
+            <!-- Need to explicitly reference @rend ... feels like a bug -->
+            <attRef name="rend" class="att.wega.rend"/>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="extent" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <classes mode="change">
+            <!-- @label und @n werden gebraucht?! -->
+<!--                            <memberOf key="att.common" mode="delete"/>-->
+            <memberOf key="att.bibl" mode="delete"/>
+            <memberOf key="att.facsimile" mode="delete"/>
+        </classes>
+    </elementSpec>
+    
+    <elementSpec ident="repository" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <classes mode="change">
+            <memberOf key="att.typed" mode="delete"/>
+            <memberOf key="att.name" mode="delete"/>
+            <memberOf key="att.lang" mode="delete"/>
+            <memberOf key="att.facsimile" mode="delete"/>
+            <memberOf key="att.bibl" mode="delete"/>
+        </classes>
+        <attList>
+            <attDef ident="label" mode="change" usage="opt">
+                <gloss versionDate="2014-10-28" xml:lang="en">RISM code</gloss>
+                <desc  versionDate="2014-10-28" xml:lang="en">WeGA: the RISM code for the repository</desc>
+                <gloss versionDate="2018-03-29" xml:lang="de">RISM Code</gloss>
+                <desc  versionDate="2014-10-28" xml:lang="de">WeGA: der RISM Code für den Aufbewahrungsort</desc>
+                <datatype>
+                    <rng:ref name="rism.pattern"/>
+                </datatype>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <!-- need to replace this attribute class to get rid of the constraintSpec -->
+    <classSpec ident="att.classed" module="MEI.shared" type="atts" mode="replace">
+        <attList>
+            <attDef ident="class" mode="change" usage="rec">
+                <valList mode="replace" type="closed">
+                    <valItem ident="http://d-nb.info/standards/elementset/gnd#MusicalWork">
+                        <gloss versionDate="2016-10-19" xml:lang="en">musical work</gloss>
+                        <gloss versionDate="2016-10-19" xml:lang="de">Musikalisches Werk</gloss>
+                        <desc versionDate="2016-10-19" xml:lang="en">a subclass of 'work' according to the GND Ontology, see <ref target="http://d-nb.info/standards/elementset/gnd#MusicalWork">http://d-nb.info/standards/elementset/gnd#MusicalWork</ref>.</desc>
+                        <desc versionDate="2016-10-19" xml:lang="de">entsprechend der GND Ontologie eine Unterklasse von 'Werk', siehe <ref target="http://d-nb.info/standards/elementset/gnd#MusicalWork">http://d-nb.info/standards/elementset/gnd#MusicalWork</ref>.</desc>
+                    </valItem>
+                    <valItem ident="http://d-nb.info/standards/elementset/gnd#Work">
+                        <gloss versionDate="2016-10-19" xml:lang="en">work</gloss>
+                        <gloss versionDate="2016-10-19" xml:lang="de">Werk</gloss>
+                        <desc versionDate="2016-10-19" xml:lang="en">according to the GND Ontology, see <ref target="http://d-nb.info/standards/elementset/gnd#Work">http://d-nb.info/standards/elementset/gnd#Work</ref>.</desc>
+                        <desc versionDate="2016-10-19" xml:lang="de">entsprechend der GND Ontologie, siehe <ref target="http://d-nb.info/standards/elementset/gnd#Work">http://d-nb.info/standards/elementset/gnd#Work</ref>.</desc>
+                    </valItem>
+                </valList>
+            </attDef>
+        </attList>
+    </classSpec>
+    
+    <elementSpec ident="classification" module="MEI.header" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <content>
+            <rng:ref name="termList"/>
+        </content>
+    </elementSpec>
+    
+    <elementSpec ident="termList" module="MEI.header" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <content>
+            <rng:oneOrMore>
+                <rng:ref name="term"/>
+            </rng:oneOrMore>
+        </content>
+    </elementSpec>
+    
+    <elementSpec ident="respStmt" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <constraintSpec scheme="isoschematron" ident="check_respStmt" mode="delete"/>
+    </elementSpec>
+    
+    <elementSpec ident="creation" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <content>
+            <alternate minOccurs="0" maxOccurs="1">
+                <elementRef key="geogName"/>
+                <classRef key="model.geogNamePart"/>
+            </alternate>
+            <elementRef key="date"/>
+        </content>
+        <constraintSpec scheme="schematron" ident="check_creationDateHasText" mode="add">
+            <constraint>
+                <sch:assert test="mei:date/text()">The creation date should have human readable text as content.</sch:assert>
+            </constraint>
+        </constraintSpec>
+    </elementSpec>
+    
+    <elementSpec ident="geogName" module="MEI.namesdates" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <classes mode="change">
+            <memberOf key="att.bibl" mode="delete"/>
+            <memberOf key="att.common" mode="delete"/>
+            <memberOf key="att.edit" mode="delete"/>
+            <memberOf key="att.facsimile" mode="delete"/>
+            <memberOf key="att.lang" mode="delete"/>
+            <memberOf key="att.name" mode="delete"/>
+            <memberOf key="att.canonical" mode="add"/>
+        </classes>
+        <attList>
+            <attDef ident="type" mode="add" usage="req">
+                <datatype>
+                    <dataRef key="wega.place.type"/>
+                </datatype>
+            </attDef>
+            <attDef ident="codedval" mode="change" usage="rec">
+                <datatype>
+                    <dataRef key="wega.places.pointer"/>
+                </datatype>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="relation" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <attList>
+            <attDef ident="target" mode="change">
+                <datatype>
+                    <dataRef key="wega.works.prefixed.pointer"/>
+                </datatype>
+            </attDef>
+            <attDef ident="rel" mode="change" usage="req">
+                <valList mode="change" type="semi">
+                    <valItem ident="isAssociatedWith" mode="add"/>
+                </valList>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="annot" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <classes mode="replace">
+            <memberOf key="model.annotLike"/>
+            <memberOf key="att.typed"/>
+        </classes>
+        <content>
+            <alternate>
+                <alternate maxOccurs="unbounded">
+                    <classRef key="model.paracontentPart"/>
+                    <textNode/>
+                </alternate>
+                <elementRef key="p" maxOccurs="unbounded"/>
+            </alternate>
+        </content>
+        <constraintSpec scheme="schematron" ident="annot-in-works">
+            <constraint>
+                <sch:report test="@type and not(parent::mei:notesStmt/parent::mei:manifestation)">No @type attribute needed here. This is only intended for notes statements within manifestations.</sch:report>
+            </constraint>
+        </constraintSpec>
+        <attList>
+            <attRef name="xml:id" class="att.id"/>
+            <attDef ident="class" mode="delete"/>
+            <attDef ident="type" mode="change" usage="opt">
+                <valList mode="replace" type="closed">
+                    <!-- aktuelle Attributwerte bei sources -->
+                    <valItem ident="Kurzbeschreibung"/>
+                    <valItem ident="Anzeigen"/>
+                    <valItem ident="Anmerkungen"/>
+                    <valItem ident="no-ordinary-record"/>
+                    <valItem ident="Verweise"/>
+                    <valItem ident="Literatur"/>
+                    <valItem ident="Faksimile"/>
+                    <valItem ident="werkfremderInhalt"/>
+                </valList>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="settlement" module="MEI.namesdates" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <classes mode="change">
+            <memberOf key="model.nameLike.agent" mode="add"/>
+            <memberOf key="att.canonical" mode="add"/>
+            <memberOf key="att.bibl" mode="delete"/>
+            <memberOf key="att.common" mode="delete"/>
+            <memberOf key="att.edit" mode="delete"/>
+            <memberOf key="att.lang" mode="delete"/>
+        </classes>
+        <attList>
+            <attDef ident="codedval" mode="change" usage="rec">
+                <datatype>
+                    <dataRef key="wega.places.pointer"/>
+                </datatype>
+            </attDef>
+            <attRef name="cert" class="att.evidence"/>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="region" module="MEI.namesdates" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <classes mode="change">
+            <memberOf key="model.nameLike.agent" mode="add"/>
+            <memberOf key="att.bibl" mode="delete"/>
+            <memberOf key="att.common" mode="delete"/>
+            <memberOf key="att.edit" mode="delete"/>
+            <memberOf key="att.lang" mode="delete"/>
+        </classes>
+        <attList>
+            <attRef name="cert" class="att.evidence"/>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="country" module="MEI.namesdates" mode="change" ns="http://www.music-encoding.org/ns/mei">
+        <classes mode="change">
+            <memberOf key="model.nameLike.agent" mode="add"/>
+            <memberOf key="att.bibl" mode="delete"/>
+            <memberOf key="att.common" mode="delete"/>
+            <memberOf key="att.edit" mode="delete"/>
+            <memberOf key="att.lang" mode="delete"/>
+        </classes>
+        <attList>
+            <attRef name="cert" class="att.evidence"/>
+        </attList>
+    </elementSpec>
+    
+</schemaSpec>

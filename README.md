@@ -1,29 +1,26 @@
-WeGA Odd files
+WeGA ODD files
 ================
 
-Files for documenting the Digital Edition of the [Carl-Maria-von-Weber-Gesamtausgabe](http://www.weber-gesamtausgabe.de) in the [ODD format](http://www.tei-c.org/Guidelines/Customization/odds.xml). 
+[![](https://img.shields.io/badge/license-BSD2-green.svg)](https://github.com/Edirom/WeGA-ODD/blob/develop/LICENSE)
+[![](https://img.shields.io/badge/license-CC--BY--4.0-green.svg)](https://github.com/Edirom/WeGA-ODD/blob/develop/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/edirom/WeGA-ODD.svg)](https://github.com/Edirom/WeGA-ODD/releases)
+[![DOI](https://zenodo.org/badge/7000665.svg)](https://zenodo.org/badge/latestdoi/7000665)
+
+Files for documenting the Digital Edition of the [Carl-Maria-von-Weber-Gesamtausgabe](http://www.weber-gesamtausgabe.de) in the [ODD format](https://tei-c.org/guidelines/customization/getting-started-with-p5-odds/). 
 
 
 
 Contents
 --------
 
-* `schema`: RelaxNG schemata, generated with the [roma cli](http://www.tei-c.org/Guidelines/Customization/odds.xml#romacommandline) from the ODD files below. For convenience, have a look at the `Makefile`. There are subfolders for English and German schemas which should only differ in the language of documentation (e.g. element and attribute descriptions)
+* `schema`: RelaxNG schemata, generated with the [TEI XSL Stylesheets](https://github.com/TEIC/Stylesheets) from the ODD files below. For convenience, an  `ANT build file` is provided that documents the transformations. There are subfolders for English and German schemas which should only differ in the language of documentation (e.g. element and attribute descriptions)
 * `src`: source ODD files
-	* `WeGA_biblio.odd.xml`: WeGA ODD file for bibliographic documents 
-	* `WeGA_common.odd.xml`: common macros and definitions for global use in the WeGA Digital Edition
-	* `WeGA_diaries.odd.xml`: WeGA ODD file for the encoding of diary entries
-	* `WeGA_generic.odd.xml`: A generic WeGA ODD file for testing and experimental purposes
-	* `WeGA_letters.odd.xml`: WeGA ODD file for the encoding of correspondence material
-	* `WeGA_news.odd.xml`: WeGA ODD file for the encoding of website news
-	* `WeGA_persons.odd.xml`: WeGA ODD file for the encoding of (short) biographies
-	* `WeGA_places.odd.xml`: WeGA ODD file for the encoding of places
-	* `WeGA_var.odd.xml`: WeGA ODD file for the encoding of various  documents 
-	* `WeGA_works.odd.xml`: WeGA ODD file for the encoding of musical works
-	* `WeGA_writings.odd.xml`: WeGA ODD file for the encoding of writings
+    * `Guidelines`: the WeGA Guidelines chapters. The main file is `guidelines-de.xml` which x-includes all chapters and schemaSpecs.   
+    * `Specs`: the various schemaSpecs for the different document types. There are two special files: `common-specs.odd.xml` which provides all common specifications grouped into `specGrp`s (which are then referenced by the other schemaSpecs) and `schemaSpec-wega_all.odd.xml` which is a compiled super set of all the specific schemaSpecs.
+* `compiled-ODD`:  the compiled (= processed with [`odd2odd.xsl`](https://github.com/TEIC/Stylesheets/blob/dev/odds/odd2odd.xsl)) ODDs that include the full specifications and can serve as a new source for the [_chaining of ODDs_](https://wiki.tei-c.org/index.php/ODD_chaining).
 
 
 License
 -------
 
-This work is available under dual license: [BSD 2-Clause](http://opensource.org/licenses/BSD-2-Clause) and [Creative Commons Attribution 3.0 Unported License (CC BY 3.0)](http://creativecommons.org/licenses/by/3.0/)
+This work is available under dual license: [BSD 2-Clause](http://opensource.org/licenses/BSD-2-Clause) and [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)

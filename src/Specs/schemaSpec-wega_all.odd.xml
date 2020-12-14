@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemaSpec ident="wega_all" xml:lang="en" start="TEI biblStruct person ab"
+    xmlns="http://www.tei-c.org/ns/1.0" 
+    xmlns:rng="http://relaxng.org/ns/structure/1.0"
+    xmlns:sch="http://purl.oclc.org/dsdl/schematron">
+    <moduleRef key="tei"/>
+    <moduleRef key="core" include="p hi quote q desc sic corr choice gap add del unclear name rs address street postCode date abbr expan ptr ref list item label head note graphic pb lb cb analytic monogr author editor respStmt resp title imprint publisher biblScope pubPlace bibl biblStruct listBibl relatedItem l lg measure term series cit mentioned gloss addrLine divGen textLang num milestone"/>
+    <moduleRef key="figures" include="table row cell notatedMusic figure figDesc"/>
+    <moduleRef key="gaiji" include="g"/>
+    <moduleRef key="header" include="teiHeader fileDesc titleStmt edition publicationStmt availability licence seriesStmt notesStmt sourceDesc encodingDesc projectDesc editorialDecl profileDesc handNote creation langUsage language textClass keywords revisionDesc change idno funder editionStmt extent distributor authority quotation correspDesc correspAction correspContext"/>
+    <moduleRef key="linking" include="seg ab anchor"/>
+    <moduleRef key="msdescription" include="msDesc msFrag msIdentifier msName repository physDesc history provenance additional collection altIdentifier incipit accMat origin acquisition"/>
+    <moduleRef key="namesdates" include="orgName persName placeName country region settlement geogName bloc geo location place surname forename genName nameLink addName roleName affiliation birth death event occupation person residence sex org state"/>
+    <moduleRef key="tagdocs" include="code eg egXML"/>
+    <moduleRef key="textcrit" include="app lem rdg listWit witness"/>
+    <moduleRef key="textstructure" include="TEI text body floatingText div dateline opener closer signed postscript byline back salute"/>
+    <moduleRef key="transcr" include="facsimile addSpan handNotes space subst supplied damage handShift"/>
+    
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-patterns"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-styleguides"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-lists"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-classes"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-element-additions"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-constraints"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-atts"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-tei-atts"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-core"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-header"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-textstructure"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-namesdates"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-figures"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-transcr"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-msdescription"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-linking"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-textcrit"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-gaiji"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-tei-macros"/>
+    
+    <elementSpec ident="TEI" mode="change" module="textstructure">
+        <content>
+            <alternate>
+                <elementRef key="ref"/>
+                <sequence>
+                    <elementRef key="teiHeader" minOccurs="0"/>
+                    <classRef key="model.resource" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
+            </alternate>
+        </content>
+    </elementSpec>
+    
+    <elementSpec ident="address" mode="change" module="core">
+        <classes mode="change">
+            <memberOf key="model.divTop" mode="add"/>
+        </classes>
+    </elementSpec>
+    
+    <elementSpec ident="biblStruct" mode="change" module="core">
+        <content>
+            <alternate>
+                <elementRef key="ref"/>
+                <sequence>
+                    <elementRef key="analytic" minOccurs="0" maxOccurs="unbounded"/>      
+                    <sequence minOccurs="1" maxOccurs="unbounded">
+                        <elementRef key="monogr"/>
+                        <elementRef key="series" minOccurs="0" maxOccurs="unbounded"/>
+                    </sequence>
+                    <alternate minOccurs="0" maxOccurs="unbounded">
+                        <elementRef key="keywords"/>
+                        <classRef key="model.noteLike"/>
+                        <classRef key="model.ptrLike"/>
+                        <elementRef key="relatedItem"/>
+                        <elementRef key="citedRange"/>
+                    </alternate>
+                </sequence>
+            </alternate>
+        </content>
+    </elementSpec>
+    
+    <elementSpec ident="person" mode="change" module="namesdates">
+        <classes mode="change">
+            <memberOf key="att.docStatus" mode="add"/>
+        </classes>
+        <content>
+            <alternate>
+                <elementRef key="ref"/>
+                <alternate>
+                    <alternate minOccurs="0" maxOccurs="unbounded">
+                        <classRef key="model.personPart"/>
+                        <classRef key="model.global"/>
+                    </alternate>
+                </alternate>
+            </alternate>
+        </content>
+    </elementSpec>
+
+</schemaSpec>
