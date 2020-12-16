@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0"
+    xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
+    <teiHeader>
+        <fileDesc>
+            <titleStmt>
+                <title>WeGA biblio ODD</title>
+                <author>Peter Stadler</author>
+                <funder><ref target="http://www.adwmainz.de">Akademie der Wissenschaften und der Literatur, Mainz</ref></funder>
+            </titleStmt>
+            <publicationStmt>
+                <publisher>
+                    <orgName><ref target="http://www.weber-gesamtausgabe.de">Carl-Maria-von-Weber-Gesamtausgabe</ref></orgName>
+                    <address>
+                        <addrLine>Gartenstr. 20</addrLine>
+                        <addrLine>32756 Detmold</addrLine>
+                        <addrLine>Germany</addrLine>
+                    </address>
+                </publisher>
+                <availability status="restricted">
+                    <p>This work is licensed under a <ref type="license" target="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License (CC BY 3.0)</ref>.</p>
+                </availability>
+            </publicationStmt>
+            <sourceDesc>
+                <p>Written from scratch (with a lot of help from tei-c.org).</p>
+            </sourceDesc>
+        </fileDesc>
+        <revisionDesc status="rev1.2.0">
+            <change who="https://github.com/peterstadler" when="2014-06-13">Tagged release 1.2.0</change>
+            <change who="https://github.com/peterstadler" when="2012-12-12">Initial commit to github in conjunction with the WeGA website release 1.1.5</change>
+        </revisionDesc>
+    </teiHeader>
+    <text>
+        <body>
+            <div>
+                <head>WeGA ODD file for bibliographic documents</head>
+                <p>Prose descriptions will follow …</p>
+            </div>
+            
+            <div>
+                <schemaSpec ident="wegaBiblio" xml:lang="en" start="biblStruct">
+                    <moduleRef key="core" include="analytic author biblScope biblStruct date editor hi imprint monogr note p pubPlace publisher ref rs series term title"/>
+                    <moduleRef key="tei"/>
+                    <moduleRef key="header" include="edition idno keywords"/>
+                    <!--<moduleRef key="linking" include="anchor seg"/>-->
+                    <!--<moduleRef key="tagdocs"/>-->
+                    
+                    <specGrpRef target="WeGA_common.odd.xml#wega-patterns"/>
+                    <specGrpRef target="WeGA_common.odd.xml#wega-common-constraints"/>
+                    <specGrpRef target="WeGA_common.odd.xml#wega-common-atts"/>
+                    <specGrpRef target="WeGA_common.odd.xml#wega-tei-atts"/>
+                    <specGrpRef target="WeGA_common.odd.xml#wega-core"/>
+                    <specGrpRef target="WeGA_common.odd.xml#wega-header"/>
+                    
+                    <elementSpec ident="biblStruct" mode="change" module="core">
+                        <gloss versionDate="2013-11-11" xml:lang="en">structured bibliographic citation</gloss>
+                        <desc versionDate="2013-11-11" xml:lang="en">contains a structured bibliographic citation, in which only bibliographic sub-elements appear and in a specified order.</desc>
+                        <gloss versionDate="2013-11-11" xml:lang="de">strukturierte bibliographische Angaben</gloss>
+                        <desc versionDate="2013-11-11" xml:lang="de">enthält ein strukturiertes bibliographisches Zitat, in dem nur bibliographische Unterelemente erscheinen, die in einer bestimmten Reihenfolge geordnet sind.</desc>
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.sortable" mode="delete"/>
+                            <memberOf key="att.declarable" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                            <memberOf key="att.docStatus" mode="add"/>
+                        </classes>
+                        <content>
+                            <rng:choice>
+                                <!--  Dubletten  -->
+                                <rng:element name="ref">
+                                    <rng:attribute name="type">
+                                        <rng:choice>
+                                            <rng:value>duplicate</rng:value>
+                                            <rng:value>deletion</rng:value>
+                                        </rng:choice>
+                                    </rng:attribute>
+                                    <rng:attribute name="target">
+                                        <rng:ref name="key.biblio.pattern"/>
+                                    </rng:attribute>
+                                    <rng:empty/>
+                                </rng:element>
+                                <!-- ordentlicher Eintrag -->
+                                <rng:group>
+                                    <rng:zeroOrMore>
+                                        <rng:ref name="analytic"/>
+                                    </rng:zeroOrMore>
+                                    <rng:oneOrMore>
+                                        <rng:ref name="monogr"/>
+                                        <rng:zeroOrMore>
+                                            <rng:ref name="series"/>
+                                        </rng:zeroOrMore>
+                                    </rng:oneOrMore>
+                                    <rng:interleave>
+                                        <rng:optional>
+                                            <rng:ref name="keywords"/>
+                                        </rng:optional>
+                                        <rng:optional>
+                                            <rng:element name="note">
+                                                <rng:ref name="macro.specialPara"/>
+                                            </rng:element>
+                                        </rng:optional>
+                                        <rng:zeroOrMore>
+                                            <rng:ref name="idno"/>
+                                        </rng:zeroOrMore>
+                                    </rng:interleave>
+                                </rng:group>
+                            </rng:choice>
+                        </content>
+                        <attList>
+                            <attDef ident="xml:id" mode="add" usage="req">
+                                <gloss versionDate="2013-11-11" xml:lang="en">identifier</gloss>
+                                <desc versionDate="2013-11-11" xml:lang="en">provides a unique identifier for the element bearing the attribute.</desc>
+                                <gloss versionDate="2013-11-11" xml:lang="de">Bezeichner</gloss>
+                                <desc versionDate="2013-11-11" xml:lang="de">liefert einen eindeutigen Bezeichner für das Element mit dem Attribut.</desc>
+                                <datatype>
+                                    <rng:ref name="key.biblio.pattern"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="type" mode="add" usage="req">
+                                <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
+                                <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</desc>
+                                <valList type="closed">
+                                    <valItem ident="article">
+                                        <desc versionDate="2013-11-11" xml:lang="en">article in a newspaper or magazine.</desc>
+                                        <desc versionDate="2013-11-11" xml:lang="de">Zeitungs- oder Zeitschriftenartikel.</desc>
+                                    </valItem>
+                                    <valItem ident="book">
+                                        <desc versionDate="2013-11-11" xml:lang="en">book respectively monograph.</desc>
+                                        <desc versionDate="2013-11-11" xml:lang="de">Buch bzw. Monographie.</desc>
+                                    </valItem>
+                                    <valItem ident="inbook">
+                                        <desc versionDate="2013-11-11" xml:lang="en">part (eg. chapters) of a monograph, usually by the same author.</desc>
+                                        <desc versionDate="2013-11-11" xml:lang="de">Teil (z.B. Kapitel) einer Monographie, meist vom selben Autor.</desc>
+                                    </valItem>
+                                    <valItem ident="incollection">
+                                        <desc versionDate="2013-11-11" xml:lang="en">part of a book (eg. essay in an anthology) with its own title. Included are yearbooks as the 'Weberiana' particularly.</desc>
+                                        <desc versionDate="2013-11-11" xml:lang="de">Teil eines Buches (z.B. Aufsatz in einem Sammelband) mit einem eigenen Titel. Hierunter fallen insbesondere auch die Jahrbücher wie "Weberiana".</desc>
+                                    </valItem>
+                                    <valItem ident="inproceedings">
+                                        <desc versionDate="2013-11-11" xml:lang="en">article in a conference report. The decisive factor is that the reference to the conference in the title of the monograph is mentioned.</desc>
+                                        <desc versionDate="2013-11-11" xml:lang="de">Artikel in einem Konferenzbericht. Ausschlaggebend ist, dass der Hinweis auf die Konferenz im Titel der Monographie genannt wird.</desc>
+                                    </valItem>
+                                    <valItem ident="mastersthesis">
+                                        <desc versionDate="2013-11-11" xml:lang="en">Bachelor's or Master's Thesis.</desc>
+                                        <desc versionDate="2013-11-11" xml:lang="de">Bachelor-, Master- oder Magisterarbeit.</desc>
+                                    </valItem>
+                                    <valItem ident="misc">
+                                        <desc versionDate="2013-11-11" xml:lang="en">everything else that can not be attached to any category.</desc>
+                                        <desc versionDate="2013-11-11" xml:lang="de">Alles, was nicht anders zuzuordnen ist.</desc>
+                                    </valItem>
+                                    <valItem ident="online">
+                                        <desc versionDate="2013-11-11" xml:lang="en">(native) online publications like blog posts, wiki entries or similar.</desc>
+                                        <desc versionDate="2013-11-11" xml:lang="de">(native) online Veröffentlichungen wie Blog-Posts, Wikieinträge o.ä.</desc>
+                                    </valItem>
+                                    <valItem ident="phdthesis">
+                                        <desc versionDate="2013-11-11" xml:lang="en">unpublished (aka 'typed') dissertation.</desc>
+                                        <desc versionDate="2013-11-11" xml:lang="de">ungedruckte (aka "maschinenschriftliche") Dissertation.</desc>
+                                    </valItem>
+                                    <valItem ident="review">
+                                        <desc versionDate="2013-11-11" xml:lang="en">review.</desc>
+                                        <desc versionDate="2013-11-11" xml:lang="de">Rezension.</desc>
+                                    </valItem>
+                                    <valItem ident="score">
+                                        <desc versionDate="2013-11-11" xml:lang="en">volume of music (eg. a score or a piano reduction)</desc>
+                                        <desc versionDate="2013-11-11" xml:lang="de">Notenband (z.B. Partitur oder Klavierauszug)</desc>
+                                    </valItem>
+                                </valList>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+                    
+                    <elementSpec ident="keywords" mode="change" module="header">
+                        <desc versionDate="2013-11-11" xml:lang="en">contains a list of keywords or phrases identifying the topic or nature of a text.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">enthält eine Liste von Keywords oder Passagen, die das Thema oder die Art eines Textes identifizieren.</desc>
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:oneOrMore>
+                                <rng:ref name="term"/>
+                            </rng:oneOrMore>
+                        </content>
+                        <attList>
+                            <attDef ident="scheme" mode="change" usage="req">
+                                <desc versionDate="2013-11-11" xml:lang="en">identifies the controlled vocabulary within which the set of keywords concerned is defined.</desc>
+                                <desc versionDate="2013-11-11" xml:lang="de">bezeichnet kontrolliert strukturiertes Vokabular, in dem die entsprechenden Keywords definiert sind.</desc>
+                                <valList>
+                                    <valItem ident="WeGA_biblio"/>
+                                </valList>
+                            </attDef>
+                        </attList>
+                    </elementSpec>
+                    
+                    <!--<elementSpec ident="title" mode="change" module="core">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.canonical" mode="delete"/>
+                        </classes>
+                        <attList>
+                            <attDef ident="level" mode="change" usage="req">
+                                <valList type="closed" mode="replace">
+                                    <valItem ident="s">
+                                        <desc>(series) Reihentitel</desc>
+                                    </valItem>
+                                    <valItem ident="a">
+                                        <desc>(analytic) Titel des Einzelwerks / der Datei</desc>
+                                    </valItem>
+                                </valList>
+                            </attDef>
+                            <attDef ident="xml:lang" mode="add" usage="req">
+                                <datatype>
+                                    <rng:ref name="data.language"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="type" mode="delete"/>
+                        </attList>
+                    </elementSpec>-->
+                    
+                    <elementSpec ident="term" mode="change" module="core">
+                        <desc versionDate="2013-11-11" xml:lang="en">contains a single-word, multi-word, or symbolic designation which is regarded as a technical term.</desc>
+                        <desc versionDate="2013-11-11" xml:lang="de">enthält ein einzelnes Wort, mehrer Wörter oder eine symbolische Bezeichnung, die als Fachbegriff gilt.</desc>
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.declaring" mode="delete"/>
+                            <memberOf key="att.pointing" mode="delete"/>
+                            <memberOf key="att.typed" mode="delete"/>
+                            <memberOf key="att.canonical" mode="delete"/>
+                        </classes>
+                        <content>
+                            <rng:ref name="data.text"/>
+                        </content>
+                        <attList>
+                            <attDef ident="cRef" mode="delete"/>
+                            <attDef ident="sortKey" mode="delete"/>
+                        </attList>
+                    </elementSpec>
+                    
+                </schemaSpec>
+            </div>
+        </body>
+    </text>
+</TEI>
