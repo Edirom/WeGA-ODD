@@ -9,7 +9,7 @@ namespace teix = "http://www.tei-c.org/ns/Examples"
 namespace xi = "http://www.w3.org/2001/XInclude"
 namespace xlink = "http://www.w3.org/1999/xlink"
 
-# Schema generated from ODD source 2020-12-17T20:48:12Z. .
+# Schema generated from ODD source 2020-12-17T21:13:08Z. .
 # TEI Edition: Version 4.0.0
 # TEI Edition Location: https://www.tei-c.org/Vault/P5//
 #
@@ -1304,6 +1304,7 @@ sch:pattern [
 ]
 model.expressionLike = expression
 model.itemLike = item
+model.manifestationLike = notAllowed
 expression =
   
   ## Intellectual or artistic realization of a work.
@@ -1321,6 +1322,7 @@ expression =
     contents?,
     notesStmt?,
     classification?,
+    componentList?,
     relationList?,
     att.common.attributes,
     att.authorized.attributes,
@@ -1346,6 +1348,7 @@ item =
     history?,
     notesStmt?,
     classification?,
+    componentList?,
     relationList?,
     att.common.attributes,
     att.authorized.attributes,
@@ -5170,6 +5173,61 @@ model.pubStmtPart =
   | respStmt
   | availability
 model.workIdent = model.incipLike | tempo
+model.workLike = work
+componentList =
+  
+  ## Container for intellectual or physical component parts of a bibliographic entity.
+  element componentList {
+    model.headLike*,
+    ((model.workLike* | model.expressionLike*)
+     | (model.manifestationLike* | model.itemLike*))
+    >> sch:pattern [
+         id =
+           "wegaWorks-componentList-checkComponentList-constraint-rule-66"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "mei:componentList"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test =
+               "every $i in ./child::mei:*[not(local-name()='head')] satisfies              $i/local-name() eq ./parent::mei:*/local-name()"
+             "Only child elements of the same name as the parent of the componentList are\x{a}" ~
+             "            allowed."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> sch:pattern [
+         id =
+           "wegaWorks-componentList-checkComponents-constraint-rule-67"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "mei:componentList[mei:*[@comptype]]"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             role = "warning"
+             test =
+               "count(mei:*[@comptype]) = count(mei:*[local-name() ne 'head'])"
+             "When any child\x{a}" ~
+             "            element has a comptype attribute, it is recommended that comptype appear on all child\x{a}" ~
+             "            elements."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.common.attributes,
+    empty
+  }
 altId =
   
   ## (alternative identifier) – May contain a bibliographic identifier that does not fit within the meiHead element's id attribute, for example because the identifier does not fit the definition of an XML id or because multiple identifiers are needed.
@@ -5226,7 +5284,7 @@ change =
     changeDesc,
     (model.dateLike?)
     >> sch:pattern [
-         id = "wegaWorks-change-check_change-constraint-rule-66"
+         id = "wegaWorks-change-check_change-constraint-rule-68"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -5311,7 +5369,7 @@ contents =
     (model.pLike? | (label?, contentItem)+)
     >> sch:pattern [
          id =
-           "wegaWorks-contents-checkContentsLabels-constraint-rule-67"
+           "wegaWorks-contents-checkContentsLabels-constraint-rule-69"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -5383,7 +5441,7 @@ handList =
     ((label?, hand)*)
     >> sch:pattern [
          id =
-           "wegaWorks-handList-checkHandListLabels-constraint-rule-68"
+           "wegaWorks-handList-checkHandListLabels-constraint-rule-70"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -5413,7 +5471,7 @@ history =
     model.headLike*,
     ((provenance | model.divLike | model.textComponentLike)*)
     >> sch:pattern [
-         id = "wegaWorks-history-history_restriction-constraint-rule-69"
+         id = "wegaWorks-history-history_restriction-constraint-rule-71"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -5443,7 +5501,7 @@ incipCode =
     text
     >> sch:pattern [
          id =
-           "wegaWorks-incipCode-Check_incipCode_form_mimetype-constraint-rule-70"
+           "wegaWorks-incipCode-Check_incipCode_form_mimetype-constraint-rule-72"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -5534,9 +5592,10 @@ meiHead =
   element meiHead {
     altId*,
     fileDesc,
+    workList?,
     (revisionDesc?)
     >> sch:pattern [
-         id = "wegaWorks-meiHead-check_meiHead_type-constraint-rule-71"
+         id = "wegaWorks-meiHead-check_meiHead_type-constraint-rule-73"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -5772,7 +5831,7 @@ source =
     itemList?,
     (relationList?)
     >> sch:pattern [
-         id = "wegaWorks-source-id-check-constraint-rule-74"
+         id = "wegaWorks-source-id-check-constraint-rule-76"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -5791,7 +5850,7 @@ source =
          "         "
        ]
     >> sch:pattern [
-         id = "wegaWorks-source-check_source_target-constraint-rule-75"
+         id = "wegaWorks-source-check_source_target-constraint-rule-77"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -5931,7 +5990,7 @@ termList =
     ((label?, term)*)
     >> sch:pattern [
          id =
-           "wegaWorks-termList-checkTermListLabels-constraint-rule-76"
+           "wegaWorks-termList-checkTermListLabels-constraint-rule-78"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6021,7 +6080,7 @@ work =
     expressionList?,
     (relationList?)
     >> sch:pattern [
-         id = "wegaWorks-work-id-check-constraint-rule-77"
+         id = "wegaWorks-work-id-check-constraint-rule-79"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6046,6 +6105,12 @@ work =
     att.pointing.attributes,
     att.targetEval.attributes,
     empty
+  }
+workList =
+  
+  ## (work list) – Grouping mechanism for information describing non-bibliographic aspects of a text.
+  element workList {
+    model.headLike*, work+, att.common.attributes, empty
   }
 model.addressPart = model.geogNamePart
 model.addressPart_alternation = model.geogNamePart_alternation
@@ -6434,7 +6499,7 @@ beam =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-beam-When_not_copyof_beam_content-constraint-rule-78"
+           "wegaWorks-beam-When_not_copyof_beam_content-constraint-rule-80"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6464,7 +6529,7 @@ beamSpan =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-beamSpan-beamspan_start-_and_end-type_attributes_required-constraint-rule-79"
+           "wegaWorks-beamSpan-beamspan_start-_and_end-type_attributes_required-constraint-rule-81"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6520,7 +6585,7 @@ fermata =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-fermata-fermata_start-type_attributes_required-constraint-rule-80"
+           "wegaWorks-fermata-fermata_start-type_attributes_required-constraint-rule-82"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6559,7 +6624,7 @@ hairpin =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-hairpin-hairpin_start-_and_end-type_attributes_required-constraint-rule-81"
+           "wegaWorks-hairpin-hairpin_start-_and_end-type_attributes_required-constraint-rule-83"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6631,7 +6696,7 @@ octave =
     ((text | model.textPhraseLike.limited)*)
     >> sch:pattern [
          id =
-           "wegaWorks-octave-octave_start-_and_end-type_attributes_required-constraint-rule-82"
+           "wegaWorks-octave-octave_start-_and_end-type_attributes_required-constraint-rule-84"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6666,7 +6731,7 @@ slur =
   [
     sch:pattern [
       id =
-        "wegaWorks-slur-slur_start-_and_end-type_attributes_required-constraint-rule-83"
+        "wegaWorks-slur-slur_start-_and_end-type_attributes_required-constraint-rule-85"
       "\x{a}" ~
       "            "
       sch:rule [
@@ -6692,7 +6757,7 @@ slur =
       "         "
     ]
     sch:pattern [
-      id = "wegaWorks-slur-slur_containing_curve-constraint-rule-84"
+      id = "wegaWorks-slur-slur_containing_curve-constraint-rule-86"
       "\x{a}" ~
       "            "
       sch:rule [
@@ -6723,7 +6788,7 @@ tie =
   [
     sch:pattern [
       id =
-        "wegaWorks-tie-tie_start-_and_end-type_attributes_required-constraint-rule-85"
+        "wegaWorks-tie-tie_start-_and_end-type_attributes_required-constraint-rule-87"
       "\x{a}" ~
       "            "
       sch:rule [
@@ -6749,7 +6814,7 @@ tie =
       "         "
     ]
     sch:pattern [
-      id = "wegaWorks-tie-tie_containing_curve-constraint-rule-86"
+      id = "wegaWorks-tie-tie_containing_curve-constraint-rule-88"
       "\x{a}" ~
       "            "
       sch:rule [
@@ -6784,7 +6849,7 @@ tuplet =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-rule-87"
+           "wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-rule-89"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6814,7 +6879,7 @@ tupletSpan =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-tupletSpan-tupletSpan_start-_and_end-type_attributes_required-constraint-rule-88"
+           "wegaWorks-tupletSpan-tupletSpan_start-_and_end-type_attributes_required-constraint-rule-90"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6903,7 +6968,7 @@ trill =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-trill-trill_start-type_attributes_required-constraint-rule-89"
+           "wegaWorks-trill-trill_start-type_attributes_required-constraint-rule-91"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6932,7 +6997,7 @@ turn =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-turn-turn_start-type_attributes_required-constraint-rule-90"
+           "wegaWorks-turn-turn_start-type_attributes_required-constraint-rule-92"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7084,7 +7149,7 @@ li =
     model.headLike*,
     ((label?, li)*)
     >> sch:pattern [
-         id = "wegaWorks-list-list_type_constraint-constraint-rule-91"
+         id = "wegaWorks-list-list_type_constraint-constraint-rule-93"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7333,7 +7398,7 @@ cpMark =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-cpMark-cpMark_start-_and_end-type_attributes_required-constraint-rule-92"
+           "wegaWorks-cpMark-cpMark_start-_and_end-type_attributes_required-constraint-rule-94"
          "\x{a}" ~
          "            "
          sch:rule [
