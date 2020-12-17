@@ -1186,7 +1186,13 @@ le fait une espace.</desc><desc xml:lang="ja" versionDate="2018-12-31">当該要
 	bearing this attribute should be considered to mark the end of
 	an orthographic token in the same way as whitespace.</desc><desc xml:lang="fr" versionDate="2007-06-12">indique si l'élément qui porte cet attribut
       peut être considéré comme une espace blanc indiquant la fin d'un mot
-      orthographique.</desc><desc xml:lang="ja" versionDate="2018-12-31">この属性を持つ要素が空白と同じ方法で正字トークンの終わりを示すとみなされるべきかどうかを示す。</desc><datatype><dataRef key="teidata.enumerated"/></datatype><valList xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" type="closed"><valItem ident="no">
+      orthographique.</desc><desc xml:lang="ja" versionDate="2018-12-31">この属性を持つ要素が空白と同じ方法で正字トークンの終わりを示すとみなされるべきかどうかを示す。</desc><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="hyphenation-whitespace">
+                        <constraint>
+                            <sch:rule context="tei:*[@break]">
+                                <sch:report test="matches((following-sibling::text() | following-sibling::element())[1], '^\s') or matches((preceding-sibling::text() | preceding-sibling::element())[last()], '\s$')">There must not be any whitespace before or after the <sch:name/> element when the @break attribute is applied.</sch:report>
+                            </sch:rule>
+                        </constraint>
+                    </constraintSpec><datatype><dataRef key="teidata.enumerated"/></datatype><valList xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" type="closed"><valItem ident="no">
                             <desc versionDate="2020-12-17" xml:lang="en">The element bearing this attribute is considered not to mark the end of any adjacent orthographic token.</desc>
                             <desc versionDate="2020-12-17" xml:lang="de">Das Element mit diesem Attribut markiert nicht das Ende des vorangehenden Wortes.</desc>
                         </valItem></valList><exemplum xml:lang="en">
@@ -7663,7 +7669,7 @@ entre les Romains.</label>
                 <desc versionDate="2020-12-15" xml:lang="en">Report any commentary note that does not start with a capital letter (except for quotes as a first child)</desc>
                 <constraint>
                     <sch:rule context="tei:note[@type='commentary'][not(*[1]/self::tei:q or *[1]/self::tei:quote)]">
-                        <sch:assert test="matches(replace(normalize-unicode(normalize-space(.), 'NFKD'),  '[\p{M}]', ''), '^[A-Z0-9]')">Commentary notes shall start with an upper case letter.</sch:assert>
+                        <sch:assert test="matches(replace(normalize-unicode(normalize-space(.), 'NFKD'),  '[\p{M}]', ''), '^[A-Z0-9]')">Commentary notes must start with an upper case letter.</sch:assert>
                     </sch:rule>
                 </constraint>
             </constraintSpec><attList><attDef ident="type" mode="change">
