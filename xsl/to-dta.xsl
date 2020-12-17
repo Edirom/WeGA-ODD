@@ -76,9 +76,11 @@
         </xsl:copy>
     </xsl:template>
     
+    <!-- TODO: need to flesh out the bibliographic reference-->
     <xsl:template match="biblStruct">
         <xsl:element name="bibl">
-            <xsl:apply-templates select="analytic/node() | monogr/node() except monogr/imprint | monogr/imprint/node()"/>
+            <!--<xsl:apply-templates select="analytic/node() | monogr/node() except monogr/imprint | monogr/imprint/node()"/>-->
+            <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
     
@@ -176,6 +178,28 @@
         </xsl:copy>
     </xsl:template>
     
+    <!-- TODO: need to keep the <quote> element -->
+    <xsl:template match="quote[@rend] | q">
+        <xsl:call-template name="enquote">
+            <xsl:with-param name="double" select="@rend='double-quotes' or self::q"/>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template match="@level[parent::title][ancestor::titleStmt]">
+        <xsl:choose>
+            <xsl:when test=".= 's'">
+                <xsl:attribute name="type">volume</xsl:attribute>
+            </xsl:when>
+            <xsl:when test=".= 'a'">
+                <xsl:attribute name="type">main</xsl:attribute>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
+    
+    <xsl:template match="@type[.='WeGA'][parent::idno][ancestor::publicationStmt]">
+        <xsl:attribute name="type">URLWeb</xsl:attribute>
+    </xsl:template>
+    
     <xsl:template match="@rend" priority="1">
         <xsl:attribute name="rendition">
             <xsl:choose>
@@ -207,5 +231,39 @@
     <xsl:template match="@key[parent::author]" priority="1"/>
     <xsl:template match="@type[parent::head]"/>
     <xsl:template match="@type[parent::date]"/>
+    
+    <xsl:template name="enquote">
+        <xsl:param name="double" select="true()"/>
+        <xsl:param name="lang" select="'de'"/>
+        <xsl:choose>
+            <!-- German double quotation marks -->
+            <xsl:when test="$lang eq 'de' and $double">
+                <xsl:text>„</xsl:text>
+                <xsl:apply-templates mode="#current"/>
+                <xsl:text>“</xsl:text>
+            </xsl:when>
+            <xsl:when test="$lang eq 'en' and $double">
+                <xsl:text>“</xsl:text>
+                <xsl:apply-templates mode="#current"/>
+                <xsl:text>”</xsl:text>
+            </xsl:when>
+            <!-- German single quotation marks -->
+            <xsl:when test="$lang eq 'de' and not($double)">
+                <xsl:text>‚</xsl:text>
+                <xsl:apply-templates mode="#current"/>
+                <xsl:text>‘</xsl:text>
+            </xsl:when>
+            <xsl:when test="$lang eq 'en' and not($double)">
+                <xsl:text>‘</xsl:text>
+                <xsl:apply-templates mode="#current"/>
+                <xsl:text>’</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>"</xsl:text>
+                <xsl:apply-templates mode="#current"/>
+                <xsl:text>"</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
     
 </xsl:stylesheet>
