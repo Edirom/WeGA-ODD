@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:teix="http://www.tei-c.org/ns/Examples" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2020-12-29T21:32:32Z. .
+Schema generated from ODD source 2020-12-29T22:16:03Z. .
 TEI Edition: Version 4.0.0
 TEI Edition Location: https://www.tei-c.org/Vault/P5//
   
@@ -800,6 +800,11 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5//
       <value>justify</value>
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Left and right aligned.</a:documentation>
     </choice>
+  </define>
+  <define name="data.INTERVAL.HARMONIC">
+    <data type="token">
+      <param name="pattern">[AdMmP][0-9]+</param>
+    </data>
   </define>
   <define name="data.INTERVAL.MELODIC">
     <choice>
@@ -5482,6 +5487,7 @@ Suggested values include: 1] smufl</a:documentation>
       <ref name="dir"/>
       <ref name="dynam"/>
       <ref name="tempo"/>
+      <ref name="model.controlEventLike.harmony"/>
       <ref name="cpMark"/>
     </choice>
   </define>
@@ -5490,6 +5496,7 @@ Suggested values include: 1] smufl</a:documentation>
       <ref name="dir"/>
       <ref name="dynam"/>
       <ref name="tempo"/>
+      <ref name="model.controlEventLike.harmony_alternation"/>
       <ref name="cpMark"/>
     </choice>
   </define>
@@ -5497,6 +5504,7 @@ Suggested values include: 1] smufl</a:documentation>
     <ref name="dir"/>
     <ref name="dynam"/>
     <ref name="tempo"/>
+    <ref name="model.controlEventLike.harmony_sequence"/>
     <ref name="cpMark"/>
   </define>
   <define name="model.controlEventLike_sequenceOptional">
@@ -5508,6 +5516,9 @@ Suggested values include: 1] smufl</a:documentation>
     </optional>
     <optional>
       <ref name="tempo"/>
+    </optional>
+    <optional>
+      <ref name="model.controlEventLike.harmony_sequenceOptional"/>
     </optional>
     <optional>
       <ref name="cpMark"/>
@@ -5524,6 +5535,9 @@ Suggested values include: 1] smufl</a:documentation>
       <ref name="tempo"/>
     </zeroOrMore>
     <zeroOrMore>
+      <ref name="model.controlEventLike.harmony_sequenceOptionalRepeatable"/>
+    </zeroOrMore>
+    <zeroOrMore>
       <ref name="cpMark"/>
     </zeroOrMore>
   </define>
@@ -5536,6 +5550,9 @@ Suggested values include: 1] smufl</a:documentation>
     </oneOrMore>
     <oneOrMore>
       <ref name="tempo"/>
+    </oneOrMore>
+    <oneOrMore>
+      <ref name="model.controlEventLike.harmony_sequenceRepeatable"/>
     </oneOrMore>
     <oneOrMore>
       <ref name="cpMark"/>
@@ -7601,6 +7618,9 @@ Suggested values include: 1] person; 2] corporation; 3] location; 4] process; 5]
     <element name="scoreDef">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(score definition) – Container for score meta-information.</a:documentation>
       <optional>
+        <ref name="model.chordTableLike"/>
+      </optional>
+      <optional>
         <ref name="model.keySigLike"/>
       </optional>
       <optional>
@@ -8018,6 +8038,121 @@ Suggested values include: 1] person; 2] corporation; 3] location; 4] process; 5]
       <empty/>
     </element>
   </define>
+  <define name="att.harm.log.attributes">
+    <ref name="att.controlEvent.attributes"/>
+    <ref name="att.duration.additive.attributes"/>
+    <ref name="att.startEndId.attributes"/>
+    <ref name="att.timestamp2.logical.attributes"/>
+    <ref name="att.harm.log.attribute.chordref"/>
+  </define>
+  <define name="att.harm.log.attribute.chordref">
+    <optional>
+      <attribute name="chordref">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Contains a reference to a <code xmlns="http://www.w3.org/1999/xhtml">&lt;chordDef&gt;</code> element elsewhere in the document.</a:documentation>
+        <ref name="data.URI"/>
+      </attribute>
+    </optional>
+  </define>
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.harm.log-chordref-check_chordrefTarget-constraint-rule-72">
+    <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="@chordref">
+      <sch:assert role="warning" test="not(normalize-space(.) eq '')">@chordref attribute
+                should have content.</sch:assert>
+      <sch:assert role="warning" test="every $i in tokenize(., '\s+') satisfies substring($i,2)=//mei:chordDef/@xml:id">The value in @chordref should correspond to the @xml:id attribute of a chordDef
+                element.</sch:assert>
+    </sch:rule>
+  </pattern>
+  <define name="model.chordTableLike">
+    <notAllowed/>
+  </define>
+  <define name="model.controlEventLike.harmony">
+    <choice>
+      <ref name="model.harmLike"/>
+    </choice>
+  </define>
+  <define name="model.controlEventLike.harmony_alternation">
+    <choice>
+      <ref name="model.harmLike_alternation"/>
+    </choice>
+  </define>
+  <define name="model.controlEventLike.harmony_sequence">
+    <ref name="model.harmLike_sequence"/>
+  </define>
+  <define name="model.controlEventLike.harmony_sequenceOptional">
+    <optional>
+      <ref name="model.harmLike_sequenceOptional"/>
+    </optional>
+  </define>
+  <define name="model.controlEventLike.harmony_sequenceOptionalRepeatable">
+    <zeroOrMore>
+      <ref name="model.harmLike_sequenceOptionalRepeatable"/>
+    </zeroOrMore>
+  </define>
+  <define name="model.controlEventLike.harmony_sequenceRepeatable">
+    <oneOrMore>
+      <ref name="model.harmLike_sequenceRepeatable"/>
+    </oneOrMore>
+  </define>
+  <define name="model.figbassLike">
+    <notAllowed/>
+  </define>
+  <define name="model.fLike">
+    <notAllowed/>
+  </define>
+  <define name="model.harmLike">
+    <choice>
+      <ref name="harm"/>
+    </choice>
+  </define>
+  <define name="model.harmLike_alternation">
+    <choice>
+      <ref name="harm"/>
+    </choice>
+  </define>
+  <define name="model.harmLike_sequence">
+    <ref name="harm"/>
+  </define>
+  <define name="model.harmLike_sequenceOptional">
+    <optional>
+      <ref name="harm"/>
+    </optional>
+  </define>
+  <define name="model.harmLike_sequenceOptionalRepeatable">
+    <zeroOrMore>
+      <ref name="harm"/>
+    </zeroOrMore>
+  </define>
+  <define name="model.harmLike_sequenceRepeatable">
+    <oneOrMore>
+      <ref name="harm"/>
+    </oneOrMore>
+  </define>
+  <define name="harm">
+    <element name="harm">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(harmony) – An indication of harmony, e.g., chord names, tablature grids, harmonic analysis, figured bass.</a:documentation>
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="model.textPhraseLike.limited"/>
+          <ref name="model.editLike"/>
+          <ref name="model.transcriptionLike"/>
+          <ref name="model.figbassLike"/>
+        </choice>
+      </zeroOrMore>
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-harm-harm_start-type_attributes_required-constraint-rule-73">
+        <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:harm">
+          <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of the
+            attributes: startid, tstamp, tstamp.ges or tstamp.real.</sch:assert>
+        </sch:rule>
+      </pattern>
+      <ref name="att.common.attributes"/>
+      <ref name="att.facsimile.attributes"/>
+      <ref name="att.harm.log.attributes"/>
+      <ref name="att.harm.vis.attributes"/>
+      <ref name="att.harm.ges.attributes"/>
+      <ref name="att.harm.anl.attributes"/>
+      <empty/>
+    </element>
+  </define>
   <define name="att.recordType.attributes">
     <ref name="att.recordType.attribute.recordtype"/>
   </define>
@@ -8131,13 +8266,13 @@ Suggested values include: 1] person; 2] corporation; 3] location; 4] process; 5]
           </zeroOrMore>
         </choice>
       </choice>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-componentList-checkComponentList-constraint-rule-72">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-componentList-checkComponentList-constraint-rule-74">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:componentList">
           <sch:assert test="every $i in ./child::mei:*[not(local-name()='head')] satisfies              $i/local-name() eq ./parent::mei:*/local-name()">Only child elements of the same name as the parent of the componentList are
             allowed.</sch:assert>
         </sch:rule>
       </pattern>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-componentList-checkComponents-constraint-rule-73">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-componentList-checkComponents-constraint-rule-75">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:componentList[mei:*[@comptype]]">
           <sch:assert role="warning" test="count(mei:*[@comptype]) = count(mei:*[local-name() ne 'head'])">When any child
             element has a comptype attribute, it is recommended that comptype appear on all child
@@ -8206,7 +8341,7 @@ Suggested values include: 1] gnd (Gemeinsame Normdatei); 2] opus; 3] WeGA (Werke
       <optional>
         <ref name="model.dateLike"/>
       </optional>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-change-check_change-constraint-rule-74">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-change-check_change-constraint-rule-76">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:change">
           <sch:assert test="@isodate or mei:date">The date of the change must be recorded in an
             isodate attribute or date element.</sch:assert>
@@ -8292,7 +8427,7 @@ Suggested values include: 1] gnd (Gemeinsame Normdatei); 2] opus; 3] WeGA (Werke
           <ref name="contentItem"/>
         </oneOrMore>
       </choice>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-contents-checkContentsLabels-constraint-rule-75">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-contents-checkContentsLabels-constraint-rule-77">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:contents[mei:label]">
           <sch:assert role="warning" test="count(mei:label) = count(mei:contentItem)">When labels
             are used, usually each content item has one.</sch:assert>
@@ -8382,7 +8517,7 @@ Suggested values include: 1] gnd (Gemeinsame Normdatei); 2] opus; 3] WeGA (Werke
         </optional>
         <ref name="hand"/>
       </zeroOrMore>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-handList-checkHandListLabels-constraint-rule-76">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-handList-checkHandListLabels-constraint-rule-78">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:handList[mei:label]">
           <sch:assert role="warning" test="count(mei:label) = count(mei:hand)">When labels are used,
             usually each hand has one.</sch:assert>
@@ -8406,7 +8541,7 @@ Suggested values include: 1] gnd (Gemeinsame Normdatei); 2] opus; 3] WeGA (Werke
           <ref name="model.textComponentLike"/>
         </choice>
       </zeroOrMore>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-history-history_restriction-constraint-rule-77">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-history-history_restriction-constraint-rule-79">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:history[parent::mei:work or parent::mei:expression]">
           <sch:assert test="not(mei:acquisition or mei:provenance)">The acquisition and provenance
             elements are not permitted in the work or expression context.</sch:assert>
@@ -8421,7 +8556,7 @@ Suggested values include: 1] gnd (Gemeinsame Normdatei); 2] opus; 3] WeGA (Werke
     <element name="incipCode">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Incipit coded in a non-XML, plain text format, such as Plaine &amp; Easie Code.</a:documentation>
       <text/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-incipCode-Check_incipCode_form_mimetype-constraint-rule-78">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-incipCode-Check_incipCode_form_mimetype-constraint-rule-80">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:incipCode">
           <sch:assert test="@form or @mimetype">incipCode must have a form or mimetype
             attribute.</sch:assert>
@@ -8524,7 +8659,7 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
       <optional>
         <ref name="revisionDesc"/>
       </optional>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-meiHead-check_meiHead_type-constraint-rule-79">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-meiHead-check_meiHead_type-constraint-rule-81">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:meiHead[@type eq 'music']">
           <sch:assert test="ancestor::mei:mei">The meiHead type attribute can have the value 'music'
             only when the document element is "mei".</sch:assert>
@@ -8846,13 +8981,13 @@ Suggested values include: 1] plaineAndEasie; 2] humdrumKern; 3] parsons</a:docum
       <optional>
         <ref name="relationList"/>
       </optional>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-source-id-check-constraint-rule-82">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-source-id-check-constraint-rule-84">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:source">
           <sch:assert test="@xml:id or ancestor::mei:source"> Am
                                         Wurzelelement muss eine XML-ID angegeben sein. </sch:assert>
         </sch:rule>
       </pattern>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-source-check_source_target-constraint-rule-83">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-source-check_source_target-constraint-rule-85">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:source/@target">
           <sch:assert role="warning" test="not(normalize-space(.) eq '')">@target attribute should
             have content.</sch:assert>
@@ -8960,7 +9095,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
         </optional>
         <ref name="term"/>
       </zeroOrMore>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-termList-checkTermListLabels-constraint-rule-84">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-termList-checkTermListLabels-constraint-rule-86">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:termList[mei:label]">
           <sch:assert role="warning" test="count(mei:label) = count(mei:term)">When labels are used,
             usually each term has one.</sch:assert>
@@ -9085,7 +9220,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
       <optional>
         <ref name="relationList"/>
       </optional>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-work-id-check-constraint-rule-85">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-work-id-check-constraint-rule-87">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:source">
           <sch:assert test="@xml:id or ancestor::mei:source"> Am
                                         Wurzelelement muss eine XML-ID angegeben sein. </sch:assert>
@@ -9476,7 +9611,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
       </attribute>
     </optional>
   </define>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.beamRend-place-check_beam_place-constraint-rule-86">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.beamRend-place-check_beam_place-constraint-rule-88">
     <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:beam[@place eq 'mixed' and not(descendant::mei:*[local-name() eq 'note' or local-name() eq 'chord'][@staff != ./@staff] or descendant::mei:*[local-name() eq 'note' or local-name() eq 'chord'][@staff != ancestor::mei:staff/@n])]">
       <sch:assert test="count(descendant::mei:*[local-name() eq 'note' or local-name() eq 'chord'][@stem.dir]) = count(descendant::mei:*[local-name() eq 'note' or local-name() eq 'chord'])">Stem direction must be specified for all notes and chords under the
                 beam.</sch:assert>
@@ -10276,7 +10411,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
           <ref name="model.transcriptionLike"/>
         </choice>
       </zeroOrMore>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-beam-When_not_copyof_beam_content-constraint-rule-88">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-beam-When_not_copyof_beam_content-constraint-rule-90">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:beam[not(@copyof)]">
           <sch:assert test="count(descendant::*[local-name()='note' or local-name()='rest' or               local-name()='chord' or local-name()='space']) &gt; 1">A beam without a copyof attribute must have at least 2 note, rest, chord, or space
             descendants.</sch:assert>
@@ -10295,7 +10430,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
     <element name="beamSpan">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(beam span) – Alternative element for explicitly encoding beams, particularly those which extend across bar lines.</a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-beamSpan-beamspan_start-_and_end-type_attributes_required-constraint-rule-89">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-beamSpan-beamspan_start-_and_end-type_attributes_required-constraint-rule-91">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:beamSpan">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of the
             attributes: startid, tstamp, tstamp.ges or tstamp.real.</sch:assert>
@@ -10347,7 +10482,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
     <element name="fermata">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An indication placed over a note or rest to indicate that it should be held longer than its written value. May also occur over a bar line to indicate the end of a phrase or section. Sometimes called a 'hold' or 'pause'.</a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-fermata-fermata_start-type_attributes_required-constraint-rule-90">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-fermata-fermata_start-type_attributes_required-constraint-rule-92">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:fermata">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of the
             attributes: startid, tstamp, tstamp.ges or tstamp.real.</sch:assert>
@@ -10394,7 +10529,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
     <element name="hairpin">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Indicates continuous dynamics expressed on the score as wedge-shaped graphics, e.g. &lt; and &gt;.</a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-hairpin-hairpin_start-_and_end-type_attributes_required-constraint-rule-91">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-hairpin-hairpin_start-_and_end-type_attributes_required-constraint-rule-93">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:hairpin">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of the
             attributes: startid, tstamp, tstamp.ges or tstamp.real.</sch:assert>
@@ -10508,7 +10643,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
           <ref name="model.textPhraseLike.limited"/>
         </choice>
       </zeroOrMore>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-octave-octave_start-_and_end-type_attributes_required-constraint-rule-92">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-octave-octave_start-_and_end-type_attributes_required-constraint-rule-94">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:octave">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of the
             attributes: startid, tstamp, tstamp.ges or tstamp.real.</sch:assert>
@@ -10528,7 +10663,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
   <define name="slur">
     <element name="slur">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Indication of 1) a "unified melodic idea" or 2) performance technique.</a:documentation>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-slur-slur_start-_and_end-type_attributes_required-constraint-rule-93">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-slur-slur_start-_and_end-type_attributes_required-constraint-rule-95">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:slur">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of the
             attributes: startid, tstamp, tstamp.ges or tstamp.real.</sch:assert>
@@ -10536,7 +10671,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
             dur, dur.ges, endid, or tstamp2.</sch:assert>
         </sch:rule>
       </pattern>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-slur-slur_containing_curve-constraint-rule-94">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-slur-slur_containing_curve-constraint-rule-96">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:slur[mei:curve[@bezier or @bulge or @curvedir or @lform or @lwidth or              @ho or @startho or @endho or @to or @startto or @endto or @vo or @startvo or @endvo or              @x or @y or @x2 or @y2]]">
           <sch:assert test="not(@bezier or @bulge or @curvedir or @lform or @lwidth or @ho or @startho or                @endho or @to or @startto or @endto or @vo or @startvo or @endvo or @x or @y or @x2 or @y2)" role="warning">The visual attributes of the slur (@bezier, @bulge, @curvedir, @lform,
             @lwidth, @ho, @startho, @endho, @to, @startto, @endto, @vo, @startvo, @endvo, @x, @y,
@@ -10556,7 +10691,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
   <define name="tie">
     <element name="tie">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An indication that two notes of the same pitch form a single note with their combined rhythmic values.</a:documentation>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tie-tie_start-_and_end-type_attributes_required-constraint-rule-95">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tie-tie_start-_and_end-type_attributes_required-constraint-rule-97">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:tie">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of the
             attributes: startid, tstamp, tstamp.ges or tstamp.real.</sch:assert>
@@ -10564,7 +10699,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
             dur, dur.ges, endid, or tstamp2.</sch:assert>
         </sch:rule>
       </pattern>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tie-tie_containing_curve-constraint-rule-96">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tie-tie_containing_curve-constraint-rule-98">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:tie[mei:curve[@bezier or @bulge or @curvedir or @lform or @lwidth or              @ho or @startho or @endho or @to or @startto or @endto or @vo or @startvo or              @endvo or @x or @y or @x2 or @y2]]">
           <sch:assert test="not(@bezier or @bulge or @curvedir or @lform or @lwidth or @ho or @startho or                @endho or @to or @startto or @endto or @vo or @startvo or @endvo or @x or @y or @x2 or @y2)" role="warning">The visual attributes of the tie (@bezier, @bulge, @curvedir, @lform,
             @lwidth, @ho, @startho, @endho, @to, @startto, @endto, @vo, @startvo, @endvo, @x, @y,
@@ -10592,7 +10727,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
           <ref name="model.transcriptionLike"/>
         </choice>
       </zeroOrMore>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-rule-97">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-rule-99">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:tuplet[not(@copyof)]">
           <sch:assert test="count(descendant::*[local-name()='note' or local-name()='rest' or               local-name()='chord']) &gt; 1">A tuplet without a copyof attribute must have at least 2 note, rest, or chord
             descendants.</sch:assert>
@@ -10611,7 +10746,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
     <element name="tupletSpan">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(tuplet span) – Alternative element for encoding tuplets, especially useful for tuplets that extend across bar lines.</a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tupletSpan-tupletSpan_start-_and_end-type_attributes_required-constraint-rule-98">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-tupletSpan-tupletSpan_start-_and_end-type_attributes_required-constraint-rule-100">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:tupletSpan">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of the
             attributes: startid, tstamp, tstamp.ges or tstamp.real.</sch:assert>
@@ -10782,7 +10917,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
     <element name="mordent">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An ornament indicating rapid alternation of the main note with a secondary note, usually a step below, but sometimes a step above. </a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-mordent-mordent_start-type_attributes_required-constraint-rule-99">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-mordent-mordent_start-type_attributes_required-constraint-rule-101">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:mordent">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of the
             attributes: startid, tstamp, tstamp.ges or tstamp.real.</sch:assert>
@@ -10801,7 +10936,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
     <element name="trill">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Rapid alternation of a note with another (usually at the interval of a second above).</a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-trill-trill_start-type_attributes_required-constraint-rule-100">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-trill-trill_start-type_attributes_required-constraint-rule-102">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:trill">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of the
             attributes: startid, tstamp, tstamp.ges or tstamp.real.</sch:assert>
@@ -10820,7 +10955,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
     <element name="turn">
       <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">An ornament consisting of four notes — the upper neighbor of the written note, the written note, the lower neighbor, and the written note.</a:documentation>
       <empty/>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-turn-turn_start-type_attributes_required-constraint-rule-101">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-turn-turn_start-type_attributes_required-constraint-rule-103">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:turn">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of the
             attributes: startid, tstamp, tstamp.ges or tstamp.real.</sch:assert>
@@ -11151,7 +11286,7 @@ Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_sco
         </optional>
         <ref name="li"/>
       </zeroOrMore>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-list-list_type_constraint-constraint-rule-102">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-list-list_type_constraint-constraint-rule-104">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:list[contains(@type,'gloss')]">
           <sch:assert test="count(mei:label) = count(mei:li)">In a list of type "gloss" all items
             must be immediately preceded by a label.</sch:assert>
@@ -11385,6 +11520,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
           <ref name="model.divLike"/>
           <ref name="model.editLike"/>
           <ref name="model.editTransPart"/>
+          <ref name="model.fLike"/>
           <ref name="model.layerPart"/>
           <ref name="model.milestoneLike.music"/>
           <ref name="model.sectionPart"/>
@@ -11415,6 +11551,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
           <ref name="model.divLike"/>
           <ref name="model.editLike"/>
           <ref name="model.editTransPart"/>
+          <ref name="model.fLike"/>
           <ref name="model.keyAccidLike"/>
           <ref name="model.layerPart"/>
           <ref name="model.milestoneLike.music"/>
@@ -11461,6 +11598,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
           <ref name="model.divLike"/>
           <ref name="model.editLike"/>
           <ref name="model.editTransPart"/>
+          <ref name="model.fLike"/>
           <ref name="model.keyAccidLike"/>
           <ref name="model.layerPart"/>
           <ref name="model.milestoneLike.music"/>
@@ -11488,7 +11626,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
           <ref name="model.transcriptionLike"/>
         </choice>
       </zeroOrMore>
-      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-cpMark-cpMark_start-_and_end-type_attributes_required-constraint-rule-103">
+      <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-cpMark-cpMark_start-_and_end-type_attributes_required-constraint-rule-105">
         <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:cpMark">
           <sch:assert test="@startid or @tstamp or @tstamp.ges or @tstamp.real">Must have one of the
             attributes: startid, tstamp, tstamp.ges or tstamp.real</sch:assert>
@@ -11514,6 +11652,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
           <ref name="model.divLike"/>
           <ref name="model.editLike"/>
           <ref name="model.editTransPart"/>
+          <ref name="model.fLike"/>
           <ref name="model.keyAccidLike"/>
           <ref name="model.layerPart"/>
           <ref name="model.milestoneLike.music"/>
@@ -11546,6 +11685,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
           <ref name="model.divLike"/>
           <ref name="model.editLike"/>
           <ref name="model.editTransPart"/>
+          <ref name="model.fLike"/>
           <ref name="model.keyAccidLike"/>
           <ref name="model.layerPart"/>
           <ref name="model.milestoneLike.music"/>
@@ -11573,6 +11713,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
           <ref name="model.divLike"/>
           <ref name="model.editLike"/>
           <ref name="model.editTransPart"/>
+          <ref name="model.fLike"/>
           <ref name="model.layerPart"/>
           <ref name="model.milestoneLike.music"/>
           <ref name="model.sectionPart"/>
@@ -11616,6 +11757,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
           <ref name="model.divLike"/>
           <ref name="model.editLike"/>
           <ref name="model.editTransPart"/>
+          <ref name="model.fLike"/>
           <ref name="model.keyAccidLike"/>
           <ref name="model.layerPart"/>
           <ref name="model.milestoneLike.music"/>
@@ -11641,6 +11783,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
           <ref name="model.divLike"/>
           <ref name="model.editLike"/>
           <ref name="model.editTransPart"/>
+          <ref name="model.fLike"/>
           <ref name="model.keyAccidLike"/>
           <ref name="model.layerPart"/>
           <ref name="model.milestoneLike.music"/>
@@ -11673,6 +11816,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
           <ref name="model.divLike"/>
           <ref name="model.editLike"/>
           <ref name="model.editTransPart"/>
+          <ref name="model.fLike"/>
           <ref name="model.keyAccidLike"/>
           <ref name="model.layerPart"/>
           <ref name="model.milestoneLike.music"/>
@@ -11711,6 +11855,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
           <ref name="model.divLike"/>
           <ref name="model.editLike"/>
           <ref name="model.editTransPart"/>
+          <ref name="model.fLike"/>
           <ref name="model.keyAccidLike"/>
           <ref name="model.layerPart"/>
           <ref name="model.milestoneLike.music"/>
@@ -11743,7 +11888,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
       </attribute>
     </optional>
   </define>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.accidental.gestural-accid.ges-check_accid_duplication-constraint-rule-104">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.accidental.gestural-accid.ges-check_accid_duplication-constraint-rule-106">
     <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="@accid.ges">
       <sch:assert role="warning" test="not(. eq ../@accid)">The value of @accid.ges should
                 not duplicate the value of @accid.</sch:assert>
@@ -11899,6 +12044,10 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
   <define name="att.halfmRpt.ges.attributes">
     <ref name="att.duration.gestural.attributes"/>
   </define>
+  <define name="att.harm.ges.attributes">
+    <ref name="att.duration.gestural.attributes"/>
+    <ref name="att.timestamp2.gestural.attributes"/>
+  </define>
   <define name="att.instrDef.ges.attributes">
     <ref name="att.channelized.attributes"/>
     <ref name="att.midiInstrument.attributes"/>
@@ -11971,7 +12120,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
       </attribute>
     </optional>
   </define>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.note.ges-extremis_disallows_gestural_pitch-constraint-rule-105">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.note.ges-extremis_disallows_gestural_pitch-constraint-rule-107">
     <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:note[@extremis]">
       <sch:assert test="not(@pname.ges) and not(@oct.ges)">When the @extremis attribute is used,
             the @pname.ges and @oct.ges attributes are not allowed.</sch:assert>
@@ -12189,6 +12338,23 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
   <define name="att.halfmRpt.anl.attributes">
     <empty/>
   </define>
+  <define name="att.harm.anl.attributes">
+    <ref name="att.intervalHarmonic.attributes"/>
+    <ref name="att.harm.anl.attribute.form"/>
+  </define>
+  <define name="att.harm.anl.attribute.form">
+    <optional>
+      <attribute name="form">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Indicates to what degree the harmonic label is supported by the notation.</a:documentation>
+        <choice>
+          <value>explicit</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The notation contains all the notes necessary for the harmonic label, e.g., the notes "D F♯ A" for the harmonic label "D".</a:documentation>
+          <value>implied</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">The harmonic label relies on notes implied, but not actually present, in the notation, e.g., the notes "D F♯ C" for the harmonic label "D7". The note "A" is missing from the notation, but can be implied.</a:documentation>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
   <define name="att.harmonicFunction.attributes">
     <ref name="att.harmonicFunction.attribute.deg"/>
   </define>
@@ -12202,6 +12368,21 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
   </define>
   <define name="att.instrDef.anl.attributes">
     <empty/>
+  </define>
+  <define name="att.intervalHarmonic.attributes">
+    <ref name="att.intervalHarmonic.attribute.inth"/>
+  </define>
+  <define name="att.intervalHarmonic.attribute.inth">
+    <optional>
+      <attribute name="inth">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Encodes the harmonic interval between pitches occurring at the same time.</a:documentation>
+        <list>
+          <oneOrMore>
+            <ref name="data.INTERVAL.HARMONIC"/>
+          </oneOrMore>
+        </list>
+      </attribute>
+    </optional>
   </define>
   <define name="att.intervalMelodic.attributes">
     <ref name="att.intervalMelodic.attribute.intm"/>
@@ -12591,7 +12772,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
       </attribute>
     </optional>
   </define>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.fTrem.vis-beams.float-check_beams.floating-constraint-rule-106">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.fTrem.vis-beams.float-check_beams.floating-constraint-rule-108">
     <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:fTrem[@beams and @beams.float]">
       <sch:assert test="@beams.float &lt;= @beams">The number of floating beams must be less
                 than or equal to the total number of beams.</sch:assert>
@@ -12629,6 +12810,30 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
     <ref name="att.expandable.attributes"/>
     <ref name="att.typography.attributes"/>
     <ref name="att.visualOffset.attributes"/>
+  </define>
+  <define name="att.harm.vis.attributes">
+    <ref name="att.extender.attributes"/>
+    <ref name="att.placement.attributes"/>
+    <ref name="att.visualOffset.attributes"/>
+    <ref name="att.visualOffset2.ho.attributes"/>
+    <ref name="att.visualOffset2.to.attributes"/>
+    <ref name="att.xy.attributes"/>
+    <ref name="att.harm.vis.attribute.rendgrid"/>
+  </define>
+  <define name="att.harm.vis.attribute.rendgrid">
+    <optional>
+      <attribute name="rendgrid">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Describes how the harmonic indication should be rendered.</a:documentation>
+        <choice>
+          <value>grid</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Chord tablature grid.</a:documentation>
+          <value>gridtext</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Chord tablature grid and the element's textual content.</a:documentation>
+          <value>text</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Textual content of the element.</a:documentation>
+        </choice>
+      </attribute>
+    </optional>
   </define>
   <define name="att.instrDef.vis.attributes">
     <empty/>
@@ -13041,7 +13246,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
       </attribute>
     </optional>
   </define>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.instrumentIdent-instr-check_instrTarget-constraint-rule-107">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.instrumentIdent-instr-check_instrTarget-constraint-rule-109">
     <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="@instr">
       <sch:assert role="warning" test="not(normalize-space(.) eq '')">@instr attribute
                 should have content.</sch:assert>
@@ -13116,13 +13321,13 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
       </attribute>
     </optional>
   </define>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.midiInstrument-One_of_instrname_or_instrnum-constraint-rule-108">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.midiInstrument-One_of_instrname_or_instrnum-constraint-rule-110">
     <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:*[@midi.instrname]">
       <sch:assert test="not(@midi.instrnum)">Only one of @midi.instrname and @midi.instrnum
             allowed.</sch:assert>
     </sch:rule>
   </pattern>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.midiInstrument-One_of_patchname_or_patchnum-constraint-rule-109">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.midiInstrument-One_of_patchname_or_patchnum-constraint-rule-111">
     <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:*[@midi.patchname]">
       <sch:assert test="not(@midi.patchnum)">Only one of @midi.patchname and @midi.patchnum
             allowed.</sch:assert>
@@ -13441,7 +13646,7 @@ Suggested values include: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] for
       </attribute>
     </optional>
   </define>
-  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.facsimile-facs-check_facsTarget-constraint-rule-110">
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.facsimile-facs-check_facsTarget-constraint-rule-112">
     <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="@facs">
       <sch:assert role="warning" test="not(normalize-space(.) eq '')">@facs attribute should
                 have content.</sch:assert>

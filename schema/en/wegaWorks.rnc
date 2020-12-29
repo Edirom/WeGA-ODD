@@ -9,7 +9,7 @@ namespace teix = "http://www.tei-c.org/ns/Examples"
 namespace xi = "http://www.w3.org/2001/XInclude"
 namespace xlink = "http://www.w3.org/1999/xlink"
 
-# Schema generated from ODD source 2020-12-29T21:32:32Z. .
+# Schema generated from ODD source 2020-12-29T22:16:03Z. .
 # TEI Edition: Version 4.0.0
 # TEI Edition Location: https://www.tei-c.org/Vault/P5//
 #
@@ -956,6 +956,7 @@ data.HORIZONTALALIGNMENT =
   | 
     ## Left and right aligned.
     "justify"
+data.INTERVAL.HARMONIC = xsd:token { pattern = "[AdMmP][0-9]+" }
 data.INTERVAL.MELODIC =
   xsd:token { pattern = "u|d|s|n|sd|su" }
   | xsd:token { pattern = "(\+|\-)?([AdMmP])?[0-9]+" }
@@ -5189,14 +5190,34 @@ model.biblLike_sequenceOptional = bibl?
 model.biblLike_sequenceOptionalRepeatable = bibl*
 model.biblLike_sequenceRepeatable = bibl+
 model.chordPart = artic | note
-model.controlEventLike = dir | dynam | tempo | cpMark
-model.controlEventLike_alternation = dir | dynam | tempo | cpMark
-model.controlEventLike_sequence = dir, dynam, tempo, cpMark
-model.controlEventLike_sequenceOptional = dir?, dynam?, tempo?, cpMark?
+model.controlEventLike =
+  dir | dynam | tempo | model.controlEventLike.harmony | cpMark
+model.controlEventLike_alternation =
+  dir
+  | dynam
+  | tempo
+  | model.controlEventLike.harmony_alternation
+  | cpMark
+model.controlEventLike_sequence =
+  dir, dynam, tempo, model.controlEventLike.harmony_sequence, cpMark
+model.controlEventLike_sequenceOptional =
+  dir?,
+  dynam?,
+  tempo?,
+  model.controlEventLike.harmony_sequenceOptional?,
+  cpMark?
 model.controlEventLike_sequenceOptionalRepeatable =
-  dir*, dynam*, tempo*, cpMark*
+  dir*,
+  dynam*,
+  tempo*,
+  model.controlEventLike.harmony_sequenceOptionalRepeatable*,
+  cpMark*
 model.controlEventLike_sequenceRepeatable =
-  dir+, dynam+, tempo+, cpMark+
+  dir+,
+  dynam+,
+  tempo+,
+  model.controlEventLike.harmony_sequenceRepeatable+,
+  cpMark+
 model.dateLike = date
 model.dateLike_alternation = date
 model.dateLike_sequence = date
@@ -6518,6 +6539,7 @@ scoreDef =
   
   ## (score definition) – Container for score meta-information.
   element scoreDef {
+    model.chordTableLike?,
     model.keySigLike?,
     model.meterSigLike?,
     instrGrp?,
@@ -7204,6 +7226,106 @@ titlePage =
     att.lang.attributes,
     empty
   }
+att.harm.log.attributes =
+  att.controlEvent.attributes,
+  att.duration.additive.attributes,
+  att.startEndId.attributes,
+  att.timestamp2.logical.attributes,
+  att.harm.log.attribute.chordref
+att.harm.log.attribute.chordref =
+  [
+    a:documentation [
+      "Contains a reference to a "
+      ns1:code [ "<chordDef>" ]
+      " element elsewhere in the document."
+    ]
+  ]
+  attribute chordref { data.URI }?
+sch:pattern [
+  id =
+    "wegaWorks-att.harm.log-chordref-check_chordrefTarget-constraint-rule-72"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context = "@chordref"
+    "\x{a}" ~
+    "              "
+    sch:assert [
+      role = "warning"
+      test = "not(normalize-space(.) eq '')"
+      "@chordref attribute\x{a}" ~
+      "                should have content."
+    ]
+    "\x{a}" ~
+    "              "
+    sch:assert [
+      role = "warning"
+      test =
+        "every $i in tokenize(., '\s+') satisfies substring($i,2)=//mei:chordDef/@xml:id"
+      "The value in @chordref should correspond to the @xml:id attribute of a chordDef\x{a}" ~
+      "                element."
+    ]
+    "\x{a}" ~
+    "            "
+  ]
+  "\x{a}" ~
+  "   "
+]
+model.chordTableLike = notAllowed
+model.controlEventLike.harmony = model.harmLike
+model.controlEventLike.harmony_alternation = model.harmLike_alternation
+model.controlEventLike.harmony_sequence = model.harmLike_sequence
+model.controlEventLike.harmony_sequenceOptional =
+  model.harmLike_sequenceOptional?
+model.controlEventLike.harmony_sequenceOptionalRepeatable =
+  model.harmLike_sequenceOptionalRepeatable*
+model.controlEventLike.harmony_sequenceRepeatable =
+  model.harmLike_sequenceRepeatable+
+model.figbassLike = notAllowed
+model.fLike = notAllowed
+model.harmLike = harm
+model.harmLike_alternation = harm
+model.harmLike_sequence = harm
+model.harmLike_sequenceOptional = harm?
+model.harmLike_sequenceOptionalRepeatable = harm*
+model.harmLike_sequenceRepeatable = harm+
+harm =
+  
+  ## (harmony) – An indication of harmony, e.g., chord names, tablature grids, harmonic analysis, figured bass.
+  element harm {
+    ((text
+      | model.textPhraseLike.limited
+      | model.editLike
+      | model.transcriptionLike
+      | model.figbassLike)*)
+    >> sch:pattern [
+         id =
+           "wegaWorks-harm-harm_start-type_attributes_required-constraint-rule-73"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "mei:harm"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test = "@startid or @tstamp or @tstamp.ges or @tstamp.real"
+             "Must have one of the\x{a}" ~
+             "            attributes: startid, tstamp, tstamp.ges or tstamp.real."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.common.attributes,
+    att.facsimile.attributes,
+    att.harm.log.attributes,
+    att.harm.vis.attributes,
+    att.harm.ges.attributes,
+    att.harm.anl.attributes,
+    empty
+  }
 att.recordType.attributes = att.recordType.attribute.recordtype
 att.recordType.attribute.recordtype =
   
@@ -7288,7 +7410,7 @@ componentList =
      | (model.manifestationLike* | model.itemLike*))
     >> sch:pattern [
          id =
-           "wegaWorks-componentList-checkComponentList-constraint-rule-72"
+           "wegaWorks-componentList-checkComponentList-constraint-rule-74"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7309,7 +7431,7 @@ componentList =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-componentList-checkComponents-constraint-rule-73"
+           "wegaWorks-componentList-checkComponents-constraint-rule-75"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7389,7 +7511,7 @@ change =
     changeDesc,
     (model.dateLike?)
     >> sch:pattern [
-         id = "wegaWorks-change-check_change-constraint-rule-74"
+         id = "wegaWorks-change-check_change-constraint-rule-76"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7474,7 +7596,7 @@ contents =
     (model.pLike? | (label?, contentItem)+)
     >> sch:pattern [
          id =
-           "wegaWorks-contents-checkContentsLabels-constraint-rule-75"
+           "wegaWorks-contents-checkContentsLabels-constraint-rule-77"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7546,7 +7668,7 @@ handList =
     ((label?, hand)*)
     >> sch:pattern [
          id =
-           "wegaWorks-handList-checkHandListLabels-constraint-rule-76"
+           "wegaWorks-handList-checkHandListLabels-constraint-rule-78"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7576,7 +7698,7 @@ history =
     model.headLike*,
     ((provenance | model.divLike | model.textComponentLike)*)
     >> sch:pattern [
-         id = "wegaWorks-history-history_restriction-constraint-rule-77"
+         id = "wegaWorks-history-history_restriction-constraint-rule-79"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7606,7 +7728,7 @@ incipCode =
     text
     >> sch:pattern [
          id =
-           "wegaWorks-incipCode-Check_incipCode_form_mimetype-constraint-rule-78"
+           "wegaWorks-incipCode-Check_incipCode_form_mimetype-constraint-rule-80"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7700,7 +7822,7 @@ meiHead =
     workList?,
     (revisionDesc?)
     >> sch:pattern [
-         id = "wegaWorks-meiHead-check_meiHead_type-constraint-rule-79"
+         id = "wegaWorks-meiHead-check_meiHead_type-constraint-rule-81"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7937,7 +8059,7 @@ source =
     itemList?,
     (relationList?)
     >> sch:pattern [
-         id = "wegaWorks-source-id-check-constraint-rule-82"
+         id = "wegaWorks-source-id-check-constraint-rule-84"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7956,7 +8078,7 @@ source =
          "         "
        ]
     >> sch:pattern [
-         id = "wegaWorks-source-check_source_target-constraint-rule-83"
+         id = "wegaWorks-source-check_source_target-constraint-rule-85"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -8096,7 +8218,7 @@ termList =
     ((label?, term)*)
     >> sch:pattern [
          id =
-           "wegaWorks-termList-checkTermListLabels-constraint-rule-84"
+           "wegaWorks-termList-checkTermListLabels-constraint-rule-86"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -8189,7 +8311,7 @@ work =
     componentList?,
     (relationList?)
     >> sch:pattern [
-         id = "wegaWorks-work-id-check-constraint-rule-85"
+         id = "wegaWorks-work-id-check-constraint-rule-87"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -8402,7 +8524,7 @@ att.beamRend.attribute.place =
   attribute place { data.BEAMPLACE }?
 sch:pattern [
   id =
-    "wegaWorks-att.beamRend-place-check_beam_place-constraint-rule-86"
+    "wegaWorks-att.beamRend-place-check_beam_place-constraint-rule-88"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -8858,7 +8980,7 @@ beam =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-beam-When_not_copyof_beam_content-constraint-rule-88"
+           "wegaWorks-beam-When_not_copyof_beam_content-constraint-rule-90"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -8892,7 +9014,7 @@ beamSpan =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-beamSpan-beamspan_start-_and_end-type_attributes_required-constraint-rule-89"
+           "wegaWorks-beamSpan-beamspan_start-_and_end-type_attributes_required-constraint-rule-91"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -8960,7 +9082,7 @@ fermata =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-fermata-fermata_start-type_attributes_required-constraint-rule-90"
+           "wegaWorks-fermata-fermata_start-type_attributes_required-constraint-rule-92"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9007,7 +9129,7 @@ hairpin =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-hairpin-hairpin_start-_and_end-type_attributes_required-constraint-rule-91"
+           "wegaWorks-hairpin-hairpin_start-_and_end-type_attributes_required-constraint-rule-93"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9130,7 +9252,7 @@ octave =
     ((text | model.textPhraseLike.limited)*)
     >> sch:pattern [
          id =
-           "wegaWorks-octave-octave_start-_and_end-type_attributes_required-constraint-rule-92"
+           "wegaWorks-octave-octave_start-_and_end-type_attributes_required-constraint-rule-94"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9169,7 +9291,7 @@ slur =
   [
     sch:pattern [
       id =
-        "wegaWorks-slur-slur_start-_and_end-type_attributes_required-constraint-rule-93"
+        "wegaWorks-slur-slur_start-_and_end-type_attributes_required-constraint-rule-95"
       "\x{a}" ~
       "            "
       sch:rule [
@@ -9195,7 +9317,7 @@ slur =
       "         "
     ]
     sch:pattern [
-      id = "wegaWorks-slur-slur_containing_curve-constraint-rule-94"
+      id = "wegaWorks-slur-slur_containing_curve-constraint-rule-96"
       "\x{a}" ~
       "            "
       sch:rule [
@@ -9234,7 +9356,7 @@ tie =
   [
     sch:pattern [
       id =
-        "wegaWorks-tie-tie_start-_and_end-type_attributes_required-constraint-rule-95"
+        "wegaWorks-tie-tie_start-_and_end-type_attributes_required-constraint-rule-97"
       "\x{a}" ~
       "            "
       sch:rule [
@@ -9260,7 +9382,7 @@ tie =
       "         "
     ]
     sch:pattern [
-      id = "wegaWorks-tie-tie_containing_curve-constraint-rule-96"
+      id = "wegaWorks-tie-tie_containing_curve-constraint-rule-98"
       "\x{a}" ~
       "            "
       sch:rule [
@@ -9303,7 +9425,7 @@ tuplet =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-rule-97"
+           "wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-rule-99"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9337,7 +9459,7 @@ tupletSpan =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-tupletSpan-tupletSpan_start-_and_end-type_attributes_required-constraint-rule-98"
+           "wegaWorks-tupletSpan-tupletSpan_start-_and_end-type_attributes_required-constraint-rule-100"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9468,7 +9590,7 @@ mordent =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-mordent-mordent_start-type_attributes_required-constraint-rule-99"
+           "wegaWorks-mordent-mordent_start-type_attributes_required-constraint-rule-101"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9501,7 +9623,7 @@ trill =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-trill-trill_start-type_attributes_required-constraint-rule-100"
+           "wegaWorks-trill-trill_start-type_attributes_required-constraint-rule-102"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9534,7 +9656,7 @@ turn =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-turn-turn_start-type_attributes_required-constraint-rule-101"
+           "wegaWorks-turn-turn_start-type_attributes_required-constraint-rule-103"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9700,7 +9822,7 @@ li =
     model.headLike*,
     ((label?, li)*)
     >> sch:pattern [
-         id = "wegaWorks-list-list_type_constraint-constraint-rule-102"
+         id = "wegaWorks-list-list_type_constraint-constraint-rule-104"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9899,6 +10021,7 @@ abbr =
      | model.divLike
      | model.editLike
      | model.editTransPart
+     | model.fLike
      | model.layerPart
      | model.milestoneLike.music
      | model.sectionPart
@@ -9922,6 +10045,7 @@ add =
      | model.divLike
      | model.editLike
      | model.editTransPart
+     | model.fLike
      | model.keyAccidLike
      | model.layerPart
      | model.milestoneLike.music
@@ -9953,6 +10077,7 @@ corr =
      | model.divLike
      | model.editLike
      | model.editTransPart
+     | model.fLike
      | model.keyAccidLike
      | model.layerPart
      | model.milestoneLike.music
@@ -9976,7 +10101,7 @@ cpMark =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-cpMark-cpMark_start-_and_end-type_attributes_required-constraint-rule-103"
+           "wegaWorks-cpMark-cpMark_start-_and_end-type_attributes_required-constraint-rule-105"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -10017,6 +10142,7 @@ damage =
      | model.divLike
      | model.editLike
      | model.editTransPart
+     | model.fLike
      | model.keyAccidLike
      | model.layerPart
      | model.milestoneLike.music
@@ -10042,6 +10168,7 @@ del =
      | model.divLike
      | model.editLike
      | model.editTransPart
+     | model.fLike
      | model.keyAccidLike
      | model.layerPart
      | model.milestoneLike.music
@@ -10065,6 +10192,7 @@ expan =
      | model.divLike
      | model.editLike
      | model.editTransPart
+     | model.fLike
      | model.layerPart
      | model.milestoneLike.music
      | model.sectionPart
@@ -10101,6 +10229,7 @@ reg =
      | model.divLike
      | model.editLike
      | model.editTransPart
+     | model.fLike
      | model.keyAccidLike
      | model.layerPart
      | model.milestoneLike.music
@@ -10122,6 +10251,7 @@ restore =
      | model.divLike
      | model.editLike
      | model.editTransPart
+     | model.fLike
      | model.keyAccidLike
      | model.layerPart
      | model.milestoneLike.music
@@ -10147,6 +10277,7 @@ sic =
      | model.divLike
      | model.editLike
      | model.editTransPart
+     | model.fLike
      | model.keyAccidLike
      | model.layerPart
      | model.milestoneLike.music
@@ -10179,6 +10310,7 @@ supplied =
      | model.divLike
      | model.editLike
      | model.editTransPart
+     | model.fLike
      | model.keyAccidLike
      | model.layerPart
      | model.milestoneLike.music
@@ -10203,7 +10335,7 @@ att.accidental.gestural.attribute.accid.ges =
   attribute accid.ges { data.ACCIDENTAL.GESTURAL }?
 sch:pattern [
   id =
-    "wegaWorks-att.accidental.gestural-accid.ges-check_accid_duplication-constraint-rule-104"
+    "wegaWorks-att.accidental.gestural-accid.ges-check_accid_duplication-constraint-rule-106"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -10306,6 +10438,8 @@ att.hairpin.ges.attributes =
   att.midiValue2.attributes,
   att.timestamp2.gestural.attributes
 att.halfmRpt.ges.attributes = att.duration.gestural.attributes
+att.harm.ges.attributes =
+  att.duration.gestural.attributes, att.timestamp2.gestural.attributes
 att.instrDef.ges.attributes =
   att.channelized.attributes,
   att.midiInstrument.attributes,
@@ -10352,7 +10486,7 @@ att.note.ges.attribute.pnum =
   attribute pnum { data.PITCHNUMBER }?
 sch:pattern [
   id =
-    "wegaWorks-att.note.ges-extremis_disallows_gestural_pitch-constraint-rule-105"
+    "wegaWorks-att.note.ges-extremis_disallows_gestural_pitch-constraint-rule-107"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -10468,12 +10602,32 @@ att.fermata.anl.attributes = empty
 att.fTrem.anl.attributes = empty
 att.hairpin.anl.attributes = empty
 att.halfmRpt.anl.attributes = empty
+att.harm.anl.attributes =
+  att.intervalHarmonic.attributes, att.harm.anl.attribute.form
+att.harm.anl.attribute.form =
+  
+  ## Indicates to what degree the harmonic label is supported by the notation.
+  attribute form {
+    
+    ## The notation contains all the notes necessary for the harmonic label, e.g., the notes "D F♯ A" for the harmonic label "D".
+    "explicit"
+    | 
+      ## The harmonic label relies on notes implied, but not actually present, in the notation, e.g., the notes "D F♯ C" for the harmonic label "D7". The note "A" is missing from the notation, but can be implied.
+      "implied"
+  }?
 att.harmonicFunction.attributes = att.harmonicFunction.attribute.deg
 att.harmonicFunction.attribute.deg =
   
   ## Captures scale degree information using Humdrum **deg syntax -- an optional indicator of melodic approach (^ = ascending approach, v = descending approach), a scale degree value (1 = tonic ... 7 = leading tone), and an optional indication of chromatic alteration, "1", "v7", "^1", or "v5+", for example. The amount of chromatic alternation is not indicated.
   attribute deg { data.SCALEDEGREE }?
 att.instrDef.anl.attributes = empty
+att.intervalHarmonic.attributes = att.intervalHarmonic.attribute.inth
+att.intervalHarmonic.attribute.inth =
+  
+  ## Encodes the harmonic interval between pitches occurring at the same time.
+  attribute inth {
+    list { data.INTERVAL.HARMONIC+ }
+  }?
 att.intervalMelodic.attributes = att.intervalMelodic.attribute.intm
 att.intervalMelodic.attribute.intm =
   
@@ -10712,7 +10866,7 @@ att.fTrem.vis.attribute.beams.float =
   attribute beams.float { xsd:nonNegativeInteger }?
 sch:pattern [
   id =
-    "wegaWorks-att.fTrem.vis-beams.float-check_beams.floating-constraint-rule-106"
+    "wegaWorks-att.fTrem.vis-beams.float-check_beams.floating-constraint-rule-108"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -10753,6 +10907,28 @@ att.halfmRpt.vis.attributes =
   att.expandable.attributes,
   att.typography.attributes,
   att.visualOffset.attributes
+att.harm.vis.attributes =
+  att.extender.attributes,
+  att.placement.attributes,
+  att.visualOffset.attributes,
+  att.visualOffset2.ho.attributes,
+  att.visualOffset2.to.attributes,
+  att.xy.attributes,
+  att.harm.vis.attribute.rendgrid
+att.harm.vis.attribute.rendgrid =
+  
+  ## Describes how the harmonic indication should be rendered.
+  attribute rendgrid {
+    
+    ## Chord tablature grid.
+    "grid"
+    | 
+      ## Chord tablature grid and the element's textual content.
+      "gridtext"
+    | 
+      ## Textual content of the element.
+      "text"
+  }?
 att.instrDef.vis.attributes = empty
 att.keySigDefault.vis.attributes =
   att.keySigDefault.vis.attribute.keysig.show,
@@ -11050,7 +11226,7 @@ att.instrumentIdent.attribute.instr =
   attribute instr { data.URI }?
 sch:pattern [
   id =
-    "wegaWorks-att.instrumentIdent-instr-check_instrTarget-constraint-rule-107"
+    "wegaWorks-att.instrumentIdent-instr-check_instrTarget-constraint-rule-109"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -11121,7 +11297,7 @@ att.midiInstrument.attribute.midi.volume =
   attribute midi.volume { text }?
 sch:pattern [
   id =
-    "wegaWorks-att.midiInstrument-One_of_instrname_or_instrnum-constraint-rule-108"
+    "wegaWorks-att.midiInstrument-One_of_instrname_or_instrnum-constraint-rule-110"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -11141,7 +11317,7 @@ sch:pattern [
 ]
 sch:pattern [
   id =
-    "wegaWorks-att.midiInstrument-One_of_patchname_or_patchnum-constraint-rule-109"
+    "wegaWorks-att.midiInstrument-One_of_patchname_or_patchnum-constraint-rule-111"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -11392,7 +11568,7 @@ att.facsimile.attribute.facs =
   }?
 sch:pattern [
   id =
-    "wegaWorks-att.facsimile-facs-check_facsTarget-constraint-rule-110"
+    "wegaWorks-att.facsimile-facs-check_facsTarget-constraint-rule-112"
   "\x{a}" ~
   "      "
   sch:rule [
