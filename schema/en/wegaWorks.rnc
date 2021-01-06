@@ -9,7 +9,7 @@ namespace teix = "http://www.tei-c.org/ns/Examples"
 namespace xi = "http://www.w3.org/2001/XInclude"
 namespace xlink = "http://www.w3.org/1999/xlink"
 
-# Schema generated from ODD source 2020-12-29T22:16:03Z. .
+# Schema generated from ODD source 2021-01-02T23:47:43Z. .
 # TEI Edition: Version 4.0.0
 # TEI Edition Location: https://www.tei-c.org/Vault/P5//
 #
@@ -2460,7 +2460,7 @@ sch:pattern [
 ]
 model.expressionLike = expression
 model.itemLike = item
-model.manifestationLike = notAllowed
+model.manifestationLike = manifestation
 expression =
   
   ## Intellectual or artistic realization of a work.
@@ -2519,6 +2519,65 @@ itemList =
   ## Gathers bibliographic item entities.
   element itemList {
     model.headLike*, model.itemLike*, att.common.attributes, empty
+  }
+manifestation =
+  
+  ## A bibliographic description of a physical embodiment of an expression of a work.
+  element manifestation {
+    model.headLike*,
+    empty*,
+    model.identifierLike*,
+    titleStmt?,
+    macro.bibldescPart,
+    creation?,
+    history?,
+    langUsage?,
+    contents?,
+    notesStmt?,
+    classification?,
+    itemList?,
+    componentList?,
+    (relationList?)
+    >> sch:pattern [
+         id =
+           "wegaWorks-manifestation-check_singleton-constraint-rule-6"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "mei:manifestation[@singleton eq 'true']"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test = "not(mei:itemList)"
+             "Item children are not permitted when @singleton\x{a}" ~
+             '            equals "true".'
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.common.attributes,
+    att.authorized.attributes,
+    att.bibl.attributes,
+    att.dataPointing.attributes,
+    att.pointing.attributes,
+    att.recordType.attributes,
+    att.targetEval.attributes,
+    
+    ##
+    attribute singleton { data.BOOLEAN }?,
+    empty
+  }
+manifestationList =
+  
+  ## A container for the descriptions of physical embodiments of an expression of a work.
+  element manifestationList {
+    model.headLike*,
+    model.manifestationLike+,
+    att.common.attributes,
+    empty
   }
 att.accid.log.attributes =
   att.accidental.attributes,
@@ -2581,7 +2640,7 @@ att.augmentDots.attribute.dots =
   attribute dots { data.AUGMENTDOT }?
 sch:pattern [
   id =
-    "wegaWorks-att.augmentDots-dots-dots_attribute_requires_dur-constraint-rule-6"
+    "wegaWorks-att.augmentDots-dots-dots_attribute_requires_dur-constraint-rule-7"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -2627,7 +2686,7 @@ att.barring.attribute.bar.method =
   attribute bar.method { data.BARMETHOD }?
 sch:pattern [
   id =
-    "wegaWorks-att.barring-bar.method-check_barmethod-constraint-rule-7"
+    "wegaWorks-att.barring-bar.method-check_barmethod-constraint-rule-8"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -2695,7 +2754,7 @@ att.classed.attribute.class =
     list { data.URI+ }
   }?
 sch:pattern [
-  id = "wegaWorks-att.classed-class-check_classURI-constraint-rule-8"
+  id = "wegaWorks-att.classed-class-check_classURI-constraint-rule-9"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -2747,7 +2806,7 @@ att.cleffing.log.attribute.clef.dis.place =
   attribute clef.dis.place { data.STAFFREL.basic }?
 sch:pattern [
   id =
-    "wegaWorks-att.cleffing.log-clef_shape_requires_clef_line-constraint-rule-9"
+    "wegaWorks-att.cleffing.log-clef_shape_requires_clef_line-constraint-rule-10"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -2785,7 +2844,7 @@ att.clefShape.attribute.shape =
   ## Describes a clef's shape.
   attribute shape { data.CLEFSHAPE }?
 sch:pattern [
-  id = "wegaWorks-att.clefShape-shape_requires_line-constraint-rule-11"
+  id = "wegaWorks-att.clefShape-shape_requires_line-constraint-rule-12"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -2929,7 +2988,7 @@ att.dataPointing.attribute.data =
   }?
 sch:pattern [
   id =
-    "wegaWorks-att.dataPointing-data-check_dataTarget-constraint-rule-12"
+    "wegaWorks-att.dataPointing-data-check_dataTarget-constraint-rule-13"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -2967,7 +3026,7 @@ att.metadataPointing.attribute.decls =
   }?
 sch:pattern [
   id =
-    "wegaWorks-att.metadataPointing-decls-check_declsTarget-constraint-rule-13"
+    "wegaWorks-att.metadataPointing-decls-check_declsTarget-constraint-rule-14"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -3130,7 +3189,7 @@ att.extent.attribute.extent =
   ## Captures a measurement, count, or description. When extent contains a numeric value, use the unit attribute to indicate the measurement unit.
   attribute extent { xsd:string }?
 sch:pattern [
-  id = "wegaWorks-att.extent-extent-check_extent-constraint-rule-14"
+  id = "wegaWorks-att.extent-extent-check_extent-constraint-rule-15"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -3191,7 +3250,7 @@ att.handIdent.attribute.hand =
   attribute hand { data.URI }?
 sch:pattern [
   id =
-    "wegaWorks-att.handIdent-hand-check_handTarget-constraint-rule-16"
+    "wegaWorks-att.handIdent-hand-check_handTarget-constraint-rule-17"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -3242,7 +3301,7 @@ att.joined.attribute.join =
     list { data.URI+ }
   }?
 sch:pattern [
-  id = "wegaWorks-att.joined-join-check_joinTarget-constraint-rule-17"
+  id = "wegaWorks-att.joined-join-check_joinTarget-constraint-rule-18"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -3302,7 +3361,7 @@ att.layer.log.attribute.def =
   attribute def { data.URI }?
 sch:pattern [
   id =
-    "wegaWorks-att.layer.log-def-check_defTarget_layer-constraint-rule-18"
+    "wegaWorks-att.layer.log-def-check_defTarget_layer-constraint-rule-19"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -3383,7 +3442,7 @@ att.lineRend.base.attribute.lsegs =
   }?
 sch:pattern [
   id =
-    "wegaWorks-att.lineRend.base-lsegs-check_lsegs-constraint-rule-19"
+    "wegaWorks-att.lineRend.base-lsegs-check_lsegs-constraint-rule-20"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -3420,7 +3479,7 @@ att.linking.attribute.copyof =
   attribute copyof { data.URI }?
 sch:pattern [
   id =
-    "wegaWorks-att.linking-copyof-When_copyof_element_empty-constraint-rule-20"
+    "wegaWorks-att.linking-copyof-When_copyof_element_empty-constraint-rule-21"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -3442,7 +3501,7 @@ sch:pattern [
 ]
 sch:pattern [
   id =
-    "wegaWorks-att.linking-copyof-check_copyofTarget-constraint-rule-21"
+    "wegaWorks-att.linking-copyof-check_copyofTarget-constraint-rule-22"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -3479,7 +3538,7 @@ att.linking.attribute.corresp =
   }?
 sch:pattern [
   id =
-    "wegaWorks-att.linking-corresp-check_correspTarget-constraint-rule-22"
+    "wegaWorks-att.linking-corresp-check_correspTarget-constraint-rule-23"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -3516,7 +3575,7 @@ att.linking.attribute.follows =
   }?
 sch:pattern [
   id =
-    "wegaWorks-att.linking-follows-check_followsTarget-constraint-rule-23"
+    "wegaWorks-att.linking-follows-check_followsTarget-constraint-rule-24"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -3552,7 +3611,7 @@ att.linking.attribute.next =
     list { data.URI+ }
   }?
 sch:pattern [
-  id = "wegaWorks-att.linking-next-check_nextTarget-constraint-rule-24"
+  id = "wegaWorks-att.linking-next-check_nextTarget-constraint-rule-25"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -3589,7 +3648,7 @@ att.linking.attribute.precedes =
   }?
 sch:pattern [
   id =
-    "wegaWorks-att.linking-precedes-check_precedesTarget-constraint-rule-25"
+    "wegaWorks-att.linking-precedes-check_precedesTarget-constraint-rule-26"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -3625,7 +3684,7 @@ att.linking.attribute.prev =
     list { data.URI+ }
   }?
 sch:pattern [
-  id = "wegaWorks-att.linking-prev-check_prevTarget-constraint-rule-26"
+  id = "wegaWorks-att.linking-prev-check_prevTarget-constraint-rule-27"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -3662,7 +3721,7 @@ att.linking.attribute.sameas =
   }?
 sch:pattern [
   id =
-    "wegaWorks-att.linking-sameas-check_sameasTarget-constraint-rule-27"
+    "wegaWorks-att.linking-sameas-check_sameasTarget-constraint-rule-28"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -3699,7 +3758,7 @@ att.linking.attribute.synch =
   }?
 sch:pattern [
   id =
-    "wegaWorks-att.linking-synch-check_synchTarget-constraint-rule-28"
+    "wegaWorks-att.linking-synch-check_synchTarget-constraint-rule-29"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -3886,7 +3945,7 @@ att.name.attribute.nymref =
   ## Used to record a pointer to the regularized form of the name elsewhere in the document.
   attribute nymref { data.URI }?
 sch:pattern [
-  id = "wegaWorks-att.name-nymref-check_nymrefTarget-constraint-rule-29"
+  id = "wegaWorks-att.name-nymref-check_nymrefTarget-constraint-rule-30"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -3969,7 +4028,7 @@ att.noteHeads.attribute.head.altsym =
   attribute head.altsym { data.URI }?
 sch:pattern [
   id =
-    "wegaWorks-att.noteHeads-head.altsym-check_head.altsymTarget-constraint-rule-30"
+    "wegaWorks-att.noteHeads-head.altsym-check_head.altsymTarget-constraint-rule-31"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -4014,7 +4073,7 @@ att.noteHeads.attribute.head.auth =
   }?
 sch:pattern [
   id =
-    "wegaWorks-att.noteHeads-head.auth-check_head.auth-constraint-rule-31"
+    "wegaWorks-att.noteHeads-head.auth-check_head.auth-constraint-rule-32"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -4062,7 +4121,7 @@ att.noteHeads.attribute.head.shape =
   attribute head.shape { data.HEADSHAPE }?
 sch:pattern [
   id =
-    "wegaWorks-att.noteHeads-head.shape-check_headshape_num-constraint-rule-32"
+    "wegaWorks-att.noteHeads-head.shape-check_headshape_num-constraint-rule-33"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -4162,7 +4221,7 @@ att.origin.timestamp.logical.attribute.origin.tstamp2 =
   attribute origin.tstamp2 { data.MEASUREBEAT }?
 sch:pattern [
   id =
-    "wegaWorks-att.origin.timestamp.logical-origin.tstamp2-origin.tstamp2_requires_origin.tstamp-constraint-rule-33"
+    "wegaWorks-att.origin.timestamp.logical-origin.tstamp2-origin.tstamp2_requires_origin.tstamp-constraint-rule-34"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -4233,7 +4292,7 @@ att.partIdent.attribute.part =
   }?
 sch:pattern [
   id =
-    "wegaWorks-att.partIdent-part-check_part_attr_all-constraint-rule-34"
+    "wegaWorks-att.partIdent-part-check_part_attr_all-constraint-rule-35"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -4262,7 +4321,7 @@ att.partIdent.attribute.partstaff =
   }?
 sch:pattern [
   id =
-    "wegaWorks-att.partIdent-partstaff-check_partstaff_attr_all-constraint-rule-35"
+    "wegaWorks-att.partIdent-partstaff-check_partstaff_attr_all-constraint-rule-36"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -4300,7 +4359,7 @@ att.plist.attribute.plist =
     list { data.URI+ }
   }?
 sch:pattern [
-  id = "wegaWorks-att.plist-plist-check_plistTarget-constraint-rule-36"
+  id = "wegaWorks-att.plist-plist-check_plistTarget-constraint-rule-37"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -4424,7 +4483,7 @@ att.ranging.attribute.confidence =
   attribute confidence { data.CONFIDENCE }?
 sch:pattern [
   id =
-    "wegaWorks-att.ranging-confidence-check_confidence-constraint-rule-37"
+    "wegaWorks-att.ranging-confidence-check_confidence-constraint-rule-38"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -4451,7 +4510,7 @@ att.responsibility.attribute.resp =
   }?
 sch:pattern [
   id =
-    "wegaWorks-att.responsibility-resp-check_respTarget-constraint-rule-38"
+    "wegaWorks-att.responsibility-resp-check_respTarget-constraint-rule-39"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -4533,7 +4592,7 @@ att.source.attribute.source =
   }?
 sch:pattern [
   id =
-    "wegaWorks-att.source-source-check_sourceTarget-constraint-rule-39"
+    "wegaWorks-att.source-source-check_sourceTarget-constraint-rule-40"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -4596,7 +4655,7 @@ att.staff.log.attribute.def =
   attribute def { data.URI }?
 sch:pattern [
   id =
-    "wegaWorks-att.staff.log-def-check_defTarget_staff-constraint-rule-40"
+    "wegaWorks-att.staff.log-def-check_defTarget_staff-constraint-rule-41"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -4713,7 +4772,7 @@ att.startEndId.attribute.endid =
   attribute endid { data.URI }?
 sch:pattern [
   id =
-    "wegaWorks-att.startEndId-endid-check_endidTarget-constraint-rule-41"
+    "wegaWorks-att.startEndId-endid-check_endidTarget-constraint-rule-42"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -4749,7 +4808,7 @@ att.startId.attribute.startid =
   attribute startid { data.URI }?
 sch:pattern [
   id =
-    "wegaWorks-att.startId-startid-check_startidTarget-constraint-rule-42"
+    "wegaWorks-att.startId-startid-check_startidTarget-constraint-rule-43"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -5437,6 +5496,7 @@ model.textPhraseLike.limited =
   | model.relationLike
   | model.rendLike
   | model.titleLike
+  | dimensions
   | extent
   | term
   | model.addressPart
@@ -5457,6 +5517,7 @@ model.textPhraseLike.limited_alternation =
   | model.relationLike_alternation
   | model.rendLike_alternation
   | model.titleLike_alternation
+  | dimensions
   | extent
   | term
   | model.addressPart_alternation
@@ -5477,6 +5538,7 @@ model.textPhraseLike.limited_sequence =
   model.relationLike_sequence,
   model.rendLike_sequence,
   model.titleLike_sequence,
+  dimensions,
   extent,
   term,
   model.addressPart_sequence,
@@ -5497,6 +5559,7 @@ model.textPhraseLike.limited_sequenceOptional =
   model.relationLike_sequenceOptional?,
   model.rendLike_sequenceOptional?,
   model.titleLike_sequenceOptional?,
+  dimensions?,
   extent?,
   term?,
   model.addressPart_sequenceOptional?,
@@ -5517,6 +5580,7 @@ model.textPhraseLike.limited_sequenceOptionalRepeatable =
   model.relationLike_sequenceOptionalRepeatable*,
   model.rendLike_sequenceOptionalRepeatable*,
   model.titleLike_sequenceOptionalRepeatable*,
+  dimensions*,
   extent*,
   term*,
   model.addressPart_sequenceOptionalRepeatable*,
@@ -5537,6 +5601,7 @@ model.textPhraseLike.limited_sequenceRepeatable =
   model.relationLike_sequenceRepeatable+,
   model.rendLike_sequenceRepeatable+,
   model.titleLike_sequenceRepeatable+,
+  dimensions+,
   extent+,
   term+,
   model.addressPart_sequenceRepeatable+,
@@ -5610,7 +5675,7 @@ annot =
         | model.textPhraseLike
         | model.transcriptionLike)*)
     >> sch:pattern [
-         id = "wegaWorks-annot-Check_annot_data-constraint-rule-43"
+         id = "wegaWorks-annot-Check_annot_data-constraint-rule-44"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -5729,7 +5794,7 @@ clef =
   element clef {
     empty
     >> sch:pattern [
-         id = "wegaWorks-clef-Clef_position_lines-constraint-rule-44"
+         id = "wegaWorks-clef-Clef_position_lines-constraint-rule-45"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -5755,7 +5820,7 @@ clef =
          "         "
        ]
     >> sch:pattern [
-         id = "wegaWorks-clef-Clef_position_nolines-constraint-rule-45"
+         id = "wegaWorks-clef-Clef_position_nolines-constraint-rule-46"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -5808,7 +5873,7 @@ contributor =
     ((text | model.textPhraseLike.limited)*)
     >> sch:pattern [
          id =
-           "wegaWorks-contributor-check_contributor_role-constraint-rule-46"
+           "wegaWorks-contributor-check_contributor_role-constraint-rule-47"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -5861,6 +5926,51 @@ date =
     att.edit.attributes,
     empty
   }
+dimensions =
+  
+  ## Information about the physical size of an entity; usually includes numerical data.
+  element dimensions {
+    macro.struc-unstrucContent
+    >> sch:pattern [
+         id = "wegaWorks-dimensions-check_dimensions-constraint-rule-48"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "mei:physDesc/mei:dimensions"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test = "not(count(mei:depth) > 1)"
+             "The depth element may only appear\x{a}" ~
+             "            once."
+           ]
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test = "not(count(mei:height) > 1)"
+             "The height element may only appear\x{a}" ~
+             "            once."
+           ]
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test = "not(count(mei:width) > 1)"
+             "The width element may only appear\x{a}" ~
+             "            once."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.common.attributes,
+    att.bibl.attributes,
+    att.evidence.attributes,
+    att.lang.attributes,
+    att.measurement.attributes,
+    empty
+  }
 dir =
   [
     a:documentation [
@@ -5878,7 +5988,7 @@ dir =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-dir-dir_start-type_attributes_required-constraint-rule-47"
+           "wegaWorks-dir-dir_start-type_attributes_required-constraint-rule-49"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -5915,7 +6025,7 @@ dynam =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-dynam-dynam_start-type_attributes_required-constraint-rule-48"
+           "wegaWorks-dynam-dynam_start-type_attributes_required-constraint-rule-50"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -5935,7 +6045,7 @@ dynam =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-dynam-dynam_end-type_attributes-constraint-rule-49"
+           "wegaWorks-dynam-dynam_end-type_attributes-constraint-rule-51"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6185,7 +6295,7 @@ mei =
     meiHead,
     music
     >> sch:pattern [
-         id = "wegaWorks-mei-Check_staff-constraint-rule-50"
+         id = "wegaWorks-mei-Check_staff-constraint-rule-52"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6231,7 +6341,7 @@ name =
       | model.editLike
       | model.transcriptionLike)*)
     >> sch:pattern [
-         id = "wegaWorks-name-nameParts-constraint-rule-51"
+         id = "wegaWorks-name-nameParts-constraint-rule-53"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6356,7 +6466,7 @@ relation =
   element relation {
     empty
     >> sch:pattern [
-         id = "wegaWorks-relation-FRBR_relation-constraint-rule-52"
+         id = "wegaWorks-relation-FRBR_relation-constraint-rule-54"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6449,7 +6559,7 @@ respStmt =
     model.headLike*,
     ((name | model.nameLike.agent)*)
     >> sch:pattern [
-         id = "wegaWorks-respStmt-check_respStmt-constraint-rule-53"
+         id = "wegaWorks-respStmt-check_respStmt-constraint-rule-55"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6481,7 +6591,7 @@ rest =
   element rest {
     ((model.editLike | model.transcriptionLike)*)
     >> sch:pattern [
-         id = "wegaWorks-rest-Check_restline-constraint-rule-54"
+         id = "wegaWorks-rest-Check_restline-constraint-rule-56"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6564,7 +6674,7 @@ section =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-section-Check_sectionexpansion-constraint-rule-55"
+           "wegaWorks-section-Check_sectionexpansion-constraint-rule-57"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6620,7 +6730,7 @@ staff =
       | model.staffPart
       | model.transcriptionLike)*)
     >> sch:pattern [
-         id = "wegaWorks-staff-checkStaff_n-constraint-rule-56"
+         id = "wegaWorks-staff-checkStaff_n-constraint-rule-58"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6663,7 +6773,7 @@ staffDef =
     model.labelLike*,
     ((model.instrDefLike | model.layerDefLike | model.staffDefPart)*)
     >> sch:pattern [
-         id = "wegaWorks-staffDef-Check_staffDefn-constraint-rule-57"
+         id = "wegaWorks-staffDef-Check_staffDefn-constraint-rule-59"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6701,7 +6811,7 @@ staffDef =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-staffDef-Check_ancestor_staff-constraint-rule-58"
+           "wegaWorks-staffDef-Check_ancestor_staff-constraint-rule-60"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6724,7 +6834,7 @@ staffDef =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-staffDef-Check_ancestor_staff_lines-constraint-rule-59"
+           "wegaWorks-staffDef-Check_ancestor_staff_lines-constraint-rule-61"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6752,7 +6862,7 @@ staffDef =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-staffDef-Check_clef_position_staffDef-constraint-rule-60"
+           "wegaWorks-staffDef-Check_clef_position_staffDef-constraint-rule-62"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6772,7 +6882,7 @@ staffDef =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-staffDef-Check_clef_position_staffDef_nolines-constraint-rule-61"
+           "wegaWorks-staffDef-Check_clef_position_staffDef_nolines-constraint-rule-63"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6802,7 +6912,7 @@ staffDef =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-staffDef-Check_tab_strings_lines-constraint-rule-62"
+           "wegaWorks-staffDef-Check_tab_strings_lines-constraint-rule-64"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6829,7 +6939,7 @@ staffDef =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-staffDef-Check_tab_strings_nolines-constraint-rule-63"
+           "wegaWorks-staffDef-Check_tab_strings_nolines-constraint-rule-65"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6986,7 +7096,7 @@ staffGrp =
     ((model.staffGrpLike | model.staffDefLike)+)
     >> sch:pattern [
          id =
-           "wegaWorks-staffGrp-Check_staffGrp_unique_staff_n_values-constraint-rule-68"
+           "wegaWorks-staffGrp-Check_staffGrp_unique_staff_n_values-constraint-rule-70"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7053,7 +7163,7 @@ tempo =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-tempo-tempo_in_header_disallow_most_attrs-constraint-rule-69"
+           "wegaWorks-tempo-tempo_in_header_disallow_most_attrs-constraint-rule-71"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7076,7 +7186,7 @@ tempo =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-tempo-tempo_start-type_attributes_required-constraint-rule-70"
+           "wegaWorks-tempo-tempo_start-type_attributes_required-constraint-rule-72"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7111,7 +7221,7 @@ term =
   element term {
     ((text | model.textPhraseLike.limited)*)
     >> sch:pattern [
-         id = "wegaWorks-term-Check_term_dataTarget-constraint-rule-71"
+         id = "wegaWorks-term-Check_term_dataTarget-constraint-rule-73"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7243,7 +7353,7 @@ att.harm.log.attribute.chordref =
   attribute chordref { data.URI }?
 sch:pattern [
   id =
-    "wegaWorks-att.harm.log-chordref-check_chordrefTarget-constraint-rule-72"
+    "wegaWorks-att.harm.log-chordref-check_chordrefTarget-constraint-rule-74"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -7300,7 +7410,7 @@ harm =
       | model.figbassLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-harm-harm_start-type_attributes_required-constraint-rule-73"
+           "wegaWorks-harm-harm_start-type_attributes_required-constraint-rule-75"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7383,6 +7493,7 @@ model.eventPart =
 model.frontAndBackPart = titlePage
 model.physDescPart =
   model.incipLike
+  | dimensions
   | extent
   | titlePage
   | condition
@@ -7410,7 +7521,7 @@ componentList =
      | (model.manifestationLike* | model.itemLike*))
     >> sch:pattern [
          id =
-           "wegaWorks-componentList-checkComponentList-constraint-rule-74"
+           "wegaWorks-componentList-checkComponentList-constraint-rule-76"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7431,7 +7542,7 @@ componentList =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-componentList-checkComponents-constraint-rule-75"
+           "wegaWorks-componentList-checkComponents-constraint-rule-77"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7511,7 +7622,7 @@ change =
     changeDesc,
     (model.dateLike?)
     >> sch:pattern [
-         id = "wegaWorks-change-check_change-constraint-rule-76"
+         id = "wegaWorks-change-check_change-constraint-rule-78"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7596,7 +7707,7 @@ contents =
     (model.pLike? | (label?, contentItem)+)
     >> sch:pattern [
          id =
-           "wegaWorks-contents-checkContentsLabels-constraint-rule-77"
+           "wegaWorks-contents-checkContentsLabels-constraint-rule-79"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7668,7 +7779,7 @@ handList =
     ((label?, hand)*)
     >> sch:pattern [
          id =
-           "wegaWorks-handList-checkHandListLabels-constraint-rule-78"
+           "wegaWorks-handList-checkHandListLabels-constraint-rule-80"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7698,7 +7809,7 @@ history =
     model.headLike*,
     ((provenance | model.divLike | model.textComponentLike)*)
     >> sch:pattern [
-         id = "wegaWorks-history-history_restriction-constraint-rule-79"
+         id = "wegaWorks-history-history_restriction-constraint-rule-81"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7728,7 +7839,7 @@ incipCode =
     text
     >> sch:pattern [
          id =
-           "wegaWorks-incipCode-Check_incipCode_form_mimetype-constraint-rule-80"
+           "wegaWorks-incipCode-Check_incipCode_form_mimetype-constraint-rule-82"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7820,9 +7931,10 @@ meiHead =
     altId*,
     fileDesc,
     workList?,
+    manifestationList?,
     (revisionDesc?)
     >> sch:pattern [
-         id = "wegaWorks-meiHead-check_meiHead_type-constraint-rule-81"
+         id = "wegaWorks-meiHead-check_meiHead_type-constraint-rule-83"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -8041,175 +8153,6 @@ seriesStmt =
     att.bibl.attributes,
     empty
   }
-source =
-  
-  ## A bibliographic description of a source used in the creation of the electronic file.
-  element source {
-    model.identifierLike*,
-    titleStmt?,
-    macro.bibldescPart,
-    incip?,
-    physDesc?,
-    physLoc?,
-    contents?,
-    history?,
-    langUsage?,
-    notesStmt?,
-    classification?,
-    itemList?,
-    (relationList?)
-    >> sch:pattern [
-         id = "wegaWorks-source-id-check-constraint-rule-84"
-         "\x{a}" ~
-         "            "
-         sch:rule [
-           context = "mei:source"
-           "\x{a}" ~
-           "                                    "
-           sch:assert [
-             test = "@xml:id or ancestor::mei:source"
-             " Am\x{a}" ~
-             "                                        Wurzelelement muss eine XML-ID angegeben sein. "
-           ]
-           "\x{a}" ~
-           "                                "
-         ]
-         "\x{a}" ~
-         "         "
-       ]
-    >> sch:pattern [
-         id = "wegaWorks-source-check_source_target-constraint-rule-85"
-         "\x{a}" ~
-         "            "
-         sch:rule [
-           context = "mei:source/@target"
-           "\x{a}" ~
-           "               "
-           sch:assert [
-             role = "warning"
-             test = "not(normalize-space(.) eq '')"
-             "@target attribute should\x{a}" ~
-             "            have content."
-           ]
-           "\x{a}" ~
-           "               "
-           sch:assert [
-             role = "warning"
-             test =
-               "every $i in tokenize(., '\s+') satisfies substring($i,2)=//mei:*[local-name()              eq 'source' or local-name() eq 'manifestation']/@xml:id or matches($i, '^([a-z]+://|\.{1,2}/)')"
-             "Each value in @target should correspond to the @xml:id attribute of a source or\x{a}" ~
-             "            manifestation element or be an external URI."
-           ]
-           "\x{a}" ~
-           "            "
-         ]
-         "\x{a}" ~
-         "         "
-       ],
-    att.basic.attribute.xmlbase,
-    att.labelled.attribute.label,
-    att.linking.attribute.copyof,
-    att.linking.attribute.corresp,
-    att.linking.attribute.follows,
-    att.linking.attribute.next,
-    att.linking.attribute.precedes,
-    att.linking.attribute.prev,
-    att.linking.attribute.sameas,
-    att.linking.attribute.synch,
-    att.nNumberLike.attribute.n,
-    att.responsibility.attribute.resp,
-    att.classed.attribute.class,
-    att.authorized.attributes,
-    att.bibl.attributes,
-    att.dataPointing.attributes,
-    att.pointing.attributes,
-    att.recordType.attributes,
-    att.targetEval.attributes,
-    
-    ## Regularizes the naming of an element and thus facilitates building links between it and other resources. Each id attribute within a document must have a unique value.
-    attribute xml:id { text }?,
-    
-    ## Designation which characterizes the element in some sense, using any convenient classification scheme or typology that employs single-token labels.
-    ## Suggested values include: 1] ms; 2] ms_score; 3] ms_piano_score; 4] ms_vocal_score; 5] ms_solo_part; 6] ms_choral_part; 7] ms_instrumental_part; 8] ms_script; 9] ms_prompt_book; 10] ms_textbook; 11] ms_inner_sheet; 12] ms_cut_sheet; 13] pr; 14] pr_score; 15] pr_piano_score; 16] pr_vocal_score; 17] pr_solo_part; 18] pr_choral_part; 19] pr_instrumental_part; 20] pr_script; 21] pr_prompt_book; 22] pr_textbook; 23] pr_inner_sheet; 24] pr_cut_sheet
-    attribute type {
-      list {
-        (
-         ## Manuscript
-         "ms"
-         | 
-           ## Score in manuscript form
-           "ms_score"
-         | 
-           ## Piano score in manuscript form
-           "ms_piano_score"
-         | 
-           ## Vocal score in manuscript form
-           "ms_vocal_score"
-         | 
-           ## Solo part in manuscript form
-           "ms_solo_part"
-         | 
-           ## Choral part in manuscript form
-           "ms_choral_part"
-         | 
-           ## Instrumental part in manuscript form
-           "ms_instrumental_part"
-         | 
-           ## Handwritten script
-           "ms_script"
-         | 
-           ## Handwritten prompt book
-           "ms_prompt_book"
-         | 
-           ## Handwritten textbook
-           "ms_textbook"
-         | 
-           ## Handwritten inner sheet
-           "ms_inner_sheet"
-         | 
-           ## Handwritten cut sheet
-           "ms_cut_sheet"
-         | 
-           ## Print
-           "pr"
-         | 
-           ## Printed score
-           "pr_score"
-         | 
-           ## Printed piano score
-           "pr_piano_score"
-         | 
-           ## Printed vocal score
-           "pr_vocal_score"
-         | 
-           ## Printed solo part
-           "pr_solo_part"
-         | 
-           ## Printed choral part
-           "pr_choral_part"
-         | 
-           ## Printed instrumental part
-           "pr_instrumental_part"
-         | 
-           ## Printed script
-           "pr_script"
-         | 
-           ## Printed prompt book
-           "pr_prompt_book"
-         | 
-           ## Printed textbook
-           "pr_textbook"
-         | 
-           ## Printed inner sheet
-           "pr_inner_sheet"
-         | 
-           ## Printed cut sheet
-           "pr_cut_sheet"
-         | xsd:NMTOKEN)+
-      }
-    }?,
-    empty
-  }
 termList =
   
   ## Collection of text phrases which describe a resource.
@@ -8218,7 +8161,7 @@ termList =
     ((label?, term)*)
     >> sch:pattern [
          id =
-           "wegaWorks-termList-checkTermListLabels-constraint-rule-86"
+           "wegaWorks-termList-checkTermListLabels-constraint-rule-88"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -8311,7 +8254,7 @@ work =
     componentList?,
     (relationList?)
     >> sch:pattern [
-         id = "wegaWorks-work-id-check-constraint-rule-87"
+         id = "wegaWorks-work-id-check-constraint-rule-89"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -8524,7 +8467,7 @@ att.beamRend.attribute.place =
   attribute place { data.BEAMPLACE }?
 sch:pattern [
   id =
-    "wegaWorks-att.beamRend-place-check_beam_place-constraint-rule-88"
+    "wegaWorks-att.beamRend-place-check_beam_place-constraint-rule-90"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -8980,7 +8923,7 @@ beam =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-beam-When_not_copyof_beam_content-constraint-rule-90"
+           "wegaWorks-beam-When_not_copyof_beam_content-constraint-rule-92"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9014,7 +8957,7 @@ beamSpan =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-beamSpan-beamspan_start-_and_end-type_attributes_required-constraint-rule-91"
+           "wegaWorks-beamSpan-beamspan_start-_and_end-type_attributes_required-constraint-rule-93"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9082,7 +9025,7 @@ fermata =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-fermata-fermata_start-type_attributes_required-constraint-rule-92"
+           "wegaWorks-fermata-fermata_start-type_attributes_required-constraint-rule-94"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9129,7 +9072,7 @@ hairpin =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-hairpin-hairpin_start-_and_end-type_attributes_required-constraint-rule-93"
+           "wegaWorks-hairpin-hairpin_start-_and_end-type_attributes_required-constraint-rule-95"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9252,7 +9195,7 @@ octave =
     ((text | model.textPhraseLike.limited)*)
     >> sch:pattern [
          id =
-           "wegaWorks-octave-octave_start-_and_end-type_attributes_required-constraint-rule-94"
+           "wegaWorks-octave-octave_start-_and_end-type_attributes_required-constraint-rule-96"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9291,7 +9234,7 @@ slur =
   [
     sch:pattern [
       id =
-        "wegaWorks-slur-slur_start-_and_end-type_attributes_required-constraint-rule-95"
+        "wegaWorks-slur-slur_start-_and_end-type_attributes_required-constraint-rule-97"
       "\x{a}" ~
       "            "
       sch:rule [
@@ -9317,7 +9260,7 @@ slur =
       "         "
     ]
     sch:pattern [
-      id = "wegaWorks-slur-slur_containing_curve-constraint-rule-96"
+      id = "wegaWorks-slur-slur_containing_curve-constraint-rule-98"
       "\x{a}" ~
       "            "
       sch:rule [
@@ -9356,7 +9299,7 @@ tie =
   [
     sch:pattern [
       id =
-        "wegaWorks-tie-tie_start-_and_end-type_attributes_required-constraint-rule-97"
+        "wegaWorks-tie-tie_start-_and_end-type_attributes_required-constraint-rule-99"
       "\x{a}" ~
       "            "
       sch:rule [
@@ -9382,7 +9325,7 @@ tie =
       "         "
     ]
     sch:pattern [
-      id = "wegaWorks-tie-tie_containing_curve-constraint-rule-98"
+      id = "wegaWorks-tie-tie_containing_curve-constraint-rule-100"
       "\x{a}" ~
       "            "
       sch:rule [
@@ -9425,7 +9368,7 @@ tuplet =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-rule-99"
+           "wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-rule-101"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9459,7 +9402,7 @@ tupletSpan =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-tupletSpan-tupletSpan_start-_and_end-type_attributes_required-constraint-rule-100"
+           "wegaWorks-tupletSpan-tupletSpan_start-_and_end-type_attributes_required-constraint-rule-102"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9590,7 +9533,7 @@ mordent =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-mordent-mordent_start-type_attributes_required-constraint-rule-101"
+           "wegaWorks-mordent-mordent_start-type_attributes_required-constraint-rule-103"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9623,7 +9566,7 @@ trill =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-trill-trill_start-type_attributes_required-constraint-rule-102"
+           "wegaWorks-trill-trill_start-type_attributes_required-constraint-rule-104"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9656,7 +9599,7 @@ turn =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-turn-turn_start-type_attributes_required-constraint-rule-103"
+           "wegaWorks-turn-turn_start-type_attributes_required-constraint-rule-105"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9822,7 +9765,7 @@ li =
     model.headLike*,
     ((label?, li)*)
     >> sch:pattern [
-         id = "wegaWorks-list-list_type_constraint-constraint-rule-104"
+         id = "wegaWorks-list-list_type_constraint-constraint-rule-106"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -10101,7 +10044,7 @@ cpMark =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-cpMark-cpMark_start-_and_end-type_attributes_required-constraint-rule-105"
+           "wegaWorks-cpMark-cpMark_start-_and_end-type_attributes_required-constraint-rule-107"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -10335,7 +10278,7 @@ att.accidental.gestural.attribute.accid.ges =
   attribute accid.ges { data.ACCIDENTAL.GESTURAL }?
 sch:pattern [
   id =
-    "wegaWorks-att.accidental.gestural-accid.ges-check_accid_duplication-constraint-rule-106"
+    "wegaWorks-att.accidental.gestural-accid.ges-check_accid_duplication-constraint-rule-108"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -10486,7 +10429,7 @@ att.note.ges.attribute.pnum =
   attribute pnum { data.PITCHNUMBER }?
 sch:pattern [
   id =
-    "wegaWorks-att.note.ges-extremis_disallows_gestural_pitch-constraint-rule-107"
+    "wegaWorks-att.note.ges-extremis_disallows_gestural_pitch-constraint-rule-109"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -10866,7 +10809,7 @@ att.fTrem.vis.attribute.beams.float =
   attribute beams.float { xsd:nonNegativeInteger }?
 sch:pattern [
   id =
-    "wegaWorks-att.fTrem.vis-beams.float-check_beams.floating-constraint-rule-108"
+    "wegaWorks-att.fTrem.vis-beams.float-check_beams.floating-constraint-rule-110"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -11226,7 +11169,7 @@ att.instrumentIdent.attribute.instr =
   attribute instr { data.URI }?
 sch:pattern [
   id =
-    "wegaWorks-att.instrumentIdent-instr-check_instrTarget-constraint-rule-109"
+    "wegaWorks-att.instrumentIdent-instr-check_instrTarget-constraint-rule-111"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -11297,7 +11240,7 @@ att.midiInstrument.attribute.midi.volume =
   attribute midi.volume { text }?
 sch:pattern [
   id =
-    "wegaWorks-att.midiInstrument-One_of_instrname_or_instrnum-constraint-rule-110"
+    "wegaWorks-att.midiInstrument-One_of_instrname_or_instrnum-constraint-rule-112"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -11317,7 +11260,7 @@ sch:pattern [
 ]
 sch:pattern [
   id =
-    "wegaWorks-att.midiInstrument-One_of_patchname_or_patchnum-constraint-rule-111"
+    "wegaWorks-att.midiInstrument-One_of_patchname_or_patchnum-constraint-rule-113"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -11568,7 +11511,7 @@ att.facsimile.attribute.facs =
   }?
 sch:pattern [
   id =
-    "wegaWorks-att.facsimile-facs-check_facsTarget-constraint-rule-112"
+    "wegaWorks-att.facsimile-facs-check_facsTarget-constraint-rule-114"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -11626,5 +11569,5 @@ zone =
     att.dataPointing.attributes,
     empty
   }
-start = mei | work | source | expression
+start = mei | work | manifestation | expression
 sch:ns [ prefix = "mei" uri = "http://www.music-encoding.org/ns/mei" ]
