@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:teix="http://www.tei-c.org/ns/Examples" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" ns="http://www.music-encoding.org/ns/mei">
   <!--
-Schema generated from ODD source 2021-01-02T23:47:33Z. .
+Schema generated from ODD source 2021-01-09T20:56:30Z. .
 TEI Edition: Version 4.0.0
 TEI Edition Location: https://www.tei-c.org/Vault/P5//
   
@@ -2368,6 +2368,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5//
       <ref name="att.common.attributes"/>
       <ref name="att.authorized.attributes"/>
       <ref name="att.bibl.attributes"/>
+      <ref name="att.componentType.attributes"/>
       <ref name="att.dataPointing.attributes"/>
       <ref name="att.pointing.attributes"/>
       <ref name="att.recordType.attributes"/>
@@ -6390,6 +6391,7 @@ Empfohlene Werte sind: 1] smufl</a:documentation>
       <ref name="model.nameLike.label"/>
       <ref name="model.qLike"/>
       <ref name="seg"/>
+      <ref name="model.msInline"/>
     </choice>
   </define>
   <define name="model.textPhraseLike.limited_alternation">
@@ -6414,6 +6416,7 @@ Empfohlene Werte sind: 1] smufl</a:documentation>
       <ref name="model.nameLike.label_alternation"/>
       <ref name="model.qLike_alternation"/>
       <ref name="seg"/>
+      <ref name="model.msInline_alternation"/>
     </choice>
   </define>
   <define name="model.textPhraseLike.limited_sequence">
@@ -6437,6 +6440,7 @@ Empfohlene Werte sind: 1] smufl</a:documentation>
     <ref name="model.nameLike.label_sequence"/>
     <ref name="model.qLike_sequence"/>
     <ref name="seg"/>
+    <ref name="model.msInline_sequence"/>
   </define>
   <define name="model.textPhraseLike.limited_sequenceOptional">
     <optional>
@@ -6498,6 +6502,9 @@ Empfohlene Werte sind: 1] smufl</a:documentation>
     </optional>
     <optional>
       <ref name="seg"/>
+    </optional>
+    <optional>
+      <ref name="model.msInline_sequenceOptional"/>
     </optional>
   </define>
   <define name="model.textPhraseLike.limited_sequenceOptionalRepeatable">
@@ -6561,6 +6568,9 @@ Empfohlene Werte sind: 1] smufl</a:documentation>
     <zeroOrMore>
       <ref name="seg"/>
     </zeroOrMore>
+    <zeroOrMore>
+      <ref name="model.msInline_sequenceOptionalRepeatable"/>
+    </zeroOrMore>
   </define>
   <define name="model.textPhraseLike.limited_sequenceRepeatable">
     <oneOrMore>
@@ -6622,6 +6632,9 @@ Empfohlene Werte sind: 1] smufl</a:documentation>
     </oneOrMore>
     <oneOrMore>
       <ref name="seg"/>
+    </oneOrMore>
+    <oneOrMore>
+      <ref name="model.msInline_sequenceRepeatable"/>
     </oneOrMore>
   </define>
   <define name="model.titleLike">
@@ -8332,6 +8345,7 @@ Empfohlene Werte sind: 1] person; 2] corporation; 3] location; 4] process; 5] st
       <ref name="physMedium"/>
       <ref name="plateNum"/>
       <ref name="watermark"/>
+      <ref name="stamp"/>
     </choice>
   </define>
   <define name="model.pubStmtPart">
@@ -13659,6 +13673,84 @@ Empfohlene Werte sind: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] foreig
       <ref name="att.common.attributes"/>
       <ref name="att.coordinated.attributes"/>
       <ref name="att.dataPointing.attributes"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="att.componentType.attributes">
+    <ref name="att.componentType.attribute.comptype"/>
+  </define>
+  <define name="att.componentType.attribute.comptype">
+    <optional>
+      <attribute name="comptype">
+        <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+        <choice>
+          <value>constituent</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A physical and logical part of entity.</a:documentation>
+          <value>boundwith</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A physical, but not logical component of the entity, usually included as part of the binding process.</a:documentation>
+          <value>separated</value>
+          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A logical component of the entity physically held elsewhere.</a:documentation>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <pattern xmlns="http://purl.oclc.org/dsdl/schematron" id="wegaWorks-att.componentType-comptype-checkComponentType-constraint-rule-115">
+    <sch:rule xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" context="mei:*[@comptype]">
+      <sch:let name="elementName" value="local-name()"/>
+      <sch:assert test="ancestor::mei:componentList">The comptype attribute may occur on
+                <sch:value-of select="$elementName"/> only when it is a descendant of a
+                componentList.</sch:assert>
+    </sch:rule>
+  </pattern>
+  <define name="model.msInline">
+    <choice>
+      <ref name="watermark"/>
+      <ref name="stamp"/>
+    </choice>
+  </define>
+  <define name="model.msInline_alternation">
+    <choice>
+      <ref name="watermark"/>
+      <ref name="stamp"/>
+    </choice>
+  </define>
+  <define name="model.msInline_sequence">
+    <ref name="watermark"/>
+    <ref name="stamp"/>
+  </define>
+  <define name="model.msInline_sequenceOptional">
+    <optional>
+      <ref name="watermark"/>
+    </optional>
+    <optional>
+      <ref name="stamp"/>
+    </optional>
+  </define>
+  <define name="model.msInline_sequenceOptionalRepeatable">
+    <zeroOrMore>
+      <ref name="watermark"/>
+    </zeroOrMore>
+    <zeroOrMore>
+      <ref name="stamp"/>
+    </zeroOrMore>
+  </define>
+  <define name="model.msInline_sequenceRepeatable">
+    <oneOrMore>
+      <ref name="watermark"/>
+    </oneOrMore>
+    <oneOrMore>
+      <ref name="stamp"/>
+    </oneOrMore>
+  </define>
+  <define name="stamp">
+    <element name="stamp">
+      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Contains a word or phrase describing an official mark indicating ownership, genuineness, validity, etc.</a:documentation>
+      <ref name="macro.struc-unstrucContent"/>
+      <ref name="att.common.attributes"/>
+      <ref name="att.bibl.attributes"/>
+      <ref name="att.datable.attributes"/>
+      <ref name="att.facsimile.attributes"/>
+      <ref name="att.lang.attributes"/>
       <empty/>
     </element>
   </define>

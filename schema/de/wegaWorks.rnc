@@ -9,7 +9,7 @@ namespace teix = "http://www.tei-c.org/ns/Examples"
 namespace xi = "http://www.w3.org/2001/XInclude"
 namespace xlink = "http://www.w3.org/1999/xlink"
 
-# Schema generated from ODD source 2021-01-02T23:47:33Z. .
+# Schema generated from ODD source 2021-01-09T20:56:30Z. .
 # TEI Edition: Version 4.0.0
 # TEI Edition Location: https://www.tei-c.org/Vault/P5//
 #
@@ -2561,6 +2561,7 @@ manifestation =
     att.common.attributes,
     att.authorized.attributes,
     att.bibl.attributes,
+    att.componentType.attributes,
     att.dataPointing.attributes,
     att.pointing.attributes,
     att.recordType.attributes,
@@ -5503,6 +5504,7 @@ model.textPhraseLike.limited =
   | model.nameLike.label
   | model.qLike
   | seg
+  | model.msInline
 model.textPhraseLike.limited_alternation =
   model.addressLike_alternation
   | model.annotLike_alternation
@@ -5524,6 +5526,7 @@ model.textPhraseLike.limited_alternation =
   | model.nameLike.label_alternation
   | model.qLike_alternation
   | seg
+  | model.msInline_alternation
 model.textPhraseLike.limited_sequence =
   model.addressLike_sequence,
   model.annotLike_sequence,
@@ -5544,7 +5547,8 @@ model.textPhraseLike.limited_sequence =
   model.addressPart_sequence,
   model.nameLike.label_sequence,
   model.qLike_sequence,
-  seg
+  seg,
+  model.msInline_sequence
 model.textPhraseLike.limited_sequenceOptional =
   model.addressLike_sequenceOptional?,
   model.annotLike_sequenceOptional?,
@@ -5565,7 +5569,8 @@ model.textPhraseLike.limited_sequenceOptional =
   model.addressPart_sequenceOptional?,
   model.nameLike.label_sequenceOptional?,
   model.qLike_sequenceOptional?,
-  seg?
+  seg?,
+  model.msInline_sequenceOptional?
 model.textPhraseLike.limited_sequenceOptionalRepeatable =
   model.addressLike_sequenceOptionalRepeatable*,
   model.annotLike_sequenceOptionalRepeatable*,
@@ -5586,7 +5591,8 @@ model.textPhraseLike.limited_sequenceOptionalRepeatable =
   model.addressPart_sequenceOptionalRepeatable*,
   model.nameLike.label_sequenceOptionalRepeatable*,
   model.qLike_sequenceOptionalRepeatable*,
-  seg*
+  seg*,
+  model.msInline_sequenceOptionalRepeatable*
 model.textPhraseLike.limited_sequenceRepeatable =
   model.addressLike_sequenceRepeatable+,
   model.annotLike_sequenceRepeatable+,
@@ -5607,7 +5613,8 @@ model.textPhraseLike.limited_sequenceRepeatable =
   model.addressPart_sequenceRepeatable+,
   model.nameLike.label_sequenceRepeatable+,
   model.qLike_sequenceRepeatable+,
-  seg+
+  seg+,
+  model.msInline_sequenceRepeatable+
 model.titleLike = title
 model.titleLike_alternation = title
 model.titleLike_sequence = title
@@ -7501,6 +7508,7 @@ model.physDescPart =
   | physMedium
   | plateNum
   | watermark
+  | stamp
 model.pubStmtPart =
   model.addressLike
   | model.dateLike
@@ -11565,6 +11573,65 @@ zone =
     att.common.attributes,
     att.coordinated.attributes,
     att.dataPointing.attributes,
+    empty
+  }
+att.componentType.attributes = att.componentType.attribute.comptype
+att.componentType.attribute.comptype =
+  
+  ##
+  attribute comptype {
+    
+    ## A physical and logical part of entity.
+    "constituent"
+    | 
+      ## A physical, but not logical component of the entity, usually included as part of the binding process.
+      "boundwith"
+    | 
+      ## A logical component of the entity physically held elsewhere.
+      "separated"
+  }?
+sch:pattern [
+  id =
+    "wegaWorks-att.componentType-comptype-checkComponentType-constraint-rule-115"
+  "\x{a}" ~
+  "      "
+  sch:rule [
+    context = "mei:*[@comptype]"
+    "\x{a}" ~
+    "              "
+    sch:let [ name = "elementName" value = "local-name()" ]
+    "\x{a}" ~
+    "              "
+    sch:assert [
+      test = "ancestor::mei:componentList"
+      "The comptype attribute may occur on\x{a}" ~
+      "                "
+      sch:value-of [ select = "$elementName" ]
+      " only when it is a descendant of a\x{a}" ~
+      "                componentList."
+    ]
+    "\x{a}" ~
+    "            "
+  ]
+  "\x{a}" ~
+  "   "
+]
+model.msInline = watermark | stamp
+model.msInline_alternation = watermark | stamp
+model.msInline_sequence = watermark, stamp
+model.msInline_sequenceOptional = watermark?, stamp?
+model.msInline_sequenceOptionalRepeatable = watermark*, stamp*
+model.msInline_sequenceRepeatable = watermark+, stamp+
+stamp =
+  
+  ## Contains a word or phrase describing an official mark indicating ownership, genuineness, validity, etc.
+  element stamp {
+    macro.struc-unstrucContent,
+    att.common.attributes,
+    att.bibl.attributes,
+    att.datable.attributes,
+    att.facsimile.attributes,
+    att.lang.attributes,
     empty
   }
 start = mei | work | manifestation | expression
