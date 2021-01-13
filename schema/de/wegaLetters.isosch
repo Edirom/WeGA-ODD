@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2020-12-17T13:21:54Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2021-01-13T21:21:05Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -517,52 +517,57 @@ relatedItem element must be empty</report>
                         <assert test="preceding::tei:witness[@xml:id = substring($wit, 2)]">The @wit-attribute must point at some witness element</assert>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wegaLetters-styleguide-document-node-content-77">
+   <pattern id="schematron-constraint-wegaLetters-listWit-only-one-witness-77">
+      <rule context="tei:listWit">
+                    <report test="count(tei:witness) le 1">There should always be more than one witness within a listWit element.</report>
+                </rule>
+   </pattern>
+   <pattern id="schematron-constraint-wegaLetters-styleguide-document-node-content-78">
                 <rule context="document-node()">
                     <report test="count(processing-instruction()) ne 2">WeGA styleguide error: there should exactly be two processing instructions before the root element</report>
                     <report test="comment()">WeGA styleguide error: there should be no comments outside the root element</report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaLetters-whitespaceOnlyContent-78">
+   <pattern id="schematron-constraint-wegaLetters-whitespaceOnlyContent-79">
                 <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('thematicCom'))] | tei:placeName | tei:title | tei:seg | tei:item[not(@* or *)]">
                     <report test="normalize-space(.) = ''">
             <name/> has whitespace only content</report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaLetters-elementStartsWithWhitespace-79">
+   <pattern id="schematron-constraint-wegaLetters-elementStartsWithWhitespace-80">
                 <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
                     <report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <name/>
          </report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaLetters-untrimmedAttributeValues-80">
+   <pattern id="schematron-constraint-wegaLetters-untrimmedAttributeValues-81">
                 <rule context="*">
                     <report test="some $i in @* satisfies string-length(normalize-unicode(normalize-space(replace($i, ' | | | ', ' ')))) ne string-length($i)">There is some whitespace here at the beginning or end of some attribute value.</report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaLetters-wegaTargets-81">
+   <pattern id="schematron-constraint-wegaLetters-wegaTargets-82">
                 <rule context="*[starts-with(@target, 'wega:')]">
                     <assert test="matches(@target, '^wega:A[0-9A-F]{6}(#.+)?(\s+wega:A[0-9A-F]{6}(#.+)?)*$')">"wega"-prefixed URIs must follow the pattern "wega:A002068" (i.e. without any file extension)</assert>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaLetters-emojiCheck-82">
+   <pattern id="schematron-constraint-wegaLetters-emojiCheck-83">
                 <rule context="*[some $i in text() satisfies normalize-space($i) ne '']">
                     <report test="matches(., '[⌚-⌛]|[⏩-⏬]|[⏰]|[⏳]|[◽-◾]|[☔-☕]|[♈-♓]|[♿]|[⚓]|[⚡]|[⚪-⚫]|[⚽-⚾]|[⛄-⛅]|[⛎]|[⛔]|[⛪]|[⛲-⛳]|[⛵]|[⛺]|[⛽]|[✅]|[✊-✋]|[✨]|[❌]|[❎]|[❓-❕]|[❗]|[➕-➗]|[➰]|[➿]|[⬛-⬜]|[⭐]|[⭕]|[🀄]|[🃏]|[🆎]|[🆑-🆚]|[🇦-🇿]|[🈁]|[🈚]|[🈯]|[🈲-🈶]|[🈸-🈺]|[🉐-🉑]|[🌀-🌠]|[🌭-🌯]|[🌰-🌵]|[🌷-🍼]|[🍾-🍿]|[🎀-🎓]|[🎠-🏄]|[🏅]|[🏆-🏊]|[🏏-🏓]|[🏠-🏰]|[🏴]|[🏸-🏿]|[🐀-🐾]|[👀]|[👂-📷]|[📸]|[📹-📼]|[📿]|[🔀-🔽]|[🕋-🕎]|[🕐-🕧]|[🕺]|[🖕-🖖]|[🖤]|[🗻-🗿]|[😀]|[😁-😐]|[😑]|[😒-😔]|[😕]|[😖]|[😗]|[😘]|[😙]|[😚]|[😛]|[😜-😞]|[😟]|[😠-😥]|[😦-😧]|[😨-😫]|[😬]|[😭]|[😮-😯]|[😰-😳]|[😴]|[😵-🙀]|[🙁-🙂]|[🙃-🙄]|[🙅-🙏]|[🚀-🛅]|[🛌]|[🛐]|[🛑-🛒]|[🛕]|[🛫-🛬]|[🛴-🛶]|[🛷-🛸]|[🛹]|[🛺]|[🟠-🟫]|[🤍-🤏]|[🤐-🤘]|[🤙-🤞]|[🤟]|[🤠-🤧]|[🤨-🤯]|[🤰]|[🤱-🤲]|[🤳-🤺]|[🤼-🤾]|[🤿]|[🥀-🥅]|[🥇-🥋]|[🥌]|[🥍-🥏]|[🥐-🥞]|[🥟-🥫]|[🥬-🥰]|[🥱]|[🥳-🥶]|[🥺]|[🥻]|[🥼-🥿]|[🦀-🦄]|[🦅-🦑]|[🦒-🦗]|[🦘-🦢]|[🦥-🦪]|[🦮-🦯]|[🦰-🦹]|[🦺-🦿]|[🧀]|[🧁-🧂]|[🧃-🧊]|[🧍-🧏]|[🧐-🧦]|[🧧-🧿]|[🩰-🩳]|[🩸-🩺]|[🪀-🪂]|[🪐-🪕]')">Text contains characters with Emoji presentation as default.</report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaLetters-sourceMustResolve-83">
+   <pattern id="schematron-constraint-wegaLetters-sourceMustResolve-84">
                 <rule context="*[starts-with(@source, '#')]">
                     <let name="source" value="@source"/>
                     <assert test="id(substring($source,2))">Unable to locate the reference provided by the @source attribute.</assert>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaLetters-styleguide-document-node-content-84">
+   <pattern id="schematron-constraint-wegaLetters-styleguide-document-node-content-85">
                 <rule context="document-node()">
                     <report test="count(processing-instruction()) ne 2">WeGA styleguide error: there should exactly be two processing instructions before the root element</report>
                     <report test="comment()">WeGA styleguide error: there should be no comments outside the root element</report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaLetters-att.wega.rend-underline-n-85">
+   <pattern id="schematron-constraint-wegaLetters-att.wega.rend-underline-n-86">
                     <rule context="*:hi[@n] | *:rend[@n]">
                         <report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</report>
                     </rule>
