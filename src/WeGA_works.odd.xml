@@ -139,6 +139,21 @@
                             </attDef>
                         </attList>
                     </classSpec>
+                    
+                    <!--<classSpec ident="att.responsibility" module="MEI.shared" type="atts" mode="change">
+                        <attList org="group">
+                            <attDef ident="resp" usage="opt">
+                                <constraintSpec ident="check_respTarget" scheme="isoschematron" mode="replace">
+                                    <constraint>
+                                        <sch:rule context="@resp">
+                                            <sch:assert role="warning" test="not(normalize-space(.) eq '')">@resp attribute should have content.</sch:assert>
+                                            <sch:assert role="warning" test="every $i in tokenize(., '\s+') satisfies substring($i,2)=//mei:*/@xml:id">The value in @resp should correspond to the @xml:id attribute of an element in the same file.</sch:assert>
+                                        </sch:rule>
+                                    </constraint>
+                                </constraintSpec>
+                            </attDef>
+                        </attList>
+                    </classSpec>-->
 
                                      
                     <elementSpec ident="mei" module="MEI.shared" mode="change"
@@ -371,6 +386,28 @@
                                 </datatype>
                             </attDef>
                         </attList>
+                    </elementSpec>
+                    
+                    <elementSpec ident="inscription" module="MEI.header" mode="change"
+                        ns="http://www.music-encoding.org/ns/mei">
+                        <content>
+                            <rng:zeroOrMore>
+                                <rng:ref name="persName"/>
+                            </rng:zeroOrMore>
+                            <rng:zeroOrMore>
+                                <rng:ref name="date"/>
+                            </rng:zeroOrMore>
+                            <!--<rng:zeroOrMore>
+                                
+                            </rng:zeroOrMore>-->
+                            <rng:zeroOrMore>
+                                <rng:choice>
+                                    <rng:text/>
+                                    <rng:ref name="model.textPhraseLike.limited" />
+                                    <rng:ref name="model.transcriptionLike"/>
+                                </rng:choice>
+                            </rng:zeroOrMore>
+                        </content>
                     </elementSpec>
                     
                     <elementSpec ident="work" module="MEI.header" mode="change"
