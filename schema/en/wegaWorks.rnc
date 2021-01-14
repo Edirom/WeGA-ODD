@@ -9,7 +9,7 @@ namespace teix = "http://www.tei-c.org/ns/Examples"
 namespace xi = "http://www.w3.org/2001/XInclude"
 namespace xlink = "http://www.w3.org/1999/xlink"
 
-# Schema generated from ODD source 2021-01-13T16:33:10Z. .
+# Schema generated from ODD source 2021-01-14T15:39:51Z. .
 # TEI Edition: Version 4.0.0
 # TEI Edition Location: https://www.tei-c.org/Vault/P5//
 #
@@ -4505,10 +4505,8 @@ sch:pattern [
 att.responsibility.attributes = att.responsibility.attribute.resp
 att.responsibility.attribute.resp =
   
-  ## Indicates the agent(s) responsible for some aspect of the text's transcription, editing, or encoding. Its value must point to one or more identifiers declared in the document header.
-  attribute resp {
-    list { data.URI+ }
-  }?
+  ##
+  attribute resp { text }?
 sch:pattern [
   id =
     "wegaWorks-att.responsibility-resp-check_respTarget-constraint-rule-39"
@@ -4517,24 +4515,22 @@ sch:pattern [
   sch:rule [
     context = "@resp"
     "\x{a}" ~
-    "              "
+    "                                            "
     sch:assert [
       role = "warning"
       test = "not(normalize-space(.) eq '')"
-      "@resp attribute should\x{a}" ~
-      "                have content."
+      "@resp attribute should have content."
     ]
     "\x{a}" ~
-    "              "
+    "                                            "
     sch:assert [
       role = "warning"
       test =
-        "every $i in tokenize(., '\s+') satisfies substring($i,2)=//mei:*[ancestor::mei:meiHead]/@xml:id"
-      "The value in @resp should correspond to the @xml:id attribute of an element within\x{a}" ~
-      "                the metadata header."
+        "every $i in tokenize(., '\s+') satisfies substring($i,2)=//mei:*/@xml:id"
+      "The value in @resp should correspond to the @xml:id attribute of an element in the same file."
     ]
     "\x{a}" ~
-    "            "
+    "                                        "
   ]
   "\x{a}" ~
   "   "
