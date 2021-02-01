@@ -5,7 +5,7 @@
          xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2021-01-13T21:38:55Z. .
+Schema generated from ODD source 2021-02-01T09:51:41Z. .
 TEI Edition: Version 4.1.0. Last updated on
 	19th August 2020, revision b414ba550
 TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.1.0/
@@ -5612,12 +5612,27 @@ Suggested values include: 1] label; 2] data</a:documentation>
    <define name="physDesc">
       <element name="physDesc">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(physical description) contains a full physical description of a manuscript or manuscript part, optionally subdivided using more specialized elements from the model.physDescPart class. [10.7. Physical Description]</a:documentation>
-         <oneOrMore>
-            <choice>
-               <ref name="p"/>
+         <group>
+            <zeroOrMore>
+               <ref name="model.pLike"/>
+            </zeroOrMore>
+            <zeroOrMore>
                <ref name="accMat"/>
-            </choice>
-         </oneOrMore>
+            </zeroOrMore>
+         </group>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaDocuments-physDesc-empty-physDesc-constraint-assert-51">
+            <rule context="tei:physDesc">
+               <sch:assert xmlns:mei="http://www.music-encoding.org/ns/mei"
+                           xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                           xmlns:s="http://www.ascc.net/xml/schematron"
+                           xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                           xmlns="http://www.tei-c.org/ns/1.0"
+                           xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                           test="*">
+                  <sch:name/> must contain at least one p or accMat element</sch:assert>
+            </rule>
+         </pattern>
       </element>
    </define>
    <define name="accMat">
