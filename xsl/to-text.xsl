@@ -65,4 +65,45 @@
     
     <xsl:template match="tei:note"/>
     
+    <xsl:template match="tei:q">
+        <!-- Always(!) surround with quotation marks -->
+        <xsl:variable name="doubleQuotes" select="(count(ancestor::tei:q | ancestor::tei:quote) mod 2) = 0"/>
+        <xsl:call-template name="enquote">
+            <xsl:with-param name="double" select="$doubleQuotes"/>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template match="tei:quote">
+        <xsl:choose>
+            <!-- Surround with quotation marks if @rend is set -->
+            <xsl:when test="@rend">
+                <xsl:call-template name="enquote">
+                    <xsl:with-param name="double" select="@rend='double-quotes'"/>
+                </xsl:call-template>
+            </xsl:when>
+            <!-- no quotation marks as default -->
+            <xsl:otherwise>
+                <xsl:apply-templates/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
+    <xsl:template name="enquote">
+        <xsl:param name="double" select="true()"/>
+        <xsl:choose>
+            <!-- German double quotation marks -->
+            <xsl:when test="$double">
+                <xsl:text>„</xsl:text>
+                <xsl:apply-templates mode="#current"/>
+                <xsl:text>“</xsl:text>
+            </xsl:when>
+            <!-- German single quotation marks -->
+            <xsl:when test="not($double)">
+                <xsl:text>‚</xsl:text>
+                <xsl:apply-templates mode="#current"/>
+                <xsl:text>‘</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
+    
 </xsl:stylesheet>

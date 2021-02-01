@@ -58,6 +58,13 @@
         <xsl:apply-templates select="$duplicatesWrapper"/>
     </xsl:template>
     
+    <xsl:template match="q[parent::title]">
+        <xsl:element name="rend">
+            <xsl:attribute name="rend">quotedbl</xsl:attribute>
+            <xsl:apply-templates/>
+        </xsl:element>
+    </xsl:template>
+    
     <xsl:template match="pubStmt">
         <xsl:copy>
             <xsl:text>&#10;            </xsl:text>
@@ -87,6 +94,14 @@
     <xsl:template match="@codedval[matches(., 'A[A-F0-9]{6}')]" mode="#all">
         <xsl:attribute name="auth.uri">https://weber-gesamtausgabe.de/</xsl:attribute>
         <xsl:attribute name="codedval" select="."/>
+    </xsl:template>
+    
+    <xsl:template match="settlement[parent::event] | country[parent::event] | region[parent::event]">
+        <xsl:element name="geogName">
+            <xsl:copy>
+                <xsl:apply-templates select="@* | node()"/>
+            </xsl:copy>
+        </xsl:element>
     </xsl:template>
     
     <xsl:template name="inject-schema-references">

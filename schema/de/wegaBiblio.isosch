@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2020-09-14T10:02:28Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2020-12-17T13:21:52Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -161,69 +161,79 @@
                         <report test="every $j in (@when, @notBefore, @notAfter, @from, @to)[. castable as xs:gYear] satisfies number($j) gt year-from-date(current-date())">some attribute value of <name/> is greater than the current date</report>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-ref-prev-next-correspContext-15">
+   <pattern id="schematron-constraint-wegaBiblio-date-julian-before-1582-15">
+                    <rule context="tei:date[@calendar='Julian']">
+                        <report test="some $i in (@when, @notBefore, @notAfter, @from, @to) satisfies $i lt '1582-10-15'">Before October 15, 1582 the default calendar is Julian so no extra calendar declaration is needed.</report>
+                    </rule>
+                </pattern>
+   <pattern id="schematron-constraint-wegaBiblio-ref-prev-next-correspContext-16">
       <rule context="tei:ref">
                     <report test="@type=('previousLetterFromAddressee', 'nextLetterFromAddressee') and not(parent::tei:correspContext)">'previousLetterFromAddressee' and 'nextLetterFromAddressee' are only used within the correspContext element.</report>
                 </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-ref-refAtts-16">
+   <pattern id="schematron-constraint-wegaBiblio-ref-refAtts-17">
       <rule context="tei:ref">
          <report test="@target and @cRef">Only one of the
 	attributes @target' and @cRef' may be supplied on <name/>
          </report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-note-note-in-text-17">
+   <pattern id="schematron-constraint-wegaBiblio-note-note-in-text-18">
                     <rule context="tei:note[not(parent::tei:org or parent::tei:person or parent::tei:notesStmt or parent::tei:biblStruct or parent::tei:imprint)]">
                         <assert test="@type and @resp and @xml:id">It is required to provide @type and @resp and @xml:id on note.</assert>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-note-thematicCom-target-18">
+   <pattern id="schematron-constraint-wegaBiblio-note-thematicCom-target-19">
                     <rule context="tei:note[@type='thematicCom' or @target]">
                         <assert test="@type='thematicCom' and @target">You need to provide thematic commentary targets (Only @type='thematicCom' and @target go together!).</assert>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-note-thematicCom-must-be-empty-19">
+   <pattern id="schematron-constraint-wegaBiblio-note-thematicCom-must-be-empty-20">
                     <rule context="tei:note[@type='thematicCom' or @target]">
                         <report test="normalize-space() ne''">Thematic commentaries must not contain any text.</report>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-note-notesStmt-notes-20">
+   <pattern id="schematron-constraint-wegaBiblio-note-notesStmt-notes-21">
                     <rule context="tei:note[parent::tei:notesStmt]">
                         <assert test="@type=('editorial', 'summary', 'thematicCom', 'incipit', 'textConst')">Within the notesStmt only 'editorial', 'summary', 'textConst', or 'thematicCom' are allowed for @type on note.</assert>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-note-text-notes-21">
+   <pattern id="schematron-constraint-wegaBiblio-note-text-notes-22">
                     <rule context="tei:note[not(parent::tei:notesStmt)]">
                         <report test="@type=('editorial', 'summary', 'incipit')">The note types 'editorial', 'summary', or 'thematicCom' are not allowed within the text section but only in the notesStmt.</report>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-note-structured-content-notes-22">
+   <pattern id="schematron-constraint-wegaBiblio-note-structured-content-notes-23">
                     <rule context="tei:note[parent::tei:notesStmt][tei:p|tei:list|tei:table]">
                         <report test="text()[matches(., '\w')] or *[not(self::tei:p or self::tei:list or self::tei:table)]">There must be no mixed content when a tei:p, tei:list, or tei:table is present.</report>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-analytic-analyticTitle-23">
+   <pattern id="schematron-constraint-wegaBiblio-note-initial-uppercase-commentaries-24">
+                    <rule context="tei:note[@type='commentary'][not(*[1]/self::tei:q or *[1]/self::tei:quote)]">
+                        <assert test="matches(replace(normalize-unicode(normalize-space(.), 'NFKD'),  '[\p{M}]', ''), '^[A-Z0-9]')">Commentary notes must start with an upper case letter.</assert>
+                    </rule>
+                </pattern>
+   <pattern id="schematron-constraint-wegaBiblio-analytic-analyticTitle-25">
       <rule context="tei:analytic">
                     <report test="tei:title/@level and not(tei:title/@level='a')">a title within analytic must have a @level='a'</report>
                 </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-monogr-monogrTitle-24">
+   <pattern id="schematron-constraint-wegaBiblio-monogr-monogrTitle-26">
       <rule context="tei:monogr">
                     <report test="tei:title/@level and not(tei:title/@level=('j','m','u'))">a title within monogr must have a @level='j|m'</report>
                 </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-series-seriesTitle-25">
+   <pattern id="schematron-constraint-wegaBiblio-series-seriesTitle-27">
       <rule context="tei:series">
                     <report test="tei:title/@level and not(tei:title/@level='s')">a title within series must have a @level='s'</report>
                 </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-author-sameAs-sameAs-reference-26">
+   <pattern id="schematron-constraint-wegaBiblio-author-sameAs-sameAs-reference-28">
                             <rule context="tei:author[@sameAs]">
                                 <assert test="id(substring(@sameAs,2)) or starts-with(@sameAs, 'wega:')">There must be an element with the xml:id = "<value-of select="substring(@sameAs,2)"/>" which is the target of this @sameAs.</assert>
                             </rule>
                         </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-title-duplicate-title-27">
+   <pattern id="schematron-constraint-wegaBiblio-title-duplicate-title-29">
                     <rule context="tei:title[following-sibling::tei:title]">
                         <let name="level" value="@level"/>
                         <let name="type" value="string(@type)"/> 
@@ -231,67 +241,67 @@
                         <report test="following-sibling::tei:title[@level = $level][string(@xml:lang) = $lang][string(@type) = $type]">Following title without differing @type or xml:lang attribute</report>
                     </rule>
                 </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-title-punctuation-mark-28">
+   <pattern id="schematron-constraint-wegaBiblio-title-punctuation-mark-30">
       <rule context="tei:title">
                     <report test="matches(normalize-space(self::tei:title), '[\.,;]$') and not(matches(normalize-space(self::tei:title), '((\p{Lu})|(\setc)|(\sal)|([\s\.]a)|(\sBl)|(\sAufl))\.$'))">Found a non-valid punctuation mark at the end of <name/> 
          </report>
                 </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-title-report-leading-zeros-29">
+   <pattern id="schematron-constraint-wegaBiblio-title-report-leading-zeros-31">
       <rule context="tei:title">
                     <report test="matches(., '\s0\d+\.')">please do not prefix numbers with a zero</report>
                 </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-title-report-quotation-marks-30">
+   <pattern id="schematron-constraint-wegaBiblio-title-report-quotation-marks-32">
       <rule context="tei:title">
                     <report test="matches(., '&#34;“„')">please replace literal quotation marks with q-tags</report>
                 </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-imprint-duplicate-biblScope-type-31">
+   <pattern id="schematron-constraint-wegaBiblio-imprint-duplicate-biblScope-type-33">
       <rule context="tei:imprint">
                     <report test="count(distinct-values(tei:biblScope/@type)) ne count(tei:biblScope/@type)">duplicate value for biblScope</report>
                 </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-styleguide-document-node-content-32">
+   <pattern id="schematron-constraint-wegaBiblio-styleguide-document-node-content-34">
                 <rule context="document-node()">
                     <report test="count(processing-instruction()) ne 2">WeGA styleguide error: there should exactly be two processing instructions before the root element</report>
                     <report test="comment()">WeGA styleguide error: there should be no comments outside the root element</report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-whitespaceOnlyContent-33">
+   <pattern id="schematron-constraint-wegaBiblio-whitespaceOnlyContent-35">
                 <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi[not(.//tei:gap)] | tei:head | tei:note[not(@type=('thematicCom'))] | tei:placeName | tei:title | tei:seg | tei:item[not(@* or *)]">
                     <report test="normalize-space(.) = ''">
             <name/> has whitespace only content</report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-elementStartsWithWhitespace-34">
+   <pattern id="schematron-constraint-wegaBiblio-elementStartsWithWhitespace-36">
                 <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
                     <report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <name/>
          </report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-untrimmedAttributeValues-35">
+   <pattern id="schematron-constraint-wegaBiblio-untrimmedAttributeValues-37">
                 <rule context="*">
                     <report test="some $i in @* satisfies string-length(normalize-unicode(normalize-space(replace($i, ' | | | ', ' ')))) ne string-length($i)">There is some whitespace here at the beginning or end of some attribute value.</report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-wegaTargets-36">
+   <pattern id="schematron-constraint-wegaBiblio-wegaTargets-38">
                 <rule context="*[starts-with(@target, 'wega:')]">
                     <assert test="matches(@target, '^wega:A[0-9A-F]{6}(#.+)?(\s+wega:A[0-9A-F]{6}(#.+)?)*$')">"wega"-prefixed URIs must follow the pattern "wega:A002068" (i.e. without any file extension)</assert>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-emojiCheck-37">
+   <pattern id="schematron-constraint-wegaBiblio-emojiCheck-39">
                 <rule context="*[some $i in text() satisfies normalize-space($i) ne '']">
                     <report test="matches(., '[⌚-⌛]|[⏩-⏬]|[⏰]|[⏳]|[◽-◾]|[☔-☕]|[♈-♓]|[♿]|[⚓]|[⚡]|[⚪-⚫]|[⚽-⚾]|[⛄-⛅]|[⛎]|[⛔]|[⛪]|[⛲-⛳]|[⛵]|[⛺]|[⛽]|[✅]|[✊-✋]|[✨]|[❌]|[❎]|[❓-❕]|[❗]|[➕-➗]|[➰]|[➿]|[⬛-⬜]|[⭐]|[⭕]|[🀄]|[🃏]|[🆎]|[🆑-🆚]|[🇦-🇿]|[🈁]|[🈚]|[🈯]|[🈲-🈶]|[🈸-🈺]|[🉐-🉑]|[🌀-🌠]|[🌭-🌯]|[🌰-🌵]|[🌷-🍼]|[🍾-🍿]|[🎀-🎓]|[🎠-🏄]|[🏅]|[🏆-🏊]|[🏏-🏓]|[🏠-🏰]|[🏴]|[🏸-🏿]|[🐀-🐾]|[👀]|[👂-📷]|[📸]|[📹-📼]|[📿]|[🔀-🔽]|[🕋-🕎]|[🕐-🕧]|[🕺]|[🖕-🖖]|[🖤]|[🗻-🗿]|[😀]|[😁-😐]|[😑]|[😒-😔]|[😕]|[😖]|[😗]|[😘]|[😙]|[😚]|[😛]|[😜-😞]|[😟]|[😠-😥]|[😦-😧]|[😨-😫]|[😬]|[😭]|[😮-😯]|[😰-😳]|[😴]|[😵-🙀]|[🙁-🙂]|[🙃-🙄]|[🙅-🙏]|[🚀-🛅]|[🛌]|[🛐]|[🛑-🛒]|[🛕]|[🛫-🛬]|[🛴-🛶]|[🛷-🛸]|[🛹]|[🛺]|[🟠-🟫]|[🤍-🤏]|[🤐-🤘]|[🤙-🤞]|[🤟]|[🤠-🤧]|[🤨-🤯]|[🤰]|[🤱-🤲]|[🤳-🤺]|[🤼-🤾]|[🤿]|[🥀-🥅]|[🥇-🥋]|[🥌]|[🥍-🥏]|[🥐-🥞]|[🥟-🥫]|[🥬-🥰]|[🥱]|[🥳-🥶]|[🥺]|[🥻]|[🥼-🥿]|[🦀-🦄]|[🦅-🦑]|[🦒-🦗]|[🦘-🦢]|[🦥-🦪]|[🦮-🦯]|[🦰-🦹]|[🦺-🦿]|[🧀]|[🧁-🧂]|[🧃-🧊]|[🧍-🧏]|[🧐-🧦]|[🧧-🧿]|[🩰-🩳]|[🩸-🩺]|[🪀-🪂]|[🪐-🪕]')">Text contains characters with Emoji presentation as default.</report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-sourceMustResolve-38">
+   <pattern id="schematron-constraint-wegaBiblio-sourceMustResolve-40">
                 <rule context="*[starts-with(@source, '#')]">
                     <let name="source" value="@source"/>
                     <assert test="id(substring($source,2))">Unable to locate the reference provided by the @source attribute.</assert>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaBiblio-att.wega.rend-underline-n-39">
+   <pattern id="schematron-constraint-wegaBiblio-att.wega.rend-underline-n-41">
                     <rule context="*:hi[@n] | *:rend[@n]">
                         <report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</report>
                     </rule>
