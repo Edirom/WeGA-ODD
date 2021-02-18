@@ -9,7 +9,7 @@ namespace teix = "http://www.tei-c.org/ns/Examples"
 namespace xi = "http://www.w3.org/2001/XInclude"
 namespace xlink = "http://www.w3.org/1999/xlink"
 
-# Schema generated from ODD source 2021-01-14T15:39:51Z. .
+# Schema generated from ODD source 2021-01-17T22:49:27Z. .
 # TEI Edition: Version 4.0.0
 # TEI Edition Location: https://www.tei-c.org/Vault/P5//
 #
@@ -3239,6 +3239,14 @@ att.filing.attribute.nonfiling =
   
   ## Holds the number of initial characters (such as those constituting an article or preposition) that should not be used for sorting a title or name.
   attribute nonfiling { xsd:positiveInteger }?
+att.grpSym.log.attributes =
+  att.staffGroupingSym.attributes,
+  att.startEndId.attributes,
+  att.grpSym.log.attribute.level
+att.grpSym.log.attribute.level =
+  
+  ## Indicates the nesting level of staff grouping symbols.
+  attribute level { xsd:positiveInteger }?
 att.handIdent.attributes = att.handIdent.attribute.hand
 att.handIdent.attribute.hand =
   [
@@ -3331,6 +3339,13 @@ sch:pattern [
   "\x{a}" ~
   "   "
 ]
+att.keySig.log.attributes = att.keySig.log.attribute.sig
+att.keySig.log.attribute.sig =
+  
+  ## Written key signature.
+  attribute sig {
+    list { data.KEYFIFTHS+ }
+  }?
 att.keySigDefault.log.attributes =
   att.keySigDefault.log.attribute.key.sig
 att.keySigDefault.log.attribute.key.sig =
@@ -3895,6 +3910,24 @@ att.meterConformance.bar.attribute.control =
     ]
   ]
   attribute control { data.BOOLEAN }?
+att.meterSig.log.attributes =
+  att.meterSig.log.attribute.count,
+  att.meterSig.log.attribute.sym,
+  att.meterSig.log.attribute.unit
+att.meterSig.log.attribute.count =
+  
+  ## Captures the number of beats in a measure, that is, the top number of the meter signature. It must contain a decimal number or an additive expression that evaluates to a decimal number, such as 2+3.
+  attribute count {
+    xsd:string { pattern = "\d+(\.\d+)?(\s*\+\s*\d+(\.\d+)?)*" }
+  }?
+att.meterSig.log.attribute.sym =
+  
+  ## Indicates the use of a meter symbol instead of a numeric meter signature, that is, 'C' for common time or 'C' with a slash for cut time.
+  attribute sym { data.METERSIGN }?
+att.meterSig.log.attribute.unit =
+  
+  ## Contains the number indicating the beat unit, that is, the bottom number of the meter signature.
+  attribute unit { xsd:decimal }?
 att.meterSigDefault.log.attributes =
   att.meterSigDefault.log.attribute.meter.count,
   att.meterSigDefault.log.attribute.meter.unit,
@@ -5313,12 +5346,12 @@ model.imprintPart = publisher | pubPlace
 model.incipLike = incip
 model.instrDefLike = instrDef
 model.keyAccidLike = notAllowed
-model.keySigLike = notAllowed
-model.keySigLike_alternation = notAllowed
-model.keySigLike_sequence = empty
-model.keySigLike_sequenceOptional = empty
-model.keySigLike_sequenceOptionalRepeatable = empty
-model.keySigLike_sequenceRepeatable = notAllowed
+model.keySigLike = keySig
+model.keySigLike_alternation = keySig
+model.keySigLike_sequence = keySig
+model.keySigLike_sequenceOptional = keySig?
+model.keySigLike_sequenceOptionalRepeatable = keySig*
+model.keySigLike_sequenceRepeatable = keySig+
 model.labelLike = label | labelAbbr
 model.layerDefLike = notAllowed
 model.layerLike = layer
@@ -5347,12 +5380,12 @@ model.measurementLike_sequenceOptionalRepeatable =
   model.numLike_sequenceOptionalRepeatable*
 model.measurementLike_sequenceRepeatable =
   model.numLike_sequenceRepeatable+
-model.meterSigLike = notAllowed
-model.meterSigLike_alternation = notAllowed
-model.meterSigLike_sequence = empty
-model.meterSigLike_sequenceOptional = empty
-model.meterSigLike_sequenceOptionalRepeatable = empty
-model.meterSigLike_sequenceRepeatable = notAllowed
+model.meterSigLike = meterSig
+model.meterSigLike_alternation = meterSig
+model.meterSigLike_sequence = meterSig
+model.meterSigLike_sequenceOptional = meterSig?
+model.meterSigLike_sequenceOptionalRepeatable = meterSig*
+model.meterSigLike_sequenceRepeatable = meterSig+
 model.milestoneLike.music = model.pbLike
 model.milestoneLike.text = model.lbLike | model.pbLike
 model.nameLike = name | model.nameLike.agent | model.nameLike.place
@@ -6160,6 +6193,59 @@ group =
     att.metadataPointing.attributes,
     empty
   }
+grpSym =
+  
+  ## (group symbol) – A brace or bracket used to group two or more staves of a score or part.
+  element grpSym {
+    (model.labelLike*)
+    >> sch:pattern [
+         id =
+           "wegaWorks-grpSym-check_grpSym_attributes_scoreDef-constraint-rule-52"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "mei:grpSym[parent::mei:scoreDef]"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test = "@startid and @endid and @level"
+             "In scoreDef, grpSym must have startid,\x{a}" ~
+             "            endid, and level attributes."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> sch:pattern [
+         id =
+           "wegaWorks-grpSym-check_grpSym_attributes_staffDef-constraint-rule-53"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "mei:grpSym[parent::mei:staffGrp]"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test = "not(@startid or @endid or @level)"
+             "In staffGrp, grpSym must not have\x{a}" ~
+             "            startid, endid, or level attributes."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.common.attributes,
+    att.facsimile.attributes,
+    att.grpSym.log.attributes,
+    att.grpSym.vis.attributes,
+    att.grpSym.ges.attributes,
+    att.grpSym.anl.attributes,
+    empty
+  }
 identifier =
   
   ## An alpha-numeric string that establishes the identity of the described material.
@@ -6185,6 +6271,60 @@ incip =
     (model.annotLike | model.scoreLike | incipCode | incipText)*,
     att.common.attributes,
     att.bibl.attributes,
+    empty
+  }
+keySig =
+  
+  ## (key signature) – Written key signature.
+  element keySig {
+    ((model.keyAccidLike | model.transcriptionLike)*)
+    >> sch:pattern [
+         id = "wegaWorks-keySig-check_keyAccid_oct-constraint-rule-54"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context = "mei:keySig[mei:keyAccid[@oct]]"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test = "count(mei:keyAccid[@oct]) = count(mei:keyAccid)"
+             "If the @oct attribute\x{a}" ~
+             "            appears on any keyAccid element, it must be provided on all keyAccid\x{a}" ~
+             "            elements."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ]
+    >> sch:pattern [
+         id =
+           "wegaWorks-keySig-check_keySig_editorial-constraint-rule-55"
+         "\x{a}" ~
+         "            "
+         sch:rule [
+           context =
+             "mei:keySig/mei:*[local-name() eq 'add' or local-name() eq 'corr'             or local-name() eq 'damage' or local-name() eq 'del' or local-name() eq 'orig' or              local-name() eq 'reg' or local-name() eq 'restore' or local-name() eq 'sic' or              local-name() eq 'supplied' or local-name() eq 'unclear']"
+           "\x{a}" ~
+           "               "
+           sch:assert [
+             test = "count(mei:keyAccid) = count(mei:*)"
+             "Only keyAccid elements are allowed\x{a}" ~
+             "            here."
+           ]
+           "\x{a}" ~
+           "            "
+         ]
+         "\x{a}" ~
+         "         "
+       ],
+    att.common.attributes,
+    att.facsimile.attributes,
+    att.keySig.anl.attributes,
+    att.keySig.ges.attributes,
+    att.keySig.log.attributes,
+    att.keySig.vis.attributes,
     empty
   }
 label =
@@ -6298,7 +6438,7 @@ mei =
     meiHead,
     music
     >> sch:pattern [
-         id = "wegaWorks-mei-Check_staff-constraint-rule-52"
+         id = "wegaWorks-mei-Check_staff-constraint-rule-56"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6344,7 +6484,7 @@ name =
       | model.editLike
       | model.transcriptionLike)*)
     >> sch:pattern [
-         id = "wegaWorks-name-nameParts-constraint-rule-53"
+         id = "wegaWorks-name-nameParts-constraint-rule-57"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6469,7 +6609,7 @@ relation =
   element relation {
     empty
     >> sch:pattern [
-         id = "wegaWorks-relation-FRBR_relation-constraint-rule-54"
+         id = "wegaWorks-relation-FRBR_relation-constraint-rule-58"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6562,7 +6702,7 @@ respStmt =
     model.headLike*,
     ((name | model.nameLike.agent)*)
     >> sch:pattern [
-         id = "wegaWorks-respStmt-check_respStmt-constraint-rule-55"
+         id = "wegaWorks-respStmt-check_respStmt-constraint-rule-59"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6594,7 +6734,7 @@ rest =
   element rest {
     ((model.editLike | model.transcriptionLike)*)
     >> sch:pattern [
-         id = "wegaWorks-rest-Check_restline-constraint-rule-56"
+         id = "wegaWorks-rest-Check_restline-constraint-rule-60"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6657,6 +6797,7 @@ scoreDef =
     model.meterSigLike?,
     instrGrp?,
     model.staffGrpLike?,
+    grpSym*,
     att.common.attributes,
     att.scoreDef.log.attributes,
     att.scoreDef.vis.attributes,
@@ -6677,7 +6818,7 @@ section =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-section-Check_sectionexpansion-constraint-rule-57"
+           "wegaWorks-section-Check_sectionexpansion-constraint-rule-61"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6733,7 +6874,7 @@ staff =
       | model.staffPart
       | model.transcriptionLike)*)
     >> sch:pattern [
-         id = "wegaWorks-staff-checkStaff_n-constraint-rule-58"
+         id = "wegaWorks-staff-checkStaff_n-constraint-rule-62"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6776,7 +6917,7 @@ staffDef =
     model.labelLike*,
     ((model.instrDefLike | model.layerDefLike | model.staffDefPart)*)
     >> sch:pattern [
-         id = "wegaWorks-staffDef-Check_staffDefn-constraint-rule-59"
+         id = "wegaWorks-staffDef-Check_staffDefn-constraint-rule-63"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6814,7 +6955,7 @@ staffDef =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-staffDef-Check_ancestor_staff-constraint-rule-60"
+           "wegaWorks-staffDef-Check_ancestor_staff-constraint-rule-64"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6837,7 +6978,7 @@ staffDef =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-staffDef-Check_ancestor_staff_lines-constraint-rule-61"
+           "wegaWorks-staffDef-Check_ancestor_staff_lines-constraint-rule-65"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6865,7 +7006,7 @@ staffDef =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-staffDef-Check_clef_position_staffDef-constraint-rule-62"
+           "wegaWorks-staffDef-Check_clef_position_staffDef-constraint-rule-66"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6885,7 +7026,7 @@ staffDef =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-staffDef-Check_clef_position_staffDef_nolines-constraint-rule-63"
+           "wegaWorks-staffDef-Check_clef_position_staffDef_nolines-constraint-rule-67"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6915,7 +7056,7 @@ staffDef =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-staffDef-Check_tab_strings_lines-constraint-rule-64"
+           "wegaWorks-staffDef-Check_tab_strings_lines-constraint-rule-68"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -6942,7 +7083,7 @@ staffDef =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-staffDef-Check_tab_strings_nolines-constraint-rule-65"
+           "wegaWorks-staffDef-Check_tab_strings_nolines-constraint-rule-69"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7094,12 +7235,14 @@ staffGrp =
   
   ## (staff group) – A group of bracketed or braced staves.
   element staffGrp {
+    grpSym*,
     model.labelLike*,
     model.instrDefLike*,
-    ((model.staffGrpLike | model.staffDefLike)+)
+    (model.staffGrpLike | model.staffDefLike)+,
+    (grpSym*)
     >> sch:pattern [
          id =
-           "wegaWorks-staffGrp-Check_staffGrp_unique_staff_n_values-constraint-rule-70"
+           "wegaWorks-staffGrp-Check_staffGrp_unique_staff_n_values-constraint-rule-74"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7166,7 +7309,7 @@ tempo =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-tempo-tempo_in_header_disallow_most_attrs-constraint-rule-71"
+           "wegaWorks-tempo-tempo_in_header_disallow_most_attrs-constraint-rule-75"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7189,7 +7332,7 @@ tempo =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-tempo-tempo_start-type_attributes_required-constraint-rule-72"
+           "wegaWorks-tempo-tempo_start-type_attributes_required-constraint-rule-76"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7224,7 +7367,7 @@ term =
   element term {
     ((text | model.textPhraseLike.limited)*)
     >> sch:pattern [
-         id = "wegaWorks-term-Check_term_dataTarget-constraint-rule-73"
+         id = "wegaWorks-term-Check_term_dataTarget-constraint-rule-77"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7356,7 +7499,7 @@ att.harm.log.attribute.chordref =
   attribute chordref { data.URI }?
 sch:pattern [
   id =
-    "wegaWorks-att.harm.log-chordref-check_chordrefTarget-constraint-rule-74"
+    "wegaWorks-att.harm.log-chordref-check_chordrefTarget-constraint-rule-78"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -7413,7 +7556,7 @@ harm =
       | model.figbassLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-harm-harm_start-type_attributes_required-constraint-rule-75"
+           "wegaWorks-harm-harm_start-type_attributes_required-constraint-rule-79"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7525,7 +7668,7 @@ componentList =
      | (model.manifestationLike* | model.itemLike*))
     >> sch:pattern [
          id =
-           "wegaWorks-componentList-checkComponentList-constraint-rule-76"
+           "wegaWorks-componentList-checkComponentList-constraint-rule-80"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7546,7 +7689,7 @@ componentList =
        ]
     >> sch:pattern [
          id =
-           "wegaWorks-componentList-checkComponents-constraint-rule-77"
+           "wegaWorks-componentList-checkComponents-constraint-rule-81"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7626,7 +7769,7 @@ change =
     changeDesc,
     (model.dateLike?)
     >> sch:pattern [
-         id = "wegaWorks-change-check_change-constraint-rule-78"
+         id = "wegaWorks-change-check_change-constraint-rule-82"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7711,7 +7854,7 @@ contents =
     (model.pLike? | (label?, contentItem)+)
     >> sch:pattern [
          id =
-           "wegaWorks-contents-checkContentsLabels-constraint-rule-79"
+           "wegaWorks-contents-checkContentsLabels-constraint-rule-83"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7783,7 +7926,7 @@ handList =
     ((label?, hand)*)
     >> sch:pattern [
          id =
-           "wegaWorks-handList-checkHandListLabels-constraint-rule-80"
+           "wegaWorks-handList-checkHandListLabels-constraint-rule-84"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7813,7 +7956,7 @@ history =
     model.headLike*,
     ((provenance | model.divLike | model.textComponentLike)*)
     >> sch:pattern [
-         id = "wegaWorks-history-history_restriction-constraint-rule-81"
+         id = "wegaWorks-history-history_restriction-constraint-rule-85"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7843,7 +7986,7 @@ incipCode =
     text
     >> sch:pattern [
          id =
-           "wegaWorks-incipCode-Check_incipCode_form_mimetype-constraint-rule-82"
+           "wegaWorks-incipCode-Check_incipCode_form_mimetype-constraint-rule-86"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -7940,7 +8083,7 @@ meiHead =
     manifestationList?,
     (revisionDesc?)
     >> sch:pattern [
-         id = "wegaWorks-meiHead-check_meiHead_type-constraint-rule-83"
+         id = "wegaWorks-meiHead-check_meiHead_type-constraint-rule-87"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -8167,7 +8310,7 @@ termList =
     ((label?, term)*)
     >> sch:pattern [
          id =
-           "wegaWorks-termList-checkTermListLabels-constraint-rule-88"
+           "wegaWorks-termList-checkTermListLabels-constraint-rule-92"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -8260,7 +8403,7 @@ work =
     componentList?,
     (relationList?)
     >> sch:pattern [
-         id = "wegaWorks-work-id-check-constraint-rule-89"
+         id = "wegaWorks-work-id-check-constraint-rule-93"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -8473,7 +8616,7 @@ att.beamRend.attribute.place =
   attribute place { data.BEAMPLACE }?
 sch:pattern [
   id =
-    "wegaWorks-att.beamRend-place-check_beam_place-constraint-rule-90"
+    "wegaWorks-att.beamRend-place-check_beam_place-constraint-rule-94"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -8677,6 +8820,8 @@ att.mRest.log.attributes =
   att.duration.additive.attributes,
   att.event.attributes
 att.mRpt.log.attributes = att.event.attributes
+att.mSpace.log.attributes =
+  att.duration.additive.attributes, att.event.attributes
 att.note.anl.cmn.attributes =
   att.beamPresent.attributes,
   att.fermataPresent.attributes,
@@ -8896,13 +9041,14 @@ model.eventLike.cmn_sequenceOptionalRepeatable =
   beam*, beatRpt*, bTrem*, fTrem*, halfmRpt*, tuplet*
 model.eventLike.cmn_sequenceRepeatable =
   beam+, beatRpt+, bTrem+, fTrem+, halfmRpt+, tuplet+
-model.eventLike.measureFilling = mRest | mRpt
-model.eventLike.measureFilling_alternation = mRest | mRpt
-model.eventLike.measureFilling_sequence = mRest, mRpt
-model.eventLike.measureFilling_sequenceOptional = mRest?, mRpt?
+model.eventLike.measureFilling = mRest | mRpt | mSpace
+model.eventLike.measureFilling_alternation = mRest | mRpt | mSpace
+model.eventLike.measureFilling_sequence = mRest, mRpt, mSpace
+model.eventLike.measureFilling_sequenceOptional = mRest?, mRpt?, mSpace?
 model.eventLike.measureFilling_sequenceOptionalRepeatable =
-  mRest*, mRpt*
-model.eventLike.measureFilling_sequenceRepeatable = mRest+, mRpt+
+  mRest*, mRpt*, mSpace*
+model.eventLike.measureFilling_sequenceRepeatable =
+  mRest+, mRpt+, mSpace+
 model.layerPart.cmn =
   model.eventLike.cmn | model.eventLike.measureFilling
 model.measureLike = measure
@@ -8929,7 +9075,7 @@ beam =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-beam-When_not_copyof_beam_content-constraint-rule-92"
+           "wegaWorks-beam-When_not_copyof_beam_content-constraint-rule-96"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -8963,7 +9109,7 @@ beamSpan =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-beamSpan-beamspan_start-_and_end-type_attributes_required-constraint-rule-93"
+           "wegaWorks-beamSpan-beamspan_start-_and_end-type_attributes_required-constraint-rule-97"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9031,7 +9177,7 @@ fermata =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-fermata-fermata_start-type_attributes_required-constraint-rule-94"
+           "wegaWorks-fermata-fermata_start-type_attributes_required-constraint-rule-98"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9078,7 +9224,7 @@ hairpin =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-hairpin-hairpin_start-_and_end-type_attributes_required-constraint-rule-95"
+           "wegaWorks-hairpin-hairpin_start-_and_end-type_attributes_required-constraint-rule-99"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9147,6 +9293,19 @@ measure =
     att.targetEval.attributes,
     empty
   }
+meterSig =
+  
+  ## (meter signature) – Written meter signature.
+  element meterSig {
+    empty,
+    att.common.attributes,
+    att.facsimile.attributes,
+    att.meterSig.anl.attributes,
+    att.meterSig.ges.attributes,
+    att.meterSig.log.attributes,
+    att.meterSig.vis.attributes,
+    empty
+  }
 mNum =
   [
     a:documentation [
@@ -9194,6 +9353,19 @@ mRpt =
     att.mRpt.anl.attributes,
     empty
   }
+mSpace =
+  
+  ## (measure space) – A measure containing only empty space in any meter.
+  element mSpace {
+    empty,
+    att.common.attributes,
+    att.facsimile.attributes,
+    att.mSpace.log.attributes,
+    att.mSpace.vis.attributes,
+    att.mSpace.ges.attributes,
+    att.mSpace.anl.attributes,
+    empty
+  }
 octave =
   
   ## An indication that a passage should be performed one or more octaves above or below its written pitch.
@@ -9201,7 +9373,7 @@ octave =
     ((text | model.textPhraseLike.limited)*)
     >> sch:pattern [
          id =
-           "wegaWorks-octave-octave_start-_and_end-type_attributes_required-constraint-rule-96"
+           "wegaWorks-octave-octave_start-_and_end-type_attributes_required-constraint-rule-100"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9240,7 +9412,7 @@ slur =
   [
     sch:pattern [
       id =
-        "wegaWorks-slur-slur_start-_and_end-type_attributes_required-constraint-rule-97"
+        "wegaWorks-slur-slur_start-_and_end-type_attributes_required-constraint-rule-101"
       "\x{a}" ~
       "            "
       sch:rule [
@@ -9266,7 +9438,7 @@ slur =
       "         "
     ]
     sch:pattern [
-      id = "wegaWorks-slur-slur_containing_curve-constraint-rule-98"
+      id = "wegaWorks-slur-slur_containing_curve-constraint-rule-102"
       "\x{a}" ~
       "            "
       sch:rule [
@@ -9305,7 +9477,7 @@ tie =
   [
     sch:pattern [
       id =
-        "wegaWorks-tie-tie_start-_and_end-type_attributes_required-constraint-rule-99"
+        "wegaWorks-tie-tie_start-_and_end-type_attributes_required-constraint-rule-103"
       "\x{a}" ~
       "            "
       sch:rule [
@@ -9331,7 +9503,7 @@ tie =
       "         "
     ]
     sch:pattern [
-      id = "wegaWorks-tie-tie_containing_curve-constraint-rule-100"
+      id = "wegaWorks-tie-tie_containing_curve-constraint-rule-104"
       "\x{a}" ~
       "            "
       sch:rule [
@@ -9374,7 +9546,7 @@ tuplet =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-rule-101"
+           "wegaWorks-tuplet-When_not_copyof_tuplet_content-constraint-rule-105"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9408,7 +9580,7 @@ tupletSpan =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-tupletSpan-tupletSpan_start-_and_end-type_attributes_required-constraint-rule-102"
+           "wegaWorks-tupletSpan-tupletSpan_start-_and_end-type_attributes_required-constraint-rule-106"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9539,7 +9711,7 @@ mordent =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-mordent-mordent_start-type_attributes_required-constraint-rule-103"
+           "wegaWorks-mordent-mordent_start-type_attributes_required-constraint-rule-107"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9572,7 +9744,7 @@ trill =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-trill-trill_start-type_attributes_required-constraint-rule-104"
+           "wegaWorks-trill-trill_start-type_attributes_required-constraint-rule-108"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9605,7 +9777,7 @@ turn =
     empty
     >> sch:pattern [
          id =
-           "wegaWorks-turn-turn_start-type_attributes_required-constraint-rule-105"
+           "wegaWorks-turn-turn_start-type_attributes_required-constraint-rule-109"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9771,7 +9943,7 @@ li =
     model.headLike*,
     ((label?, li)*)
     >> sch:pattern [
-         id = "wegaWorks-list-list_type_constraint-constraint-rule-106"
+         id = "wegaWorks-list-list_type_constraint-constraint-rule-110"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -9949,7 +10121,7 @@ att.trans.attributes =
   att.metadataPointing.attributes,
   att.sequence.attributes
 model.choicePart =
-  model.editorialLike | model.editLike | corr | reg | sic
+  model.editorialLike | model.editLike | corr | orig | reg | sic
 model.editLike = choice | subst
 model.editTransPart =
   model.sylLike | model.editTransPart.music | model.editTransPart.text
@@ -9961,7 +10133,16 @@ model.editTransPart.music =
 model.editTransPart.text =
   model.textComponentLike | model.textPhraseLike.limited
 model.transcriptionLike =
-  add | corr | damage | del | gap | reg | restore | sic | supplied
+  add
+  | corr
+  | damage
+  | del
+  | gap
+  | orig
+  | reg
+  | restore
+  | sic
+  | supplied
 abbr =
   
   ## (abbreviation) – A generic element for 1) a shortened form of a word, including an acronym or 2) a shorthand notation.
@@ -10050,7 +10231,7 @@ cpMark =
       | model.transcriptionLike)*)
     >> sch:pattern [
          id =
-           "wegaWorks-cpMark-cpMark_start-_and_end-type_attributes_required-constraint-rule-107"
+           "wegaWorks-cpMark-cpMark_start-_and_end-type_attributes_required-constraint-rule-111"
          "\x{a}" ~
          "            "
          sch:rule [
@@ -10170,6 +10351,28 @@ gap =
     att.reasonIdent.attributes,
     empty
   }
+orig =
+  
+  ## (original) – Contains material which is marked as following the original, rather than being normalized or corrected.
+  element orig {
+    (text
+     | model.divLike
+     | model.editLike
+     | model.editTransPart
+     | model.fLike
+     | model.keyAccidLike
+     | model.layerPart
+     | model.milestoneLike.music
+     | model.sectionPart
+     | model.staffGrpLike
+     | model.transcriptionLike)*,
+    att.common.attributes,
+    att.edit.attributes,
+    att.extent.attributes,
+    att.facsimile.attributes,
+    att.lang.attributes,
+    empty
+  }
 reg =
   
   ## (regularization) – Contains material which has been regularized or normalized in some sense.
@@ -10284,7 +10487,7 @@ att.accidental.gestural.attribute.accid.ges =
   attribute accid.ges { data.ACCIDENTAL.GESTURAL }?
 sch:pattern [
   id =
-    "wegaWorks-att.accidental.gestural-accid.ges-check_accid_duplication-constraint-rule-108"
+    "wegaWorks-att.accidental.gestural-accid.ges-check_accid_duplication-constraint-rule-112"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -10381,6 +10584,7 @@ att.dynam.ges.attributes =
 att.ending.ges.attributes = empty
 att.fermata.ges.attributes = att.duration.gestural.attributes
 att.fTrem.ges.attributes = att.tremMeasured.attributes
+att.grpSym.ges.attributes = empty
 att.hairpin.ges.attributes =
   att.duration.gestural.attributes,
   att.midiValue.attributes,
@@ -10393,13 +10597,17 @@ att.instrDef.ges.attributes =
   att.channelized.attributes,
   att.midiInstrument.attributes,
   att.soundLocation.attributes
+att.keySig.ges.attributes = empty
 att.layer.ges.attributes = empty
 att.measure.ges.attributes = att.timestamp.gestural.attributes
+att.meterSig.ges.attributes = empty
 att.midi.ges.attributes = empty
 att.mordent.ges.attributes = empty
 att.mRest.ges.attributes =
   att.duration.gestural.attributes, att.instrumentIdent.attributes
 att.mRpt.ges.attributes = empty
+att.mSpace.ges.attributes =
+  att.duration.gestural.attributes, att.instrumentIdent.attributes
 att.note.ges.attributes =
   att.accidental.gestural.attributes,
   att.articulation.gestural.attributes,
@@ -10435,7 +10643,7 @@ att.note.ges.attribute.pnum =
   attribute pnum { data.PITCHNUMBER }?
 sch:pattern [
   id =
-    "wegaWorks-att.note.ges-extremis_disallows_gestural_pitch-constraint-rule-109"
+    "wegaWorks-att.note.ges-extremis_disallows_gestural_pitch-constraint-rule-113"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -10549,6 +10757,7 @@ att.dynam.anl.attributes = empty
 att.ending.anl.attributes = empty
 att.fermata.anl.attributes = empty
 att.fTrem.anl.attributes = empty
+att.grpSym.anl.attributes = empty
 att.hairpin.anl.attributes = empty
 att.halfmRpt.anl.attributes = empty
 att.harm.anl.attributes =
@@ -10582,6 +10791,14 @@ att.intervalMelodic.attribute.intm =
   
   ## Encodes the melodic interval from the previous pitch. The value may be a general directional indication (u, d, s, etc.), an indication of diatonic interval direction, quality, and size, or a precise numeric value in half steps.
   attribute intm { data.INTERVAL.MELODIC }?
+att.keySig.anl.attributes =
+  att.accidental.attributes,
+  att.pitch.attributes,
+  att.keySig.anl.attribute.mode
+att.keySig.anl.attribute.mode =
+  
+  ## Indicates major, minor, or other tonality.
+  attribute mode { data.MODE }?
 att.keySigDefault.anl.attributes =
   att.keySigDefault.anl.attribute.key.accid,
   att.keySigDefault.anl.attribute.key.mode,
@@ -10605,10 +10822,12 @@ att.melodicFunction.attribute.mfunc =
   
   ## Describes melodic function using Humdrum **embel syntax.
   attribute mfunc { data.MELODICFUNCTION }?
+att.meterSig.anl.attributes = empty
 att.midi.anl.attributes = empty
 att.mordent.anl.attributes = empty
 att.mRest.anl.attributes = att.fermataPresent.attributes
 att.mRpt.anl.attributes = empty
+att.mSpace.anl.attributes = att.fermataPresent.attributes
 att.note.anl.attributes =
   att.accidental.attributes,
   att.articulation.attributes,
@@ -10815,7 +11034,7 @@ att.fTrem.vis.attribute.beams.float =
   attribute beams.float { xsd:nonNegativeInteger }?
 sch:pattern [
   id =
-    "wegaWorks-att.fTrem.vis-beams.float-check_beams.floating-constraint-rule-110"
+    "wegaWorks-att.fTrem.vis-beams.float-check_beams.floating-constraint-rule-114"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -10837,6 +11056,10 @@ att.fTrem.vis.attribute.float.gap =
   
   ## Records the amount of separation between floating beams and stems.
   attribute float.gap { data.MEASUREMENTABS }?
+att.grpSym.vis.attributes =
+  att.typography.attributes,
+  att.visualOffset.attributes,
+  att.xy.attributes
 att.hairpin.vis.attributes =
   att.color.attributes,
   att.lineRend.base.attributes,
@@ -10879,6 +11102,12 @@ att.harm.vis.attribute.rendgrid =
       "text"
   }?
 att.instrDef.vis.attributes = empty
+att.keySig.vis.attributes =
+  att.visibility.attributes, att.keySig.vis.attribute.sig.showchange
+att.keySig.vis.attribute.sig.showchange =
+  
+  ## Determines whether cautionary accidentals should be displayed at a key change.
+  attribute sig.showchange { data.BOOLEAN }?
 att.keySigDefault.vis.attributes =
   att.keySigDefault.vis.attribute.keysig.show,
   att.keySigDefault.vis.attribute.keysig.showchange
@@ -10893,6 +11122,27 @@ att.keySigDefault.vis.attribute.keysig.showchange =
 att.layer.vis.attributes = att.visibility.attributes
 att.measure.vis.attributes =
   att.barring.attributes, att.width.attributes
+att.meterSig.vis.attributes =
+  att.color.attributes,
+  att.typography.attributes,
+  att.meterSig.vis.attribute.form
+att.meterSig.vis.attribute.form =
+  
+  ## Contains an indication of how the meter signature should be rendered.
+  attribute form {
+    
+    ## Show only the number of beats.
+    "num"
+    | 
+      ## The lower number in the meter signature is replaced by a note symbol.
+      "denomsym"
+    | 
+      ## Meter signature rendered using traditional numeric values.
+      "norm"
+    | 
+      ## Meter signature not rendered.
+      "invis"
+  }?
 att.meterSigDefault.vis.attributes =
   att.meterSigDefault.vis.attribute.meter.form,
   att.meterSigDefault.vis.attribute.meter.showchange
@@ -10935,6 +11185,7 @@ att.mRpt.vis.attributes =
   att.color.attributes,
   att.expandable.attributes,
   att.typography.attributes
+att.mSpace.vis.attributes = att.cutout.attributes, att.xy.attributes
 att.note.vis.attributes =
   att.color.attributes,
   att.enclosingChars.attributes,
@@ -11175,7 +11426,7 @@ att.instrumentIdent.attribute.instr =
   attribute instr { data.URI }?
 sch:pattern [
   id =
-    "wegaWorks-att.instrumentIdent-instr-check_instrTarget-constraint-rule-111"
+    "wegaWorks-att.instrumentIdent-instr-check_instrTarget-constraint-rule-115"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -11246,7 +11497,7 @@ att.midiInstrument.attribute.midi.volume =
   attribute midi.volume { text }?
 sch:pattern [
   id =
-    "wegaWorks-att.midiInstrument-One_of_instrname_or_instrnum-constraint-rule-112"
+    "wegaWorks-att.midiInstrument-One_of_instrname_or_instrnum-constraint-rule-116"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -11266,7 +11517,7 @@ sch:pattern [
 ]
 sch:pattern [
   id =
-    "wegaWorks-att.midiInstrument-One_of_patchname_or_patchnum-constraint-rule-113"
+    "wegaWorks-att.midiInstrument-One_of_patchname_or_patchnum-constraint-rule-117"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -11517,7 +11768,7 @@ att.facsimile.attribute.facs =
   }?
 sch:pattern [
   id =
-    "wegaWorks-att.facsimile-facs-check_facsTarget-constraint-rule-114"
+    "wegaWorks-att.facsimile-facs-check_facsTarget-constraint-rule-118"
   "\x{a}" ~
   "      "
   sch:rule [
@@ -11592,7 +11843,7 @@ att.componentType.attribute.comptype =
   }?
 sch:pattern [
   id =
-    "wegaWorks-att.componentType-comptype-checkComponentType-constraint-rule-115"
+    "wegaWorks-att.componentType-comptype-checkComponentType-constraint-rule-119"
   "\x{a}" ~
   "      "
   sch:rule [
