@@ -2704,7 +2704,12 @@
             </content>
             <constraintSpec scheme="schematron" ident="no-language-for-revealed-correspondence">
                 <constraint>
-                    <sch:report test="preceding-sibling::tei:correspDesc[@n='revealed']">Revealed correspondence must not have language information.</sch:report>
+                    <!-- There is one occurence of revealed correspondence where we are able to provide text: A045255
+                        Thus we need to check not only for "revealed" but also for empty body 
+                    -->
+                    <sch:report test="
+                        preceding-sibling::tei:correspDesc[@n='revealed']
+                        and following::tei:body[normalize-space(.) eq '']">Revealed correspondence must not have language information.</sch:report>
                 </constraint>
             </constraintSpec>
         </elementSpec>

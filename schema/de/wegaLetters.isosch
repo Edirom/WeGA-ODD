@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2021-08-12T14:39:37Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2021-08-13T07:01:25Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -399,7 +399,7 @@ relatedItem element must be empty</report>
    </pattern>
    <pattern id="schematron-constraint-wegaLetters-langUsage-no-language-for-revealed-correspondence-56">
       <rule context="tei:langUsage">
-                    <report test="preceding-sibling::tei:correspDesc[@n='revealed']">Revealed correspondence must not have language information.</report>
+                    <report test="                         preceding-sibling::tei:correspDesc[@n='revealed']                         and following::tei:body[normalize-space(.) eq '']">Revealed correspondence must not have language information.</report>
                 </rule>
    </pattern>
       
@@ -407,7 +407,8 @@ relatedItem element must be empty</report>
     
       
     <pattern id="schematron-constraint-wegaLetters-body-non-empty-body-needs-langUsage-59">
-                <rule context="tei:body[normalize-space(.) ne '']">
+                <rule context="tei:body[string-length(normalize-space(.)) - string-length(normalize-space(string-join(.//tei:notatedMusic, ' '))) gt 0]">
+                    
                     <assert test="preceding::tei:langUsage">The langUsage element must be provided when text is present.</assert>
                 </rule>
             </pattern>
