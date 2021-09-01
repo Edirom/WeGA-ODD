@@ -5,10 +5,10 @@
          xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2021-08-10T14:17:58Z. .
-TEI Edition: Version 4.2.1. Last updated on
-	1st March 2021, revision 654a5c551
-TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.2.1/
+Schema generated from ODD source 2021-09-01T07:26:13Z. .
+TEI Edition: Version 4.3.0. Last updated on
+        31st August 2021, revision b4f72b1ff
+TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.3.0/
   
 --><!--This work is licensed under a  Creative Commons Attribution 3.0 Unported License (CC BY 3.0) .-->
    <sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron"
@@ -240,8 +240,12 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.2.1/
    <define name="att.datable.attribute.calendar">
       <optional>
          <attribute name="calendar">
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the system or calendar to which the date represented by the content of this element belongs.</a:documentation>
-            <data type="anyURI"/>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates one or more systems or calendars to which the date represented by the content of this element belongs.</a:documentation>
+            <list>
+               <oneOrMore>
+                  <data type="anyURI"/>
+               </oneOrMore>
+            </list>
          </attribute>
       </optional>
    </define>
@@ -252,7 +256,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.2.1/
                 xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:rng="http://relaxng.org/ns/structure/1.0"
                 context="tei:*[@calendar]">
-            <sch:assert test="string-length(.) gt 0"> @calendar indicates the system or calendar to
+            <sch:assert test="string-length(.) gt 0"> @calendar indicates one or more systems or calendars to
               which the date represented by the content of this element belongs, but this
               <sch:name/> element has no textual content.</sch:assert>
           </sch:rule>
@@ -957,11 +961,14 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.2.1/
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   id="wegaBiblio-p-abstractModel-structure-l-constraint-report-5">
             <rule context="tei:p">
-               <report xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+               <report xmlns:mei="http://www.music-encoding.org/ns/mei"
+                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                       xmlns:s="http://www.ascc.net/xml/schematron"
+                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                        xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                       test="ancestor::tei:l[not(.//tei:note//tei:p[. = current()])]">
-        Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab.
-      </report>
+                       test="(ancestor::tei:l or ancestor::tei:lg)                          and not(parent::tei:figure or parent::tei:note or ancestor::tei:floatingText or parent::tei:footNote)">
+                        Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab, unless p is a child of figure or note, or is a descendant of floatingText.
+                    </report>
             </rule>
          </pattern>
          <ref name="att.fragmentable.attributes"/>
@@ -2142,7 +2149,7 @@ Suggested values include: 1] ISBN; 2] ISSN; 3] DOI; 4] URI; 5] VIAF; 6] ESTC; 7]
    <define name="att.global.facs.attribute.facs">
       <optional>
          <attribute name="facs">
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(facsimile) points to all or part of an image which corresponds with the content of the element.</a:documentation>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(facsimile) points to one or more images, portions of an image, or surfaces which correspond to the current element.</a:documentation>
             <list>
                <oneOrMore>
                   <data type="anyURI"/>

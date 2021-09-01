@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2021-08-12T14:27:45Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2021-09-01T07:26:10Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -45,7 +45,7 @@
     </pattern>
    <pattern id="schematron-constraint-wegaWritings-att.datable-calendar-calendar-6">
           <rule context="tei:*[@calendar]">
-            <assert test="string-length(.) gt 0"> @calendar indicates the system or calendar to
+            <assert test="string-length(.) gt 0"> @calendar indicates one or more systems or calendars to
               which the date represented by the content of this element belongs, but this
               <name/> element has no textual content.</assert>
           </rule>
@@ -71,10 +71,10 @@ The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the 
    </pattern>
    <pattern id="schematron-constraint-wegaWritings-p-abstractModel-structure-l-10">
       <rule context="tei:p">
-         <report test="ancestor::tei:l[not(.//tei:note//tei:p[. = current()])]">
-        Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab.
-      </report>
-      </rule>
+                    <report test="(ancestor::tei:l or ancestor::tei:lg)                          and not(parent::tei:figure or parent::tei:note or ancestor::tei:floatingText or parent::tei:footNote)">
+                        Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab, unless p is a child of figure or note, or is a descendant of floatingText.
+                    </report>
+                </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaWritings-desc-deprecationInfo-only-in-deprecated-11">
       <rule context="tei:desc[ @type eq 'deprecationInfo']">
@@ -389,7 +389,8 @@ relatedItem element must be empty</report>
    </pattern>
    <pattern id="schematron-constraint-wegaWritings-langUsage-no-language-for-revealed-correspondence-54">
       <rule context="tei:langUsage">
-                    <report test="preceding-sibling::tei:correspDesc[@n='revealed']">Revealed correspondence must not have language information.</report>
+                    
+                    <report test="                         preceding-sibling::tei:correspDesc[@n='revealed']                         and following::tei:body[normalize-space(.) eq '']">Revealed correspondence must not have language information.</report>
                 </rule>
    </pattern>
       
@@ -403,15 +404,15 @@ relatedItem element must be empty</report>
             </pattern>
    <pattern id="schematron-constraint-wegaWritings-div-abstractModel-structure-l-58">
       <rule context="tei:div">
-         <report test="ancestor::tei:l">
-        Abstract model violation: Lines may not contain higher-level structural elements such as div.
+         <report test="(ancestor::tei:l or ancestor::tei:lg) and not(ancestor::tei:floatingText)">
+        Abstract model violation: Lines may not contain higher-level structural elements such as div, unless div is a descendant of floatingText.
       </report>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaWritings-div-abstractModel-structure-p-59">
       <rule context="tei:div">
-         <report test="ancestor::tei:p or ancestor::tei:ab and not(ancestor::tei:floatingText)">
-        Abstract model violation: p and ab may not contain higher-level structural elements such as div.
+         <report test="(ancestor::tei:p or ancestor::tei:ab) and not(ancestor::tei:floatingText)">
+        Abstract model violation: p and ab may not contain higher-level structural elements such as div, unless div is a descendant of floatingText.
       </report>
       </rule>
    </pattern>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2021-08-18T13:05:02Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2021-09-01T07:26:03Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -43,7 +43,7 @@
     </pattern>
    <pattern id="schematron-constraint-wegaDiaries-att.datable-calendar-calendar-6">
           <rule context="tei:*[@calendar]">
-            <assert test="string-length(.) gt 0"> @calendar indicates the system or calendar to
+            <assert test="string-length(.) gt 0"> @calendar indicates one or more systems or calendars to
               which the date represented by the content of this element belongs, but this
               <name/> element has no textual content.</assert>
           </rule>
@@ -74,10 +74,10 @@ The element indicated by @spanTo (<value-of select="@spanTo"/>) must follow the 
    </pattern>
    <pattern id="schematron-constraint-wegaDiaries-p-abstractModel-structure-l-11">
       <rule context="tei:p">
-         <report test="ancestor::tei:l[not(.//tei:note//tei:p[. = current()])]">
-        Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab.
-      </report>
-      </rule>
+                    <report test="(ancestor::tei:l or ancestor::tei:lg)                          and not(parent::tei:figure or parent::tei:note or ancestor::tei:floatingText or parent::tei:footNote)">
+                        Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab, unless p is a child of figure or note, or is a descendant of floatingText.
+                    </report>
+                </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaDiaries-desc-deprecationInfo-only-in-deprecated-12">
       <rule context="tei:desc[ @type eq 'deprecationInfo']">
@@ -356,8 +356,8 @@ attributes @target and @cRef may be supplied on <name/>.</report>
    </pattern>
    <pattern id="schematron-constraint-wegaDiaries-ab-abstractModel-structure-l-50">
       <rule context="tei:ab">
-         <report test="ancestor::tei:l or ancestor::tei:lg">
-        Abstract model violation: Lines may not contain higher-level divisions such as p or ab.
+         <report test="(ancestor::tei:l or ancestor::tei:lg) and not(parent::tei:figure or parent::tei:note or ancestor::tei:floatingText)">
+        Abstract model violation: Lines may not contain higher-level divisions such as p or ab, unless ab is a child of figure or note, or is a descendant of floatingText.
       </report>
       </rule>
    </pattern>
