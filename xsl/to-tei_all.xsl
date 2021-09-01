@@ -522,6 +522,14 @@
         </xsl:if>
     </xsl:template>
     
+    <xsl:template match="graphic[not(@url)][@sameAs]">
+        <xsl:copy>
+            <!-- turn sameAs references (to IIIF manifests) into urls -->
+            <xsl:apply-templates select="@* except @sameAs"/>
+            <xsl:attribute name="url" select="@sameAs"/>
+        </xsl:copy>
+    </xsl:template>
+    
     <xsl:template match="@rend">
         <xsl:choose>
             <xsl:when test="ends-with(., 'quotes')">
