@@ -7,7 +7,7 @@
     exclude-result-prefixes="xs wega"
     version="2.0">
     
-    <xsl:param name="current-tei-version" as="xs:string">4.1.0</xsl:param>
+    <xsl:param name="current-tei-version" as="xs:string">4.3.0</xsl:param>
     <xsl:param name="facsimileWhiteList" as="xs:string">D-B</xsl:param>
     
     <xsl:output media-type="application/tei+xml" encoding="UTF-8" indent="no" method="xml"/>
@@ -520,6 +520,14 @@
                 <xsl:apply-templates/>
             </xsl:copy>
         </xsl:if>
+    </xsl:template>
+    
+    <xsl:template match="graphic[not(@url)][@sameAs]">
+        <xsl:copy>
+            <!-- turn sameAs references (to IIIF manifests) into urls -->
+            <xsl:apply-templates select="@* except @sameAs"/>
+            <xsl:attribute name="url" select="@sameAs"/>
+        </xsl:copy>
     </xsl:template>
     
     <xsl:template match="@rend">

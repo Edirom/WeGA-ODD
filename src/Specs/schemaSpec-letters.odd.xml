@@ -227,6 +227,14 @@
                 </rng:zeroOrMore>
             </rng:interleave>
         </content>
+        <constraintSpec scheme="schematron" ident="non-empty-body-needs-langUsage">
+            <constraint>
+                <sch:rule context="tei:body[string-length(normalize-space(.)) - string-length(normalize-space(string-join(.//tei:notatedMusic, ' '))) gt 0]">
+                    <!-- Need to subtract notatedMusic for there are some Albumblätter with musical content only, e.g. A045408 -->
+                    <sch:assert test="preceding::tei:langUsage">The langUsage element must be provided when text is present.</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
     </elementSpec>
 
     <elementSpec ident="div" mode="change" module="textstructure">

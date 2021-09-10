@@ -310,7 +310,6 @@
     </specGrp>
     
     <specGrp xml:id="wega-lists">
-        <!-- Don't forget to modify the appropriate section in subversionUsers.xml -->
         <macroSpec ident="staffSignatures.list" mode="add">
             <content>
                 <rng:choice>
@@ -347,6 +346,8 @@
                     <rng:value>CJ</rng:value><a:documentation>Charlene Jakob</a:documentation><!-- jakob -->
                     <rng:value>IK</rng:value><a:documentation>Ina Klare</a:documentation><!-- ina -->
                     <rng:value>FS</rng:value><a:documentation>Fabian Schmidt</a:documentation><!-- fabian -->
+                    <rng:value>AAS</rng:value><a:documentation>Aida Amiryan-Stein</a:documentation><!-- aida -->
+                    <rng:value>SO</rng:value><a:documentation>Salome Obert</a:documentation><!-- salome -->
                 </rng:choice>
             </content>
         </macroSpec>
@@ -738,6 +739,38 @@
                     <valItem ident="score">
                         <desc versionDate="2013-11-11" xml:lang="en">volume of music (eg. a score or a piano reduction)</desc>
                         <desc versionDate="2013-11-11" xml:lang="de">Notenband (z.B. Partitur oder Klavierauszug)</desc>
+                    </valItem>
+                </valList>
+            </content>
+        </dataSpec>
+        
+        <dataSpec ident="teidata.language" mode="change">
+            <desc>A closed list of values to be used with a <att>ident</att> attribute on e.g. <gi>language</gi>.</desc>
+            <content>
+                <valList type="closed">
+                    <valItem ident="en">
+                        <desc versionDate="2021-08-10" xml:lang="en">English</desc>
+                        <desc versionDate="2021-08-10" xml:lang="de">Englisch</desc>
+                    </valItem>
+                    <valItem ident="de">
+                        <desc versionDate="2021-08-10" xml:lang="en">German</desc>
+                        <desc versionDate="2021-08-10" xml:lang="de">Deutsch</desc>
+                    </valItem>
+                    <valItem ident="fr">
+                        <desc versionDate="2021-08-10" xml:lang="en">French</desc>
+                        <desc versionDate="2021-08-10" xml:lang="de">Französisch</desc>
+                    </valItem>
+                    <valItem ident="it">
+                        <desc versionDate="2021-08-10" xml:lang="en">Italian</desc>
+                        <desc versionDate="2021-08-10" xml:lang="de">Italienisch</desc>
+                    </valItem>
+                    <valItem ident="da">
+                        <desc versionDate="2021-08-10" xml:lang="en">Danish</desc>
+                        <desc versionDate="2021-08-10" xml:lang="de">Dänisch</desc>
+                    </valItem>
+                    <valItem ident="la">
+                        <desc versionDate="2021-08-10" xml:lang="en">Latin</desc>
+                        <desc versionDate="2021-08-10" xml:lang="de">Latein</desc>
                     </valItem>
                 </valList>
             </content>
@@ -2102,6 +2135,15 @@
                     </report>
                 </constraint>
             </constraintSpec>
+            <constraintSpec ident="abstractModel-structure-l" scheme="schematron" mode="change">
+                <constraint>
+                    <report xmlns="http://purl.oclc.org/dsdl/schematron" xmlns:tei="http://www.tei-c.org/ns/1.0" 
+                        test="(ancestor::tei:l or ancestor::tei:lg) 
+                        and not(parent::tei:figure or parent::tei:note or ancestor::tei:floatingText or parent::tei:footNote)">
+                        Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab, unless p is a child of figure or note, or is a descendant of floatingText.
+                    </report>
+                </constraint>
+            </constraintSpec>
             <attList>
                 <attDef ident="n" mode="add" usage="opt">
                     <gloss versionDate="2013-11-11" xml:lang="en">number</gloss>
@@ -2232,8 +2274,9 @@
             </attList>
         </elementSpec>
         <elementSpec ident="graphic" mode="change" module="core">
+            <gloss versionDate="2021-03-19" xml:lang="de">Abbildung</gloss>
+            <gloss versionDate="2021-03-19" xml:lang="en">Graphic</gloss>
             <desc versionDate="2014-07-10" xml:lang="en">indicates the location of an inline graphic, illustration, or figure.</desc>
-            <gloss versionDate="2014-07-10" xml:lang="de">Abbildung</gloss>
             <desc versionDate="2014-07-10" xml:lang="de">bestimmt den Ort einer Abbildung, Illustration o.ä.</desc>
             <classes mode="change">
                 <memberOf key="att.global" mode="delete"/>
@@ -2241,20 +2284,38 @@
                 <memberOf key="att.internetMedia" mode="delete"/>
             </classes>
             <content>
-                <rng:empty/>
+                <empty/>
             </content>
             <constraintSpec scheme="schematron" ident="graphic-url-check">
                 <desc versionDate="2014-07-11" xml:lang="en">checks for ASCII only filenames.</desc>
                 <desc versionDate="2014-07-11" xml:lang="de">Überprüft auf reine ASCII-Zeichen in der URL.</desc>
                 <constraint>
-                    <sch:assert test="matches(@url, '^[-_A-Za-z0-9\.]+$') or starts-with(@url, 'http') or starts-with(@url, 'wega:')">Found invalid (non-ASCII) characters for an internal URL in @url</sch:assert>
+                    <sch:rule context="tei:graphic[@url]">
+                        <sch:assert test="matches(@url, '^[-_A-Za-z0-9\.]+$') or starts-with(@url, 'http') or starts-with(@url, 'wega:')">Found invalid (non-ASCII) characters for an internal URL in @url</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="schematron" ident="url-or-sameAs">
+                <desc versionDate="2021-03-19" xml:lang="en">assert that either a @url or @sameAs attribute is present.</desc>
+                <desc versionDate="2021-03-19" xml:lang="de">stellt sicher, dass entweder ein @url oder @sameAs Attribut angegeben ist.</desc>
+                <constraint>
+                    <sch:assert test="(@url or @sameAs) and (count(@url|@sameAs) eq 1)">Exactly one @url or @sameAs attribute is mandatory</sch:assert>
                 </constraint>
             </constraintSpec>
             <attList>
                 <attDef ident="scale" mode="delete"/>
-                <attDef ident="url" mode="change" usage="req"/>
+                <attDef ident="url" mode="change" usage="opt"/>
                 <attRef name="xml:id" class="att.global"/>
+                <attRef name="sameAs" class="att.global.linking"/>
             </attList>
+            <remarks versionDate="2021-03-19" xml:lang="de">
+                <p>Im Rahmen der WeGA kann das <gi>graphic</gi>-Element entweder ein <att>url</att>-Attribut oder ein <att>sameAs</att>-Attribut aufnehmen.
+                    Mittels <att>sameAs</att> kann dabei auf (online zugängliche) IIIF-Ressourcen verwiesen werden, 
+                    via <att>url</att> und einer vollständigen URL inkl. "http"- oder "https"-Schemaangabe auf beliebige externe Bilder.
+                    Eine Angabe von einfachen Dateinamen im <att>url</att>-Attribut verweist auf interne Bilder der WeGA, 
+                    die nach der gängigen Ordnerstruktur im Subversion abgelegt sein müssen. 
+                </p>
+            </remarks>
         </elementSpec>
         <elementSpec ident="q" mode="change" module="core">
             <gloss versionDate="2014-07-14" xml:lang="en">quoted</gloss>
@@ -2631,6 +2692,35 @@
             <content>
                 <elementRef key="p" maxOccurs="2"/>
             </content>
+        </elementSpec>
+        
+        <elementSpec ident="language" module="header" mode="change">
+            <classes mode="change">
+                <memberOf key="att.global" mode="delete"/>
+            </classes>
+            <content>
+                <textNode/>
+            </content>
+        </elementSpec>
+        
+        <elementSpec ident="langUsage" module="header" mode="change">
+            <classes mode="change">
+                <memberOf key="att.global" mode="delete"/>
+                <memberOf key="att.declarable" mode="delete"/>
+            </classes>
+            <content>
+                <elementRef key="language" minOccurs="1" maxOccurs="unbounded"/>
+            </content>
+            <constraintSpec scheme="schematron" ident="no-language-for-revealed-correspondence">
+                <constraint>
+                    <!-- There is one occurence of revealed correspondence where we are able to provide text: A045255
+                        Thus we need to check not only for "revealed" but also for empty body 
+                    -->
+                    <sch:report test="
+                        preceding-sibling::tei:correspDesc[@n='revealed']
+                        and following::tei:body[normalize-space(.) eq '']">Revealed correspondence must not have language information.</sch:report>
+                </constraint>
+            </constraintSpec>
         </elementSpec>
     </specGrp>
     
@@ -3853,6 +3943,15 @@
             <classes mode="change">
                 <memberOf key="att.global" mode="delete"/>
             </classes>
+            <constraintSpec scheme="schematron" ident="enforce-ref-attribute-for-smufl-characters">
+                <desc xml:lang="en" versionDate="2021-03-18">assert that SMuFL symbols provide an external reference.</desc>
+                <desc xml:lang="de" versionDate="2021-03-18">überprüfe, dass SMuFL Symbole auch einen Link zu einer externen Beschreibung angeben.</desc>
+                <constraint>
+                    <sch:rule context="tei:g[@type='smufl']">
+                        <sch:assert test="@ref">g-elements of @type='smufl' must provide a @ref-attribute to point to an external reference.</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
             <attList>
                 <attDef ident="subtype" mode="delete"/>
                 <attDef ident="type" mode="change" usage="req">
@@ -3865,9 +3964,14 @@
                             <desc versionDate="2014-04-25" xml:lang="en">Identifies this character or glyph as a musical symbol defined by the <ref target="http://www.smufl.org">SMuFL specification</ref></desc>
                             <desc versionDate="2014-04-25" xml:lang="de">Markiert dieses Zeichen oder Glyphe als ein musikalisches Symbol nach der <ref target="http://www.smufl.org">SMuFL Specifikation</ref></desc>
                         </valItem>
+                        <valItem ident="mufi">
+                            <gloss versionDate="2021-03-18" xml:lang="en">Medieval Unicode Font Initiative</gloss>
+                            <gloss versionDate="2021-03-18" xml:lang="de">Medieval Unicode Font Initiative</gloss>
+                            <desc versionDate="2021-03-18" xml:lang="en">Identifies this character or glyph as a symbol defined by the <ref target="https://mufi.info">Medieval Unicode Font Initiative</ref></desc>
+                            <desc versionDate="2021-03-18" xml:lang="de">Markiert dieses Zeichen oder Glyphe als ein Symbol nach der <ref target="https://mufi.info">Medieval Unicode Font Initiative</ref></desc>
+                        </valItem>
                     </valList>
                 </attDef>
-                <attDef ident="ref" mode="change" usage="req"/>
                 <attRef class="att.global" name="xml:id"/>
             </attList>
         </elementSpec>
