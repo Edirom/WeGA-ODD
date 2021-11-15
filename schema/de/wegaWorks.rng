@@ -5,7 +5,7 @@
          xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.music-encoding.org/ns/mei"><!--
-Schema generated from ODD source 2021-11-15T11:59:54Z. .
+Schema generated from ODD source 2021-11-15T12:22:29Z. .
 TEI Edition: Version 4.0.0
 TEI Edition Location: https://www.tei-c.org/Vault/P5//
   
@@ -2482,17 +2482,6 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
          </attribute>
       </optional>
    </define>
-   <define name="att.filing.attributes">
-      <ref name="att.filing.attribute.nonfiling"/>
-   </define>
-   <define name="att.filing.attribute.nonfiling">
-      <optional>
-         <attribute name="nonfiling">
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Holds the number of initial characters (such as those constituting an article or preposition) that should not be used for sorting a title or name.</a:documentation>
-            <data type="positiveInteger"/>
-         </attribute>
-      </optional>
-   </define>
    <define name="att.horizontalAlign.attributes">
       <ref name="att.horizontalAlign.attribute.halign"/>
    </define>
@@ -4868,11 +4857,23 @@ Empfohlene Werte sind: 1] isAssociatedWith</a:documentation>
                     <sch:assert test="string(@xml:lang) = preceding-sibling::mei:title/string(@xml:lang)">Make sure that this subtitle has a proper xml:lang attribute matching a preceding title's xml:lang</sch:assert>
                 </sch:rule>
          </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaWorks-title-type-or-codedval-constraint-report-6">
+            <rule context="mei:title">
+               <sch:report xmlns:sch="http://purl.oclc.org/dsdl/schematron" test="@codedval and @type">type and codedval attribute found! A title should either refer to an entity by the codedval attribute or be further refined by the type attribute</sch:report>
+            </rule>
+         </pattern>
          <ref name="att.id.attribute.xmlid"/>
-         <ref name="att.classed.attributes"/>
-         <ref name="att.filing.attributes"/>
          <ref name="att.lang.attributes"/>
          <ref name="att.nNumberLike.attributes"/>
+         <optional>
+            <attribute name="codedval">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">A value that represents or identifies other data. Often, it is a primary key in the database or a unique value in the coded list identified by the <code xmlns="http://www.w3.org/1999/xhtml">@auth</code> or <code xmlns="http://www.w3.org/1999/xhtml">@auth.uri</code> attributes.</a:documentation>
+               <data type="string">
+                  <param name="pattern">A02\d{4}</param>
+               </data>
+            </attribute>
+         </optional>
          <optional>
             <attribute name="level">
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Indicates the bibliographic level of the title.</a:documentation>

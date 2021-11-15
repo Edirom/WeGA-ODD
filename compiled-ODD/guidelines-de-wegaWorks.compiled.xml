@@ -4599,17 +4599,6 @@
         </valList>
       </attDef>
     </attList>
-  </classSpec><classSpec rend="add" ident="att.filing" module="MEI.shared" type="atts">
-    <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">Attributes that deal with string filing characteristics.</desc>
-    <attList xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
-      <attDef ident="nonfiling" usage="opt">
-        <desc>Holds the number of initial characters (such as those constituting an article or
-          preposition) that should not be used for sorting a title or name.</desc>
-        <datatype>
-          <rng:data type="positiveInteger"/>
-        </datatype>
-      </attDef>
-    </attList>
   </classSpec><classSpec rend="add" ident="att.horizontalAlign" module="MEI.shared" type="atts">
     <desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">Attributes that record horizontal alignment.</desc>
     <attList xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
@@ -5973,13 +5962,21 @@
         identifier of the element containing the category label.</p>
     </remarks><remarks xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
       <p>This element is modelled on an element in the Text Encoding Initiative (TEI) standard.</p>
-    </remarks></elementSpec><elementSpec rend="add" ident="title" module="MEI.shared" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">Title of a bibliographic entity.</desc><classes><memberOf key="att.basic"/><memberOf key="att.classed"/><memberOf key="att.filing"/><memberOf key="att.labelled"/><memberOf key="att.lang"/><memberOf key="att.nNumberLike"/><memberOf key="model.titleLike"/></classes><content><macroRef key="macro.titlePart"/></content><constraintSpec scheme="schematron" ident="work-subtitles-map-xmllang">
+    </remarks></elementSpec><elementSpec rend="add" ident="title" module="MEI.shared" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">Title of a bibliographic entity.</desc><classes><memberOf key="att.canonical"/><memberOf key="att.basic"/><memberOf key="att.lang"/><memberOf key="att.nNumberLike"/><memberOf key="model.titleLike"/></classes><content><macroRef key="macro.titlePart"/></content><constraintSpec scheme="schematron" ident="work-subtitles-map-xmllang">
             <constraint>
                 <sch:rule context="mei:title[@type='sub'][parent::mei:titleStmt]">
                     <sch:assert test="string(@xml:lang) = preceding-sibling::mei:title/string(@xml:lang)">Make sure that this subtitle has a proper xml:lang attribute matching a preceding title's xml:lang</sch:assert>
                 </sch:rule>
             </constraint>
-        </constraintSpec><attList><attDef ident="label" mode="delete"/><attDef ident="xml:base" mode="delete"/><attDef ident="level" usage="opt">
+        </constraintSpec><constraintSpec scheme="schematron" ident="type-or-codedval">
+            <constraint>
+                <sch:report test="@codedval and @type">type and codedval attribute found! A title should either refer to an entity by the codedval attribute or be further refined by the type attribute</sch:report>
+            </constraint>
+        </constraintSpec><attList><attDef ident="xml:base" mode="delete"/><attDef ident="codedval" mode="change" usage="rec">
+                <datatype>
+                    <dataRef key="wega.works.pointer"/>
+                </datatype>
+            </attDef><attDef ident="level" usage="opt">
         <desc>Indicates the bibliographic level of the title.</desc>
         <valList type="closed">
           <valItem ident="a">

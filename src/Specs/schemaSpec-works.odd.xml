@@ -410,9 +410,14 @@
     <elementSpec ident="title" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">
         <classes mode="change">
             <memberOf key="att.authorized" mode="delete"/>
-            <memberOf key="att.canonical" mode="delete"/>
+            <memberOf key="att.canonical" mode="add"/>
             <memberOf key="att.bibl" mode="delete"/>
+            <memberOf key="att.classed" mode="delete"/>
             <memberOf key="att.facsimile" mode="delete"/>
+            <memberOf key="att.filing" mode="delete"/>
+            <memberOf key="att.labelled" mode="delete"/>
+            <memberOf key="att.linking" mode="delete"/>
+            <memberOf key="att.responsibility" mode="delete"/>
         </classes>
         <content>
             <macroRef key="macro.titlePart"/>
@@ -430,8 +435,12 @@
                 </sch:rule>
             </constraint>
         </constraintSpec>
+        <constraintSpec scheme="schematron" ident="type-or-codedval">
+            <constraint>
+                <sch:report test="@codedval and @type">type and codedval attribute found! A title should either refer to an entity by the codedval attribute or be further refined by the type attribute</sch:report>
+            </constraint>
+        </constraintSpec>
         <attList>
-            <attDef ident="label" mode="delete"/>
             <attDef ident="xml:base" mode="delete"/>
             <attDef ident="type" mode="change" usage="opt">
                 <valList mode="replace" type="closed">
@@ -452,6 +461,11 @@
                         <desc versionDate="2014-04-30" xml:lang="en">marks a title of a musical division (e.g. scene, aria).</desc>
                     </valItem>
                 </valList>
+            </attDef>
+            <attDef ident="codedval" mode="change" usage="rec">
+                <datatype>
+                    <dataRef key="wega.works.pointer"/>
+                </datatype>
             </attDef>
         </attList>
     </elementSpec>
