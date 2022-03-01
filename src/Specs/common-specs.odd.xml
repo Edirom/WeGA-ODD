@@ -307,6 +307,24 @@
             </content>
         </macroSpec>
         
+        <macroSpec ident="dracor.einakter.id.pattern" mode="add">
+            <content>
+                <rng:data type="string">
+                    <!-- see https://github.com/dracor-org/einakter/ -->
+                    <rng:param name="pattern">ein[0-9]{6}</rng:param>
+                </rng:data>
+            </content>
+        </macroSpec>
+        
+        <macroSpec ident="wikidata.id.pattern" mode="add">
+            <content>
+                <rng:data type="string">
+                    <!-- see https://www.wikidata.org/wiki/Q43649390 -->
+                    <rng:param name="pattern">Q[1-9]\d*</rng:param>
+                </rng:data>
+            </content>
+        </macroSpec>
+        
     </specGrp>
     
     <specGrp xml:id="wega-lists">
@@ -4025,6 +4043,7 @@
                     <rng:ref name="viaf.pattern"/>
                     <rng:ref name="bd.pattern"/>
                     <rng:ref name="geonames.pattern"/>
+                    <rng:ref name="geonames.pattern"/>
                 </rng:choice>
             </content>
             <constraintSpec scheme="schematron" ident="types-match-external-identifiers">
@@ -4039,6 +4058,12 @@
                     </sch:rule>
                     <sch:rule context="tei:idno[@type='geonames']">
                         <sch:assert test="matches(., '^[1-9][0-9]{0,8}$')">That doesn't look like a valid Geonames ID.</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:idno[@type='bd']">
+                        <sch:assert test="matches(., '^BachDigitalPerson_agent')">That doesn't look like a valid Bach Digital ID.</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:idno[@type='wikidata']">
+                        <sch:assert test="matches(., '^Q[1-9]\d*$')">That doesn't look like a valid Wikidata ID.</sch:assert>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
@@ -4074,6 +4099,10 @@
                         <valItem ident="geonames">
                             <desc versionDate="2014-01-08" xml:lang="en">ID taken from http://www.geonames.org/</desc>
                             <desc versionDate="2014-01-08" xml:lang="de">ID von http://www.geonames.org/</desc>
+                        </valItem>
+                        <valItem ident="wikidata">
+                            <desc versionDate="2022-03-01" xml:lang="en">Wikidata Q identifier</desc>
+                            <desc versionDate="2022-03-01" xml:lang="de">Wikidata Q identifier</desc>
                         </valItem>
                         <!--<valItem ident="getty">
                             <desc versionDate="2014-01-08" xml:lang="en">ID taken from http://www.getty.edu/research/tools/vocabularies/tgn/</desc>

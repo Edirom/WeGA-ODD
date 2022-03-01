@@ -5,7 +5,7 @@
          xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.music-encoding.org/ns/mei"><!--
-Schema generated from ODD source 2021-11-15T12:22:29Z. .
+Schema generated from ODD source 2022-03-01T15:26:44Z. .
 TEI Edition: Version 4.0.0
 TEI Edition Location: https://www.tei-c.org/Vault/P5//
   
@@ -1119,13 +1119,34 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5//
       <element name="altId" ns="http://www.music-encoding.org/ns/mei">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(alternative identifier) – May contain a bibliographic identifier that does not fit within the meiHead element's id attribute, for example because the identifier does not fit the definition of an XML id or because multiple identifiers are needed.</a:documentation>
          <text/>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaWorks-altId-types-match-external-identifiers-constraint-rule-7">
+            <sch:rule xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="mei:altId[@type='gnd']">
+                    <sch:assert test="matches(., '^1[01]?\d{7}[0-9X]|[47]\d{6}-\d|[1-9]\d{0,7}-[0-9X]|3\d{7}[0-9X]$')">That doesn't look like a valid GND ID.</sch:assert>
+                </sch:rule>
+            <sch:rule xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="mei:altId[@type='wikidata']">
+                    <sch:assert test="matches(., '^Q[1-9]\d*$')">That doesn't look like a valid Wikidata ID.</sch:assert>
+                </sch:rule>
+            <sch:rule xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="mei:altId[@type='dracor.einakter']">
+                    <sch:assert test="matches(., '^ein[0-9]{6}$')">That doesn't look like a valid DraCor Einakter ID.</sch:assert>
+                </sch:rule>
+         </pattern>
          <ref name="att.id.attribute.xmlid"/>
          <ref name="att.labelled.attribute.label"/>
          <ref name="att.nNumberLike.attribute.n"/>
          <ref name="att.classed.attribute.class"/>
          <attribute name="type">
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Designation which characterizes the element in some sense, using any convenient classification scheme or typology that employs single-token labels.
-Empfohlene Werte sind: 1] gnd (Gemeinsame Normdatei); 2] JV (Jähns-Verzeichnis); 3] KS (Kaiser-Schriften); 4] opus; 5] WeV (Weber Werkverzeichnis)</a:documentation>
+Empfohlene Werte sind: 1] gnd (Gemeinsame Normdatei); 2] JV (Jähns-Verzeichnis); 3] KS (Kaiser-Schriften); 4] opus; 5] WeV (Weber Werkverzeichnis); 6] wikidata (Wikidata); 7] dracor.einakter (DraCor one-act play)</a:documentation>
             <list>
                <oneOrMore>
                   <choice>
@@ -1139,6 +1160,10 @@ Empfohlene Werte sind: 1] gnd (Gemeinsame Normdatei); 2] JV (Jähns-Verzeichnis)
                      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Markiert eine Opuszahl.</a:documentation>
                      <value>WeV</value>
                      <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Weber Werkverzeichnis) Markiert eine Verzeichnisnummer des WeV.</a:documentation>
+                     <value>wikidata</value>
+                     <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Wikidata) Markiert einen Wikidata Q identifier.</a:documentation>
+                     <value>dracor.einakter</value>
+                     <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(DraCor Einakter) Markiert eine DraCor Einakter Identifikator.</a:documentation>
                      <data type="NMTOKEN"/>
                   </choice>
                </oneOrMore>
@@ -1172,7 +1197,7 @@ Empfohlene Werte sind: 1] gnd (Gemeinsame Normdatei); 2] JV (Jähns-Verzeichnis)
             <ref name="model.dateLike"/>
          </optional>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-change-check_change-constraint-rule-7">
+                  id="wegaWorks-change-check_change-constraint-rule-10">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -1299,7 +1324,7 @@ Empfohlene Werte sind: 1] gnd (Gemeinsame Normdatei); 2] JV (Jähns-Verzeichnis)
             <ref name="hand"/>
          </zeroOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-handList-checkHandListLabels-constraint-rule-8">
+                  id="wegaWorks-handList-checkHandListLabels-constraint-rule-11">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -1328,7 +1353,7 @@ Empfohlene Werte sind: 1] gnd (Gemeinsame Normdatei); 2] JV (Jähns-Verzeichnis)
             </choice>
          </zeroOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-history-history_restriction-constraint-rule-9">
+                  id="wegaWorks-history-history_restriction-constraint-rule-12">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -1383,7 +1408,7 @@ Empfohlene Werte sind: 1] gnd (Gemeinsame Normdatei); 2] JV (Jähns-Verzeichnis)
          <ref name="workList"/>
          <ref name="revisionDesc"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-meiHead-check_meiHead_type-constraint-rule-10">
+                  id="wegaWorks-meiHead-check_meiHead_type-constraint-rule-13">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -1681,7 +1706,7 @@ Empfohlene Werte sind: 1] gnd (Gemeinsame Normdatei); 2] JV (Jähns-Verzeichnis)
             <ref name="term"/>
          </oneOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-termList-checkTermListLabels-constraint-rule-13">
+                  id="wegaWorks-termList-checkTermListLabels-constraint-rule-16">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -1707,7 +1732,7 @@ Empfohlene Werte sind: 1] gnd (Gemeinsame Normdatei); 2] JV (Jähns-Verzeichnis)
             <ref name="respStmt"/>
          </optional>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-titleStmt-multiple-same-language-titles-constraint-rule-14">
+                  id="wegaWorks-titleStmt-multiple-same-language-titles-constraint-rule-17">
             <sch:rule xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:rng="http://relaxng.org/ns/structure/1.0"
@@ -2353,7 +2378,7 @@ Empfohlene Werte sind: 1] gnd (Gemeinsame Normdatei); 2] JV (Jähns-Verzeichnis)
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWorks-att.cleffing.log-clef_shape_requires_clef_line-constraint-rule-15">
+            id="wegaWorks-att.cleffing.log-clef_shape_requires_clef_line-constraint-rule-18">
       <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                 xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                 xmlns="http://www.tei-c.org/ns/1.0"
@@ -3995,7 +4020,7 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
             </rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-annot-Check_annot_data-constraint-rule-17">
+                  id="wegaWorks-annot-Check_annot_data-constraint-rule-20">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -4047,7 +4072,7 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
          </optional>
          <ref name="date"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-creation-check_creationDateHasText-constraint-assert-19">
+                  id="wegaWorks-creation-check_creationDateHasText-constraint-assert-22">
             <rule context="mei:creation">
                <sch:assert xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                            xmlns="http://www.tei-c.org/ns/1.0"
@@ -4099,7 +4124,7 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
             </rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-date-dateHeuristics5-constraint-assert-20">
+                  id="wegaWorks-date-dateHeuristics5-constraint-assert-23">
             <rule context="mei:date">
                <sch:assert xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                            xmlns="http://www.tei-c.org/ns/1.0"
@@ -4118,7 +4143,7 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Information about the physical size of an entity; usually includes numerical data.</a:documentation>
          <ref name="macro.struc-unstrucContent"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-dimensions-check_dimensions-constraint-rule-18">
+                  id="wegaWorks-dimensions-check_dimensions-constraint-rule-21">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -4332,7 +4357,7 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
             </element>
          </choice>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-mei-Check_staff-constraint-rule-19">
+                  id="wegaWorks-mei-Check_staff-constraint-rule-22">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -4434,7 +4459,7 @@ Empfohlene Werte sind: 1] internal; 2] external; 3] conjecture</a:documentation>
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Describes a relationship or linkage amongst entities.</a:documentation>
          <empty/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-relation-FRBR_relation-constraint-rule-20">
+                  id="wegaWorks-relation-FRBR_relation-constraint-rule-23">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -4607,7 +4632,7 @@ Empfohlene Werte sind: 1] isAssociatedWith</a:documentation>
             </choice>
          </zeroOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-section-Check_sectionexpansion-constraint-rule-21">
+                  id="wegaWorks-section-Check_sectionexpansion-constraint-rule-24">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -4640,7 +4665,7 @@ Empfohlene Werte sind: 1] isAssociatedWith</a:documentation>
             </choice>
          </zeroOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-staffDef-Check_staffDefn-constraint-rule-22">
+                  id="wegaWorks-staffDef-Check_staffDefn-constraint-rule-25">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -4656,7 +4681,7 @@ Empfohlene Werte sind: 1] isAssociatedWith</a:documentation>
             </sch:rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-staffDef-Check_ancestor_staff-constraint-rule-23">
+                  id="wegaWorks-staffDef-Check_ancestor_staff-constraint-rule-26">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -4668,7 +4693,7 @@ Empfohlene Werte sind: 1] isAssociatedWith</a:documentation>
             </sch:rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-staffDef-Check_ancestor_staff_lines-constraint-rule-24">
+                  id="wegaWorks-staffDef-Check_ancestor_staff_lines-constraint-rule-27">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -4681,7 +4706,7 @@ Empfohlene Werte sind: 1] isAssociatedWith</a:documentation>
             </sch:rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-staffDef-Check_clef_position_staffDef-constraint-rule-25">
+                  id="wegaWorks-staffDef-Check_clef_position_staffDef-constraint-rule-28">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -4692,7 +4717,7 @@ Empfohlene Werte sind: 1] isAssociatedWith</a:documentation>
             </sch:rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-staffDef-Check_clef_position_staffDef_nolines-constraint-rule-26">
+                  id="wegaWorks-staffDef-Check_clef_position_staffDef_nolines-constraint-rule-29">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -4706,7 +4731,7 @@ Empfohlene Werte sind: 1] isAssociatedWith</a:documentation>
             </sch:rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-staffDef-Check_tab_strings_lines-constraint-rule-27">
+                  id="wegaWorks-staffDef-Check_tab_strings_lines-constraint-rule-30">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -4719,7 +4744,7 @@ Empfohlene Werte sind: 1] isAssociatedWith</a:documentation>
             </sch:rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-staffDef-Check_tab_strings_nolines-constraint-rule-28">
+                  id="wegaWorks-staffDef-Check_tab_strings_nolines-constraint-rule-31">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -4799,7 +4824,7 @@ Empfohlene Werte sind: 1] isAssociatedWith</a:documentation>
             </choice>
          </oneOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-staffGrp-Check_staffGrp_unique_staff_n_values-constraint-rule-33">
+                  id="wegaWorks-staffGrp-Check_staffGrp_unique_staff_n_values-constraint-rule-36">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -4828,7 +4853,7 @@ Empfohlene Werte sind: 1] isAssociatedWith</a:documentation>
             </choice>
          </zeroOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-term-Check_term_dataTarget-constraint-rule-34">
+                  id="wegaWorks-term-Check_term_dataTarget-constraint-rule-37">
             <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
@@ -4849,7 +4874,7 @@ Empfohlene Werte sind: 1] isAssociatedWith</a:documentation>
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Title of a bibliographic entity.</a:documentation>
          <ref name="macro.titlePart"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaWorks-title-work-subtitles-map-xmllang-constraint-rule-35">
+                  id="wegaWorks-title-work-subtitles-map-xmllang-constraint-rule-38">
             <sch:rule xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:rng="http://relaxng.org/ns/structure/1.0"
@@ -5188,7 +5213,7 @@ Empfohlene Werte sind: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] foreig
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWorks-att.wega.rend-underline-n-constraint-rule-37">
+            id="wegaWorks-att.wega.rend-underline-n-constraint-rule-40">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
@@ -5206,7 +5231,7 @@ Empfohlene Werte sind: 1] spoken; 2] thought; 3] written; 4] soCalled; 5] foreig
       </choice>
    </start>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWorks-styleguide-document-node-content-constraint-rule-36">
+            id="wegaWorks-styleguide-document-node-content-constraint-rule-39">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
