@@ -3602,6 +3602,11 @@
                     <sch:report test="count(tei:witness) le 1">There should always be more than one witness within a listWit element.</sch:report>
                 </constraint>
             </constraintSpec>
+            <constraintSpec scheme="schematron" ident="only-one-hauptquelle">
+                <constraint>
+                    <sch:report test="count(tei:witness[@n='main']) gt 1">There should always be only one witness within a listWit element with the attribute @n='main'.</sch:report>
+                </constraint>
+            </constraintSpec>
         </elementSpec>
         
         <elementSpec ident="witness" mode="change" module="textcrit">
@@ -3618,10 +3623,13 @@
                 </alternate>
             </content>
             <attList>
-                <attDef ident="n" mode="add" usage="req">
-                    <datatype>
-                        <dataRef key="teidata.count"/>
-                    </datatype>
+                <attDef ident="n" mode="add" usage="opt">
+                    <valList type="closed">
+                        <valItem ident="main">
+                            <desc versionDate="2022-04-06" xml:lang="en">marks the main source</desc>
+                            <desc versionDate="2022-04-06" xml:lang="de">markiert die Hauptquelle</desc>
+                        </valItem>
+                    </valList>
                 </attDef>
                 <attDef ident="rend" mode="add" usage="opt">
                     <gloss versionDate="2013-11-11" xml:lang="en">rendition</gloss>
