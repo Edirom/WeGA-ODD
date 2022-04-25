@@ -555,7 +555,9 @@
                 <xsl:when test="matches(., 'wega:')">
                     <xsl:value-of select="replace(., 'wega:', 'https://weber-gesamtausgabe.de/Scaler/IIIF/')"/>
                 </xsl:when>
-                <xsl:when test="starts-with(., 'http')"/>
+                <xsl:when test="starts-with(., 'http')">
+                    <xsl:value-of select="."/>
+                </xsl:when>
                 <xsl:otherwise>
                     <xsl:variable name="curID" select="root()/*/data(@xml:id)"/>
                     <xsl:variable name="docType" select="wega:docType($curID)"/>
