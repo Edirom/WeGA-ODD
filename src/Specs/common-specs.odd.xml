@@ -676,6 +676,44 @@
             </attList>
         </classSpec>
         
+        <!-- 
+            Added here only to overwrite the constraintSpec "only_1_ODD_source" 
+            which causes those pesky "SXWN9000: The child axis starting at an attribute node will never select anything" warnings
+            This can be removed eventually when https://github.com/TEIC/TEI/pull/2287 has been accepted
+        -->
+        <classSpec module="tei" type="atts" ident="att.global.source" mode="change">
+            <attList>
+                <attDef ident="source" usage="opt" mode="change">
+                    <desc versionDate="2010-05-09" xml:lang="en">specifies the source from which some aspect of
+                        this element is drawn.</desc>
+                    <desc versionDate="2019-09-18" xml:lang="ja">この要素の何らかの側面を示すソースを指定する。</desc>
+                    <datatype maxOccurs="unbounded">
+                        <dataRef key="teidata.pointer"/>
+                    </datatype>
+                    <constraintSpec scheme="schematron" ident="only_1_ODD_source" mode="replace">
+                        <constraint>
+                            <sch:rule context="tei:*[@source]">
+                                <sch:let name="srcs" value="tokenize( normalize-space(@source),'&#x20;')"/>
+                                <sch:report test="( self::tei:classRef
+                                    | self::tei:dataRef
+                                    | self::tei:elementRef
+                                    | self::tei:macroRef
+                                    | self::tei:moduleRef
+                                    | self::tei:schemaSpec )
+                                    and
+                                    $srcs[2]">
+                                    When used on a schema description element (like
+                                    <sch:value-of select="name(.)"/>), the @source attribute
+                                    should have only 1 value. (This one has <sch:value-of
+                                        select="count($srcs)"/>.)
+                                </sch:report>
+                            </sch:rule>
+                        </constraint>
+                    </constraintSpec>
+                </attDef>
+            </attList>
+        </classSpec>
+        
         <classSpec type="atts" ident="att.sortable" module="tei" mode="delete"/>
         <classSpec type="atts" ident="att.datable.iso" module="tei" mode="delete"/>
         <classSpec type="atts" ident="att.datable.custom" module="tei" mode="delete"/>
@@ -2136,7 +2174,7 @@
                 <memberOf key="att.global" mode="delete"/>
                 <memberOf key="att.declaring" mode="delete"/>
             </classes>
-            <constraintSpec ident="abstractModel-structure-p" scheme="schematron" mode="change">
+            <constraintSpec ident="abstractModel-structure-p-in-ab-or-p" scheme="schematron" mode="change">
                 <constraint>
                     <report xmlns="http://purl.oclc.org/dsdl/schematron" xmlns:tei="http://www.tei-c.org/ns/1.0" 
                         test="(ancestor::tei:p or ancestor::tei:ab) 
