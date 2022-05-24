@@ -8708,7 +8708,7 @@ epistemology, methodology and history of
                         <sch:assert test="@type='reg'">There must exactly be one name with @type='reg'.</sch:assert>
                     </sch:rule>
                 </constraint>
-            </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="parent-org-reg">
+            </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="parent-org-reg2">
                 <constraint>
                     <sch:rule context="tei:orgName[parent::tei:org and preceding::tei:orgName]">
                         <sch:report test="@type='reg'">Only the first name can be of @type='reg'. Following names are supposed to be alternative names, @type='alt'.</sch:report>
@@ -9755,7 +9755,7 @@ element is appropriate for which circumstance.</p>
             <desc versionDate="2016-09-30" xml:lang="en">Warnings for attribute values with leading or trailing whitespace</desc>
             <desc versionDate="2016-09-30" xml:lang="de">Warnung vor Leerzeichen am Beginn oder Ende eines Attributs</desc>
             <constraint>
-                <sch:rule context="*">
+                <sch:rule context="*[@*]">
                     <sch:report test="some $i in @* satisfies string-length(normalize-unicode(normalize-space(replace($i, ' | | | ', ' ')))) ne string-length($i)">There is some whitespace here at the beginning or end of some attribute value.</sch:report>
                 </sch:rule>
             </constraint>
@@ -9783,6 +9783,12 @@ element is appropriate for which circumstance.</p>
                 <sch:rule context="*[starts-with(@source, '#')]">
                     <sch:let name="source" value="@source"/>
                     <sch:assert test="id(substring($source,2))">Unable to locate the reference provided by the @source attribute.</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="anonymus-id">
+            <constraint>
+                <sch:rule context="*[@key|@codedval]">
+                    <sch:report test="(@key | @codedval) = 'A007979'">Please do not link to the anonymus ID.</sch:report>
                 </sch:rule>
             </constraint>
         </constraintSpec><macroSpec rend="add" module="derived-module-wegaOrgs" ident="wega.data.temporal.iso" mode="add">
