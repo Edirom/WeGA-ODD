@@ -569,6 +569,7 @@
     </xsl:template>
     
     <xsl:template match="@notInvolved" mode="#all"/>
+    <xsl:template match="@full[parent::author]" mode="#all"/>
     <xsl:template match="keywords[parent::biblStruct]" mode="#all"/>
     
     <xsl:template name="inject-schema-references">

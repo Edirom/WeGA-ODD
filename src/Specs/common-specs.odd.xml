@@ -1425,7 +1425,17 @@
                 <memberOf key="att.naming" mode="delete"/>
                 <memberOf key="att.canonical" mode="delete"/>
                 <memberOf key="att.global" mode="delete"/>
+                <memberOf key="att.datable" mode="delete"/>
             </classes>
+            <constraintSpec scheme="schematron" ident="author-abb">
+                <desc versionDate="2022-05-31" xml:lang="en">constrain the attribute <att>full</att> to occur only on <gi>author</gi> elements within <gi>biblStruct</gi>.</desc>
+                <desc versionDate="2022-05-31" xml:lang="de">erlaube das <att>full</att>-Attribut nur an <gi>author</gi>-Elementen innerhalb von <gi>biblStruct</gi>.</desc>
+                <constraint>
+                    <sch:rule context="tei:author[@full]">
+                        <sch:assert test="ancestor::tei:biblStruct">The full-attribute on author may only be applied within biblStruct.</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
             <attList>
                 <attDef ident="key" mode="add" usage="opt">
                     <desc versionDate="2013-11-11" xml:lang="en">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</desc>
@@ -1434,7 +1444,6 @@
                         <dataRef key="wega.personsPlus.pointer"/>
                     </datatype>
                 </attDef>
-                <attRef class="att.global" name="xml:id"/>
                 <attDef ident="sameAs" mode="add" usage="opt">
                     <desc versionDate="2013-11-11" xml:lang="en">points to an element that is the same as the current element.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">zeigt auf ein Element, dass das gleiche ist, wie das aktuelle Element.</desc>
@@ -1449,21 +1458,21 @@
                         </constraint>
                     </constraintSpec>
                 </attDef>
-                <attRef class="att.global.responsibility" name="cert"/>
-                <attDef ident="role" mode="add" usage="rec">
-                    <desc versionDate="2013-11-11" xml:lang="en">may be used to specify further information about the entity referenced by this name, for example the occupation of a person, or the status of a place.</desc>
-                    <desc versionDate="2013-11-11" xml:lang="de">kann verwendet werden, um weitere Informationen, die über die Einheit unter diesem Namen referenziert werden, anzugeben, z. B. der Beruf einer Person, oder der Status eines Ortes.</desc>
+                <!--<attRef class="att.personal" name="full"/>--><!-- That does not work for biblio?!? -->
+                <attDef ident="full" mode="add" usage="opt">
+                    <desc versionDate="2022-05-31" xml:lang="en">indicates whether the author name is given in full.</desc>
+                    <desc versionDate="2022-05-31" xml:lang="de">zeigt an, ob der Name des/der Autor:in vollständig angegeben ist.</desc>
                     <valList type="closed">
-                        <valItem ident="composer">
-                            <desc versionDate="2013-11-11" xml:lang="en">composer of a musical work.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">Komponist eines musikalischen Werkes.</desc>
-                        </valItem>
-                        <valItem ident="librettist">
-                            <desc versionDate="2013-11-11" xml:lang="en">librettist of a musical work.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">Librettist eines musikalischen Werkes.</desc>
+                        <valItem ident="abb">
+                            <gloss versionDate="2022-05-31" xml:lang="en">abbreviated</gloss>
+                            <gloss versionDate="2022-05-31" xml:lang="de">abgekürzt</gloss>
+                            <desc versionDate="2022-05-31" xml:lang="en">the name component is given in an abbreviated form.</desc>
+                            <desc versionDate="2022-05-31" xml:lang="de">der Name ist in abgekürzter Form angegeben.</desc>
                         </valItem>
                     </valList>
                 </attDef>
+                <attRef class="att.global" name="xml:id"/>
+                <attRef class="att.global.responsibility" name="cert"/>
             </attList>
         </elementSpec>
         
