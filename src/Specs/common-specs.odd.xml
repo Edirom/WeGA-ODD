@@ -2774,6 +2774,21 @@
                     <rng:ref name="change"/>
                 </rng:oneOrMore>
             </content>
+            <constraintSpec scheme="schematron" ident="assert-status-alignment">
+                <constraint>
+                    <!--
+                        This is to assert that the last provided change entry with a status change matches the document status given on revisionDesc.
+                        I'd like to see that every status change be documented by a change entry, but currently we cannot enforce this in the schema
+                        since the data is lacking this information in many files. We'd need to dig this information up from the Subversion – which is
+                        some work …
+                        So, the envisioned approach is to get rid of the `<sch:rule context="">`, which would then enforce a corresponding status 
+                        attribute (to the status attribute on revisionDesc) on some change element.
+                    -->
+                    <sch:rule context="tei:revisionDesc[tei:change/@status]">
+                        <sch:assert test="@status eq (tei:change/@status)[1]">The value of the status-attribute on <sch:name/> should be in congruence with the latest status value on a change child element.</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
             <attList>
                 <attDef ident="status" usage="req" mode="change"/>
             </attList>
