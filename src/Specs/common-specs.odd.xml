@@ -2691,8 +2691,22 @@
                 <memberOf key="att.global" mode="delete"/>
                 <memberOf key="att.typed" mode="delete"/>
                 <memberOf key="att.datable" mode="delete"/>
-                <!--            <memberOf key="att.datable.w3c" mode="add"/>-->
             </classes>
+            <!-- 
+                Still too many errors. Will need to fix the data first before introducing this constraint 
+            -->
+            <!--<constraintSpec scheme="schematron" ident="assert-chronologic-order">
+                <constraint>
+                    <sch:rule context="tei:change[preceding::tei:change]">
+                        <sch:assert test="preceding::tei:change/@when >= @when">The change elements should be ordered by date descending, i.e. the latest entry should be on top.</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>-->
+            <constraintSpec scheme="schematron" ident="report-future-dates">
+                <constraint>
+                    <sch:report test="string(@when) > (current-date() cast as xs:string)">The when-attribute must not refer to a future date.</sch:report>
+                </constraint>
+            </constraintSpec>
             <attList>
                 <attDef ident="who" mode="change" usage="req">
                     <desc versionDate="2013-11-11" xml:lang="en">indicates the person, or group of people, to whom the element content is ascribed.</desc>
@@ -2701,7 +2715,23 @@
                         <rng:ref name="staffSignatures.list"/>
                     </datatype>
                 </attDef>
-                <attRef name="when" class="att.datable.w3c"/>
+                <attDef ident="when" mode="add" usage="req">
+                    <desc versionDate="2022-09-19" xml:lang="en">supplies the value of the date in the form yyyy-mm-dd.</desc>
+                    <desc versionDate="2022-09-19" xml:lang="de">gibt das Datum in der Form yyyy-mm-dd an.</desc>
+                    <datatype>
+                        <!--
+                            There are some values of "2006" in the writings so we can't 
+                            set this to xs:date here but also need gYear
+                        -->
+                        <dataRef key="wega.data.temporal.iso"/>
+                    </datatype>
+                    <remarks versionDate="2022-09-19" xml:lang="en">
+                        <p>For historic reasons gYear (i.e. only providing the year) is also allowed. For new entries this must be avoided.</p>
+                    </remarks>
+                    <remarks versionDate="2022-09-19" xml:lang="de">
+                        <p>Aus historischen Gründen ist der Datentyp gYear (d.h. nur die Angabe des Jahrs) ebenfalls erlaubt. Dies ist bei neuen Einträge aber zu vermeiden.</p>
+                    </remarks>
+                </attDef>
                 <attDef ident="calendar" mode="delete"/>
                 <attDef ident="target" mode="delete"/>
             </attList>
