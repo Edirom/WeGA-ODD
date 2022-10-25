@@ -5,10 +5,10 @@
          xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2022-09-21T08:22:22Z. .
-TEI Edition: Version 4.4.0. Last updated on
-        19th April 2022, revision ff9cc28b0
-TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.4.0/
+Schema generated from ODD source 2022-10-25T19:32:41Z. .
+TEI Edition: Version 4.5.0. Last updated on
+        25th October 2022, revision 3e98e619e
+TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
   
 --><!--This work is licensed under a  Creative Commons Attribution 3.0 Unported License (CC BY 3.0) .-->
    <sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron"
@@ -18,12 +18,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.4.0/
       <zeroOrMore>
          <choice>
             <text/>
-            <ref name="model.gLike"/>
-            <ref name="model.phrase"/>
-            <ref name="model.inter"/>
-            <ref name="model.global"/>
-        
-            <ref name="model.lLike"/>
+            <ref name="model.paraPart"/>
          </choice>
       </zeroOrMore>
    </define>
@@ -543,9 +538,9 @@ Sample values include: 1] all; 2] most; 3] range</a:documentation>
                 xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:rng="http://relaxng.org/ns/structure/1.0"
                 context="tei:*[@calendar]">
-            <sch:assert test="string-length(.) gt 0"> @calendar indicates one or more systems or calendars to
-              which the date represented by the content of this element belongs, but this
-              <sch:name/> element has no textual content.</sch:assert>
+            <sch:assert test="string-length( normalize-space(.) ) gt 0"> @calendar indicates one or more
+            systems or calendars to which the date represented by the content of this element belongs,
+            but this <sch:name/> element has no textual content.</sch:assert>
           </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
@@ -555,9 +550,9 @@ Sample values include: 1] all; 2] most; 3] range</a:documentation>
                 xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:rng="http://relaxng.org/ns/structure/1.0"
                 context="tei:*[@calendar]">
-            <sch:assert test="string-length(.) gt 0"> @calendar indicates one or more systems or calendars to
-              which the date represented by the content of this element belongs, but this
-              <sch:name/> element has no textual content.</sch:assert>
+            <sch:assert test="string-length( normalize-space(.) ) gt 0"> @calendar indicates one or more
+            systems or calendars to which the date represented by the content of this element belongs,
+            but this <sch:name/> element has no textual content.</sch:assert>
           </sch:rule>
    </pattern>
    <define name="att.fragmentable.attributes">
@@ -951,6 +946,21 @@ Suggested values include: 1] top; 2] bottom; 3] margin; 4] opposite; 5] overleaf
    <define name="model.segLike">
       <notAllowed/>
    </define>
+   <define name="model.segLike_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.segLike_sequence">
+      <empty/>
+   </define>
+   <define name="model.segLike_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.segLike_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.segLike_sequenceRepeatable">
+      <notAllowed/>
+   </define>
    <define name="model.hiLike">
       <choice>
          <ref name="hi"/>
@@ -1015,6 +1025,40 @@ Suggested values include: 1] top; 2] bottom; 3] margin; 4] opposite; 5] overleaf
          <ref name="model.emphLike"/>
       </choice>
    </define>
+   <define name="model.highlighted_alternation">
+      <choice>
+         <ref name="model.hiLike_alternation"/>
+         <ref name="model.emphLike_alternation"/>
+      </choice>
+   </define>
+   <define name="model.highlighted_sequence">
+      <ref name="model.hiLike_sequence"/>
+      <ref name="model.emphLike_sequence"/>
+   </define>
+   <define name="model.highlighted_sequenceOptional">
+      <optional>
+         <ref name="model.hiLike_sequenceOptional"/>
+      </optional>
+      <optional>
+         <ref name="model.emphLike_sequenceOptional"/>
+      </optional>
+   </define>
+   <define name="model.highlighted_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="model.hiLike_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="model.emphLike_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.highlighted_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="model.hiLike_sequenceRepeatable"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="model.emphLike_sequenceRepeatable"/>
+      </oneOrMore>
+   </define>
    <define name="model.dateLike">
       <choice>
          <ref name="date"/>
@@ -1064,7 +1108,37 @@ Suggested values include: 1] top; 2] bottom; 3] margin; 4] opposite; 5] overleaf
    <define name="model.egLike">
       <notAllowed/>
    </define>
+   <define name="model.egLike_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.egLike_sequence">
+      <empty/>
+   </define>
+   <define name="model.egLike_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.egLike_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.egLike_sequenceRepeatable">
+      <notAllowed/>
+   </define>
    <define name="model.graphicLike">
+      <notAllowed/>
+   </define>
+   <define name="model.graphicLike_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.graphicLike_sequence">
+      <empty/>
+   </define>
+   <define name="model.graphicLike_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.graphicLike_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.graphicLike_sequenceRepeatable">
       <notAllowed/>
    </define>
    <define name="model.offsetLike">
@@ -1086,6 +1160,21 @@ Suggested values include: 1] top; 2] bottom; 3] margin; 4] opposite; 5] overleaf
       <notAllowed/>
    </define>
    <define name="model.pPart.msdesc">
+      <notAllowed/>
+   </define>
+   <define name="model.pPart.msdesc_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.pPart.msdesc_sequence">
+      <empty/>
+   </define>
+   <define name="model.pPart.msdesc_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.pPart.msdesc_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.pPart.msdesc_sequenceRepeatable">
       <notAllowed/>
    </define>
    <define name="model.pPart.editorial">
@@ -1198,18 +1287,120 @@ Suggested values include: 1] top; 2] bottom; 3] margin; 4] opposite; 5] overleaf
          <ref name="model.pPart.transcriptional"/>
       </choice>
    </define>
+   <define name="model.pPart.edit_alternation">
+      <choice>
+         <ref name="model.pPart.editorial_alternation"/>
+         <ref name="model.pPart.transcriptional_alternation"/>
+      </choice>
+   </define>
+   <define name="model.pPart.edit_sequence">
+      <ref name="model.pPart.editorial_sequence"/>
+      <ref name="model.pPart.transcriptional_sequence"/>
+   </define>
+   <define name="model.pPart.edit_sequenceOptional">
+      <optional>
+         <ref name="model.pPart.editorial_sequenceOptional"/>
+      </optional>
+      <optional>
+         <ref name="model.pPart.transcriptional_sequenceOptional"/>
+      </optional>
+   </define>
+   <define name="model.pPart.edit_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="model.pPart.editorial_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="model.pPart.transcriptional_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.pPart.edit_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="model.pPart.editorial_sequenceRepeatable"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="model.pPart.transcriptional_sequenceRepeatable"/>
+      </oneOrMore>
+   </define>
    <define name="model.ptrLike">
       <choice>
          <ref name="ref"/>
       </choice>
    </define>
+   <define name="model.ptrLike_alternation">
+      <choice>
+         <ref name="ref"/>
+      </choice>
+   </define>
+   <define name="model.ptrLike_sequence">
+      <ref name="ref"/>
+   </define>
+   <define name="model.ptrLike_sequenceOptional">
+      <optional>
+         <ref name="ref"/>
+      </optional>
+   </define>
+   <define name="model.ptrLike_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="ref"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.ptrLike_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="ref"/>
+      </oneOrMore>
+   </define>
    <define name="model.lPart">
+      <notAllowed/>
+   </define>
+   <define name="model.lPart_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.lPart_sequence">
+      <empty/>
+   </define>
+   <define name="model.lPart_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.lPart_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.lPart_sequenceRepeatable">
       <notAllowed/>
    </define>
    <define name="model.global.meta">
       <notAllowed/>
    </define>
+   <define name="model.global.meta_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.global.meta_sequence">
+      <empty/>
+   </define>
+   <define name="model.global.meta_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.global.meta_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.global.meta_sequenceRepeatable">
+      <notAllowed/>
+   </define>
    <define name="model.milestoneLike">
+      <notAllowed/>
+   </define>
+   <define name="model.milestoneLike_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.milestoneLike_sequence">
+      <empty/>
+   </define>
+   <define name="model.milestoneLike_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.milestoneLike_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.milestoneLike_sequenceRepeatable">
       <notAllowed/>
    </define>
    <define name="model.gLike">
@@ -1218,16 +1409,91 @@ Suggested values include: 1] top; 2] bottom; 3] margin; 4] opposite; 5] overleaf
    <define name="model.oddDecl">
       <notAllowed/>
    </define>
+   <define name="model.oddDecl_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.oddDecl_sequence">
+      <empty/>
+   </define>
+   <define name="model.oddDecl_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.oddDecl_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.oddDecl_sequenceRepeatable">
+      <notAllowed/>
+   </define>
    <define name="model.phrase.xml">
+      <notAllowed/>
+   </define>
+   <define name="model.phrase.xml_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.phrase.xml_sequence">
+      <empty/>
+   </define>
+   <define name="model.phrase.xml_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.phrase.xml_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.phrase.xml_sequenceRepeatable">
       <notAllowed/>
    </define>
    <define name="model.specDescLike">
       <notAllowed/>
    </define>
+   <define name="model.specDescLike_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.specDescLike_sequence">
+      <empty/>
+   </define>
+   <define name="model.specDescLike_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.specDescLike_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.specDescLike_sequenceRepeatable">
+      <notAllowed/>
+   </define>
    <define name="model.biblLike">
       <notAllowed/>
    </define>
+   <define name="model.biblLike_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.biblLike_sequence">
+      <empty/>
+   </define>
+   <define name="model.biblLike_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.biblLike_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.biblLike_sequenceRepeatable">
+      <notAllowed/>
+   </define>
    <define name="model.labelLike">
+      <notAllowed/>
+   </define>
+   <define name="model.labelLike_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.labelLike_sequence">
+      <empty/>
+   </define>
+   <define name="model.labelLike_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.labelLike_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.labelLike_sequenceRepeatable">
       <notAllowed/>
    </define>
    <define name="model.listLike">
@@ -1235,11 +1501,68 @@ Suggested values include: 1] top; 2] bottom; 3] margin; 4] opposite; 5] overleaf
          <ref name="list"/>
       </choice>
    </define>
+   <define name="model.listLike_alternation">
+      <choice>
+         <ref name="list"/>
+      </choice>
+   </define>
+   <define name="model.listLike_sequence">
+      <ref name="list"/>
+   </define>
+   <define name="model.listLike_sequenceOptional">
+      <optional>
+         <ref name="list"/>
+      </optional>
+   </define>
+   <define name="model.listLike_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="list"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.listLike_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="list"/>
+      </oneOrMore>
+   </define>
    <define name="model.noteLike">
       <choice>
          <ref name="note"/>
          <ref name="footNote"/>
       </choice>
+   </define>
+   <define name="model.noteLike_alternation">
+      <choice>
+         <ref name="note"/>
+         <ref name="footNote"/>
+      </choice>
+   </define>
+   <define name="model.noteLike_sequence">
+      <ref name="note"/>
+      <ref name="footNote"/>
+   </define>
+   <define name="model.noteLike_sequenceOptional">
+      <optional>
+         <ref name="note"/>
+      </optional>
+      <optional>
+         <ref name="footNote"/>
+      </optional>
+   </define>
+   <define name="model.noteLike_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="note"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="footNote"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.noteLike_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="note"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="footNote"/>
+      </oneOrMore>
    </define>
    <define name="model.lLike">
       <notAllowed/>
@@ -1252,7 +1575,37 @@ Suggested values include: 1] top; 2] bottom; 3] margin; 4] opposite; 5] overleaf
    <define name="model.stageLike">
       <notAllowed/>
    </define>
+   <define name="model.stageLike_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.stageLike_sequence">
+      <empty/>
+   </define>
+   <define name="model.stageLike_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.stageLike_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.stageLike_sequenceRepeatable">
+      <notAllowed/>
+   </define>
    <define name="model.global.edit">
+      <notAllowed/>
+   </define>
+   <define name="model.global.edit_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.global.edit_sequence">
+      <empty/>
+   </define>
+   <define name="model.global.edit_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.global.edit_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.global.edit_sequenceRepeatable">
       <notAllowed/>
    </define>
    <define name="model.divPart">
@@ -1397,6 +1750,29 @@ Suggested values include: 1] top; 2] bottom; 3] margin; 4] opposite; 5] overleaf
       <choice>
          <ref name="model.quoteLike"/>
       </choice>
+   </define>
+   <define name="model.attributable_alternation">
+      <choice>
+         <ref name="model.quoteLike_alternation"/>
+      </choice>
+   </define>
+   <define name="model.attributable_sequence">
+      <ref name="model.quoteLike_sequence"/>
+   </define>
+   <define name="model.attributable_sequenceOptional">
+      <optional>
+         <ref name="model.quoteLike_sequenceOptional"/>
+      </optional>
+   </define>
+   <define name="model.attributable_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="model.quoteLike_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.attributable_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="model.quoteLike_sequenceRepeatable"/>
+      </oneOrMore>
    </define>
    <define name="model.addressLike">
       <choice>
@@ -1554,6 +1930,62 @@ Suggested values include: 1] top; 2] bottom; 3] margin; 4] opposite; 5] overleaf
          <ref name="model.nameLike"/>
       </choice>
    </define>
+   <define name="model.pPart.data_alternation">
+      <choice>
+         <ref name="model.dateLike_alternation"/>
+         <ref name="model.measureLike_alternation"/>
+         <ref name="model.addressLike_alternation"/>
+         <ref name="model.nameLike_alternation"/>
+      </choice>
+   </define>
+   <define name="model.pPart.data_sequence">
+      <ref name="model.dateLike_sequence"/>
+      <ref name="model.measureLike_sequence"/>
+      <ref name="model.addressLike_sequence"/>
+      <ref name="model.nameLike_sequence"/>
+   </define>
+   <define name="model.pPart.data_sequenceOptional">
+      <optional>
+         <ref name="model.dateLike_sequenceOptional"/>
+      </optional>
+      <optional>
+         <ref name="model.measureLike_sequenceOptional"/>
+      </optional>
+      <optional>
+         <ref name="model.addressLike_sequenceOptional"/>
+      </optional>
+      <optional>
+         <ref name="model.nameLike_sequenceOptional"/>
+      </optional>
+   </define>
+   <define name="model.pPart.data_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="model.dateLike_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="model.measureLike_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="model.addressLike_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="model.nameLike_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.pPart.data_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="model.dateLike_sequenceRepeatable"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="model.measureLike_sequenceRepeatable"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="model.addressLike_sequenceRepeatable"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="model.nameLike_sequenceRepeatable"/>
+      </oneOrMore>
+   </define>
    <define name="model.inter">
       <choice>
          <ref name="model.egLike"/>
@@ -1577,6 +2009,15 @@ Suggested values include: 1] top; 2] bottom; 3] margin; 4] opposite; 5] overleaf
          <ref name="model.phrase.xml"/>
          <ref name="model.specDescLike"/>
          <ref name="model.pPart.data"/>
+      </choice>
+   </define>
+   <define name="model.paraPart">
+      <choice>
+         <ref name="model.gLike"/>
+         <ref name="model.lLike"/>
+         <ref name="model.global"/>
+         <ref name="model.inter"/>
+         <ref name="model.phrase"/>
       </choice>
    </define>
    <define name="att.locatable.attributes">
@@ -1699,7 +2140,7 @@ Suggested values include: 1] top; 2] bottom; 3] margin; 4] opposite; 5] overleaf
                <sch:report xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                            xmlns="http://www.tei-c.org/ns/1.0"
                            xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                           test="    (ancestor::tei:l or ancestor::tei:lg)                          and not( ancestor::tei:floatingText                                 |parent::tei:figure                                 |parent::tei:note                                )">
+                           test="(ancestor::tei:l or ancestor::tei:lg) and not( ancestor::tei:floatingText |parent::tei:figure |parent::tei:note )">
         Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab, unless p is a child of figure or note, or is a descendant of floatingText.
       </sch:report>
             </rule>
@@ -3535,6 +3976,18 @@ Sample values include: 1] primary; 2] other; 3] paid; 4] unpaid</a:documentation
                <param name="pattern">A00[0-9A-F]{4}</param>
             </data>
          </attribute>
+         <optional>
+            <attribute name="gender">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the gender of the person.</a:documentation>
+               <list>
+                  <oneOrMore>
+                     <data type="token">
+                        <param name="pattern">[^\p{C}\p{Z}]+</param>
+                     </data>
+                  </oneOrMore>
+               </list>
+            </attribute>
+         </optional>
          <empty/>
       </element>
    </define>
@@ -3594,16 +4047,7 @@ Sample values include: 1] primary; 2] secondary; 3] temporary; 4] permanent</a:d
             <value>m</value>
             <value>unknown</value>
          </choice>
-         <ref name="att.typed.attribute.subtype"/>
-         <optional>
-            <attribute name="type">
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.
-Sample values include: 1] explicit; 2] implicit</a:documentation>
-               <data type="token">
-                  <param name="pattern">[^\p{C}\p{Z}]+</param>
-               </data>
-            </attribute>
-         </optional>
+         <ref name="att.typed.attributes"/>
          <optional>
             <attribute name="value">
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">supplies a coded value for sex</a:documentation>

@@ -5,25 +5,29 @@
          xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2022-09-21T08:22:20Z. .
-TEI Edition: Version 4.4.0. Last updated on
-        19th April 2022, revision ff9cc28b0
-TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.4.0/
+Schema generated from ODD source 2022-10-25T19:32:39Z. .
+TEI Edition: Version 4.5.0. Last updated on
+        25th October 2022, revision 3e98e619e
+TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
   
 --><!--This work is licensed under a  Creative Commons Attribution 3.0 Unported License (CC BY 3.0) .-->
    <sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron"
            prefix="tei"
            uri="http://www.tei-c.org/ns/1.0"/>
+   <define name="macro.abContent">
+      <zeroOrMore>
+         <choice>
+            <text/>
+            <ref name="model.paraPart"/>
+            <ref name="ab"/>
+         </choice>
+      </zeroOrMore>
+   </define>
    <define name="macro.paraContent">
       <zeroOrMore>
          <choice>
             <text/>
-            <ref name="model.gLike"/>
-            <ref name="model.phrase"/>
-            <ref name="model.inter"/>
-            <ref name="model.global"/>
-        
-            <ref name="model.lLike"/>
+            <ref name="model.paraPart"/>
          </choice>
       </zeroOrMore>
    </define>
@@ -521,9 +525,9 @@ Sample values include: 1] all; 2] most; 3] range</a:documentation>
                 xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:rng="http://relaxng.org/ns/structure/1.0"
                 context="tei:*[@calendar]">
-            <sch:assert test="string-length(.) gt 0"> @calendar indicates one or more systems or calendars to
-              which the date represented by the content of this element belongs, but this
-              <sch:name/> element has no textual content.</sch:assert>
+            <sch:assert test="string-length( normalize-space(.) ) gt 0"> @calendar indicates one or more
+            systems or calendars to which the date represented by the content of this element belongs,
+            but this <sch:name/> element has no textual content.</sch:assert>
           </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
@@ -533,9 +537,9 @@ Sample values include: 1] all; 2] most; 3] range</a:documentation>
                 xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:rng="http://relaxng.org/ns/structure/1.0"
                 context="tei:*[@calendar]">
-            <sch:assert test="string-length(.) gt 0"> @calendar indicates one or more systems or calendars to
-              which the date represented by the content of this element belongs, but this
-              <sch:name/> element has no textual content.</sch:assert>
+            <sch:assert test="string-length( normalize-space(.) ) gt 0"> @calendar indicates one or more
+            systems or calendars to which the date represented by the content of this element belongs,
+            but this <sch:name/> element has no textual content.</sch:assert>
           </sch:rule>
    </pattern>
    <define name="att.fragmentable.attributes">
@@ -761,7 +765,7 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
          <attribute name="width">
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Where the media are displayed, indicates the display width</a:documentation>
             <data type="token">
-               <param name="pattern">[\-+]?\d+(\.\d+)?(%|cm|mm|in|pt|pc|px|em|ex|gd|rem|vw|vh|vm)</param>
+               <param name="pattern">[\-+]?\d+(\.\d+)?(%|cm|mm|in|pt|pc|px|em|ex|ch|rem|vw|vh|vmin|vmax)</param>
             </data>
          </attribute>
       </optional>
@@ -771,7 +775,7 @@ Suggested values include: 1] internal; 2] external; 3] conjecture</a:documentati
          <attribute name="height">
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Where the media are displayed, indicates the display height</a:documentation>
             <data type="token">
-               <param name="pattern">[\-+]?\d+(\.\d+)?(%|cm|mm|in|pt|pc|px|em|ex|gd|rem|vw|vh|vm)</param>
+               <param name="pattern">[\-+]?\d+(\.\d+)?(%|cm|mm|in|pt|pc|px|em|ex|ch|rem|vw|vh|vmin|vmax)</param>
             </data>
          </attribute>
       </optional>
@@ -1037,6 +1041,29 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
          <ref name="seg"/>
       </choice>
    </define>
+   <define name="model.segLike_alternation">
+      <choice>
+         <ref name="seg"/>
+      </choice>
+   </define>
+   <define name="model.segLike_sequence">
+      <ref name="seg"/>
+   </define>
+   <define name="model.segLike_sequenceOptional">
+      <optional>
+         <ref name="seg"/>
+      </optional>
+   </define>
+   <define name="model.segLike_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="seg"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.segLike_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="seg"/>
+      </oneOrMore>
+   </define>
    <define name="model.hiLike">
       <choice>
          <ref name="hi"/>
@@ -1111,6 +1138,40 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
          <ref name="model.emphLike"/>
       </choice>
    </define>
+   <define name="model.highlighted_alternation">
+      <choice>
+         <ref name="model.hiLike_alternation"/>
+         <ref name="model.emphLike_alternation"/>
+      </choice>
+   </define>
+   <define name="model.highlighted_sequence">
+      <ref name="model.hiLike_sequence"/>
+      <ref name="model.emphLike_sequence"/>
+   </define>
+   <define name="model.highlighted_sequenceOptional">
+      <optional>
+         <ref name="model.hiLike_sequenceOptional"/>
+      </optional>
+      <optional>
+         <ref name="model.emphLike_sequenceOptional"/>
+      </optional>
+   </define>
+   <define name="model.highlighted_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="model.hiLike_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="model.emphLike_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.highlighted_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="model.hiLike_sequenceRepeatable"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="model.emphLike_sequenceRepeatable"/>
+      </oneOrMore>
+   </define>
    <define name="model.dateLike">
       <choice>
          <ref name="date"/>
@@ -1170,10 +1231,48 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
    <define name="model.egLike">
       <notAllowed/>
    </define>
+   <define name="model.egLike_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.egLike_sequence">
+      <empty/>
+   </define>
+   <define name="model.egLike_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.egLike_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.egLike_sequenceRepeatable">
+      <notAllowed/>
+   </define>
    <define name="model.graphicLike">
       <choice>
          <ref name="graphic"/>
       </choice>
+   </define>
+   <define name="model.graphicLike_alternation">
+      <choice>
+         <ref name="graphic"/>
+      </choice>
+   </define>
+   <define name="model.graphicLike_sequence">
+      <ref name="graphic"/>
+   </define>
+   <define name="model.graphicLike_sequenceOptional">
+      <optional>
+         <ref name="graphic"/>
+      </optional>
+   </define>
+   <define name="model.graphicLike_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="graphic"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.graphicLike_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="graphic"/>
+      </oneOrMore>
    </define>
    <define name="model.offsetLike">
       <notAllowed/>
@@ -1194,6 +1293,21 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
       <notAllowed/>
    </define>
    <define name="model.pPart.msdesc">
+      <notAllowed/>
+   </define>
+   <define name="model.pPart.msdesc_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.pPart.msdesc_sequence">
+      <empty/>
+   </define>
+   <define name="model.pPart.msdesc_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.pPart.msdesc_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.pPart.msdesc_sequenceRepeatable">
       <notAllowed/>
    </define>
    <define name="model.pPart.editorial">
@@ -1330,16 +1444,114 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
          <ref name="model.pPart.transcriptional"/>
       </choice>
    </define>
+   <define name="model.pPart.edit_alternation">
+      <choice>
+         <ref name="model.pPart.editorial_alternation"/>
+         <ref name="model.pPart.transcriptional_alternation"/>
+      </choice>
+   </define>
+   <define name="model.pPart.edit_sequence">
+      <ref name="model.pPart.editorial_sequence"/>
+      <ref name="model.pPart.transcriptional_sequence"/>
+   </define>
+   <define name="model.pPart.edit_sequenceOptional">
+      <optional>
+         <ref name="model.pPart.editorial_sequenceOptional"/>
+      </optional>
+      <optional>
+         <ref name="model.pPart.transcriptional_sequenceOptional"/>
+      </optional>
+   </define>
+   <define name="model.pPart.edit_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="model.pPart.editorial_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="model.pPart.transcriptional_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.pPart.edit_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="model.pPart.editorial_sequenceRepeatable"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="model.pPart.transcriptional_sequenceRepeatable"/>
+      </oneOrMore>
+   </define>
    <define name="model.ptrLike">
       <choice>
          <ref name="ptr"/>
          <ref name="ref"/>
       </choice>
    </define>
+   <define name="model.ptrLike_alternation">
+      <choice>
+         <ref name="ptr"/>
+         <ref name="ref"/>
+      </choice>
+   </define>
+   <define name="model.ptrLike_sequence">
+      <ref name="ptr"/>
+      <ref name="ref"/>
+   </define>
+   <define name="model.ptrLike_sequenceOptional">
+      <optional>
+         <ref name="ptr"/>
+      </optional>
+      <optional>
+         <ref name="ref"/>
+      </optional>
+   </define>
+   <define name="model.ptrLike_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="ptr"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="ref"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.ptrLike_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="ptr"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="ref"/>
+      </oneOrMore>
+   </define>
    <define name="model.lPart">
       <notAllowed/>
    </define>
+   <define name="model.lPart_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.lPart_sequence">
+      <empty/>
+   </define>
+   <define name="model.lPart_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.lPart_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.lPart_sequenceRepeatable">
+      <notAllowed/>
+   </define>
    <define name="model.global.meta">
+      <notAllowed/>
+   </define>
+   <define name="model.global.meta_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.global.meta_sequence">
+      <empty/>
+   </define>
+   <define name="model.global.meta_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.global.meta_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.global.meta_sequenceRepeatable">
       <notAllowed/>
    </define>
    <define name="model.milestoneLike">
@@ -1347,6 +1559,40 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
          <ref name="pb"/>
          <ref name="lb"/>
       </choice>
+   </define>
+   <define name="model.milestoneLike_alternation">
+      <choice>
+         <ref name="pb"/>
+         <ref name="lb"/>
+      </choice>
+   </define>
+   <define name="model.milestoneLike_sequence">
+      <ref name="pb"/>
+      <ref name="lb"/>
+   </define>
+   <define name="model.milestoneLike_sequenceOptional">
+      <optional>
+         <ref name="pb"/>
+      </optional>
+      <optional>
+         <ref name="lb"/>
+      </optional>
+   </define>
+   <define name="model.milestoneLike_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="pb"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="lb"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.milestoneLike_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="pb"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="lb"/>
+      </oneOrMore>
    </define>
    <define name="model.gLike">
       <choice>
@@ -1356,13 +1602,73 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
    <define name="model.oddDecl">
       <notAllowed/>
    </define>
+   <define name="model.oddDecl_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.oddDecl_sequence">
+      <empty/>
+   </define>
+   <define name="model.oddDecl_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.oddDecl_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.oddDecl_sequenceRepeatable">
+      <notAllowed/>
+   </define>
    <define name="model.phrase.xml">
+      <notAllowed/>
+   </define>
+   <define name="model.phrase.xml_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.phrase.xml_sequence">
+      <empty/>
+   </define>
+   <define name="model.phrase.xml_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.phrase.xml_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.phrase.xml_sequenceRepeatable">
       <notAllowed/>
    </define>
    <define name="model.specDescLike">
       <notAllowed/>
    </define>
+   <define name="model.specDescLike_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.specDescLike_sequence">
+      <empty/>
+   </define>
+   <define name="model.specDescLike_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.specDescLike_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.specDescLike_sequenceRepeatable">
+      <notAllowed/>
+   </define>
    <define name="model.biblLike">
+      <notAllowed/>
+   </define>
+   <define name="model.biblLike_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.biblLike_sequence">
+      <empty/>
+   </define>
+   <define name="model.biblLike_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.biblLike_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.biblLike_sequenceRepeatable">
       <notAllowed/>
    </define>
    <define name="model.labelLike">
@@ -1370,7 +1676,45 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
          <ref name="desc"/>
       </choice>
    </define>
+   <define name="model.labelLike_alternation">
+      <choice>
+         <ref name="desc"/>
+      </choice>
+   </define>
+   <define name="model.labelLike_sequence">
+      <ref name="desc"/>
+   </define>
+   <define name="model.labelLike_sequenceOptional">
+      <optional>
+         <ref name="desc"/>
+      </optional>
+   </define>
+   <define name="model.labelLike_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="desc"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.labelLike_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="desc"/>
+      </oneOrMore>
+   </define>
    <define name="model.listLike">
+      <notAllowed/>
+   </define>
+   <define name="model.listLike_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.listLike_sequence">
+      <empty/>
+   </define>
+   <define name="model.listLike_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.listLike_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.listLike_sequenceRepeatable">
       <notAllowed/>
    </define>
    <define name="model.noteLike">
@@ -1378,6 +1722,40 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
          <ref name="note"/>
          <ref name="footNote"/>
       </choice>
+   </define>
+   <define name="model.noteLike_alternation">
+      <choice>
+         <ref name="note"/>
+         <ref name="footNote"/>
+      </choice>
+   </define>
+   <define name="model.noteLike_sequence">
+      <ref name="note"/>
+      <ref name="footNote"/>
+   </define>
+   <define name="model.noteLike_sequenceOptional">
+      <optional>
+         <ref name="note"/>
+      </optional>
+      <optional>
+         <ref name="footNote"/>
+      </optional>
+   </define>
+   <define name="model.noteLike_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="note"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="footNote"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.noteLike_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="note"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="footNote"/>
+      </oneOrMore>
    </define>
    <define name="model.lLike">
       <notAllowed/>
@@ -1391,12 +1769,72 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
    <define name="model.stageLike">
       <notAllowed/>
    </define>
+   <define name="model.stageLike_alternation">
+      <notAllowed/>
+   </define>
+   <define name="model.stageLike_sequence">
+      <empty/>
+   </define>
+   <define name="model.stageLike_sequenceOptional">
+      <empty/>
+   </define>
+   <define name="model.stageLike_sequenceOptionalRepeatable">
+      <empty/>
+   </define>
+   <define name="model.stageLike_sequenceRepeatable">
+      <notAllowed/>
+   </define>
    <define name="model.global.edit">
       <choice>
          <ref name="gap"/>
          <ref name="addSpan"/>
          <ref name="space"/>
       </choice>
+   </define>
+   <define name="model.global.edit_alternation">
+      <choice>
+         <ref name="gap"/>
+         <ref name="addSpan"/>
+         <ref name="space"/>
+      </choice>
+   </define>
+   <define name="model.global.edit_sequence">
+      <ref name="gap"/>
+      <ref name="addSpan"/>
+      <ref name="space"/>
+   </define>
+   <define name="model.global.edit_sequenceOptional">
+      <optional>
+         <ref name="gap"/>
+      </optional>
+      <optional>
+         <ref name="addSpan"/>
+      </optional>
+      <optional>
+         <ref name="space"/>
+      </optional>
+   </define>
+   <define name="model.global.edit_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="gap"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="addSpan"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="space"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.global.edit_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="gap"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="addSpan"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="space"/>
+      </oneOrMore>
    </define>
    <define name="model.divPart">
       <choice>
@@ -1549,6 +1987,29 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
          <ref name="model.quoteLike"/>
       </choice>
    </define>
+   <define name="model.attributable_alternation">
+      <choice>
+         <ref name="model.quoteLike_alternation"/>
+      </choice>
+   </define>
+   <define name="model.attributable_sequence">
+      <ref name="model.quoteLike_sequence"/>
+   </define>
+   <define name="model.attributable_sequenceOptional">
+      <optional>
+         <ref name="model.quoteLike_sequenceOptional"/>
+      </optional>
+   </define>
+   <define name="model.attributable_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="model.quoteLike_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.attributable_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="model.quoteLike_sequenceRepeatable"/>
+      </oneOrMore>
+   </define>
    <define name="model.addressLike">
       <notAllowed/>
    </define>
@@ -1673,6 +2134,62 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
          <ref name="model.nameLike"/>
       </choice>
    </define>
+   <define name="model.pPart.data_alternation">
+      <choice>
+         <ref name="model.dateLike_alternation"/>
+         <ref name="model.measureLike_alternation"/>
+         <ref name="model.addressLike_alternation"/>
+         <ref name="model.nameLike_alternation"/>
+      </choice>
+   </define>
+   <define name="model.pPart.data_sequence">
+      <ref name="model.dateLike_sequence"/>
+      <ref name="model.measureLike_sequence"/>
+      <ref name="model.addressLike_sequence"/>
+      <ref name="model.nameLike_sequence"/>
+   </define>
+   <define name="model.pPart.data_sequenceOptional">
+      <optional>
+         <ref name="model.dateLike_sequenceOptional"/>
+      </optional>
+      <optional>
+         <ref name="model.measureLike_sequenceOptional"/>
+      </optional>
+      <optional>
+         <ref name="model.addressLike_sequenceOptional"/>
+      </optional>
+      <optional>
+         <ref name="model.nameLike_sequenceOptional"/>
+      </optional>
+   </define>
+   <define name="model.pPart.data_sequenceOptionalRepeatable">
+      <zeroOrMore>
+         <ref name="model.dateLike_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="model.measureLike_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="model.addressLike_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="model.nameLike_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+   </define>
+   <define name="model.pPart.data_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="model.dateLike_sequenceRepeatable"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="model.measureLike_sequenceRepeatable"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="model.addressLike_sequenceRepeatable"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="model.nameLike_sequenceRepeatable"/>
+      </oneOrMore>
+   </define>
    <define name="model.inter">
       <choice>
          <ref name="model.egLike"/>
@@ -1696,6 +2213,15 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
          <ref name="model.phrase.xml"/>
          <ref name="model.specDescLike"/>
          <ref name="model.pPart.data"/>
+      </choice>
+   </define>
+   <define name="model.paraPart">
+      <choice>
+         <ref name="model.gLike"/>
+         <ref name="model.lLike"/>
+         <ref name="model.global"/>
+         <ref name="model.inter"/>
+         <ref name="model.phrase"/>
       </choice>
    </define>
    <define name="model.limitedPhrase">
@@ -1812,7 +2338,7 @@ The element indicated by @spanTo (<sch:value-of select="@spanTo"/>) must follow 
                <sch:report xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                            xmlns="http://www.tei-c.org/ns/1.0"
                            xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                           test="    (ancestor::tei:l or ancestor::tei:lg)                          and not( ancestor::tei:floatingText                                 |parent::tei:figure                                 |parent::tei:note                                )">
+                           test="(ancestor::tei:l or ancestor::tei:lg) and not( ancestor::tei:floatingText |parent::tei:figure |parent::tei:note )">
         Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab, unless p is a child of figure or note, or is a descendant of floatingText.
       </sch:report>
             </rule>
@@ -2418,6 +2944,7 @@ Measures]</a:documentation>
          <ref name="macro.phraseSeq"/>
          <ref name="att.typed.attribute.subtype"/>
          <ref name="att.measurement.attribute.unitRef"/>
+         <ref name="att.ranging.attributes"/>
          <optional>
             <attribute name="type">
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.</a:documentation>
@@ -3539,27 +4066,15 @@ Elements 7.2.5. Speech Contents]</a:documentation>
    <define name="ab">
       <element name="ab">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(anonymous block) contains any arbitrary component-level unit of text, acting as an anonymous container for phrase or inter level elements analogous to, but without the semantic baggage of, a paragraph. [16.3. Blocks, Segments, and Anchors]</a:documentation>
-         <ref name="macro.paraContent"/>
+         <ref name="macro.abContent"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaDiaries-ab-abstractModel-structure-ab-in-ab-or-p-constraint-report-37">
+                  id="wegaDiaries-ab-abstractModel-structure-ab-in-l-or-lg-constraint-report-37">
             <rule context="tei:ab">
                <sch:report xmlns:xi="http://www.w3.org/2001/XInclude"
                            xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                            xmlns="http://www.tei-c.org/ns/1.0"
                            xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                           test="    (ancestor::tei:p or ancestor::tei:ab)                          and not( ancestor::tei:floatingText                                  |parent::tei:exemplum                                 |parent::tei:item                                 |parent::tei:note                                 |parent::tei:q                                 |parent::tei:quote                                 |parent::tei:remarks                                 |parent::tei:said                                 |parent::tei:sp                                 |parent::tei:stage                                 |parent::tei:cell                                 |parent::tei:figure                                )">
-        Abstract model violation: ab may not occur inside paragraphs or other ab elements.
-      </sch:report>
-            </rule>
-         </pattern>
-         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaDiaries-ab-abstractModel-structure-ab-in-l-or-lg-constraint-report-38">
-            <rule context="tei:ab">
-               <sch:report xmlns:xi="http://www.w3.org/2001/XInclude"
-                           xmlns:sch="http://purl.oclc.org/dsdl/schematron"
-                           xmlns="http://www.tei-c.org/ns/1.0"
-                           xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                           test="    (ancestor::tei:l or ancestor::tei:lg)                         and not( ancestor::tei:floatingText                                 |parent::tei:figure                                 |parent::tei:note                                )">
+                           test="(ancestor::tei:l or ancestor::tei:lg) and not( ancestor::tei:floatingText |parent::tei:figure |parent::tei:note )">
         Abstract model violation: Lines may not contain higher-level divisions such as p or ab, unless ab is a child of figure or note, or is a descendant of floatingText.
       </sch:report>
             </rule>
@@ -3608,7 +4123,7 @@ Elements 7.2.5. Speech Contents]</a:documentation>
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(arbitrary segment) represents any segmentation of text below the ‘chunk’ level. [16.3. Blocks, Segments, and Anchors 6.2. Components of the Verse Line 7.2.5. Speech Contents]</a:documentation>
          <ref name="macro.paraContent"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaDiaries-seg-activeOrPassivePerformance-constraint-report-39">
+                  id="wegaDiaries-seg-activeOrPassivePerformance-constraint-report-38">
             <rule context="tei:seg">
                <sch:report xmlns:mei="http://www.music-encoding.org/ns/mei"
                            xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
@@ -3621,7 +4136,7 @@ Elements 7.2.5. Speech Contents]</a:documentation>
             </rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaDiaries-seg-AddresseeOrSenderCorrespondence-constraint-report-40">
+                  id="wegaDiaries-seg-AddresseeOrSenderCorrespondence-constraint-report-39">
             <rule context="tei:seg">
                <sch:report xmlns:mei="http://www.music-encoding.org/ns/mei"
                            xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
