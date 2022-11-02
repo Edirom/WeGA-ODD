@@ -16,6 +16,7 @@
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-tei-atts"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-atts"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-core"/>
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-namesdates"/>
     
     <elementSpec ident="place" mode="change" module="namesdates">
         <desc versionDate="2013-11-11" xml:lang="en">contains data about a geographic location.</desc>
@@ -32,7 +33,7 @@
             <memberOf key="att.wega.rdfa" mode="add"/>
         </classes>
         <content>
-            <alternate>
+            <rng:choice>
                 <rng:element name="ref">
                     <rng:attribute name="type">
                         <rng:choice>
@@ -45,20 +46,62 @@
                     </rng:attribute>
                     <rng:empty/>
                 </rng:element>
-                <sequence>
-                    <elementRef key="placeName" minOccurs="1" maxOccurs="unbounded"/>
-                    <elementRef key="state" minOccurs="0" maxOccurs="unbounded"/>
-                    <elementRef key="location" minOccurs="0" maxOccurs="1"/>
-                    <elementRef key="note" minOccurs="0" maxOccurs="1"/>
-                    <elementRef key="idno" minOccurs="0" maxOccurs="unbounded"/>
-                </sequence>
-            </alternate>
+                <rng:group>
+                    <rng:element name="placeName">
+                        <rng:attribute name="type">
+                            <rng:value>reg</rng:value>
+                        </rng:attribute>
+                        <rng:optional>
+                            <rng:attribute name="xml:lang">
+                                <dataRef key="teidata.language"/>
+                            </rng:attribute>
+                        </rng:optional>
+                        <rng:text/>
+                    </rng:element>
+                    <rng:zeroOrMore>
+                        <rng:element name="placeName">
+                            <rng:attribute name="type">
+                                <rng:choice>
+                                    <rng:value>alt</rng:value>
+                                    <rng:value>modern</rng:value>
+                                </rng:choice>
+                            </rng:attribute>
+                            <rng:optional>
+                                <rng:attribute name="xml:lang">
+                                    <dataRef key="teidata.language"/>
+                                </rng:attribute>
+                            </rng:optional>
+                            <rng:text/>
+                        </rng:element>
+                    </rng:zeroOrMore>
+                    <rng:zeroOrMore>
+                        <rng:ref name="state"/>
+                    </rng:zeroOrMore>
+                    <rng:optional>
+                        <rng:ref name="location"/>
+                    </rng:optional>
+                    <rng:optional>
+                        <rng:ref name="note"/>
+                    </rng:optional>
+                    <rng:zeroOrMore>
+                        <rng:ref name="idno"/>
+                    </rng:zeroOrMore>
+                </rng:group>
+            </rng:choice>
         </content>
         <constraintSpec scheme="schematron" ident="placeName_reg">
             <desc versionDate="2013-11-11" xml:lang="en"></desc>
             <desc  versionDate="2013-11-11" xml:lang="de"></desc>
             <constraint>
                 <sch:assert test="(tei:placeName[1][@type='reg'] and count(./tei:placeName[@type='reg']) = 1) or tei:ref">tei:place muss (genau) ein placeName@type="reg" enthalten</sch:assert>
+            </constraint>
+        </constraintSpec>
+        <constraintSpec scheme="schematron" ident="count-modern-names">
+            <constraint>
+                <sch:rule context="tei:placeName[@type='modern']">
+                    <sch:let name="lang" value="string(@xml:lang)"/> <!-- use string values so comparing non-existing attributes will return true -->
+                    <sch:report test="following-sibling::tei:placeName[@type='modern'][string(@xml:lang)=$lang]">Only one modern name per xml:lang allowed.</sch:report>
+                </sch:rule>
             </constraint>
         </constraintSpec>
         <attList>
@@ -85,57 +128,7 @@
         </attList>
     </elementSpec>
     
-    <elementSpec ident="placeName" mode="change" module="namesdates">
-        <desc versionDate="2013-11-11" xml:lang="en">contains an absolute or relative place name.</desc>
-        <desc versionDate="2013-11-11" xml:lang="de">enthält einen absoluten oder relativen Ortsnamen.</desc>
-        <classes mode="change">
-            <memberOf key="att.global" mode="delete"/>
-            <memberOf key="att.naming" mode="delete"/>
-            <memberOf key="att.canonical" mode="delete"/>
-            <memberOf key="att.typed" mode="delete"/>
-            <memberOf key="att.datable" mode="delete"/>
-            <memberOf key="att.editLike" mode="delete"/>
-            <memberOf key="att.dimensions" mode="delete"/>
-            <memberOf key="att.ranging" mode="delete"/>
-            <memberOf key="att.responsibility" mode="delete"/>
-            <memberOf key="att.source" mode="delete"/>
-            <memberOf key="att.personal" mode="delete"/>
-        </classes>
-        <content>
-            <textNode/>
-        </content>
-        <constraintSpec scheme="schematron" ident="count-modern-names">
-            <constraint>
-                <sch:rule context="tei:placeName[@type='modern']">
-                    <sch:let name="lang" value="string(@xml:lang)"/> <!-- use string values so comparing non-existing attributes will return true -->
-                    <sch:report test="following-sibling::tei:placeName[@type='modern'][string(@xml:lang)=$lang]">Only one modern name per xml:lang allowed.</sch:report>
-                </sch:rule>
-            </constraint>
-        </constraintSpec>
-        <attList>
-            <attDef ident="type" mode="add" usage="req">
-                <desc versionDate="2014-01-08" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
-                <desc versionDate="2014-01-08" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</desc>
-                <valList type="closed">
-                    <valItem ident="reg">
-                        <gloss versionDate="2013-11-11" xml:lang="en">regular</gloss>
-                        <gloss versionDate="2013-11-11" xml:lang="de">regulär</gloss>
-                        <desc versionDate="2016-03-07" xml:lang="en">the canonical name of the WeGA, i.e. the historic version known by Weber.</desc>
-                        <desc versionDate="2016-03-07" xml:lang="de">die Ansetzungsform der WeGA basierend auf der historischen Bezeichnung Webers.</desc>
-                    </valItem>
-                    <valItem ident="alt">
-                        <gloss versionDate="2014-01-08" xml:lang="en">alternative</gloss>
-                        <gloss versionDate="2014-01-08" xml:lang="de">Alternative</gloss>
-                    </valItem>
-                    <valItem ident="modern">
-                        <desc versionDate="2016-03-07" xml:lang="en">the current, official version of the name.</desc>
-                        <desc versionDate="2016-03-07" xml:lang="de">die atuelle, verwaltungssprachliche Namensform.</desc>
-                    </valItem>
-                </valList>
-            </attDef>
-            <attRef class="att.global" name="xml:lang"/>
-        </attList>
-    </elementSpec>
+    
     
     <elementSpec ident="location" mode="change" module="namesdates">
         <desc versionDate="2013-11-11" xml:lang="en">defines the location of a place as a set of geographical coordinates, in terms of other named geo-political entities, or as an address.</desc>
