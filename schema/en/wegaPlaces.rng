@@ -5,7 +5,7 @@
          xmlns="http://relaxng.org/ns/structure/1.0"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2022-10-25T19:32:42Z. .
+Schema generated from ODD source 2022-11-02T12:18:30Z. .
 TEI Edition: Version 4.5.0. Last updated on
         25th October 2022, revision 3e98e619e
 TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
@@ -14,6 +14,23 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
    <sch:ns xmlns:sch="http://purl.oclc.org/dsdl/schematron"
            prefix="tei"
            uri="http://www.tei-c.org/ns/1.0"/>
+   <define name="macro.paraContent">
+      <zeroOrMore>
+         <choice>
+            <text/>
+            <ref name="model.paraPart"/>
+         </choice>
+      </zeroOrMore>
+   </define>
+   <define name="macro.limitedContent">
+      <zeroOrMore>
+         <choice>
+            <text/>
+            <ref name="model.limitedPhrase"/>
+            <ref name="model.inter"/>
+         </choice>
+      </zeroOrMore>
+   </define>
    <define name="macro.phraseSeq">
       <zeroOrMore>
          <choice>
@@ -21,6 +38,18 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
             <ref name="model.gLike"/>
             <ref name="model.attributable"/>
             <ref name="model.phrase"/>
+            <ref name="model.global"/>
+         </choice>
+      </zeroOrMore>
+   </define>
+   <define name="macro.specialPara">
+      <zeroOrMore>
+         <choice>
+            <text/>
+            <ref name="model.gLike"/>
+            <ref name="model.phrase"/>
+            <ref name="model.inter"/>
+            <ref name="model.divPart"/>
             <ref name="model.global"/>
          </choice>
       </zeroOrMore>
@@ -45,22 +74,18 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
          <param name="pattern">BachDigitalPerson_agent_[0-9]{8}</param>
       </data>
    </define>
-   <define name="att.canonical.attributes">
-      <ref name="att.canonical.attribute.key"/>
-      <ref name="att.canonical.attribute.ref"/>
+   <define name="thematicCom.target">
+      <data type="string">
+         <param name="pattern">wega:A09\d{4}</param>
+      </data>
    </define>
-   <define name="att.canonical.attribute.key">
-      <optional>
-         <attribute name="key">
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</a:documentation>
-            <data type="string"/>
-         </attribute>
-      </optional>
+   <define name="att.ascribed.attributes">
+      <ref name="att.ascribed.attribute.who"/>
    </define>
-   <define name="att.canonical.attribute.ref">
+   <define name="att.ascribed.attribute.who">
       <optional>
-         <attribute name="ref">
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(reference) provides an explicit means of locating a full definition or identity for the entity being named by means of one or more URIs.</a:documentation>
+         <attribute name="who">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the person, or group of people, to whom the element content is ascribed.</a:documentation>
             <list>
                <oneOrMore>
                   <data type="anyURI">
@@ -71,6 +96,202 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
          </attribute>
       </optional>
    </define>
+   <define name="att.ascribed.directed.attributes">
+      <ref name="att.ascribed.attributes"/>
+      <ref name="att.ascribed.directed.attribute.toWhom"/>
+   </define>
+   <define name="att.ascribed.directed.attribute.toWhom">
+      <optional>
+         <attribute name="toWhom">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the person, or group of people, to whom a speech act or action is directed.</a:documentation>
+            <list>
+               <oneOrMore>
+                  <data type="anyURI">
+                     <param name="pattern">\S+</param>
+                  </data>
+               </oneOrMore>
+            </list>
+         </attribute>
+      </optional>
+   </define>
+   <define name="att.ranging.attributes">
+      <ref name="att.ranging.attribute.atLeast"/>
+      <ref name="att.ranging.attribute.atMost"/>
+      <ref name="att.ranging.attribute.min"/>
+      <ref name="att.ranging.attribute.max"/>
+      <ref name="att.ranging.attribute.confidence"/>
+   </define>
+   <define name="att.ranging.attribute.atLeast">
+      <optional>
+         <attribute name="atLeast">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">gives a minimum estimated value for the approximate measurement.</a:documentation>
+            <choice>
+               <data type="double"/>
+               <data type="token">
+                  <param name="pattern">(\-?[\d]+/\-?[\d]+)</param>
+               </data>
+               <data type="decimal"/>
+            </choice>
+         </attribute>
+      </optional>
+   </define>
+   <define name="att.ranging.attribute.atMost">
+      <optional>
+         <attribute name="atMost">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">gives a maximum estimated value for the approximate measurement.</a:documentation>
+            <choice>
+               <data type="double"/>
+               <data type="token">
+                  <param name="pattern">(\-?[\d]+/\-?[\d]+)</param>
+               </data>
+               <data type="decimal"/>
+            </choice>
+         </attribute>
+      </optional>
+   </define>
+   <define name="att.ranging.attribute.min">
+      <optional>
+         <attribute name="min">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">where the measurement summarizes more than one observation or a range, supplies the minimum value observed.</a:documentation>
+            <choice>
+               <data type="double"/>
+               <data type="token">
+                  <param name="pattern">(\-?[\d]+/\-?[\d]+)</param>
+               </data>
+               <data type="decimal"/>
+            </choice>
+         </attribute>
+      </optional>
+   </define>
+   <define name="att.ranging.attribute.max">
+      <optional>
+         <attribute name="max">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">where the measurement summarizes more than one observation or a range, supplies the maximum value observed.</a:documentation>
+            <choice>
+               <data type="double"/>
+               <data type="token">
+                  <param name="pattern">(\-?[\d]+/\-?[\d]+)</param>
+               </data>
+               <data type="decimal"/>
+            </choice>
+         </attribute>
+      </optional>
+   </define>
+   <define name="att.ranging.attribute.confidence">
+      <optional>
+         <attribute name="confidence">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the degree of statistical confidence (between zero and one) that a value falls within the range specified by <code xmlns="http://www.w3.org/1999/xhtml">@min</code> and <code xmlns="http://www.w3.org/1999/xhtml">@max</code>, or the proportion of observed values that fall within that range.</a:documentation>
+            <data type="double"/>
+         </attribute>
+      </optional>
+   </define>
+   <define name="att.dimensions.attributes">
+      <ref name="att.ranging.attributes"/>
+      <ref name="att.dimensions.attribute.unit"/>
+      <ref name="att.dimensions.attribute.quantity"/>
+      <ref name="att.dimensions.attribute.extent"/>
+      <ref name="att.dimensions.attribute.precision"/>
+      <ref name="att.dimensions.attribute.scope"/>
+   </define>
+   <define name="att.dimensions.attribute.unit">
+      <optional>
+         <attribute name="unit">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">names the unit used for the measurement
+Suggested values include: 1] cm (centimetres); 2] mm (millimetres); 3] in (inches); 4] line; 5] char (characters)</a:documentation>
+            <choice>
+               <value>cm</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(centimetres) </a:documentation>
+               <value>mm</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(millimetres) </a:documentation>
+               <value>in</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(inches) </a:documentation>
+               <value>line</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">lines of text</a:documentation>
+               <value>char</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(characters) characters of text</a:documentation>
+               <data type="token">
+                  <param name="pattern">[^\p{C}\p{Z}]+</param>
+               </data>
+            </choice>
+         </attribute>
+      </optional>
+   </define>
+   <define name="att.dimensions.attribute.quantity">
+      <optional>
+         <attribute name="quantity">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the length in the units specified</a:documentation>
+            <choice>
+               <data type="double"/>
+               <data type="token">
+                  <param name="pattern">(\-?[\d]+/\-?[\d]+)</param>
+               </data>
+               <data type="decimal"/>
+            </choice>
+         </attribute>
+      </optional>
+   </define>
+   <define name="att.dimensions.attribute.extent">
+      <optional>
+         <attribute name="extent">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the size of the object concerned using a project-specific vocabulary combining quantity and units in a single string of words.</a:documentation>
+            <data type="string"/>
+         </attribute>
+      </optional>
+   </define>
+   <define name="att.dimensions.attribute.precision">
+      <optional>
+         <attribute name="precision">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the precision of the values specified by the other attributes.</a:documentation>
+            <choice>
+               <value>high</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+               <value>medium</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+               <value>low</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+               <value>unknown</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            </choice>
+         </attribute>
+      </optional>
+   </define>
+   <define name="att.dimensions.attribute.scope">
+      <optional>
+         <attribute name="scope">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">where the measurement summarizes more than one observation, specifies the applicability of this measurement.
+Sample values include: 1] all; 2] most; 3] range</a:documentation>
+            <data type="token">
+               <param name="pattern">[^\p{C}\p{Z}]+</param>
+            </data>
+         </attribute>
+      </optional>
+   </define>
+   <define name="att.written.attributes">
+      <ref name="att.written.attribute.hand"/>
+   </define>
+   <define name="att.written.attribute.hand">
+      <optional>
+         <attribute name="hand">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the hand of the agent which made the intervention.</a:documentation>
+            <data type="anyURI">
+               <param name="pattern">\S+</param>
+            </data>
+         </attribute>
+      </optional>
+   </define>
+   <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+            id="wegaPlaces-att.written-hand-hand-reference-constraint-rule-1">
+      <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                xmlns:s="http://www.ascc.net/xml/schematron"
+                xmlns:xi="http://www.w3.org/2001/XInclude"
+                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                xmlns="http://www.tei-c.org/ns/1.0"
+                xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                context="tei:*[@hand]">
+                                <sch:assert test="id(substring(@hand,2)) or starts-with(@hand, 'wega:')">There must be an element with the xml:id = "<sch:value-of select="substring(@hand,2)"/>" which is the target of this @hand.</sch:assert>
+                            </sch:rule>
+   </pattern>
    <define name="att.datable.w3c.attributes">
       <ref name="att.datable.w3c.attribute.when"/>
       <ref name="att.datable.w3c.attribute.notBefore"/>
@@ -82,6 +303,10 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       <optional>
          <attribute name="when">
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">supplies the value of the date or time in a standard form, e.g. yyyy-mm-dd.</a:documentation>
+            <choice>
+               <data type="date"/>
+               <data type="gYear"/>
+            </choice>
          </attribute>
       </optional>
    </define>
@@ -89,6 +314,10 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       <optional>
          <attribute name="notBefore">
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the earliest possible date for the event in standard form, e.g. yyyy-mm-dd.</a:documentation>
+            <choice>
+               <data type="date"/>
+               <data type="gYear"/>
+            </choice>
          </attribute>
       </optional>
    </define>
@@ -96,6 +325,10 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       <optional>
          <attribute name="notAfter">
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the latest possible date for the event in standard form, e.g. yyyy-mm-dd.</a:documentation>
+            <choice>
+               <data type="date"/>
+               <data type="gYear"/>
+            </choice>
          </attribute>
       </optional>
    </define>
@@ -103,6 +336,10 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       <optional>
          <attribute name="from">
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the starting point of the period in standard form, e.g. yyyy-mm-dd.</a:documentation>
+            <choice>
+               <data type="date"/>
+               <data type="gYear"/>
+            </choice>
          </attribute>
       </optional>
    </define>
@@ -110,11 +347,15 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       <optional>
          <attribute name="to">
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">indicates the ending point of the period in standard form, e.g. yyyy-mm-dd.</a:documentation>
+            <choice>
+               <data type="date"/>
+               <data type="gYear"/>
+            </choice>
          </attribute>
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaPlaces-att.datable.w3c-att-datable-w3c-when-constraint-rule-1">
+            id="wegaPlaces-att.datable.w3c-att-datable-w3c-when-constraint-rule-2">
       <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                 xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                 xmlns="http://www.tei-c.org/ns/1.0"
@@ -124,7 +365,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaPlaces-att.datable.w3c-att-datable-w3c-from-constraint-rule-2">
+            id="wegaPlaces-att.datable.w3c-att-datable-w3c-from-constraint-rule-3">
       <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                 xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                 xmlns="http://www.tei-c.org/ns/1.0"
@@ -134,7 +375,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaPlaces-att.datable.w3c-att-datable-w3c-to-constraint-rule-3">
+            id="wegaPlaces-att.datable.w3c-att-datable-w3c-to-constraint-rule-4">
       <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                 xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                 xmlns="http://www.tei-c.org/ns/1.0"
@@ -162,7 +403,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaPlaces-att.datable-calendar-calendar-constraint-rule-5">
+            id="wegaPlaces-att.datable-calendar-calendar-constraint-rule-6">
       <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                 xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                 xmlns="http://www.tei-c.org/ns/1.0"
@@ -174,7 +415,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
           </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaPlaces-att.datable-calendar-constraint-rule-4">
+            id="wegaPlaces-att.datable-calendar-constraint-rule-5">
       <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                 xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                 xmlns="http://www.tei-c.org/ns/1.0"
@@ -185,6 +426,30 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
             but this <sch:name/> element has no textual content.</sch:assert>
           </sch:rule>
    </pattern>
+   <define name="att.fragmentable.attributes">
+      <ref name="att.fragmentable.attribute.part"/>
+   </define>
+   <define name="att.fragmentable.attribute.part">
+      <optional>
+         <attribute xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                    name="part"
+                    a:defaultValue="N">
+            <a:documentation>specifies whether or not its parent element is fragmented in some way, typically by some other overlapping structure: for example a speech which is divided between two or more verse stanzas, a paragraph which is split across a page division, a verse line which is divided between two speakers.</a:documentation>
+            <choice>
+               <value>Y</value>
+               <a:documentation>(yes) the element is fragmented in some (unspecified) respect</a:documentation>
+               <value>N</value>
+               <a:documentation>(no) the element is not fragmented, or no claim is made as to its completeness</a:documentation>
+               <value>I</value>
+               <a:documentation>(initial) this is the initial part of a fragmented element</a:documentation>
+               <value>M</value>
+               <a:documentation>(medial) this is a medial part of a fragmented element</a:documentation>
+               <value>F</value>
+               <a:documentation>(final) this is the final part of a fragmented element</a:documentation>
+            </choice>
+         </attribute>
+      </optional>
+   </define>
    <define name="att.global.responsibility.attributes">
       <ref name="att.global.responsibility.attribute.cert"/>
       <ref name="att.global.responsibility.attribute.resp"/>
@@ -258,7 +523,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaPlaces-att.global.source-source-only_1_ODD_source-constraint-rule-6">
+            id="wegaPlaces-att.global.source-source-only_1_ODD_source-constraint-rule-7">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
@@ -305,23 +570,37 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(language) indicates the language of the element content using a tag generated according to <a xmlns="http://www.w3.org/1999/xhtml"
                   href="http://www.rfc-editor.org/rfc/bcp/bcp47.txt">BCP 47</a>.</a:documentation>
             <choice>
-               <data type="language"/>
-               <choice>
-                  <value/>
-                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
-               </choice>
+               <value>en</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">English</a:documentation>
+               <value>de</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">German</a:documentation>
+               <value>fr</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">French</a:documentation>
+               <value>it</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Italian</a:documentation>
+               <value>da</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Danish</a:documentation>
+               <value>la</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Latin</a:documentation>
+               <value>pl</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Polish</a:documentation>
+               <value>cs</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Czech</a:documentation>
+               <value>hu</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Hungarian</a:documentation>
+               <value>uk</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Ukrainian</a:documentation>
             </choice>
          </attribute>
       </optional>
    </define>
-   <define name="att.naming.attributes">
-      <ref name="att.canonical.attributes"/>
-      <ref name="att.naming.attribute.role"/>
+   <define name="att.internetMedia.attributes">
+      <ref name="att.internetMedia.attribute.mimeType"/>
    </define>
-   <define name="att.naming.attribute.role">
+   <define name="att.internetMedia.attribute.mimeType">
       <optional>
-         <attribute name="role">
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">may be used to specify further information about the entity referenced by this name in the form of a set of whitespace-separated values, for example the occupation of a person, or the status of a place.</a:documentation>
+         <attribute name="mimeType">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(MIME media type) specifies the applicable multimedia internet mail extension (MIME) media type</a:documentation>
             <list>
                <oneOrMore>
                   <data type="token">
@@ -332,14 +611,13 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
          </attribute>
       </optional>
    </define>
-   <define name="att.typed.attributes">
-      <ref name="att.typed.attribute.type"/>
-      <ref name="att.typed.attribute.subtype"/>
+   <define name="att.notated.attributes">
+      <ref name="att.notated.attribute.notation"/>
    </define>
-   <define name="att.typed.attribute.type">
+   <define name="att.notated.attribute.notation">
       <optional>
-         <attribute name="type">
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.</a:documentation>
+         <attribute name="notation">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">names the notation used for the content of the element.</a:documentation>
             <data type="token">
                <param name="pattern">[^\p{C}\p{Z}]+</param>
             </data>
@@ -357,7 +635,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaPlaces-att.typed-subtypeTyped-constraint-rule-7">
+            id="wegaPlaces-att.typed-subtypeTyped-constraint-rule-8">
       <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
                 xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                 xmlns="http://www.tei-c.org/ns/1.0"
@@ -366,23 +644,55 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
         <sch:assert test="@type">The <sch:name/> element should not be categorized in detail with @subtype unless also categorized in general with @type</sch:assert>
       </sch:rule>
    </pattern>
+   <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+            id="wegaPlaces-att.pointing-targetLang-constraint-rule-9">
+      <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
+                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                xmlns="http://www.tei-c.org/ns/1.0"
+                xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                context="tei:*[not(self::tei:schemaSpec)][@targetLang]">
+            <sch:assert test="@target">@targetLang should only be used on <sch:name/> if @target is specified.</sch:assert>
+          </sch:rule>
+   </pattern>
    <define name="model.nameLike.agent">
-      <notAllowed/>
+      <choice>
+         <ref name="persName"/>
+         <ref name="characterName"/>
+      </choice>
    </define>
    <define name="model.nameLike.agent_alternation">
-      <notAllowed/>
+      <choice>
+         <ref name="persName"/>
+         <ref name="characterName"/>
+      </choice>
    </define>
    <define name="model.nameLike.agent_sequence">
-      <empty/>
+      <ref name="persName"/>
+      <ref name="characterName"/>
    </define>
    <define name="model.nameLike.agent_sequenceOptional">
-      <empty/>
+      <optional>
+         <ref name="persName"/>
+      </optional>
+      <optional>
+         <ref name="characterName"/>
+      </optional>
    </define>
    <define name="model.nameLike.agent_sequenceOptionalRepeatable">
-      <empty/>
+      <zeroOrMore>
+         <ref name="persName"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="characterName"/>
+      </zeroOrMore>
    </define>
    <define name="model.nameLike.agent_sequenceRepeatable">
-      <notAllowed/>
+      <oneOrMore>
+         <ref name="persName"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="characterName"/>
+      </oneOrMore>
    </define>
    <define name="model.segLike">
       <notAllowed/>
@@ -403,22 +713,44 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       <notAllowed/>
    </define>
    <define name="model.hiLike">
-      <notAllowed/>
+      <choice>
+         <ref name="hi"/>
+         <ref name="q"/>
+      </choice>
    </define>
    <define name="model.hiLike_alternation">
-      <notAllowed/>
+      <choice>
+         <ref name="hi"/>
+         <ref name="q"/>
+      </choice>
    </define>
    <define name="model.hiLike_sequence">
-      <empty/>
+      <ref name="hi"/>
+      <ref name="q"/>
    </define>
    <define name="model.hiLike_sequenceOptional">
-      <empty/>
+      <optional>
+         <ref name="hi"/>
+      </optional>
+      <optional>
+         <ref name="q"/>
+      </optional>
    </define>
    <define name="model.hiLike_sequenceOptionalRepeatable">
-      <empty/>
+      <zeroOrMore>
+         <ref name="hi"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="q"/>
+      </zeroOrMore>
    </define>
    <define name="model.hiLike_sequenceRepeatable">
-      <notAllowed/>
+      <oneOrMore>
+         <ref name="hi"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="q"/>
+      </oneOrMore>
    </define>
    <define name="model.emphLike">
       <notAllowed/>
@@ -673,22 +1005,32 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       </oneOrMore>
    </define>
    <define name="model.ptrLike">
-      <notAllowed/>
+      <choice>
+         <ref name="ref"/>
+      </choice>
    </define>
    <define name="model.ptrLike_alternation">
-      <notAllowed/>
+      <choice>
+         <ref name="ref"/>
+      </choice>
    </define>
    <define name="model.ptrLike_sequence">
-      <empty/>
+      <ref name="ref"/>
    </define>
    <define name="model.ptrLike_sequenceOptional">
-      <empty/>
+      <optional>
+         <ref name="ref"/>
+      </optional>
    </define>
    <define name="model.ptrLike_sequenceOptionalRepeatable">
-      <empty/>
+      <zeroOrMore>
+         <ref name="ref"/>
+      </zeroOrMore>
    </define>
    <define name="model.ptrLike_sequenceRepeatable">
-      <notAllowed/>
+      <oneOrMore>
+         <ref name="ref"/>
+      </oneOrMore>
    </define>
    <define name="model.lPart">
       <notAllowed/>
@@ -820,58 +1162,120 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       <notAllowed/>
    </define>
    <define name="model.labelLike">
-      <notAllowed/>
+      <choice>
+         <ref name="desc"/>
+         <ref name="label"/>
+      </choice>
    </define>
    <define name="model.labelLike_alternation">
-      <notAllowed/>
+      <choice>
+         <ref name="desc"/>
+         <ref name="label"/>
+      </choice>
    </define>
    <define name="model.labelLike_sequence">
-      <empty/>
+      <ref name="desc"/>
+      <ref name="label"/>
    </define>
    <define name="model.labelLike_sequenceOptional">
-      <empty/>
+      <optional>
+         <ref name="desc"/>
+      </optional>
+      <optional>
+         <ref name="label"/>
+      </optional>
    </define>
    <define name="model.labelLike_sequenceOptionalRepeatable">
-      <empty/>
+      <zeroOrMore>
+         <ref name="desc"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="label"/>
+      </zeroOrMore>
    </define>
    <define name="model.labelLike_sequenceRepeatable">
-      <notAllowed/>
+      <oneOrMore>
+         <ref name="desc"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="label"/>
+      </oneOrMore>
    </define>
    <define name="model.listLike">
-      <notAllowed/>
+      <choice>
+         <ref name="list"/>
+      </choice>
    </define>
    <define name="model.listLike_alternation">
-      <notAllowed/>
+      <choice>
+         <ref name="list"/>
+      </choice>
    </define>
    <define name="model.listLike_sequence">
-      <empty/>
+      <ref name="list"/>
    </define>
    <define name="model.listLike_sequenceOptional">
-      <empty/>
+      <optional>
+         <ref name="list"/>
+      </optional>
    </define>
    <define name="model.listLike_sequenceOptionalRepeatable">
-      <empty/>
+      <zeroOrMore>
+         <ref name="list"/>
+      </zeroOrMore>
    </define>
    <define name="model.listLike_sequenceRepeatable">
-      <notAllowed/>
+      <oneOrMore>
+         <ref name="list"/>
+      </oneOrMore>
    </define>
    <define name="model.noteLike">
-      <notAllowed/>
+      <choice>
+         <ref name="note"/>
+         <ref name="footNote"/>
+      </choice>
    </define>
    <define name="model.noteLike_alternation">
-      <notAllowed/>
+      <choice>
+         <ref name="note"/>
+         <ref name="footNote"/>
+      </choice>
    </define>
    <define name="model.noteLike_sequence">
-      <empty/>
+      <ref name="note"/>
+      <ref name="footNote"/>
    </define>
    <define name="model.noteLike_sequenceOptional">
-      <empty/>
+      <optional>
+         <ref name="note"/>
+      </optional>
+      <optional>
+         <ref name="footNote"/>
+      </optional>
    </define>
    <define name="model.noteLike_sequenceOptionalRepeatable">
-      <empty/>
+      <zeroOrMore>
+         <ref name="note"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="footNote"/>
+      </zeroOrMore>
    </define>
    <define name="model.noteLike_sequenceRepeatable">
+      <oneOrMore>
+         <ref name="note"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="footNote"/>
+      </oneOrMore>
+   </define>
+   <define name="model.lLike">
       <notAllowed/>
+   </define>
+   <define name="model.pLike">
+      <choice>
+         <ref name="p"/>
+      </choice>
    </define>
    <define name="model.stageLike">
       <notAllowed/>
@@ -909,21 +1313,30 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
    <define name="model.global.edit_sequenceRepeatable">
       <notAllowed/>
    </define>
+   <define name="model.divPart">
+      <choice>
+         <ref name="model.lLike"/>
+         <ref name="model.pLike"/>
+      </choice>
+   </define>
    <define name="model.placeNamePart">
       <choice>
          <ref name="placeName"/>
          <ref name="country"/>
+         <ref name="settlement"/>
       </choice>
    </define>
    <define name="model.placeNamePart_alternation">
       <choice>
          <ref name="placeName"/>
          <ref name="country"/>
+         <ref name="settlement"/>
       </choice>
    </define>
    <define name="model.placeNamePart_sequence">
       <ref name="placeName"/>
       <ref name="country"/>
+      <ref name="settlement"/>
    </define>
    <define name="model.placeNamePart_sequenceOptional">
       <optional>
@@ -931,6 +1344,9 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       </optional>
       <optional>
          <ref name="country"/>
+      </optional>
+      <optional>
+         <ref name="settlement"/>
       </optional>
    </define>
    <define name="model.placeNamePart_sequenceOptionalRepeatable">
@@ -940,6 +1356,9 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       <zeroOrMore>
          <ref name="country"/>
       </zeroOrMore>
+      <zeroOrMore>
+         <ref name="settlement"/>
+      </zeroOrMore>
    </define>
    <define name="model.placeNamePart_sequenceRepeatable">
       <oneOrMore>
@@ -948,22 +1367,28 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       <oneOrMore>
          <ref name="country"/>
       </oneOrMore>
+      <oneOrMore>
+         <ref name="settlement"/>
+      </oneOrMore>
    </define>
    <define name="model.placeStateLike">
       <choice>
          <ref name="model.placeNamePart"/>
          <ref name="location"/>
+         <ref name="state"/>
       </choice>
    </define>
    <define name="model.placeStateLike_alternation">
       <choice>
          <ref name="model.placeNamePart_alternation"/>
          <ref name="location"/>
+         <ref name="state"/>
       </choice>
    </define>
    <define name="model.placeStateLike_sequence">
       <ref name="model.placeNamePart_sequence"/>
       <ref name="location"/>
+      <ref name="state"/>
    </define>
    <define name="model.placeStateLike_sequenceOptional">
       <optional>
@@ -971,6 +1396,9 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       </optional>
       <optional>
          <ref name="location"/>
+      </optional>
+      <optional>
+         <ref name="state"/>
       </optional>
    </define>
    <define name="model.placeStateLike_sequenceOptionalRepeatable">
@@ -980,6 +1408,9 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       <zeroOrMore>
          <ref name="location"/>
       </zeroOrMore>
+      <zeroOrMore>
+         <ref name="state"/>
+      </zeroOrMore>
    </define>
    <define name="model.placeStateLike_sequenceRepeatable">
       <oneOrMore>
@@ -988,24 +1419,37 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
       <oneOrMore>
          <ref name="location"/>
       </oneOrMore>
+      <oneOrMore>
+         <ref name="state"/>
+      </oneOrMore>
    </define>
    <define name="model.quoteLike">
-      <notAllowed/>
+      <choice>
+         <ref name="quote"/>
+      </choice>
    </define>
    <define name="model.quoteLike_alternation">
-      <notAllowed/>
+      <choice>
+         <ref name="quote"/>
+      </choice>
    </define>
    <define name="model.quoteLike_sequence">
-      <empty/>
+      <ref name="quote"/>
    </define>
    <define name="model.quoteLike_sequenceOptional">
-      <empty/>
+      <optional>
+         <ref name="quote"/>
+      </optional>
    </define>
    <define name="model.quoteLike_sequenceOptionalRepeatable">
-      <empty/>
+      <zeroOrMore>
+         <ref name="quote"/>
+      </zeroOrMore>
    </define>
    <define name="model.quoteLike_sequenceRepeatable">
-      <notAllowed/>
+      <oneOrMore>
+         <ref name="quote"/>
+      </oneOrMore>
    </define>
    <define name="model.attributable">
       <choice>
@@ -1058,8 +1502,10 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
          <ref name="model.nameLike.agent"/>
          <ref name="model.offsetLike"/>
          <ref name="model.placeStateLike"/>
+         <ref name="rs"/>
          <ref name="idno"/>
          <ref name="model.persNamePart"/>
+         <ref name="workName"/>
       </choice>
    </define>
    <define name="model.nameLike_alternation">
@@ -1067,16 +1513,20 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
          <ref name="model.nameLike.agent_alternation"/>
          <ref name="model.offsetLike_alternation"/>
          <ref name="model.placeStateLike_alternation"/>
+         <ref name="rs"/>
          <ref name="idno"/>
          <ref name="model.persNamePart_alternation"/>
+         <ref name="workName"/>
       </choice>
    </define>
    <define name="model.nameLike_sequence">
       <ref name="model.nameLike.agent_sequence"/>
       <ref name="model.offsetLike_sequence"/>
       <ref name="model.placeStateLike_sequence"/>
+      <ref name="rs"/>
       <ref name="idno"/>
       <ref name="model.persNamePart_sequence"/>
+      <ref name="workName"/>
    </define>
    <define name="model.nameLike_sequenceOptional">
       <optional>
@@ -1089,10 +1539,16 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
          <ref name="model.placeStateLike_sequenceOptional"/>
       </optional>
       <optional>
+         <ref name="rs"/>
+      </optional>
+      <optional>
          <ref name="idno"/>
       </optional>
       <optional>
          <ref name="model.persNamePart_sequenceOptional"/>
+      </optional>
+      <optional>
+         <ref name="workName"/>
       </optional>
    </define>
    <define name="model.nameLike_sequenceOptionalRepeatable">
@@ -1106,10 +1562,16 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
          <ref name="model.placeStateLike_sequenceOptionalRepeatable"/>
       </zeroOrMore>
       <zeroOrMore>
+         <ref name="rs"/>
+      </zeroOrMore>
+      <zeroOrMore>
          <ref name="idno"/>
       </zeroOrMore>
       <zeroOrMore>
          <ref name="model.persNamePart_sequenceOptionalRepeatable"/>
+      </zeroOrMore>
+      <zeroOrMore>
+         <ref name="workName"/>
       </zeroOrMore>
    </define>
    <define name="model.nameLike_sequenceRepeatable">
@@ -1123,10 +1585,16 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
          <ref name="model.placeStateLike_sequenceRepeatable"/>
       </oneOrMore>
       <oneOrMore>
+         <ref name="rs"/>
+      </oneOrMore>
+      <oneOrMore>
          <ref name="idno"/>
       </oneOrMore>
       <oneOrMore>
          <ref name="model.persNamePart_sequenceRepeatable"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="workName"/>
       </oneOrMore>
    </define>
    <define name="model.global">
@@ -1201,6 +1669,17 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
          <ref name="model.nameLike_sequenceRepeatable"/>
       </oneOrMore>
    </define>
+   <define name="model.inter">
+      <choice>
+         <ref name="model.egLike"/>
+         <ref name="model.oddDecl"/>
+         <ref name="model.biblLike"/>
+         <ref name="model.labelLike"/>
+         <ref name="model.listLike"/>
+         <ref name="model.stageLike"/>
+         <ref name="model.attributable"/>
+      </choice>
+   </define>
    <define name="model.phrase">
       <choice>
          <ref name="model.segLike"/>
@@ -1215,6 +1694,776 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
          <ref name="model.pPart.data"/>
       </choice>
    </define>
+   <define name="model.paraPart">
+      <choice>
+         <ref name="model.gLike"/>
+         <ref name="model.lLike"/>
+         <ref name="model.global"/>
+         <ref name="model.inter"/>
+         <ref name="model.phrase"/>
+      </choice>
+   </define>
+   <define name="model.limitedPhrase">
+      <choice>
+         <ref name="model.hiLike"/>
+         <ref name="model.emphLike"/>
+         <ref name="model.pPart.msdesc"/>
+         <ref name="model.pPart.editorial"/>
+         <ref name="model.ptrLike"/>
+         <ref name="model.phrase.xml"/>
+         <ref name="model.pPart.data"/>
+      </choice>
+   </define>
+   <define name="p">
+      <element name="p">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(paragraph) marks paragraphs in prose. [3.1. Paragraphs 7.2.5. Speech Contents]</a:documentation>
+         <ref name="macro.paraContent"/>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-p-extent-within-physDesc-constraint-report-5">
+            <rule context="tei:p">
+               <report xmlns:mei="http://www.music-encoding.org/ns/mei"
+                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                       xmlns:s="http://www.ascc.net/xml/schematron"
+                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                       xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                       test="@n='extent' and not(parent::tei:physDesc)">
+                        The value 'extent' must only be used within the tei:physDesc.
+                    </report>
+            </rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-p-extent-only-once-constraint-rule-10">
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:physDesc">
+                        <sch:report test="count(tei:p[@n='extent']) gt 1">There must only be one tei:p with @n='extent'</sch:report>
+                    </sch:rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-p-extent-regex-constraint-rule-11">
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:p[@n='extent']">
+                        <sch:assert test="matches(., '^\d+ D?Bl\. \(\d+ b\. S\.( (o|einschl)\. Adr\.)?( u\. Umschlag)?\)$')">The 'extent' must match the pattern '^\d+ D?Bl\. \(\d+ b\. S\.( (o|einschl)\. Adr\.)?( u\. Umschlag)?\)$'</sch:assert>
+                    </sch:rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-p-abstractModel-structure-p-in-ab-or-p-constraint-report-7">
+            <rule context="tei:p">
+               <report xmlns:mei="http://www.music-encoding.org/ns/mei"
+                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                       xmlns:s="http://www.ascc.net/xml/schematron"
+                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                       xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                       test="(ancestor::tei:p or ancestor::tei:ab)                          and not(parent::tei:exemplum                         |parent::tei:item                         |parent::tei:note                         |parent::tei:q                         |parent::tei:quote                         |parent::tei:remarks                         |parent::tei:said                         |parent::tei:sp                         |parent::tei:stage                         |parent::tei:cell                         |parent::tei:figure                         |parent::tei:footNote)">
+                        Abstract model violation: Paragraphs may not contain other paragraphs or ab elements.
+                    </report>
+            </rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-p-abstractModel-structure-l-constraint-report-8">
+            <rule context="tei:p">
+               <report xmlns:mei="http://www.music-encoding.org/ns/mei"
+                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                       xmlns:s="http://www.ascc.net/xml/schematron"
+                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                       xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                       test="(ancestor::tei:l or ancestor::tei:lg)                          and not(parent::tei:figure or parent::tei:note or ancestor::tei:floatingText or parent::tei:footNote)">
+                        Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab, unless p is a child of figure or note, or is a descendant of floatingText.
+                    </report>
+            </rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-p-abstractModel-structure-p-in-l-or-lg-constraint-report-9">
+            <rule context="tei:p">
+               <sch:report xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                           xmlns="http://www.tei-c.org/ns/1.0"
+                           xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                           test="(ancestor::tei:l or ancestor::tei:lg) and not( ancestor::tei:floatingText |parent::tei:figure |parent::tei:note )">
+        Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab, unless p is a child of figure or note, or is a descendant of floatingText.
+      </sch:report>
+            </rule>
+         </pattern>
+         <ref name="att.fragmentable.attributes"/>
+         <ref name="att.written.attributes"/>
+         <optional>
+            <attribute name="n">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(number) gives a number (or other label) for an element, which is not necessarily unique within the document.</a:documentation>
+               <choice>
+                  <value>1</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks the (logical) first paragraph of some division of text.</a:documentation>
+                  <value>extent</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks the paragraph describing the extent of a manuscript.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="rend">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(rendition) indicates how the element in question was rendered or presented in the source text.</a:documentation>
+               <choice>
+                  <value>inline</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks an inline paragraph</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <ref name="att.global.attribute.xmlid"/>
+         <empty/>
+      </element>
+   </define>
+   <define name="hi">
+      <element name="hi">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(highlighted) marks a word or phrase as graphically distinct from the surrounding text, for reasons concerning which no claim is made. [3.3.2.2. Emphatic Words and Phrases 3.3.2. Emphasis, Foreign Words, and Unusual Language]</a:documentation>
+         <ref name="macro.paraContent"/>
+         <ref name="att.wega.rend.attributes"/>
+         <ref name="att.written.attributes"/>
+         <ref name="att.global.attribute.xmlid"/>
+         <empty/>
+      </element>
+   </define>
+   <define name="quote">
+      <element name="quote">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(quotation) contains a phrase or passage attributed by the narrator or author to some agency external to the text. [3.3.3. Quotation 4.3.1. Grouped Texts]</a:documentation>
+         <ref name="macro.specialPara"/>
+         <ref name="att.global.source.attributes"/>
+         <ref name="att.notated.attributes"/>
+         <optional>
+            <attribute name="rend">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies how the the quotation is typographically distinct from the surrounding text. When no <code xmlns="http://www.w3.org/1999/xhtml">@rend</code> is given, the quotation is not visible.</a:documentation>
+               <choice>
+                  <value>double-quotes</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the quotation is surrounded by double quotation marks.</a:documentation>
+                  <value>single-quotes</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the quotation is surrounded by single quotation marks.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="q">
+      <element name="q">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(quoted) contains material which is distinguished from the surrounding text using quotation marks. [3.3.3. Quotation]</a:documentation>
+         <ref name="macro.specialPara"/>
+         <ref name="att.ascribed.directed.attributes"/>
+         <optional>
+            <attribute name="type">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(type) may be used to indicate whether the offset passage is spoken or thought, or to characterize it more finely.
+Suggested values include: 1] spoken (spoken); 2] thought (thought); 3] written (written); 4] soCalled (so called); 5] foreign (foreign); 6] distinct (distinct); 7] term; 8] emph (emph); 9] mentioned (mentioned)</a:documentation>
+               <choice>
+                  <value>spoken</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(spoken) representation of speech</a:documentation>
+                  <value>thought</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(thought) representation of thought, e.g. internal monologue</a:documentation>
+                  <value>written</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(written) quotation from a written source</a:documentation>
+                  <value>soCalled</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(so called) authorial distance</a:documentation>
+                  <value>foreign</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(foreign) </a:documentation>
+                  <value>distinct</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(distinct) linguistically distinct</a:documentation>
+                  <value>term</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">technical term</a:documentation>
+                  <value>emph</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(emph) rhetorically emphasized</a:documentation>
+                  <value>mentioned</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(mentioned) refering to itself, not its normal referent</a:documentation>
+                  <data type="token">
+                     <param name="pattern">[^\p{C}\p{Z}]+</param>
+                  </data>
+               </choice>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="desc">
+      <element name="desc">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(description) contains a short description of the purpose, function, or use of its parent element, or when the parent is a documentation element, describes or defines the object being documented.  [22.4.1. Description of Components]</a:documentation>
+         <ref name="macro.limitedContent"/>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-desc-deprecationInfo-only-in-deprecated-constraint-rule-12">
+            <sch:rule xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:desc[ @type eq 'deprecationInfo']">
+               <sch:assert test="../@validUntil">Information about a
+        deprecation should only be present in a specification element
+        that is being deprecated: that is, only an element that has a
+        @validUntil attribute should have a child &lt;desc
+        type="deprecationInfo"&gt;.</sch:assert>
+            </sch:rule>
+         </pattern>
+         <ref name="att.global.attributes"/>
+         <ref name="att.typed.attribute.subtype"/>
+         <optional>
+            <attribute name="type">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.
+Suggested values include: 1] deprecationInfo (deprecation information)</a:documentation>
+               <choice>
+                  <value>deprecationInfo</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(deprecation
+          information) This element describes why or how its parent element is being deprecated, typically including recommendations for alternate encoding.</a:documentation>
+                  <data type="token">
+                     <param name="pattern">[^\p{C}\p{Z}]+</param>
+                  </data>
+               </choice>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="rs">
+      <element name="rs">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(referencing string) identifies one or more objects by type person, work, dairy entry, and so on. [13.2.1. Personal Names 3.6.1. Referring Strings]</a:documentation>
+         <ref name="macro.phraseSeq"/>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-rs-rs-typeNkey-constraint-rule-13">
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='person'][@key]">
+                        <sch:assert test="matches(@key, '^A00[0-9A-F]{4}$')">A type value of 'person' must have only one key, starting with 'A00'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='persons'][@key]">
+                        <sch:assert test="matches(@key, '^(A00[0-9A-F]{4}\s)*A00[0-9A-F]{4}$')">A type value of 'persons' must have at least one key, each starting with 'A00'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='work'][@key]">
+                        <sch:assert test="matches(@key, '^A02\d{4}$')">A type value of 'work' must have only one key, starting with 'A02'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='works'][@key]">
+                        <sch:assert test="matches(@key, '^(A02\d{4}\s)*A02\d{4}$')">A type value of 'works' must have at least one key, each starting with 'A02'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='writing'][@key]">
+                        <sch:assert test="matches(@key, '^A03\d{4}$')">A type value of 'writing' must have only one key, starting with 'A03'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='writings'][@key]">
+                        <sch:assert test="matches(@key, '^(A03\d{4}\s)*A03\d{4}$')">A type value of 'writings' must have at least one key, each starting with 'A03'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='letter'][@key]">
+                        <sch:assert test="matches(@key, '^A04\d{4}$')">A type value of 'letter' must have only one key, starting with 'A04'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='letters'][@key]">
+                        <sch:assert test="matches(@key, '^(A04\d{4}\s)*A04\d{4}$')">A type value of 'letters' must have at least one key, each starting with 'A04'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='news'][@key]">
+                        <sch:assert test="matches(@key, '^(A05\d{4}\s)*A05\d{4}$')">A type value of 'news' must have at least one key, starting with 'A05'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='diaryDay'][@key]">
+                        <sch:assert test="matches(@key, '^A06\d{4}$')">A type value of 'diaryDay' must have only one key, starting with 'A06'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='diaryDays'][@key]">
+                        <sch:assert test="matches(@key, '^(A06\d{4}\s)*A06\d{4}$')">A type value of 'diaryDays' must have at least one key, each starting with 'A06'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='org'][@key]">
+                        <sch:assert test="matches(@key, '^A08\d{4}$')">A type value of 'org' must have only one key, starting with 'A08'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='orgs'][@key]">
+                        <sch:assert test="matches(@key, '^(A08\d{4}\s)*A08\d{4}$')">A type value of 'orgs' must have at least one key, each starting with 'A08'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='document'][@key]">
+                        <sch:assert test="matches(@key, '^A10\d{4}$')">A type value of 'document' must have only one key, starting with 'A10'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='documents'][@key]">
+                        <sch:assert test="matches(@key, '^(A10\d{4}\s)*A10\d{4}$')">A type value of 'documents' must have at least one key, each starting with 'A10'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='biblio'][@key]">
+                        <sch:assert test="matches(@key, '^(A11\d{4}\s)*A11\d{4}$')">A type value of 'biblio' must have at least one key, each starting with 'A11'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='addenda'][@key]">
+                        <sch:assert test="matches(@key, '^A12\d{4}$')">A type value of 'addenda' must have only one key, starting with 'A12'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='place'][@key]">
+                        <sch:assert test="matches(@key, '^A13\d{4}$')">A type value of 'place' must have only one key, starting with 'A13'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='places'][@key]">
+                        <sch:assert test="matches(@key, '^(A13\d{4}\s)*A13\d{4}$')">A type value of 'places' must have at least one key, each starting with 'A13'</sch:assert>
+                    </sch:rule>
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:rs[@type='mixed'][@key]">
+                        <sch:assert test="count(distinct-values(for $i in tokenize(@key, '\s+') return substring($i, 1, 3))) gt 1">A type value of 'mixed' must have keys referring to different document types</sch:assert>
+                    </sch:rule>
+         </pattern>
+         <ref name="att.typed.attribute.subtype"/>
+         <attribute name="type">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.</a:documentation>
+            <choice>
+               <value>person</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks a person that is not explicitly mentioned by name.</a:documentation>
+               <value>persons</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks persons that are not explicitly mentioned by name.</a:documentation>
+               <value>letter</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks a letter that is not explicitly entitled.</a:documentation>
+               <value>letters</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks letters that are not explicitly entitled.</a:documentation>
+               <value>diaryDay</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks a dairy entry that is not explicitly mentioned.</a:documentation>
+               <value>diaryDays</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks dairy entries that are not explicitly mentioned.</a:documentation>
+               <value>work</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks a work that is not explicitly mentioned.</a:documentation>
+               <value>works</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks works that are not explicitly mentioned.</a:documentation>
+               <value>writing</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks a writing that is not explicitly mentioned.</a:documentation>
+               <value>writings</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks writings that are not explicitly mentioned.</a:documentation>
+               <value>news</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks news that are not explicitly mentioned.</a:documentation>
+               <value>biblio</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks bilbiographic entries that are not explicitly mentioned.</a:documentation>
+               <value>org</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks an organization that is not explicitly mentioned.</a:documentation>
+               <value>orgs</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks organizations that are not explicitly mentioned.</a:documentation>
+               <value>place</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks a place that is not explicitly mentioned.</a:documentation>
+               <value>places</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks places that are not explicitly mentioned.</a:documentation>
+               <value>document</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks a document that is not explicitly entitled.</a:documentation>
+               <value>documents</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks organizations that are not explicitly mentioned.</a:documentation>
+               <value>mixed</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks a variety of documents/entities that are not explicitly mentioned.</a:documentation>
+               <value>addenda</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">marks a reference to addenda of printed volumes.</a:documentation>
+            </choice>
+         </attribute>
+         <optional>
+            <attribute name="key">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</a:documentation>
+               <list>
+                  <oneOrMore>
+                     <choice>
+                        <data type="string">
+                           <param name="pattern">A00[0-9A-F]{4}</param>
+                        </data>
+                        <data type="string">
+                           <param name="pattern">A02\d{4}</param>
+                        </data>
+                        <data type="string">
+                           <param name="pattern">A03\d{4}</param>
+                        </data>
+                        <data type="string">
+                           <param name="pattern">A04\d{4}</param>
+                        </data>
+                        <data type="string">
+                           <param name="pattern">A05\d{4}</param>
+                        </data>
+                        <data type="string">
+                           <param name="pattern">A06\d{4}</param>
+                        </data>
+                        <data type="string">
+                           <param name="pattern">A07\d{4}</param>
+                        </data>
+                        <data type="string">
+                           <param name="pattern">A08\d{4}</param>
+                        </data>
+                        <data type="string">
+                           <param name="pattern">A10\d{4}</param>
+                        </data>
+                        <data type="string">
+                           <param name="pattern">A11\d{4}</param>
+                        </data>
+                        <data type="string">
+                           <param name="pattern">A13\d{4}</param>
+                        </data>
+                        <data type="string">
+                           <param name="pattern">A22\d{4}</param>
+                        </data>
+                        <data type="string">
+                           <param name="pattern">A12\d{4}</param>
+                        </data>
+                     </choice>
+                  </oneOrMore>
+               </list>
+            </attribute>
+         </optional>
+         <ref name="att.global.responsibility.attribute.cert"/>
+         <empty/>
+      </element>
+   </define>
+   <define name="ref">
+      <element name="ref">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(reference) defines a reference to another location, possibly modified by additional text or comment. [3.7. Simple Links and Cross-References 16.1. Links]</a:documentation>
+         <ref name="macro.paraContent"/>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-ref-prev-next-correspContext-constraint-report-10">
+            <rule context="tei:ref">
+               <sch:report xmlns:mei="http://www.music-encoding.org/ns/mei"
+                           xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                           xmlns:s="http://www.ascc.net/xml/schematron"
+                           xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                           xmlns="http://www.tei-c.org/ns/1.0"
+                           xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                           test="@type=('previousLetterFromAddressee', 'nextLetterFromAddressee') and not(parent::tei:correspContext)">'previousLetterFromAddressee' and 'nextLetterFromAddressee' are only used within the correspContext element.</sch:report>
+            </rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-ref-refAtts-constraint-report-11">
+            <rule context="tei:ref">
+               <report xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                       xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                       test="@target and @cRef">Only one of the
+	attributes @target' and @cRef' may be supplied on <name/>
+               </report>
+            </rule>
+         </pattern>
+         <ref name="att.internetMedia.attributes"/>
+         <optional>
+            <attribute name="type">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.</a:documentation>
+               <choice>
+                  <value>footnoteAnchor</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Marks the footnote sign within the text.</a:documentation>
+                  <value>hyperLink</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Marks some passage within the text that acts as a hyperlink to an external resource on the internet.</a:documentation>
+                  <value>previousLetterFromAddressee</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Marks the (or a) preceding letter in the <code xmlns="http://www.w3.org/1999/xhtml">&lt;correspContext&gt;</code> element, i.e. the letter to which the current is the reply.</a:documentation>
+                  <value>nextLetterFromAddressee</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Marks the (or a) following letter in the <code xmlns="http://www.w3.org/1999/xhtml">&lt;correspContext&gt;</code> element, i.e. the letter which is a reply to the current.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <attribute name="target">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">specifies the destination of the reference by supplying one or more URI References.</a:documentation>
+            <data type="anyURI">
+               <param name="pattern">\S+</param>
+            </data>
+         </attribute>
+         <empty/>
+      </element>
+   </define>
+   <define name="list">
+      <element name="list">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(list) contains any sequence of items organized as a list. [3.8. Lists]</a:documentation>
+         <choice>
+            <oneOrMore>
+               <ref name="item"/>
+               <optional>
+                  <ref name="note"/>
+               </optional>
+               <optional>
+                  <ref name="model.milestoneLike"/>
+               </optional>
+            </oneOrMore>
+            <oneOrMore>
+               <ref name="label"/>
+               <ref name="item"/>
+            </oneOrMore>
+         </choice>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-list-gloss-list-constraint-report-12">
+            <rule context="tei:list">
+               <sch:report xmlns:mei="http://www.music-encoding.org/ns/mei"
+                           xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                           xmlns:s="http://www.ascc.net/xml/schematron"
+                           xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                           xmlns="http://www.tei-c.org/ns/1.0"
+                           xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                           test="./tei:label and not(@type='gloss')">Labels are only allowed in lists of type='gloss'</sch:report>
+            </rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-list-gloss-list-must-have-labels-constraint-rule-33">
+            <sch:rule xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:list[@type='gloss']">
+	              <sch:assert test="tei:label">The content of a "gloss" list should include a sequence of one or more pairs of a label element followed by an item element</sch:assert>
+            </sch:rule>
+         </pattern>
+         <ref name="att.typed.attribute.subtype"/>
+         <optional>
+            <attribute name="type">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(type) characterizes the element in some sense, using any convenient classification scheme or typology.</a:documentation>
+               <choice>
+                  <value>simple</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">list items are not numbered or bulleted.</a:documentation>
+                  <value>gloss</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">each list item glosses some term or concept, which is given by a label element preceding the list item.</a:documentation>
+                  <value>ordered</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">list items are numbered or lettered.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
+   <define name="item">
+      <element name="item">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(item) contains one component of a list. [3.8. Lists 2.6. The Revision Description]</a:documentation>
+         <ref name="macro.specialPara"/>
+         <ref name="att.global.attributes"/>
+         <empty/>
+      </element>
+   </define>
+   <define name="label">
+      <element name="label">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(label) contains any label or heading used to identify part of a text, typically but not exclusively in a list or glossary. [3.8. Lists]</a:documentation>
+         <ref name="macro.phraseSeq"/>
+         <ref name="att.written.attributes"/>
+         <ref name="att.global.attribute.xmlid"/>
+         <empty/>
+      </element>
+   </define>
+   <define name="note">
+      <element name="note">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(note) contains a note or annotation. [3.9.1. Notes and Simple Annotation 2.2.6. The Notes Statement 3.12.2.8. Notes and Statement of Language 9.3.5.4. Notes within Entries]</a:documentation>
+         <ref name="macro.specialPara"/>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-note-note-in-text-constraint-rule-34">
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:note[not(parent::tei:org or parent::tei:person or parent::tei:notesStmt or parent::tei:biblStruct or parent::tei:imprint or parent::tei:place)]">
+                        <sch:assert test="@type and @resp and @xml:id">It is required to provide @type and @resp and @xml:id on note.</sch:assert>
+                    </sch:rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-note-thematicCom-target-constraint-rule-35">
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:note[@type='thematicCom' or @target]">
+                        <sch:assert test="@type='thematicCom' and @target">You need to provide thematic commentary targets (Only @type='thematicCom' and @target go together!).</sch:assert>
+                    </sch:rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-note-thematicCom-must-be-empty-constraint-rule-36">
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:note[@type='thematicCom' or @target]">
+                        <sch:report test="normalize-space() ne''">Thematic commentaries must not contain any text.</sch:report>
+                    </sch:rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-note-notesStmt-notes-constraint-rule-37">
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:note[parent::tei:notesStmt]">
+                        <sch:assert test="@type=('editorial', 'summary', 'thematicCom', 'incipit', 'textConst')">Within the notesStmt only 'editorial', 'summary', 'textConst', or 'thematicCom' are allowed for @type on note.</sch:assert>
+                    </sch:rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-note-text-notes-constraint-rule-38">
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:note[not(parent::tei:notesStmt)]">
+                        <sch:report test="@type=('editorial', 'summary', 'incipit')">The note types 'editorial', 'summary', or 'thematicCom' are not allowed within the text section but only in the notesStmt.</sch:report>
+                    </sch:rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-note-structured-content-notes-constraint-rule-39">
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:note[parent::tei:notesStmt][tei:p|tei:list|tei:table]">
+                        <sch:report test="text()[matches(., '\w')] or *[not(self::tei:p or self::tei:list or self::tei:table)]">There must be no mixed content when a tei:p, tei:list, or tei:table is present.</sch:report>
+                    </sch:rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-note-initial-uppercase-commentaries-constraint-rule-40">
+            <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:note[@type='commentary'][not(*[1]/self::tei:q or *[1]/self::tei:quote)]">
+                        <sch:assert test="matches(replace(normalize-unicode(normalize-space(.), 'NFKD'),  '[\p{M}]', ''), '^[A-Z0-9]')">Commentary notes must start with an upper case letter.</sch:assert>
+                    </sch:rule>
+         </pattern>
+         <ref name="att.global.attribute.xmlid"/>
+         <ref name="att.global.attribute.n"/>
+         <ref name="att.global.attribute.xmllang"/>
+         <ref name="att.global.rendition.attribute.rend"/>
+         <ref name="att.written.attributes"/>
+         <optional>
+            <attribute name="resp">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(responsible party) indicates the agency responsible for the intervention or interpretation, for example an editor or transcriber.</a:documentation>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="target">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(link targets) holds the URIs (notated like "wega:A07xxxx") of the to be linked thematic commentaries (only applicable if <code xmlns="http://www.w3.org/1999/xhtml">@type</code>="thematicCom" is also present)</a:documentation>
+               <list>
+                  <oneOrMore>
+                     <ref name="thematicCom.target"/>
+                  </oneOrMore>
+               </list>
+            </attribute>
+         </optional>
+         <optional>
+            <attribute name="type">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.</a:documentation>
+               <choice>
+                  <value>commentary</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(commentary) </a:documentation>
+                  <value>definition</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Word definitions/Term explanations) words should stand between pointer and note that marking is possible.</a:documentation>
+                  <value>textConst</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Text constitution) Comments to variants, writings or other corrections which can not be encoded with an app or subst etc. in the letter.</a:documentation>
+                  <value>thematicCom</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Thematic commentary) A synoptical commentary that can be applied to several places within the edition.</a:documentation>
+                  <value>summary</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(summary) A summary of the content of the text (only applicable in the <code xmlns="http://www.w3.org/1999/xhtml">&lt;notesStmt&gt;</code>).</a:documentation>
+                  <value>editorial</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(general remark) Some general remark about the file (only applicable in the <code xmlns="http://www.w3.org/1999/xhtml">&lt;notesStmt&gt;</code>).</a:documentation>
+                  <value>incipit</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(incipit) The text incipit of the letter (or other piece of correspondence).</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <empty/>
+      </element>
+   </define>
    <define name="idno">
       <element name="idno">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(identifier) supplies any form of identifier used to identify some object, such as a bibliographic item, a person, a title, an organization, etc. in a standardized way. [13.3.1. Basic Principles 2.2.4. Publication, Distribution, Licensing, etc. 2.2.5. The Series Statement 3.12.2.4. Imprint, Size of a Document, and Reprint Information]</a:documentation>
@@ -1226,7 +2475,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
             <ref name="geonames.pattern"/>
          </choice>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaPlaces-idno-types-match-external-identifiers-constraint-rule-8">
+                  id="wegaPlaces-idno-types-match-external-identifiers-constraint-rule-41">
             <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:s="http://www.ascc.net/xml/schematron"
@@ -1279,7 +2528,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
                     </sch:rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaPlaces-idno-match-external-identifiers-constraint-rule-13">
+                  id="wegaPlaces-idno-match-external-identifiers-constraint-rule-46">
             <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:s="http://www.ascc.net/xml/schematron"
@@ -1339,44 +2588,76 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
    <define name="model.persNamePart_sequenceRepeatable">
       <notAllowed/>
    </define>
+   <define name="persName">
+      <element name="persName">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(personal name) contains a proper noun or proper-noun phrase referring to a person, possibly including one or more of the person's forenames, surnames, honorifics, added names, etc. [13.2.1. Personal Names]</a:documentation>
+         <ref name="macro.phraseSeq"/>
+         <optional>
+            <attribute name="key">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</a:documentation>
+               <data type="string">
+                  <param name="pattern">A00[0-9A-F]{4}</param>
+               </data>
+            </attribute>
+         </optional>
+         <ref name="att.global.responsibility.attribute.cert"/>
+         <empty/>
+      </element>
+   </define>
    <define name="placeName">
       <element name="placeName">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(place name) contains an absolute or relative place name. [13.2.3. Place Names]</a:documentation>
-         <text/>
-         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaPlaces-placeName-count-modern-names-constraint-rule-15">
-            <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
-                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
-                      xmlns="http://www.tei-c.org/ns/1.0"
-                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                      context="tei:placeName[@type='modern']">
-                    <sch:let name="lang" value="string(@xml:lang)"/> 
-                    <sch:report test="following-sibling::tei:placeName[@type='modern'][string(@xml:lang)=$lang]">Only one modern name per xml:lang allowed.</sch:report>
-                </sch:rule>
-         </pattern>
-         <attribute name="type">
-            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes the element in some sense, using any convenient classification scheme or typology.</a:documentation>
-            <choice>
-               <value>reg</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(regular) the canonical name of the WeGA, i.e. the historic version known by Weber.</a:documentation>
-               <value>alt</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(alternative) </a:documentation>
-               <value>modern</value>
-               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">the current, official version of the name.</a:documentation>
-            </choice>
-         </attribute>
-         <ref name="att.global.attribute.xmllang"/>
+         <ref name="macro.phraseSeq"/>
+         <optional>
+            <attribute name="type">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">categorisation of varying localities.</a:documentation>
+               <choice>
+                  <value>theatre</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes buildings designed for performing plays, operas etc. (e.g. (amphi)theatres, operas, ball rooms).</a:documentation>
+                  <value>building</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes all sorts of building where no other category is applicable (e.g. bath, bookshop, office).</a:documentation>
+                  <value>hospitality</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes buildings designed for lodging, serving food, drinks, etc. (e.g. hotels, bars, inns).</a:documentation>
+                  <value>sacral-building</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes buildings serving religious purposes (e.g. churches, abbeys).</a:documentation>
+                  <value>administrative-building</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes buildings designed for government administration (e.g. city hall, castle, police station, custom office).</a:documentation>
+                  <value>art-building</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes buildings designed for (art) exhibitions (e.g. museums, galleries).</a:documentation>
+                  <value>shop</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes buildings designed for selling goods and services to the end-user (e.g. markets, shops).</a:documentation>
+                  <value>street</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes a street or a street name.</a:documentation>
+                  <value>park</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">characterizes a botanical or zoological garden, or any other park area.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <ref name="att.global.responsibility.attribute.cert"/>
          <empty/>
       </element>
    </define>
    <define name="country">
       <element name="country">
-         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(country) contains the name of a geo-political unit, such as a nation, country, colony, or commonwealth, larger than or administratively superior to a region and smaller than a bloc. [13.2.3. Place Names]</a:documentation>
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(country) marks the name of a geo-political unit, such as a nation or country at the contemporary period. [13.2.3. Place Names]</a:documentation>
          <ref name="macro.phraseSeq"/>
-         <ref name="att.global.attributes"/>
-         <ref name="att.naming.attributes"/>
-         <ref name="att.typed.attributes"/>
-         <ref name="att.datable.attributes"/>
+         <ref name="att.global.responsibility.attribute.cert"/>
+         <empty/>
+      </element>
+   </define>
+   <define name="settlement">
+      <element name="settlement">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(settlement) marks the name of a settlement identified as a single geo-political or administrative unit. [13.2.3. Place Names]</a:documentation>
+         <ref name="macro.phraseSeq"/>
+         <optional>
+            <attribute name="key">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</a:documentation>
+               <data type="string">
+                  <param name="pattern">A13\d{4}</param>
+               </data>
+            </attribute>
+         </optional>
+         <ref name="att.global.responsibility.attribute.cert"/>
          <empty/>
       </element>
    </define>
@@ -1385,7 +2666,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(geographical coordinates) contains any expression of a set of geographic coordinates, representing a point, line, or area on the surface of the earth in some notation. [13.3.4.1. Varieties of Location]</a:documentation>
          <text/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaPlaces-geo-whitespace-separated-coordinates-constraint-assert-9">
+                  id="wegaPlaces-geo-whitespace-separated-coordinates-constraint-assert-38">
             <rule context="tei:geo">
                <sch:assert xmlns:xi="http://www.w3.org/2001/XInclude"
                            xmlns:sch="http://purl.oclc.org/dsdl/schematron"
@@ -1421,11 +2702,83 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
                <empty/>
             </element>
             <group>
-               <oneOrMore>
-                  <ref name="placeName"/>
-               </oneOrMore>
+               <element name="placeName">
+                  <attribute name="type">
+                     <value>reg</value>
+                  </attribute> 
+                  <optional>
+                     <attribute name="xml:lang">
+                        <choice>
+                           <value>en</value>
+                           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">English</a:documentation>
+                           <value>de</value>
+                           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">German</a:documentation>
+                           <value>fr</value>
+                           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">French</a:documentation>
+                           <value>it</value>
+                           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Italian</a:documentation>
+                           <value>da</value>
+                           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Danish</a:documentation>
+                           <value>la</value>
+                           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Latin</a:documentation>
+                           <value>pl</value>
+                           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Polish</a:documentation>
+                           <value>cs</value>
+                           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Czech</a:documentation>
+                           <value>hu</value>
+                           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Hungarian</a:documentation>
+                           <value>uk</value>
+                           <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Ukrainian</a:documentation>
+                        </choice>
+                     </attribute>
+                  </optional> 
+                  <text/>
+               </element>
+               <zeroOrMore>
+                  <element name="placeName">
+                     <attribute name="type">
+                        <choice>
+                           <value>alt</value>
+                           <value>modern</value>
+                        </choice>
+                     </attribute> 
+                     <optional>
+                        <attribute name="xml:lang">
+                           <choice>
+                              <value>en</value>
+                              <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">English</a:documentation>
+                              <value>de</value>
+                              <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">German</a:documentation>
+                              <value>fr</value>
+                              <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">French</a:documentation>
+                              <value>it</value>
+                              <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Italian</a:documentation>
+                              <value>da</value>
+                              <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Danish</a:documentation>
+                              <value>la</value>
+                              <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Latin</a:documentation>
+                              <value>pl</value>
+                              <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Polish</a:documentation>
+                              <value>cs</value>
+                              <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Czech</a:documentation>
+                              <value>hu</value>
+                              <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Hungarian</a:documentation>
+                              <value>uk</value>
+                              <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Ukrainian</a:documentation>
+                           </choice>
+                        </attribute>
+                     </optional> 
+                     <text/>
+                  </element>
+               </zeroOrMore>
+               <zeroOrMore>
+                  <ref name="state"/>
+               </zeroOrMore>
                <optional>
                   <ref name="location"/>
+               </optional>
+               <optional>
+                  <ref name="note"/>
                </optional>
                <zeroOrMore>
                   <ref name="idno"/>
@@ -1433,14 +2786,15 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
             </group>
          </choice>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-                  id="wegaPlaces-place-placeName_reg-constraint-assert-10">
-            <rule context="tei:place">
-               <sch:assert xmlns:xi="http://www.w3.org/2001/XInclude"
-                           xmlns:sch="http://purl.oclc.org/dsdl/schematron"
-                           xmlns="http://www.tei-c.org/ns/1.0"
-                           xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                           test="(tei:placeName[1][@type='reg'] and count(./tei:placeName[@type='reg']) = 1) or tei:ref">tei:place muss (genau) ein placeName@type="reg" enthalten</sch:assert>
-            </rule>
+                  id="wegaPlaces-place-count-modern-names-constraint-rule-48">
+            <sch:rule xmlns:xi="http://www.w3.org/2001/XInclude"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                      context="tei:placeName[@type='modern']">
+                    <sch:let name="lang" value="string(@xml:lang)"/> 
+                    <sch:report test="following-sibling::tei:placeName[@type='modern'][string(@xml:lang)=$lang]">Only one modern name per xml:lang allowed.</sch:report>
+                </sch:rule>
          </pattern>
          <attribute name="status">
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">describes the status of a document either currently or, when associated with a dated element, at the time indicated.</a:documentation>
@@ -1453,6 +2807,32 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
                <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Category "green") approved documents that match the current requirements of markup and went through control and checking procedures.</a:documentation>
             </choice>
          </attribute>
+         <attribute name="typeof">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">defines the type of the subject.</a:documentation>
+            <choice>
+               <value>P</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(city, village, …) </a:documentation>
+               <value>A</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(country, state, region, …) </a:documentation>
+               <value>H</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(stream, lake, …) </a:documentation>
+               <value>L</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(parks, area, …) </a:documentation>
+               <value>S</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(spot, building, farm) </a:documentation>
+               <value>T</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(mountain, hill, rock, …) </a:documentation>
+               <value>V</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(forest, heath, …) </a:documentation>
+            </choice>
+         </attribute>
+         <attribute name="vocab">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">an IRI that defines the mapping to use when a TERM is referenced in an attribute value.</a:documentation>
+            <choice>
+               <value>https://www.geonames.org/ontology</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"/>
+            </choice>
+         </attribute>
          <attribute name="xml:id">
             <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(identifier) provides a unique identifier for the element bearing the attribute.</a:documentation>
             <data type="string">
@@ -1462,13 +2842,116 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
          <empty/>
       </element>
    </define>
+   <define name="state">
+      <element name="state">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(state) contains a description of some status or quality attributed to a place. [13.3.1. Basic Principles 13.3.2.1. Personal Characteristics]</a:documentation>
+         <ref name="label"/>
+         <ref name="desc"/>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  id="wegaPlaces-state-org-states-constraint-assert-39">
+            <rule context="tei:state">
+               <sch:assert xmlns:xi="http://www.w3.org/2001/XInclude"
+                           xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                           xmlns="http://www.tei-c.org/ns/1.0"
+                           xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                           test="tei:label=('Ort', 'Kategorie')">label for state should be 'Ort' or 'Kategorie'.</sch:assert>
+            </rule>
+         </pattern>
+         <ref name="att.datable.attributes"/>
+         <ref name="att.dimensions.attributes"/>
+         <empty/>
+      </element>
+   </define>
+   <define name="characterName">
+      <element name="characterName">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(characterName) name of a role or character in a work.</a:documentation>
+         <ref name="macro.phraseSeq"/>
+         <ref name="att.global.responsibility.attribute.cert"/>
+         <empty/>
+      </element>
+   </define>
+   <define name="workName">
+      <element name="workName">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">name of a work (e.g. composition)</a:documentation>
+         <ref name="macro.phraseSeq"/>
+         <optional>
+            <attribute name="key">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">provides an externally-defined means of identifying the entity (or entities) being named, using a coded value of some kind.</a:documentation>
+               <data type="string">
+                  <param name="pattern">A02\d{4}</param>
+               </data>
+            </attribute>
+         </optional>
+         <ref name="att.global.responsibility.attribute.cert"/>
+         <empty/>
+      </element>
+   </define>
+   <define name="footNote">
+      <element name="footNote">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Special element for the transcription of a footnote (not necessarily to be rendered as such)</a:documentation>
+         <ref name="macro.specialPara"/>
+         <ref name="att.global.attribute.xmlid"/>
+         <empty/>
+      </element>
+   </define>
+   <define name="att.wega.rend.attributes">
+      <ref name="att.wega.rend.attribute.rend"/>
+      <ref name="att.wega.rend.attribute.n"/>
+   </define>
+   <define name="att.wega.rend.attribute.rend">
+      <attribute name="rend">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(rendition) indicates how the element in question was rendered or presented in the source text.</a:documentation>
+         <choice>
+            <value>latintype</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">typeface: latintype.</a:documentation>
+            <value>antiqua</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">typeface: antiqua.</a:documentation>
+            <value>superscript</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">superscript character.</a:documentation>
+            <value>subscript</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">subscript character.</a:documentation>
+            <value>italic</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">italic typeface.</a:documentation>
+            <value>spaced_out</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">spaced out typeface.</a:documentation>
+            <value>bold</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">bold typeface.</a:documentation>
+            <value>underline</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">underlined text.</a:documentation>
+            <value>small-caps</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">small caps.</a:documentation>
+            <value>smaller</value>
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">smaller font.</a:documentation>
+         </choice>
+      </attribute>
+   </define>
+   <define name="att.wega.rend.attribute.n">
+      <optional>
+         <attribute name="n">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(number) gives a number for the ammount of underlinings (i.e. only applicable with hi@rend='underline').</a:documentation>
+            <data type="nonNegativeInteger"/>
+         </attribute>
+      </optional>
+   </define>
+   <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+            id="wegaPlaces-att.wega.rend-underline-n-constraint-rule-57">
+      <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
+                xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                xmlns:s="http://www.ascc.net/xml/schematron"
+                xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                xmlns="http://www.tei-c.org/ns/1.0"
+                xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                context="*:hi[@n] | *:rend[@n]">
+                        <sch:report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</sch:report>
+                    </sch:rule>
+   </pattern>
    <start>
       <choice>
          <ref name="place"/>
       </choice>
    </start>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaPlaces-styleguide-document-node-content-constraint-rule-16">
+            id="wegaPlaces-styleguide-document-node-content-constraint-rule-49">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
@@ -1481,7 +2964,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
                 </sch:rule>
    </pattern>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaPlaces-whitespaceOnlyContent-constraint-rule-17">
+            id="wegaPlaces-whitespaceOnlyContent-constraint-rule-50">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
@@ -1494,7 +2977,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
                 </sch:rule>
    </pattern>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaPlaces-elementStartsWithWhitespace-constraint-rule-18">
+            id="wegaPlaces-elementStartsWithWhitespace-constraint-rule-51">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
@@ -1507,7 +2990,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
                 </sch:rule>
    </pattern>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaPlaces-untrimmedAttributeValues-constraint-rule-19">
+            id="wegaPlaces-untrimmedAttributeValues-constraint-rule-52">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
@@ -1519,7 +3002,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
                 </sch:rule>
    </pattern>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaPlaces-wegaTargets-constraint-rule-20">
+            id="wegaPlaces-wegaTargets-constraint-rule-53">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
@@ -1531,7 +3014,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
                 </sch:rule>
    </pattern>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaPlaces-emojiCheck-constraint-rule-21">
+            id="wegaPlaces-emojiCheck-constraint-rule-54">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
@@ -1543,7 +3026,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
                 </sch:rule>
    </pattern>  
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaPlaces-sourceMustResolve-constraint-rule-22">
+            id="wegaPlaces-sourceMustResolve-constraint-rule-55">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
@@ -1556,7 +3039,7 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/Version 4.5.0/
                 </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaPlaces-anonymus-id-constraint-rule-23">
+            id="wegaPlaces-anonymus-id-constraint-rule-56">
       <sch:rule xmlns:mei="http://www.music-encoding.org/ns/mei"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:s="http://www.ascc.net/xml/schematron"
