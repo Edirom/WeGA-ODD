@@ -5027,6 +5027,147 @@ which contain an XPath expression.</desc>
   </exemplum><listRef>
     <ref target="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ND.html#NDPER">13.2.1. Personal Names</ref>
     <ref target="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/CO.html#CONARS">3.6.1. Referring Strings</ref>
+  </listRef></elementSpec><elementSpec rend="change" module="core" ident="date"><gloss xml:lang="en" versionDate="2009-01-06">date</gloss><gloss versionDate="2009-01-06" xml:lang="fr">date</gloss><gloss versionDate="2016-11-25" xml:lang="de">Datum</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">contains a date in any format.</desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">enthält ein Datum in einem beliebigen Format.</desc><classes><memberOf key="att.global.responsibility"/><memberOf key="model.dateLike"/><memberOf key="att.datable"/></classes><content><alternate minOccurs="0" maxOccurs="unbounded"><textNode/><classRef key="model.gLike"/><classRef key="model.phrase"/><classRef key="model.global"/></alternate></content><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="dateHeuristics2">
+                <desc versionDate="2013-11-11" xml:lang="en">checks for the existence of an <att>notBefore</att> with a <emph>smaller</emph> date value than its corresponding <att>notAfter</att></desc>
+                <desc versionDate="2013-11-11" xml:lang="de">sucht nach der Existenz eines <att>notBefore</att> mit einem <emph>kleineren</emph> Datumswert als sein entsprechendes <att>notAfter</att></desc>
+                <constraint>
+                    <sch:rule context="tei:date[@notBefore castable as xs:date and @notAfter castable as xs:date]">
+                        <sch:report test="xs:date(@notBefore) gt xs:date(@notAfter)">the date value of notBefore is later than notAfter</sch:report>
+                    </sch:rule>
+                    <sch:rule context="tei:date[@notBefore castable as xs:gYear and @notAfter castable as xs:gYear]">
+                        <sch:report test="xs:date(concat(@notBefore, '-01-01')) gt xs:date(concat(@notAfter, '-01-01'))">the date value of notBefore is later than notAfter</sch:report>
+                    </sch:rule>
+                    <sch:rule context="tei:date[@notBefore castable as xs:gYear and @notAfter castable as xs:date]">
+                        <sch:report test="xs:date(concat(@notBefore, '-01-01')) gt xs:date(@notAfter)">the date value of notBefore is later than notAfter</sch:report>
+                    </sch:rule>
+                    <sch:rule context="tei:date[@notBefore castable as xs:date and @notAfter castable as xs:gYear]">
+                        <sch:report test="xs:date(@notBefore) gt xs:date(concat(@notAfter, '-12-31'))">the date value of notBefore is later than notAfter</sch:report>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="dateHeuristics3">
+                <desc versionDate="2013-11-11" xml:lang="en">checks for the cooccurence of date and duration attributes</desc>
+                <desc versionDate="2013-11-11" xml:lang="de">sucht nach der Kookkurenz von Datums- und Zeitattributen</desc>
+                <constraint>
+                    <sch:report test="(@from or @to) and (@when or @notAfter or @notBefore)">cooccurence of date and duration attributes</sch:report>
+                </constraint>
+            </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="dateHeuristics4">
+                <desc versionDate="2013-11-11" xml:lang="en">checks for the cooccurence of exact and uncertain date attributes</desc>
+                <desc versionDate="2013-11-11" xml:lang="de">sucht nach der Kookkurenz von exaten und ungenauen Datumsattributen</desc>
+                <constraint>
+                    <sch:report test="@when and (@notAfter or @notBefore)">cooccurence of exact and uncertain date attributes</sch:report>
+                </constraint>
+            </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="dateHeuristics5">
+                <desc versionDate="2013-11-11" xml:lang="en">If a <gi>date</gi> is present it must either have an attribute 
+                    <att>when</att>, <att>notBefore</att>, <att>notAfter</att>, <att>from</att> or <att>to</att>.
+                    Alternatively the content of <gi>date</gi> may contain at least four zeros, "unknown" or "o.J.", which qualifies as undated.
+                </desc>
+                <desc versionDate="2013-11-11" xml:lang="de">Wenn ein <gi>date</gi> vorhanden ist, muss es entweder die Attribute
+                    <att>when</att>, <att>notBefore</att>, <att>notAfter</att>, <att>from</att> oder <att>to</att> haben.
+                    Alternativ kann der Inhalt von <gi>date</gi> mindestens vier Nullen, "unbekannt" oder "oJ" enthalten, die die Quellen dann als undatiert bezeichnen.
+                </desc>
+                <constraint>
+                    <sch:assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</sch:assert>
+                </constraint>
+            </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="dateHeuristics6">
+                <desc versionDate="2018-03-12" xml:lang="en">checks for future dates</desc>
+                <desc versionDate="2018-03-12" xml:lang="de">prüft auf in der Zukunft liegende Daten</desc>
+                <constraint>
+                    <sch:rule context="tei:date[some $i in (@when, @notBefore, @notAfter, @from, @to) satisfies $i castable as xs:date]">
+                        <sch:report test="every $j in (@when, @notBefore, @notAfter, @from, @to)[. castable as xs:date] satisfies xs:date($j) gt current-date()">some attribute value of <sch:name/> is greater than the current date</sch:report>
+                    </sch:rule>
+                    <sch:rule context="tei:date[some $i in (@when, @notBefore, @notAfter, @from, @to) satisfies $i castable as xs:gYear]">
+                        <sch:report test="every $j in (@when, @notBefore, @notAfter, @from, @to)[. castable as xs:gYear] satisfies number($j) gt year-from-date(current-date())">some attribute value of <sch:name/> is greater than the current date</sch:report>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="julian-before-1582">
+                <constraint>
+                    <sch:rule context="tei:date[@calendar='Julian']">
+                        <sch:report test="some $i in (@when, @notBefore, @notAfter, @from, @to) satisfies $i lt '1582-10-15'">Before October 15, 1582 the default calendar is Julian so no extra calendar declaration is needed.</sch:report>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec><attList><attDef ident="type" usage="opt">
+                    <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
+                    <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</desc>
+                    <valList type="closed">
+                        <valItem ident="baptism">
+                            <gloss versionDate="2013-11-11" xml:lang="en">Baptism</gloss>
+                            <desc versionDate="2013-11-11" xml:lang="en">Identifies the selected date as date of baptism.</desc>
+                            <gloss versionDate="2013-11-11" xml:lang="de">Taufe</gloss>
+                            <desc versionDate="2013-11-11" xml:lang="de">Identifiziert das markierte Datum als Taufdatum.</desc>
+                        </valItem>
+                        <valItem ident="funeral">
+                            <gloss versionDate="2013-11-11" xml:lang="en">Funeral</gloss>
+                            <desc versionDate="2013-11-11" xml:lang="en">Identifies the selected date as date of funeral.</desc>
+                            <gloss versionDate="2013-11-11" xml:lang="de">Beerdigung</gloss>
+                            <desc versionDate="2013-11-11" xml:lang="de">Identifiziert das markierte Datum als Begräbnisdatum.</desc>
+                        </valItem>
+                        <valItem ident="performance">
+                            <gloss versionDate="2013-11-11" xml:lang="en">Performance</gloss>
+                            <desc versionDate="2013-11-11" xml:lang="en">Identifies the selected date as date of performance.</desc>
+                            <gloss versionDate="2013-11-11" xml:lang="de">Aufführung</gloss>
+                            <desc versionDate="2013-11-11" xml:lang="de">Identifiziert das markierte Datum als Aufführungsdatum.</desc>
+                        </valItem>
+                    </valList>
+                </attDef><attDef ident="calendar" mode="replace" usage="opt">
+                    <desc versionDate="2013-11-11" xml:lang="en">indicates the system or calendar to which the date represented by the content of this element belongs.</desc>
+                    <desc versionDate="2013-11-11" xml:lang="de">zeigt das System oder den Kalender auf, zu dem das dargestellte Datum des Elements gehört.</desc>
+                    <valList type="closed">
+                        <valItem ident="Julian">
+                            <desc versionDate="2013-11-11" xml:lang="en">Identifies the selected date as specified according to the Julian calendar. The normalized value in <att>when</att> has to be specified after the standard, ergo the Gregorian calendar.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="de">Identifiziert das markierte Datum als Angabe nach dem Julianischen Kalender. Der normalisierte Wert im <att>when</att> muss aber nach dem Standard, ergo dem Gregorianischen Kalender angegeben werden.</desc>
+                        </valItem>
+                    </valList>
+                </attDef><attRef class="att.global" name="xml:id"/><attRef class="att.global" name="n"/></attList><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">
+      <date when="1980-02">early February 1980</date>
+    </egXML>
+  </exemplum><exemplum versionDate="2008-04-06" xml:lang="fr">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">
+      <date when="1980-02">au début de février 1980</date>
+    </egXML>
+  </exemplum><exemplum versionDate="2008-04-06" xml:lang="fr">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" source="#fr-ex-Pascal_Pensees">
+      <date when="1654-11-23">L'an de grâce 1654,<lb/> Lundi, 23 novembre, jour de saint Clément,
+          pape et martyr et autres au martyrologe, <lb/>Veille de saint Chrysogone, martyr, et
+          autres, <lb/> Depuis environ dix heures et demie du soir jusques environ minuit et
+        demi.</date>
+    </egXML>
+  </exemplum><exemplum versionDate="2008-04-06" xml:lang="fr">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">
+      <date when="1990-09">septembre
+                mcmxc</date>
+      <date when="--09">septembre</date>
+      <date when="2001-09-11T12:48:00">11
+                septembre, neuf heures moins douze GMT</date>
+    </egXML>
+  </exemplum><exemplum xml:lang="zh-TW">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples"> 他出生於<date calendar="#gregorian">西元2007年12月24日</date> (<date calendar="#chinese" when="2007-12-24"> 丁亥年11月15日</date>).</egXML>
+  </exemplum><exemplum xml:lang="zh-TW">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">
+      <date when="1980-02">西元1980年2月初</date>
+    </egXML>
+  </exemplum><exemplum xml:lang="zh-TW">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples"><date when="0637-11">貞觀十一年十一月</date>，唐太宗聽說年輕的武則天長得妖媚嬌艷，楚楚動人，便將她納入宮中，封為四品才人，賜號「武媚」。</egXML>
+  </exemplum><exemplum xml:lang="zh-TW">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">
+      <date when="1990-09">西元1990年9月</date>
+    </egXML>
+  </exemplum><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">Given on the <date when="1977-06-12">Twelfth Day
+        of June in the Year of Our Lord One Thousand Nine Hundred and Seventy-seven of the Republic
+        the Two Hundredth and first and of the University the Eighty-Sixth.</date>
+      </egXML>
+  </exemplum><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples">
+      <date when="1990-09">September 1990</date>
+    </egXML>
+  </exemplum><listRef>
+    <ref target="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/CO.html#CONADA">3.6.4. Dates and Times</ref>
+    <ref target="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/HD.html#HD24">2.2.4. Publication, Distribution, Licensing, etc.</ref>
+    <ref target="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/HD.html#HD6">2.6. The Revision Description</ref>
+    <ref target="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/CO.html#COBICOI">3.12.2.4. Imprint, Size of a Document, and Reprint Information</ref>
+    <ref target="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/CC.html#CCAHSE">15.2.3. The Setting Description</ref>
+    <ref target="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ND.html#NDDATE">13.4. Dates</ref>
   </listRef></elementSpec><elementSpec rend="change" module="core" ident="ref"><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">reference</gloss><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">Quellenangabe</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">defines a reference to another location, possibly modified by additional text or comment.</desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">definiert eine Quellenangabe an einer anderen Stelle, die womöglich durch zusätzlichen Text oder Kommentare modifizert wurde.</desc><classes><memberOf key="att.cReferencing"/><memberOf key="att.internetMedia"/><memberOf key="model.ptrLike"/></classes><content><macroRef key="macro.paraContent"/></content><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="prev-next-correspContext">
                 <constraint>
                     <sch:report test="@type=('previousLetterFromAddressee', 'nextLetterFromAddressee') and not(parent::tei:correspContext)">'previousLetterFromAddressee' and 'nextLetterFromAddressee' are only used within the correspContext element.</sch:report>
