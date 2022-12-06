@@ -372,7 +372,7 @@
                 <specDesc key="del"/>
                 <specDesc key="add"/>
                 <specDesc key="subst"/>
-                <specDesc key="space"/>
+                <!--<specDesc key="space"/>--> <!-- Gehört hier nicht hin?! (PS) -->
                 <specDesc key="damage"/>
                 <specDesc key="gap"/>
                 <specDesc key="unclear"/>
@@ -381,61 +381,99 @@
 
         <div xml:id="MU-deletions">
             <head>Streichungen in der Textvorlage</head>
-            <p>Das einfache Streichen von Worten oder Absätzen – im Gegensatz zu der Kombination von Streichungen und Hinzufügungen (siehe <ptr target="#MU-substitutions"/>) – wird durch das Element <gi>del</gi> 
-                gekennzeichnet, die Form der Streichung wird dabei durch das Attribut <att>rend</att> angegeben.
-                <eg source="A044367"> eine längere <del rend="strikethrough">biographische</del> Skizze </eg>
-                <eg source="A044367"> allein zuzuschreiben <del rend="strikethrough">ist</del> sind. </eg>
+            <p><q>Streichung</q> meint im Folgenden jedwede Tilgung, Löschung oder sonstige Entfernung von Textbestandteilen wie Buchstaben, Wörter oder Absätze.
+              Die Form der Streichung, z.B. Durchstreichung oder Rasur, wird dabei durch das obligatorische Attribut <att>rend</att> angegeben. Geht die Streichung 
+              mit einer Ergänzung einher, so liegt eine <q>Ersetzung</q> vor (siehe <ptr target="#MU-substitutions"/>) und das <gi>del</gi> muss
+              innerhalb eines <gi>subst</gi> stehen, andernfalls handelt es sich um eine einfache Streichung und das <gi>del</gi> kann im laufenden Text auftreten.  
+<egXML xmlns="http://www.tei-c.org/ns/Examples" source="A040198" valid="feasible"><p>Das Neueste ist: daß man so späth wie möglich des Morgens aufsteht, 
+  sein Geschäfte so schläfrig wie möglich versieht, so schlecht wie möglich zu Mittag ißt, 
+  das möglichst schlechte Wetter so schlecht als möglich benüzt, <del rend="strikethrough">und</del> eine schlechte Komödie so schlecht als möglich 
+  aufführen sieht, und sich so früh als möglich zu Bette begiebt.</p></egXML>
+              <egXML xmlns="http://www.tei-c.org/ns/Examples" source="A042748" valid="feasible"><p>… aber ich glaube nicht daß das Mädchen <del rend="erased">sch</del> sich darüber freuen kann.</p></egXML>
+              Ist der gelöschte Text nicht zu entziffern, so wird innerhalb des
+              Elements <gi>del</gi> ein Element <gi>gap</gi> angegeben und mittels der Attribute <att>unit</att>
+              und <att>quantity</att> kann das Ausmaß der Tilgung beziffert werden.
+              <egXML xmlns="http://www.tei-c.org/ns/Examples" source="A040245" valid="feasible"><p>… führten mich auf mein Verlangen dahin, majestätisch, sanft, <del rend="strikethrough"><gap reason="illegible" quantity="3" unit="chars"/></del> spiegelglatt, und pathetisch fließt er dahin …</p></egXML>
             </p>
         </div>
         <div xml:id="MU-additions">
             <head>Ergänzungen in der Textvorlage</head>
-            <p>Einfügungen, die der Autor (Schreiber) nachträglich oder im Schreibvorgang
-                vorgenommen hat, werden (sofern es sich nicht um Korrekturen durch Eingriffe in die
-                ursprüngliche Substanz) handelt, mit dem Element <gi>add</gi> (addition) vermerkt.
-                Dabei sollte der Ort der Einfügung mit Hilfe des Attributs <att>place</att>
-                bezeichnet werden. Als Attributwerte kommen dabei in Frage: <q>inline</q>, <q>margin</q>,
-                <q>above</q> (the line), <q>below</q> (the line) oder <q>mixed</q>. Stammen solche Einfügungen von
-                anderer Hand, kann dies im Attribut <att>hand</att> ausgewiesen werden. 
-                <eg source="A041014"> ich <add place="above">bereits</add> mündlich die Ehre hatte </eg>
-                <eg source="A045192"> die autographischen <add place="below">sehr langen</add> Briefe </eg>
-            </p>
+          <p>Einfügungen, die nachträglich oder ad hoc außerhalb des regulären Textflusses 
+            vorgenommen wurden, werden mit dem Element <gi>add</gi> vermerkt.
+            Dabei muss der Ort der Einfügung mit Hilfe des Attributs <att>place</att>
+            bezeichnet werden. Als Attributwerte kommen dabei in Frage: <q>inline</q>, <q>margin</q>,
+            <q>above</q> (the line), <q>below</q> (the line) oder <q>mixed</q>. Stammen solche Einfügungen von
+            anderer Hand, kann dies im Attribut <att>hand</att> ausgewiesen werden. 
+            <egXML xmlns="http://www.tei-c.org/ns/Examples" source="A041014" valid="feasible"><p>… ich <add place="above">bereits</add> mündlich die Ehre hatte …</p></egXML>
+            <egXML xmlns="http://www.tei-c.org/ns/Examples" source="A042566" valid="feasible"><p>… u. derjenige würde gewiß ermordet <add place="above" hand="#jaehns">worden</add>, welcher nur wagte seinen Unwillen blicken zu lassen.</p></egXML>
+          </p>
         </div>
-
         <div xml:id="MU-substitutions">
             <head>Ersetzungen in der Textvorlage</head>
-            <p>Korrekturen, die der Autor (Schreiber) in seinem Text vorgenommen hat, werden als
-                Substitutionsprozess innerhalb des Elements <gi>subst</gi> dargestellt. Dieser
-                Prozess besteht in der Regel aus zwei Teilen: dem Löschungsvorgang (durch Streichen,
-                Überschreiben o. ä.) und der Ergänzung des neuen Textes (durch Einfügen,
-                Überschreiben o. a.). Der Vorgang ist sowohl hinsichtlich der Art des Löschvorgangs
-                als auch des Ortes, an dem der Ersatztext zu finden ist, näher zu beschreiben. Die
-                Art und Weise der Streichung wird am Element <gi>del</gi> festgehalten, nicht an
-                    <gi>subst</gi>. Ist der ersetzte Text nicht zu entziffern, so wird innerhalb des
-                Elements <gi>del</gi> ein Element <gi>gap</gi> angegeben (das durch <att>unit</att>
-                und <att>quantity</att> näher charakterisiert sein kann). 
-                <eg source="A041014"> Ich <subst><del rend="strikethrough">glaube</del>
-                    <add place="above">hoffe</add></subst> ganz im Geiste der anerkannten Huld
-                    Güte <del rend="strikethrough">und</del> Gerechtigkeits <add place="above">und
-                        Kunst</add>Liebe unsers <rs type="person" key="A000537">allergnädigsten
-                                <subst><del rend="overwritten">Herrn</del><add place="inline">Monarchen</add></subst></rs> zu fühlen </eg>
+            <p>Ersetzungen (Substitutionsprozesse) werden innerhalb des Elements <gi>subst</gi> dargestellt. Ein solcher
+                Prozess besteht aus zwei Teilen: einer <ref target="#MU-deletions">Streichung</ref> und 
+              einer dazugehörigen <ref target="#MU-additions">Ergänzung</ref>.
+              Das Element <gi>subst</gi> dient als Container und Verbindung für die Elemente <gi>add</gi> und <gi>del</gi>, 
+              die wie in <ptr target="#MU-deletions"/> und <ptr target="#MU-additions"/> beschrieben die Art und Weise der Streichung 
+              bzw. den Ort der Einfügung angeben.
+              <egXML xmlns="http://www.tei-c.org/ns/Examples" source="A040156" valid="feasible"><p>… auffallend ist der Enthusiasmus mit dem Sie überall <subst><del rend="strikethrough">aufgenommen</del> <add place="inline">gesehen</add></subst>, und alles dazu gehörige gesucht wird …</p></egXML>
             </p>
         </div>
-        <div xml:id="MU-illegible">
-            <head>Unleserliches</head>
-            <p>Wenn durch Wasserschäden, Siegelloch oder sonstige äußere Einwirkungen (nicht aktives
-                Eingreifen des Schreibers in den Text!) Teile nicht lesbar sind, wird dies durch das
+        <div xml:id="MU-damage">
+            <head>Beschädigungen des Textträgers</head>
+          <p>Wenn durch äußere Einwirkungen auf den Textträger wie Wasser, Tintenfraß oder Ausriss 
+            Teile des Textes nicht mehr lesbar sind, wird dies an der betreffenenden Stelle durch das
                 Element <gi>damage</gi> gekennzeichnet. Dabei wird die Ursache der
-                Lesebeeinträchtigung durch das Attribut <att>agent</att> angegeben. Die Auszeichnung
-                kann als bloße Kennzeichnung der <q>Schadenstatsache</q> erfolgen oder aber unklare
-                bzw. vom Herausgeber ergänzte Lesungen kennzeichnen 
-                <eg source="A041311"> worüber <damage agent="water"><supplied>ich sehr</supplied></damage> froh bin </eg>
-                <!-- zu supplied: Wenn die Ergänzung auf den Hg. zurückgeht und, wie im vorstehenden Falle, etwas <q>nicht Selbstverständliches</q> (zu letzterem gehören Ergänzungen einzelner Buchstaben) umfasst, sollte sich der Herausgeber als Verantwortlicher eintragen: <tag>supplied resp="JV"</tag>.-->
-                Komplett unlesbare Bereiche werden durch das Element <gi>gap</gi> gekennzeichnet,
-                wobei der Vollständigkeit halber der Umfang mit den Attributen <att>unit</att> und
-                    <att>quantity</att> notiert werden kann (als Werte kommen z. B. <q>chars</q> in
-                Frage), die Entzifferungsprobleme können zusätzlich durch das Attribut <tag>damage
-                    reason="illegible"</tag> vermerkt sein.</p>
+                Lesebeeinträchtigung durch das obligatorische Attribut <att>agent</att> angegeben. 
+            Ist der Text zu erschließen, so kann dieser mittels <gi>supplied</gi> ergänzt werden.  
+            <egXML xmlns="http://www.tei-c.org/ns/Examples" source="A040074" valid="feasible"><p>es ist ein Glück für mich, denn er nimmt sonst keine <damage agent="paperloss"><supplied resp="EB">Sc</supplied></damage>hüler mehr an, weilen er gar zu viel zu thun hat.</p></egXML>
+            Ist der Text nicht zu entziffern oder zu erschließen, so muss durch das Element <gi>gap</gi> der fehlende Text markiert werden 
+            und – so möglich – das Ausmaß über die Attribute <att>unit</att> und <att>quantity</att> beziffert werden.   
+            <egXML xmlns="http://www.tei-c.org/ns/Examples" source="A041956" valid="feasible"><p>Der <damage agent="water"><gap/></damage> alle Ehre,  und ich freue mich <damage agent="water"><gap/></damage> zu wandeln.</p></egXML>
+          </p>
         </div>
+      <div xml:id="MU-supplied">
+        <head>Herausgeberzusätze</head>
+        <p>
+          <specList>
+            <specDesc key="supplied"/>
+            <specDesc key="choice"/>
+            <specDesc key="sic"/>
+            <specDesc key="corr"/>
+            <specDesc key="abbr"/>
+            <specDesc key="expan"/>
+          </specList>
+        </p>
+        <div xml:id="MU-Hg-Korrekturen">
+          <head>Herausgeberergänzungen und -korrekturen</head>
+          <p>Gelegentlich kann es vorkommen, dass der Autor zum besseren Textverständnis einzelne
+            fehlende Zeichen oder auch Zeichenfolgen bzw. Worte ergänzen muss/möchte (wenn dies
+            die Folge von Textverlusten ist, vgl. <gi>damage</gi>. Diese Ergänzungen werden mit
+            dem Attribut <att>resp</att> innerhalb eines Elements <gi>supplied</gi> vorgenommen.
+            Alle auf diese Weise vorgenommenen Ergänzungen erscheinen z.Zt. im Text in eckigen
+            Klammern; Ausnahme bilden die Währungsangaben im Tagebuch, dort werden sie zur
+            besseren Lesbarkeit in der Darstellung im Grausatz wiedergegeben. Es kommt auch vor,
+            dass ganz offensichtlich Falsches zu Missverständnissen führt und besser korrigiert
+            werden sollte (in den früheren Richtlinien war an solchen Stellen die Einfügung
+            eines <q>[recte:]</q> oder <q>[vielmehr:]</q> vorgesehen). Zur Kennzeichnung der originalen
+            Schreibung wird nun das Element <gi>sic</gi> verwendet (das auch eingetragen werden
+            kann, um die Tatsache eigenartiger Schreibungen hervorzuheben, damit in späteren
+            Korrekturgängen an dieser Stelle nicht fälschlich ein Verschreiber des Übertragenden
+            angenommen wird). Die Korrektur selbst kann dann durch <gi>corr</gi> angegeben
+            werden und der Urheber sollte sich als Verantwortlicher mit Hilfe des
+            <att>resp</att> eintragen (liegt eine zweite Quelle für diese Änderung vor, kann
+            sie sogar mit einem zusätzlichen Attribut <att>source</att> angegeben werden). Das
+            Ganze wird in ein <gi>choice</gi>-Element eingeschlossen, um eine wahlweise
+            Darstellung zu ermöglichen: <eg source="A041307"><choice><sic>vererhteste</sic><corr>verehrteste</corr></choice> Mamsell</eg>
+            Abkürzungen, die unverständlich bleiben und sich nicht durch bloße Ergänzung
+            auflösen lassen, werden in ihrer originalen Form und zusätzlich als wahlweise
+            aufzurufende Vollform ebenfalls mit <gi>choice</gi>, hier aber ausgefüllt mit den
+            Elementen <gi>abbr</gi> und <gi>expan</gi>, wiedergegeben: 
+            <eg source="A045169"> Angemessenheit der <choice><abbr>ges:</abbr><expan>gesamten</expan></choice> Decoratio in
+              der Wolfsgrube.</eg>
+          </p>
+        </div>
+      </div>
     </div>
     <div xml:id="MU-app">
         <head>Lesarten</head>
@@ -446,49 +484,15 @@
             </specList>
         </p>
     </div>
-    <div xml:id="MU-supplied">
-        <head>Herausgeberzusätze und Kommentare</head>
+    <div xml:id="MU-commentaries">
+        <head>Kommentare</head>
         <p>
             <specList>
-                <specDesc key="supplied"/>
-                <specDesc key="choice"/>
-                <specDesc key="sic"/>
-                <specDesc key="corr"/>
-                <specDesc key="abbr"/>
-                <specDesc key="expan"/>
                 <specDesc key="note"/>
                 <!-- editorial, summary, commentary, themCom  -->
             </specList>
         </p>
-        <div xml:id="MU-Hg-Korrekturen">
-            <head>Herausgeberergänzungen und -korrekturen</head>
-            <p>Gelegentlich kann es vorkommen, dass der Autor zum besseren Textverständnis einzelne
-                fehlende Zeichen oder auch Zeichenfolgen bzw. Worte ergänzen muss/möchte (wenn dies
-                die Folge von Textverlusten ist, vgl. <gi>damage</gi>. Diese Ergänzungen werden mit
-                dem Attribut <att>resp</att> innerhalb eines Elements <gi>supplied</gi> vorgenommen.
-                Alle auf diese Weise vorgenommenen Ergänzungen erscheinen z.Zt. im Text in eckigen
-                Klammern; Ausnahme bilden die Währungsangaben im Tagebuch, dort werden sie zur
-                besseren Lesbarkeit in der Darstellung im Grausatz wiedergegeben. Es kommt auch vor,
-                dass ganz offensichtlich Falsches zu Missverständnissen führt und besser korrigiert
-                werden sollte (in den früheren Richtlinien war an solchen Stellen die Einfügung
-                eines <q>[recte:]</q> oder <q>[vielmehr:]</q> vorgesehen). Zur Kennzeichnung der originalen
-                Schreibung wird nun das Element <gi>sic</gi> verwendet (das auch eingetragen werden
-                kann, um die Tatsache eigenartiger Schreibungen hervorzuheben, damit in späteren
-                Korrekturgängen an dieser Stelle nicht fälschlich ein Verschreiber des Übertragenden
-                angenommen wird). Die Korrektur selbst kann dann durch <gi>corr</gi> angegeben
-                werden und der Urheber sollte sich als Verantwortlicher mit Hilfe des
-                    <att>resp</att> eintragen (liegt eine zweite Quelle für diese Änderung vor, kann
-                sie sogar mit einem zusätzlichen Attribut <att>source</att> angegeben werden). Das
-                Ganze wird in ein <gi>choice</gi>-Element eingeschlossen, um eine wahlweise
-                Darstellung zu ermöglichen: <eg source="A041307"><choice><sic>vererhteste</sic><corr>verehrteste</corr></choice> Mamsell</eg>
-                Abkürzungen, die unverständlich bleiben und sich nicht durch bloße Ergänzung
-                auflösen lassen, werden in ihrer originalen Form und zusätzlich als wahlweise
-                aufzurufende Vollform ebenfalls mit <gi>choice</gi>, hier aber ausgefüllt mit den
-                Elementen <gi>abbr</gi> und <gi>expan</gi>, wiedergegeben: 
-                <eg source="A045169"> Angemessenheit der <choice><abbr>ges:</abbr><expan>gesamten</expan></choice> Decoratio in
-                    der Wolfsgrube.</eg>
-            </p>
-        </div>
+        
         <div xml:id="MU-commentary">
             <head>Herausgeberkommentare</head>
             <p>Innerhalb der ursprünglichen Planung zur Erfassung und Kommentierung von Textinhalten
@@ -722,7 +726,7 @@
                 und die gelegentliche Verwendung des <q>h</q>-ähnlichen Buchstabens als Ersatz für das
                 <q>runde s</q> (vgl. in der Liste: <q>Wissenſchaften</q>, <q>Beſchüzer</q>, <q>Nachſicht</q>) ebenso wie
                 die Vertauschung beider Buchstaben (<q>ſs</q> und <q>sſ</q>) gegen die Verwendung eines
-                zusammengezogenen <q>ß</q> sprechen.&gt;</p>
+                zusammengezogenen <q>ß</q> sprechen.</p>
         </div>
     </div>
     
