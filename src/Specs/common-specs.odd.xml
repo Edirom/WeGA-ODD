@@ -2369,24 +2369,20 @@
                 <memberOf key="att.sortable" mode="delete"/>
             </classes>
             <content>
-                <rng:zeroOrMore>
-                    <rng:ref name="head"/>
-                </rng:zeroOrMore>
-                <rng:choice>
-                    <rng:oneOrMore>
-                        <rng:ref name="item"/>
-                        <rng:optional>
-                            <rng:ref name="note"/>
-                        </rng:optional>
-                        <rng:optional>
-                            <rng:ref name="model.milestoneLike"/>
-                        </rng:optional>
-                    </rng:oneOrMore>
-                    <rng:oneOrMore>
-                        <rng:ref name="label"/>
-                        <rng:ref name="item"/>
-                    </rng:oneOrMore>
-                </rng:choice>
+                <sequence>
+                    <elementRef key="head" minOccurs="0" maxOccurs="unbounded"/>
+                    <alternate>
+                        <sequence maxOccurs="unbounded">
+                            <elementRef key="item"/>
+                            <elementRef key="note" minOccurs="0" maxOccurs="1"/>
+                            <classRef key="model.milestoneLike" minOccurs="0" maxOccurs="1"/>
+                        </sequence>
+                        <sequence maxOccurs="unbounded">
+                            <elementRef key="label"/>
+                            <elementRef key="item"/>
+                        </sequence>
+                    </alternate>
+                </sequence>
             </content>
             <constraintSpec scheme="schematron" ident="gloss-list">
                 <desc versionDate="2014-07-09" xml:lang="en">checks for <gi>label</gi> within <gi>list</gi> without <att>type</att>='gloss'.</desc>
@@ -3795,12 +3791,10 @@
                 <memberOf key="att.global" mode="delete"/>
             </classes>
             <content>
-                <rng:optional>
-                    <rng:ref name="lem"/>
-                </rng:optional>
-                <rng:zeroOrMore>
-                    <rng:ref name="model.rdgLike"/>
-                </rng:zeroOrMore>
+                <sequence>
+                    <elementRef key="lem" minOccurs="0" maxOccurs="1"/>
+                    <classRef key="model.rdgLike" minOccurs="0" maxOccurs="unbounded"/>
+                </sequence>
             </content>
             <attList>
                 <attDef ident="type" mode="delete"/>
@@ -4014,15 +4008,11 @@
                 <memberOf key="att.global" mode="delete"/>
             </classes>
             <content>
-                <rng:optional>
-                    <rng:ref name="origin"/>
-                </rng:optional>
-                <rng:zeroOrMore>
-                    <rng:ref name="provenance"/>
-                </rng:zeroOrMore>
-                <rng:optional>
-                    <rng:ref name="acquisition"/>
-                </rng:optional>
+                <sequence>
+                    <elementRef key="origin" minOccurs="0" maxOccurs="1"/>
+                    <elementRef key="provenance" minOccurs="0" maxOccurs="unbounded"/>
+                    <elementRef key="acquisition" minOccurs="0" maxOccurs="1"/>
+                </sequence>
             </content>
         </elementSpec>
         
@@ -4049,10 +4039,10 @@
                 <memberOf key="att.typed" mode="delete"/>
             </classes>
             <content>
-                <rng:ref name="figDesc"/>
-                <rng:optional>
-                    <rng:ref name="graphic"/>
-                </rng:optional>
+                <sequence>
+                    <elementRef key="figDesc"/>
+                    <elementRef key="graphic" minOccurs="0" maxOccurs="1"/>
+                </sequence>
             </content>
             <attList>
                 <attDef ident="rend" mode="add" usage="opt">
@@ -4091,12 +4081,10 @@
                 <memberOf key="att.global" mode="delete"/>
             </classes>
             <content>
-                <rng:optional>
-                    <rng:ref name="head"/>
-                </rng:optional>
-                <rng:oneOrMore>
-                    <rng:ref name="row"/>
-                </rng:oneOrMore>
+                <sequence>
+                    <elementRef key="head" minOccurs="0" maxOccurs="1"/>
+                    <elementRef key="row" minOccurs="1" maxOccurs="unbounded"/>
+                </sequence>
             </content>
             <constraintSpec scheme="schematron" ident="collapsible-head">
                 <constraint>
