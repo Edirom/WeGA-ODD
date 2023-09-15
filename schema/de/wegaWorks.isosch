@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2022-03-01T15:26:45Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2023-09-15T18:53:46Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -16,7 +16,7 @@
    <!-- ************ -->
    <!-- constraints: -->
    <!-- ************ -->
-   <pattern id="isoschematron-constraint-wegaWorks-data.STAFFREL-between_requires_adjacent_staves-1">
+   <pattern id="schematron-constraint-wegaWorks-data.STAFFREL-between_requires_adjacent_staves-1">
         <rule context="mei:*[@place eq 'between']">
           <assert test="count(tokenize(normalize-space(string(@staff)), '\s+')) = 2">The @staff
             attribute must contain 2 numerically-adjacent integer values.</assert>
@@ -30,7 +30,7 @@
             <value-of select="$maxValue"/> are not adjacent.</assert>
         </rule>
       </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-att.notationType-notationsubtype-When_notationsubtype-2">
+   <pattern id="schematron-constraint-wegaWorks-att.notationType-notationsubtype-When_notationsubtype-2">
             <rule context="mei:*[@notationsubtype]">
               <assert test="@notationtype">An element with a notationsubtype attribute must have
                 a notationtype attribute.</assert>
@@ -49,21 +49,12 @@
             equals "true".</assert>
         </rule>
       </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-componentList-checkComponentList-5">
-        <rule context="mei:componentList">
-          <assert test="every $i in ./child::mei:*[not(local-name()='head')] satisfies              $i/local-name() eq ./parent::mei:*/local-name()">Only child elements of the same name as the parent of the componentList are
-            allowed.</assert>
+   <pattern id="schematron-constraint-wegaWorks-manifestation-check_singleton_availability-5">
+        <rule context="mei:manifestation[@singleton eq 'false'] | mei:manifestation[not(@singleton)]">
+          <assert test="not(mei:availability)">Availability is only permitted when @singleton equals "true".</assert>
         </rule>
       </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-componentList-checkComponents-6">
-        <rule context="mei:componentList[mei:*[@comptype]]">
-          <assert role="warning"
-                 test="count(mei:*[@comptype]) = count(mei:*[local-name() ne 'head'])">When any child
-            element has a comptype attribute, it is recommended that comptype appear on all child
-            elements.</assert>
-        </rule>
-      </pattern>
-   <pattern id="schematron-constraint-wegaWorks-altId-types-match-external-identifiers-7">
+   <pattern id="schematron-constraint-wegaWorks-altId-types-match-external-identifiers-6">
                 <rule context="mei:altId[@type='gnd']">
                     <assert test="matches(., '^1[01]?\d{7}[0-9X]|[47]\d{6}-\d|[1-9]\d{0,7}-[0-9X]|3\d{7}[0-9X]$')">That doesn't look like a valid GND ID.</assert>
                 </rule>
@@ -74,7 +65,7 @@
                     <assert test="matches(., '^ein[0-9]{6}$')">That doesn't look like a valid DraCor Einakter ID.</assert>
                 </rule>
             </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-change-check_change-8">
+   <pattern id="schematron-constraint-wegaWorks-change-check_change-7">
         <rule context="mei:change">
           <assert test="@isodate or mei:date">The date of the change must be recorded in an
             isodate attribute or date element.</assert>
@@ -84,19 +75,32 @@
             element.</assert>
         </rule>
       </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-handList-checkHandListLabels-9">
+   <pattern id="schematron-constraint-wegaWorks-componentList-checkComponentList-8">
+        <rule context="mei:componentList">
+          <assert test="every $i in ./child::mei:*[not(local-name()='head')] satisfies             $i/local-name() eq ./parent::mei:*/local-name()">Only child elements of the same name as the parent of the componentList are
+            allowed.</assert>
+        </rule>
+      </pattern>
+   <pattern id="schematron-constraint-wegaWorks-componentList-checkComponents-9">
+        <rule context="mei:componentList[mei:*[@comptype]]">
+          <assert role="warning"
+                 test="count(mei:*[@comptype]) = count(mei:*[local-name() ne 'head'])">When any child
+            element has a comptype attribute, it is recommended that comptype appear on all child
+            elements.</assert>
+        </rule>
+      </pattern>
+   <pattern id="schematron-constraint-wegaWorks-handList-checkHandListLabels-10">
         <rule context="mei:handList[mei:label]">
           <assert role="warning" test="count(mei:label) = count(mei:hand)">When labels are used,
             usually each hand has one.</assert>
         </rule>
       </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-history-history_restriction-10">
-        <rule context="mei:history[parent::mei:work or parent::mei:expression]">
-          <assert test="not(mei:acquisition or mei:provenance)">The acquisition and provenance
-            elements are not permitted in the work or expression context.</assert>
+   <pattern id="schematron-constraint-wegaWorks-history-history_restriction-11">
+        <rule context="mei:history[parent::mei:work or parent::mei:expression or parent::mei:manifestation[not(@singleton='true')]]">
+          <assert test="not(mei:acquisition or mei:provenance or mei:exhibHist or mei:treatHist or mei:treatSched)">The elements acquisition, provenance, exhibHist, treatHist and treatSched are not permitted at the work or expression level and are only permitted at the manifestation level, if the manifestation is a manifestation singleton.</assert>
         </rule>
       </pattern>
-   <pattern id="schematron-constraint-wegaWorks-meiHead-check_meiHead_type-11">
+   <pattern id="schematron-constraint-wegaWorks-meiHead-check_meiHead_type-12">
         <rule context="mei:meiHead[@type eq 'music']">
           <assert test="ancestor::mei:mei">The meiHead type attribute can have the value 'music'
             only when the document element is "mei".</assert>
@@ -110,18 +114,18 @@
             'independent' only when the document element is "meiHead".</assert>
         </rule>
       </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-termList-checkTermListLabels-12">
+   <pattern id="schematron-constraint-wegaWorks-termList-checkTermListLabels-13">
         <rule context="mei:termList[mei:label]">
           <assert role="warning" test="count(mei:label) = count(mei:term)">When labels are used,
             usually each term has one.</assert>
         </rule>
       </pattern>
-   <pattern id="schematron-constraint-wegaWorks-titleStmt-multiple-same-language-titles-13">
+   <pattern id="schematron-constraint-wegaWorks-titleStmt-multiple-same-language-titles-14">
                 <rule context="mei:titleStmt[not(@analog)]">
                     <report test="some $title in mei:title[not(@type)] satisfies ($title/string(@xml:lang) = $title/following-sibling::mei:title[not(@type)]/string(@xml:lang))">Multiple title with the same xml:lang detected</report>
                 </rule>
             </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-att.cleffing.log-clef_shape_requires_clef_line-14">
+   <pattern id="schematron-constraint-wegaWorks-att.cleffing.log-clef_shape_requires_clef_line-15">
         <rule context="mei:*[matches(@clef.shape, '[FCG]')]">
           <assert test="@clef.line">An 'F', 'C', or 'G' clef requires that its position be
             specified.</assert>
@@ -131,43 +135,43 @@
             specified.</assert>
         </rule>
       </pattern>
-   <pattern id="schematron-constraint-wegaWorks-annot-annot-in-works-15">
+   <pattern id="schematron-constraint-wegaWorks-annot-annot-in-works-16">
       <rule context="mei:annot">
                 <report test="@type and not(parent::mei:notesStmt/parent::mei:manifestation)">No @type attribute needed here. This is only intended for notes statements within manifestations.</report>
             </rule>
    </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-annot-Check_annot_data-16">
+   <pattern id="schematron-constraint-wegaWorks-annot-Check_annot_data-17">
         <rule context="mei:annot[@data]">
           <assert test="ancestor::mei:notesStmt">The @data attribute may only occur on an
             annotation within the notesStmt element.</assert>
         </rule>
       </pattern>
-   <pattern id="schematron-constraint-wegaWorks-creation-check_creationDateHasText-17">
+   <pattern id="schematron-constraint-wegaWorks-creation-check_creationDateHasText-18">
       <rule context="mei:creation">
                 <assert test="mei:date/text()">The creation date should have human readable text as content.</assert>
             </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaWorks-date-dateHeuristics1-18">
+   <pattern id="schematron-constraint-wegaWorks-date-dateHeuristics1-19">
       <rule context="mei:date">
                 <report test="(@notbefore gt @notafter) and not(starts-with(@notbefore, '-'))">value of notBefore greater than notAfter</report>
             </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaWorks-date-dateHeuristics3-19">
+   <pattern id="schematron-constraint-wegaWorks-date-dateHeuristics3-20">
       <rule context="mei:date">
                 <report test="(@startdate or @enddate) and (@isodate or @notafter or @notbefore)">cooccurence of date and duration attributes</report>
             </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaWorks-date-dateHeuristics4-20">
+   <pattern id="schematron-constraint-wegaWorks-date-dateHeuristics4-21">
       <rule context="mei:date">
                 <report test="@isodate and (@notafter or @notbefore)">cooccurence of exact and uncertain date attributes</report>
             </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaWorks-date-dateHeuristics5-21">
+   <pattern id="schematron-constraint-wegaWorks-date-dateHeuristics5-22">
       <rule context="mei:date">
                 <assert test="@isodate or @notbefore or @notafter or @startdate or @enddate or @cert='unknown' or matches(., '0000|o\.J\.|unknown')">mei:date benötigt ein Attribut @isodate, @notbefore o.ä.</assert>
             </rule>
    </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-dimensions-check_dimensions-22">
+   <pattern id="schematron-constraint-wegaWorks-dimensions-check_dimensions-23">
         <rule context="mei:physDesc/mei:dimensions">
           <assert test="not(count(mei:depth) &gt; 1)">The depth element may only appear
             once.</assert>
@@ -177,15 +181,15 @@
             once.</assert>
         </rule>
       </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-mei-Check_staff-23">
+   <pattern id="schematron-constraint-wegaWorks-mei-Check_staff-24">
         <rule context="mei:*[@staff]">
           <assert test="every $i in tokenize(normalize-space(@staff), '\s+') satisfies $i=//mei:staffDef/@n">The values in @staff must correspond to @n attribute of a staffDef
             element.</assert>
         </rule>
       </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-relation-FRBR_relation-24">
+   <pattern id="schematron-constraint-wegaWorks-relation-FRBR_relation-25">
         
-        <rule context="mei:relationList/mei:relation[parent::mei:work or parent::mei:expression or                        parent::mei:source or parent::mei:item]">
+        <rule context="mei:relationList/mei:relation[parent::mei:work or parent::mei:expression or           parent::mei:source or parent::mei:item]">
           <assert test="matches(@rel, 'hasAbridgement') or             matches(@rel, 'hasAbridgement') or             matches(@rel, 'isAbridgementOf') or             matches(@rel, 'hasAdaptation') or             matches(@rel, 'isAdaptationOf') or             matches(@rel, 'hasAlternate') or             matches(@rel, 'isAlternateOf') or             matches(@rel, 'hasArrangement') or             matches(@rel, 'isArrangementOf') or             matches(@rel, 'hasComplement') or             matches(@rel, 'isComplementOf') or             matches(@rel, 'hasEmbodiment') or             matches(@rel, 'isEmbodimentOf') or             matches(@rel, 'hasExemplar') or             matches(@rel, 'isExemplarOf') or             matches(@rel, 'hasImitation') or             matches(@rel, 'isImitationOf') or             matches(@rel, 'hasPart') or             matches(@rel, 'isPartOf') or             matches(@rel, 'hasRealization') or             matches(@rel, 'isRealizationOf') or             matches(@rel, 'hasReconfiguration') or             matches(@rel, 'isReconfigurationOf') or             matches(@rel, 'hasReproduction') or             matches(@rel, 'isReproductionOf') or             matches(@rel, 'hasRevision') or             matches(@rel, 'isRevisionOf') or             matches(@rel, 'hasSuccessor') or             matches(@rel, 'isSuccessorOf') or             matches(@rel, 'hasSummarization') or             matches(@rel, 'isSummarizationOf') or             matches(@rel, 'hasSupplement') or             matches(@rel, 'isSupplementOf') or             matches(@rel, 'hasTransformation') or             matches(@rel, 'isTransformationOf') or             matches(@rel, 'hasTranslation') or             matches(@rel, 'isTranslationOf')">Within work, expression, source, or item, the value of the rel attribute must match one
             of the following: hasAbridgement, isAbridgementOf, hasAdaptation, isAdaptationOf,
             hasAlternate, isAlternateOf, hasArrangement, isArrangementOf, hasComplement,
@@ -199,14 +203,14 @@
             must be present.</assert>
         </rule>
       </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-section-Check_sectionexpansion-25">
+   <pattern id="schematron-constraint-wegaWorks-section-Check_sectionexpansion-26">
         <rule context="mei:section[mei:expansion]">
           <assert test="descendant::mei:section|descendant::mei:ending|descendant::mei:rdg">A
             section containing an expansion element must have descendant section, ending, or rdg
             elements.</assert>
         </rule>
       </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_staffDefn-26">
+   <pattern id="schematron-constraint-wegaWorks-staffDef-Check_staffDefn-27">
         <rule context="mei:staffDef[not(ancestor::mei:staff)]">
           <let name="thisstaff" value="@n"/>
           <assert test="@n">StaffDef must have an n attribute.</assert>
@@ -217,14 +221,14 @@
             permitted.</assert>
         </rule>
       </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_ancestor_staff-27">
+   <pattern id="schematron-constraint-wegaWorks-staffDef-Check_ancestor_staff-28">
         <rule context="mei:staffDef[ancestor::mei:staff and @n]">
           <let name="thisstaff" value="@n"/>
           <assert test="ancestor::mei:staff/@n eq $thisstaff">@n must have the same value as the
             current staff.</assert>
         </rule>
       </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_ancestor_staff_lines-28">
+   <pattern id="schematron-constraint-wegaWorks-staffDef-Check_ancestor_staff_lines-29">
         <rule context="mei:staffDef[ancestor::mei:staff and not(@n)]">
           <let name="thisstaff" value="ancestor::mei:staff/@n"/>
           <assert test="@lines or preceding::mei:staffDef[@n=$thisstaff and @lines]"> Either
@@ -232,13 +236,13 @@
             exist.</assert>
         </rule>
       </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_clef_position_staffDef-29">
+   <pattern id="schematron-constraint-wegaWorks-staffDef-Check_clef_position_staffDef-30">
         <rule context="mei:staffDef[@clef.line and @lines]">
           <assert test="number(@clef.line) &lt;= number(@lines)">The clef position must be less
             than or equal to the number of lines on the staff.</assert>
         </rule>
       </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_clef_position_staffDef_nolines-30">
+   <pattern id="schematron-constraint-wegaWorks-staffDef-Check_clef_position_staffDef_nolines-31">
         <rule context="mei:staffDef[@clef.line and not(@lines)]">
           <let name="thisstaff" value="@n"/>
           <let name="stafflines"
@@ -247,7 +251,7 @@
             less than or equal to the number of lines on the staff.</assert>
         </rule>
       </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_tab_strings_lines-31">
+   <pattern id="schematron-constraint-wegaWorks-staffDef-Check_tab_strings_lines-32">
         <rule context="mei:staffDef[@tab.strings and @lines]">
           <let name="countTokens"
               value="count(tokenize(normalize-space(@tab.strings), '\s'))"/>
@@ -255,7 +259,7 @@
             number of values as there are staff lines.</assert>
         </rule>
       </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-staffDef-Check_tab_strings_nolines-32">
+   <pattern id="schematron-constraint-wegaWorks-staffDef-Check_tab_strings_nolines-33">
         <rule context="mei:staffDef[@tab.strings and not(@lines)]">
           <let name="countTokens"
               value="count(tokenize(normalize-space(@tab.strings), '\s'))"/>
@@ -299,7 +303,7 @@
               the value of ppq on a preceding scoreDef.</assert>
           </rule>
         </pattern>
-      <pattern id="isoschematron-constraint-wegaWorks-staffGrp-Check_staffGrp_unique_staff_n_values-36">
+      <pattern id="schematron-constraint-wegaWorks-staffGrp-Check_staffGrp_unique_staff_n_values-37">
         <rule context="mei:staffGrp">
           <let name="countstaves" value="count(descendant::mei:staffDef)"/>
           <let name="countuniqstaves"
@@ -308,29 +312,29 @@
             for the n attribute.</assert>
         </rule>
       </pattern>
-   <pattern id="isoschematron-constraint-wegaWorks-term-Check_term_dataTarget-37">
+   <pattern id="schematron-constraint-wegaWorks-term-Check_term_dataTarget-38">
         <rule context="mei:term[@data]">
           <assert test="ancestor::mei:classification">The @data attribute may only occur on a
             term which is a descendant of a classification element.</assert>
         </rule>
       </pattern>
-   <pattern id="schematron-constraint-wegaWorks-title-work-subtitles-map-xmllang-38">
+   <pattern id="schematron-constraint-wegaWorks-title-work-subtitles-map-xmllang-39">
                 <rule context="mei:title[@type='sub'][parent::mei:titleStmt]">
                     <assert test="string(@xml:lang) = preceding-sibling::mei:title/string(@xml:lang)">Make sure that this subtitle has a proper xml:lang attribute matching a preceding title's xml:lang</assert>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaWorks-title-type-or-codedval-39">
+   <pattern id="schematron-constraint-wegaWorks-title-type-or-codedval-40">
       <rule context="mei:title">
                 <report test="@codedval and @type">type and codedval attribute found! A title should either refer to an entity by the codedval attribute or be further refined by the type attribute</report>
             </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaWorks-styleguide-document-node-content-40">
+   <pattern id="schematron-constraint-wegaWorks-styleguide-document-node-content-41">
                 <rule context="document-node()">
                     <report test="count(processing-instruction()) ne 2">WeGA styleguide error: there should exactly be two processing instructions before the root element</report>
                     <report test="comment()">WeGA styleguide error: there should be no comments outside the root element</report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaWorks-att.wega.rend-underline-n-41">
+   <pattern id="schematron-constraint-wegaWorks-att.wega.rend-underline-n-42">
                     <rule context="*:hi[@n] | *:rend[@n]">
                         <report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</report>
                     </rule>
