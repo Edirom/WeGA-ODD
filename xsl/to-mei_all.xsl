@@ -7,7 +7,7 @@
     exclude-result-prefixes="xs wega"
     version="2.0">
     
-    <xsl:param name="current-mei-version" as="xs:string">4.0.1</xsl:param>
+    <xsl:param name="current-mei-version" as="xs:string">5.0</xsl:param>
     
     <xsl:output media-type="application/tei+xml" encoding="UTF-8" indent="no" method="xml"/>
     <xsl:preserve-space elements="*"/>
