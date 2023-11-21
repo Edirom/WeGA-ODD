@@ -420,9 +420,9 @@
     
     <specGrp xml:id="wega-common-atts">
         <!-- common macros for TEI and MEI -->
-        <macroSpec ident="wega.data.temporal.iso" mode="add" module="wega.core.module">
-            <desc versionDate="2014-04-22" xml:lang="en">A replacement for the TEI macro data.temporal.iso which allows only date (YYYY-MM-DD) and gYear (YYYY).</desc>
-            <desc versionDate="2014-04-22" xml:lang="de">WeGA-Ersatz für das TEI Makro data.temporal.iso mit der Einschränkung auf date (YYYY-MM-DD) und gYear (YYYY).</desc>
+        <macroSpec ident="wega.data.temporal.w3c" mode="add" module="wega.core.module">
+            <desc versionDate="2014-04-22" xml:lang="en">A replacement for the TEI macro teidata.temporal.w3c which allows only date (YYYY-MM-DD) and gYear (YYYY).</desc>
+            <desc versionDate="2014-04-22" xml:lang="de">WeGA-Ersatz für das TEI Makro teidata.temporal.w3c mit der Einschränkung auf date (YYYY-MM-DD) und gYear (YYYY).</desc>
             <content>
                 <alternate>
                     <dataRef name="date"/>
@@ -574,11 +574,11 @@
     </specGrp>
     
     <specGrp xml:id="wega-tei-atts">
-        <macroSpec ident="teidata.temporal.w3c" mode="change" module="tei">
+        <dataSpec ident="teidata.temporal.w3c" mode="change" module="tei">
             <content>
-                <dataRef key="wega.data.temporal.iso"/>
+                <dataRef key="wega.data.temporal.w3c"/>
             </content>
-        </macroSpec>
+        </dataSpec>
         
         <classSpec type="atts" ident="att.docStatus" mode="replace" module="tei">
             <desc versionDate="2013-11-11" xml:lang="en">provides attributes for use on metadata elements describing the status of a document.</desc>
@@ -740,6 +740,21 @@
                             </sch:rule>
                         </constraint>
                     </constraintSpec>
+                </attDef>
+            </attList>
+        </classSpec>
+        
+        <classSpec type="atts" ident="att.calendarSystem" module="tei" mode="change">
+            <attList>
+                <attDef ident="calendar" mode="replace" usage="opt">
+                    <desc versionDate="2013-11-11" xml:lang="en">indicates the system or calendar to which the date represented by the content of this element belongs.</desc>
+                    <desc versionDate="2013-11-11" xml:lang="de">zeigt das System oder den Kalender auf, zu dem das dargestellte Datum des Elements gehört.</desc>
+                    <valList type="closed">
+                        <valItem ident="Julian">
+                            <desc versionDate="2013-11-11" xml:lang="en">Identifies the selected date as specified according to the Julian calendar. The normalized value in <att>when</att> has to be specified after the standard, ergo the Gregorian calendar.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="de">Identifiziert das markierte Datum als Angabe nach dem Julianischen Kalender. Der normalisierte Wert im <att>when</att> muss aber nach dem Standard, ergo dem Gregorianischen Kalender angegeben werden.</desc>
+                        </valItem>
+                    </valList>
                 </attDef>
             </attList>
         </classSpec>
@@ -1202,6 +1217,8 @@
                         </valItem>
                     </valList>
                 </attDef>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
             </attList>
         </elementSpec>
         
@@ -1315,16 +1332,6 @@
                             <desc versionDate="2013-11-11" xml:lang="en">Identifies the selected date as date of performance.</desc>
                             <gloss versionDate="2013-11-11" xml:lang="de">Aufführung</gloss>
                             <desc versionDate="2013-11-11" xml:lang="de">Identifiziert das markierte Datum als Aufführungsdatum.</desc>
-                        </valItem>
-                    </valList>
-                </attDef>
-                <attDef ident="calendar" mode="replace" usage="opt">
-                    <desc versionDate="2013-11-11" xml:lang="en">indicates the system or calendar to which the date represented by the content of this element belongs.</desc>
-                    <desc versionDate="2013-11-11" xml:lang="de">zeigt das System oder den Kalender auf, zu dem das dargestellte Datum des Elements gehört.</desc>
-                    <valList type="closed">
-                        <valItem ident="Julian">
-                            <desc versionDate="2013-11-11" xml:lang="en">Identifies the selected date as specified according to the Julian calendar. The normalized value in <att>when</att> has to be specified after the standard, ergo the Gregorian calendar.</desc>
-                            <desc versionDate="2013-11-11" xml:lang="de">Identifiziert das markierte Datum als Angabe nach dem Julianischen Kalender. Der normalisierte Wert im <att>when</att> muss aber nach dem Standard, ergo dem Gregorianischen Kalender angegeben werden.</desc>
                         </valItem>
                     </valList>
                 </attDef>
@@ -1576,6 +1583,8 @@
                 </attDef>
                 <attRef class="att.global" name="xml:id"/>
                 <attRef class="att.global.responsibility" name="cert"/>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
             </attList>
         </elementSpec>
         
@@ -1596,6 +1605,8 @@
                     </datatype>
                 </attDef>
                 <attRef class="att.global" name="xml:id"/>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
             </attList>
         </elementSpec>
         
@@ -1929,6 +1940,8 @@
                 <attDef ident="source" mode="delete"/>
                 <attDef ident="xml:base" mode="delete"/>
                 <attDef ident="xml:space" mode="delete"/>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
             </attList>
         </elementSpec>
         
@@ -2723,6 +2736,20 @@
             </content>
         </elementSpec>
         
+        <elementSpec ident="resp" module="core" mode="change">
+            <attList>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
+            </attList>
+        </elementSpec>
+        
+        <elementSpec ident="name" module="core" mode="change">
+            <attList>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
+            </attList>
+        </elementSpec>
+        
        <classSpec type="atts" ident="att.declarable" module="tei" mode="delete"/>
     </specGrp>
     
@@ -2736,6 +2763,10 @@
             <content>
                 <rng:ref name="date"/>
             </content>
+            <attList>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
+            </attList>
         </elementSpec>
         
         <elementSpec ident="handNote" mode="change" module="header">
@@ -2819,7 +2850,7 @@
                             There are some values of "2006" in the writings so we can't 
                             set this to xs:date here but also need gYear
                         -->
-                        <dataRef key="wega.data.temporal.iso"/>
+                        <dataRef key="wega.data.temporal.w3c"/>
                     </datatype>
                     <remarks versionDate="2022-09-19" xml:lang="en">
                         <p>For historic reasons gYear (i.e. only providing the year) is also allowed. For new entries this must be avoided.</p>
@@ -2828,8 +2859,9 @@
                         <p>Aus historischen Gründen ist der Datentyp gYear (d.h. nur die Angabe des Jahrs) ebenfalls erlaubt. Dies ist bei neuen Einträge aber zu vermeiden.</p>
                     </remarks>
                 </attDef>
-                <attDef ident="calendar" mode="delete"/>
                 <attDef ident="target" mode="delete"/>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
             </attList>
         </elementSpec>
         
@@ -2976,6 +3008,13 @@
                 </constraint>
             </constraintSpec>
         </elementSpec>
+        
+        <elementSpec ident="licence" module="header" mode="change">
+            <attList>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
+            </attList>
+        </elementSpec>
     </specGrp>
     
     <specGrp xml:id="wega-namesdates">
@@ -3000,6 +3039,8 @@
                     </datatype>
                 </attDef>
                 <attRef class="att.global.responsibility" name="cert"/>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
             </attList>
         </elementSpec>
         
@@ -3082,6 +3123,8 @@
                     </datatype>
                 </attDef>
                 <attDef ident="subtype" mode="delete"/>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
             </attList>
             
             <exemplum versionDate="2013-11-11" xml:lang="de">
@@ -3138,6 +3181,8 @@
                     </datatype>
                 </attDef>
                 <attRef class="att.global.responsibility" name="cert"/>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
             </attList>
         </elementSpec>
         
@@ -3152,6 +3197,8 @@
             </classes>
             <attList>
                 <attRef class="att.global.responsibility" name="cert"/>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
             </attList>
         </elementSpec>
         
@@ -3166,6 +3213,8 @@
             </classes>
             <attList>
                 <attRef class="att.global.responsibility" name="cert"/>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
             </attList>
         </elementSpec>
         
@@ -3180,6 +3229,8 @@
             </classes>
             <attList>
                 <attRef class="att.global.responsibility" name="cert"/>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
             </attList>
         </elementSpec>
         
@@ -3201,6 +3252,8 @@
                     </valList>
                 </attDef>
                 <attRef class="att.global.responsibility" name="cert"/>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
             </attList>
         </elementSpec>
         
@@ -3257,6 +3310,8 @@
                     </datatype>
                 </attDef>
                 <attRef name="cert" class="att.global.responsibility"/>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
             </attList>
         </elementSpec>
     </specGrp>
@@ -3994,6 +4049,10 @@
                         minOccurs="0"/>
                 </sequence>
             </content>
+            <attList>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
+            </attList>
         </elementSpec>
         
         <elementSpec ident="physDesc" mode="change" module="msdescription">
@@ -4045,6 +4104,24 @@
             </content>
         </elementSpec>
         
+        <elementSpec ident="origin" mode="change" module="msdescription">
+            <attList>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
+            </attList>
+        </elementSpec>
+        <elementSpec ident="provenance" mode="change" module="msdescription">
+            <attList>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
+            </attList>
+        </elementSpec>
+        <elementSpec ident="acquisition" mode="change" module="msdescription">
+            <attList>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
+            </attList>
+        </elementSpec>
     </specGrp>
     
     <specGrp xml:id="wega-figures">
@@ -4316,6 +4393,8 @@
                     </valItem>-->
                     </valList>
                 </attDef>
+                <!-- need to remove calendar explicitly to prevent deprecation notice -->
+                <attDef ident="calendar" mode="delete"/>
             </attList>
         </elementSpec>
     </specGrp>
