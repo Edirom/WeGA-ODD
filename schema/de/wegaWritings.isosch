@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2024-04-02T08:31:26Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2024-04-25T10:20:53Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -12,6 +12,7 @@
    <ns prefix="rna" uri="http://relaxng.org/ns/compatibility/annotations/1.0"/>
    <ns prefix="sch" uri="http://purl.oclc.org/dsdl/schematron"/>
    <ns prefix="sch1x" uri="http://www.ascc.net/xml/schematron"/>
+   <ns prefix="teix" uri="http://www.tei-c.org/ns/Examples"/>
 
    <!-- ********************* -->
    <!-- namespaces, implicit: -->
@@ -805,15 +806,16 @@ relatedItem element must be empty</report>
                     <assert test="id(substring($source,2))">Unable to locate the reference provided by the @source attribute.</assert>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaWritings-anonymus-id-120">
-                <rule context="*[@key|@codedval]">
-                    <report test="(@key | @codedval) = 'A007979'">Please do not link to the anonymus ID.</report>
+   <pattern id="schematron-constraint-wegaWritings-targetMustResolve-120">
+                
+                <rule context="*[starts-with(@target, '#')][not(ancestor::teix:*)]">
+                    <let name="target" value="@target"/>
+                    <assert test="id(substring($target,2))">Unable to locate the reference provided by the @target attribute.</assert>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaWritings-styleguide-document-node-content-121">
-                <rule context="document-node()">
-                    <report test="count(processing-instruction()) ne 2">WeGA styleguide error: there should exactly be two processing instructions before the root element</report>
-                    <report test="comment()">WeGA styleguide error: there should be no comments outside the root element</report>
+   <pattern id="schematron-constraint-wegaWritings-anonymus-id-121">
+                <rule context="*[@key|@codedval]">
+                    <report test="(@key | @codedval) = 'A007979'">Please do not link to the anonymus ID.</report>
                 </rule>
             </pattern>
    <pattern id="schematron-constraint-wegaWritings-styleguide-document-node-content-122">
@@ -822,7 +824,13 @@ relatedItem element must be empty</report>
                     <report test="comment()">WeGA styleguide error: there should be no comments outside the root element</report>
                 </rule>
             </pattern>
-   <pattern id="schematron-constraint-wegaWritings-att.wega.rend-underline-n-123">
+   <pattern id="schematron-constraint-wegaWritings-styleguide-document-node-content-123">
+                <rule context="document-node()">
+                    <report test="count(processing-instruction()) ne 2">WeGA styleguide error: there should exactly be two processing instructions before the root element</report>
+                    <report test="comment()">WeGA styleguide error: there should be no comments outside the root element</report>
+                </rule>
+            </pattern>
+   <pattern id="schematron-constraint-wegaWritings-att.wega.rend-underline-n-124">
                     <rule context="*:hi[@n] | *:rend[@n]">
                         <report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</report>
                     </rule>
