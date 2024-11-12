@@ -3,10 +3,10 @@
     xmlns="http://www.tei-c.org/ns/1.0" 
     xmlns:rng="http://relaxng.org/ns/structure/1.0"
     xmlns:sch="http://purl.oclc.org/dsdl/schematron">
-    <moduleRef key="core" include="address author bibl date divGen graphic head hi item label lb list mentioned name note p postCode publisher q quote ref rs street term title"/>
+    <moduleRef key="core" include="address author bibl biblStruct date divGen editor graphic head hi imprint item label lb list mentioned monogr name note p postCode publisher pubPlace q quote ref relatedItem rs street term title"/>
     <moduleRef key="tei"/>
-    <moduleRef key="header" include="availability editionStmt fileDesc keywords licence profileDesc publicationStmt sourceDesc teiHeader textClass titleStmt"/>
-    <moduleRef key="textstructure" include="TEI body div text"/>
+    <moduleRef key="header" include="availability editionStmt fileDesc keywords licence notesStmt profileDesc publicationStmt sourceDesc teiHeader textClass titleStmt"/>
+    <moduleRef key="textstructure" include="TEI body div front text titlePage titlePart"/>
     <moduleRef key="namesdates" include="country orgName persName placeName settlement"/>
     <moduleRef key="figures" include="cell figDesc figure row table"/>
     
@@ -17,7 +17,7 @@
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-constraints"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-atts"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-tei-atts"/>
-    <specGrpRef target="../Specs/common-specs.odd.xml#wega-core"/>
+<!--    <specGrpRef target="../Specs/common-specs.odd.xml#wega-core"/>-->
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-header"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-textstructure"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-namesdates"/>
@@ -126,12 +126,28 @@
             <memberOf key="att.typed" mode="delete"/>
             <memberOf key="att.canonical" mode="delete"/>
         </classes>
-        <content>
+        <!--<content>
             <macroRef key="WeGA_keywords.list"/>
-        </content>
+        </content>-->
         <attList>
             <attDef ident="cRef" mode="delete"/>
             <attDef ident="sortKey" mode="delete"/>
+        </attList>
+    </elementSpec>
+    
+    <!-- 
+        temporarily overwrite the default note definition
+        NB, this entails disabling the import of #wega-core at line 20
+    -->
+    <elementSpec ident="note" mode="change" module="core">
+        <attList>
+            <attDef ident="type" mode="change">
+                <valList mode="add" type="closed">
+                    <valItem ident="Kurzbeschreibung"/>
+                    <valItem ident="Verweise"/>
+                    <valItem ident="Anmerkungen"/>
+                </valList>
+            </attDef>
         </attList>
     </elementSpec>
     
