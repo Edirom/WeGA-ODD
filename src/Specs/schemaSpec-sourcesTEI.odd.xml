@@ -5,7 +5,7 @@
     xmlns:sch="http://purl.oclc.org/dsdl/schematron">
     <moduleRef key="core" include="address author bibl biblStruct date divGen editor graphic head hi imprint item label lb list mentioned monogr name note p postCode publisher pubPlace q quote ref relatedItem rs street term title"/>
     <moduleRef key="tei"/>
-    <moduleRef key="header" include="availability editionStmt fileDesc keywords licence notesStmt profileDesc publicationStmt sourceDesc teiHeader textClass titleStmt"/>
+    <moduleRef key="header" include="availability change editionStmt fileDesc keywords licence notesStmt profileDesc publicationStmt revisionDesc sourceDesc teiHeader textClass titleStmt"/>
     <moduleRef key="textstructure" include="TEI body div front text titlePage titlePart"/>
     <moduleRef key="namesdates" include="country orgName persName placeName settlement"/>
     <moduleRef key="figures" include="cell figDesc figure row table"/>
@@ -17,7 +17,7 @@
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-constraints"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-common-atts"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-tei-atts"/>
-<!--    <specGrpRef target="../Specs/common-specs.odd.xml#wega-core"/>-->
+    <specGrpRef target="../Specs/common-specs.odd.xml#wega-core"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-header"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-textstructure"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-namesdates"/>
@@ -69,6 +69,24 @@
                 </datatype>
             </attDef>
         </attList>
+    </elementSpec>
+    
+    <elementSpec ident="teiHeader" module="header" mode="change">
+        <content>
+            <sequence>
+                <elementRef key="fileDesc"/>
+                <elementRef key="profileDesc"/>
+                <elementRef key="revisionDesc"/>
+            </sequence>
+        </content>
+        <constraintSpec scheme="isoschematron" ident="seriesTitle">
+            <constraint>
+                <sch:rule context="tei:fileDesc/tei:titleStmt/tei:title[@level='s']">
+                    <sch:assert test=".='WeGA, Textquellen, Digitale Edition'">The series title must be  
+                        "WeGA, Textquellen, Digitale Edition".</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
     </elementSpec>
     
     <elementSpec ident="publicationStmt" mode="change" module="header">
@@ -132,22 +150,6 @@
         <attList>
             <attDef ident="cRef" mode="delete"/>
             <attDef ident="sortKey" mode="delete"/>
-        </attList>
-    </elementSpec>
-    
-    <!-- 
-        temporarily overwrite the default note definition
-        NB, this entails disabling the import of #wega-core at line 20
-    -->
-    <elementSpec ident="note" mode="change" module="core">
-        <attList>
-            <attDef ident="type" mode="change">
-                <valList mode="add" type="closed">
-                    <valItem ident="Kurzbeschreibung"/>
-                    <valItem ident="Verweise"/>
-                    <valItem ident="Anmerkungen"/>
-                </valList>
-            </attDef>
         </attList>
     </elementSpec>
     
