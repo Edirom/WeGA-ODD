@@ -483,8 +483,9 @@
                 <desc versionDate="2014-06-16" xml:lang="en">Checks for illegal combination of <att>n</att></desc>
                 <desc versionDate="2014-06-16" xml:lang="de">Überprüft auf illegale Kombinationen von <att>n</att></desc>
                 <constraint>
+                    <!-- see also constraint "indent-n" on lg/@rend -->
                     <sch:rule context="*:hi[@n] | *:rend[@n]">
-                        <sch:report test="@rend ne 'underline'">The @n-attribute is only supported in combination with @rend='underline'</sch:report>
+                        <sch:assert test="@rend = ('underline', 'indent')">The @n-attribute is only supported in combination with @rend='underline' and @rend='indent'</sch:assert>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
@@ -785,10 +786,43 @@
             </attList>
         </classSpec>
         
+        <classSpec type="atts" ident="att.placement" module="tei" mode="change">
+            <attList>
+                <attDef ident="place" mode="change">
+                    <desc versionDate="2013-11-11" xml:lang="en">specifies where this item is placed.</desc>
+                    <desc versionDate="2013-11-11" xml:lang="de">spezifiert wo das Element angebracht ist.</desc>
+                    <valList type="closed" mode="replace">
+                        <valItem ident="above">
+                            <desc versionDate="2013-11-11" xml:lang="en">insertion above the line.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="de">Einfügung über der Zeile.</desc>
+                        </valItem>
+                        <valItem ident="below">
+                            <desc versionDate="2013-11-11" xml:lang="en">insertion below the line.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="de">Einfügung unter der Zeile.</desc>
+                        </valItem>
+                        <valItem ident="inline">
+                            <desc versionDate="2013-11-11" xml:lang="en">insertion inline.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="de">Einfügung in der Zeile.</desc>
+                        </valItem>
+                        <valItem ident="margin">
+                            <desc versionDate="2013-11-11" xml:lang="en">insertion at margin.</desc>
+                            <desc versionDate="2013-11-11" xml:lang="de">Einfügung am Rand.</desc>
+                        </valItem>
+                        <valItem ident="mixed">
+                            <desc versionDate="2013-11-11" xml:lang="en"></desc>
+                            <desc versionDate="2013-11-11" xml:lang="de"></desc>
+                        </valItem>
+                    </valList>
+                </attDef>
+            </attList>
+        </classSpec>
+        
         <classSpec type="atts" ident="att.sortable" module="tei" mode="delete"/>
         <classSpec type="atts" ident="att.datable.iso" module="tei" mode="delete"/>
         <classSpec type="atts" ident="att.datable.custom" module="tei" mode="delete"/>
         <classSpec type="atts" ident="att.edition" module="tei" mode="delete"/>
+        <classSpec type="atts" ident="att.cmc" module="tei" mode="delete"/>
+        <classSpec type="atts" ident="att.ranging" module="tei" mode="delete"/>
         
     </specGrp>
     
@@ -2065,9 +2099,11 @@
                 <memberOf key="att.dimensions" mode="delete"/>
             </classes>
             <attList>
-               <attRef name="xml:id" class="att.global"/>
-               <attRef name="hand" class="att.written"/>
-                <attDef ident="place" mode="change" usage="req">
+                <attRef name="xml:id" class="att.global"/>
+                <attRef name="hand" class="att.written"/>
+                <attDef ident="place" mode="change" usage="req"/>
+                
+                <!--<attDef ident="place" mode="change" usage="req">
                     <desc versionDate="2013-11-11" xml:lang="en">specifies where this item is placed.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">spezifiert wo das Element angebracht ist.</desc>
                     <valList type="closed" mode="replace">
@@ -2092,7 +2128,7 @@
                             <desc versionDate="2013-11-11" xml:lang="de"></desc>
                         </valItem>
                     </valList>
-                </attDef>
+                </attDef>-->
             </attList>
         </elementSpec>
         
@@ -2281,7 +2317,41 @@
                 <memberOf key="att.declaring" mode="delete"/>
                 <memberOf key="att.metrical" mode="delete"/>
                 <memberOf key="att.divLike" mode="delete"/>
+                <memberOf key="att.typed" mode="delete"/>
             </classes>
+            <constraintSpec scheme="schematron" ident="indent-n">
+                <!-- see also constraint "underline-n" from class att.wega.rend -->
+                <desc versionDate="2024-11-15" xml:lang="en">Checks for illegal combination of <att>n</att></desc>
+                <desc versionDate="2024-11-15" xml:lang="de">Überprüft auf illegale Kombinationen von <att>n</att></desc>
+                <constraint>
+                    <sch:rule context="tei:lg[@n]">
+                        <sch:assert test="@rend='indent'">The @n-attribute is only supported in combination with @rend='indent'</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <attList>
+                <attDef ident="rend" mode="add" usage="opt">
+                    <gloss versionDate="2013-11-11" xml:lang="en">rendition</gloss>
+                    <desc versionDate="2013-11-11" xml:lang="en">indicates how the element in question was rendered or presented in the source text.</desc>
+                    <gloss versionDate="2013-11-11" xml:lang="de">graphische Darstellung</gloss>
+                    <desc versionDate="2013-11-11" xml:lang="de">gibt an, wie das fragliche Element <emph>in der Vorlage</emph> graphisch dargestellt ist.</desc>
+                    <valList type="closed">
+                        <valItem ident="indent">
+                            <desc versionDate="2024-11-15" xml:lang="en">indented.</desc>
+                            <desc versionDate="2024-11-15" xml:lang="de">eingerückt.</desc>
+                        </valItem>
+                    </valList>
+                </attDef>
+                <attDef ident="n" mode="add" usage="opt">
+                    <gloss versionDate="2013-11-11" xml:lang="en">number</gloss>
+                    <desc versionDate="2024-11-15" xml:lang="en">gives a number for the ammount of indentation steps (i.e. only applicable with <code>hi@rend='indent'</code>).</desc>
+                    <gloss versionDate="2013-11-11" xml:lang="de">Zahl</gloss>
+                    <desc versionDate="2024-11-15" xml:lang="de">gibt die Anzahl der Einrückungen an (d.h., <att>n</att> kann nur in Kombination mit <code>hi@rend='indent'</code> auftreten).</desc>
+                    <datatype>
+                        <dataRef key="teidata.count"/>
+                    </datatype>
+                </attDef>
+            </attList>
         </elementSpec>
         
         <elementSpec ident="listBibl" mode="change" module="core">
@@ -2354,9 +2424,10 @@
                     <gloss versionDate="2018-03-29" xml:lang="de">Nummer</gloss>
                     <desc versionDate="2013-11-11" xml:lang="de">gibt dem Element eine Nummer (oder eine andere Bezeichnung), die nicht unbedingt eindeutig im Dokument ist.</desc>
                     <datatype>
-                        <rng:data type="string">
-                            <rng:param name="pattern">\d+[rv]?</rng:param>
-                        </rng:data>
+                        <dataRef name="token" restriction="[0-9IVX]+([ab]/)?[rv]?"/>
+                        <!--<rng:data type="string">
+                            <rng:param name="pattern">[0-9IVX]+([ab]/)?[rv]?</rng:param>
+                        </rng:data>-->
                     </datatype>
                 </attDef>
             </attList>
@@ -3595,7 +3666,6 @@
             <classes mode="change">
                 <memberOf key="att.global" mode="delete"/>
                 <memberOf key="att.typed" mode="delete"/>
-                <memberOf key="att.placement" mode="delete"/>
             </classes>
             <attList>
                 <attDef ident="spanTo" mode="change" usage="req">
