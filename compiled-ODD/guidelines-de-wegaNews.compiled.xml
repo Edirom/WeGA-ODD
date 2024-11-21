@@ -4945,9 +4945,11 @@ one initial.</desc>
   </remarks>
 </dataSpec><elementSpec rend="change" module="core" ident="p"><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">paragraph</gloss><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">Absatz</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">marks paragraphs in prose.</desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">markiert einen Absatz in Prosa-Form.</desc><classes><memberOf key="model.pLike"/><memberOf key="att.fragmentable"/><memberOf key="att.written"/></classes><content><macroRef key="macro.paraContent"/></content><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" ident="extent-within-physDesc" scheme="schematron" mode="add">
                 <constraint>
-                    <report xmlns="http://purl.oclc.org/dsdl/schematron" test="@n='extent' and not(parent::tei:physDesc)">
-                        The value 'extent' must only be used within the tei:physDesc.
-                    </report>
+                    <sch:rule context="tei:p">
+                        <report xmlns="http://purl.oclc.org/dsdl/schematron" test="@n='extent' and not(parent::tei:physDesc)">
+                            The value 'extent' must only be used within the tei:physDesc.
+                        </report>
+                    </sch:rule>
                 </constraint>
             </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" ident="extent-only-once" scheme="schematron" mode="add">
                 <constraint>
@@ -4963,15 +4965,19 @@ one initial.</desc>
                 </constraint>
             </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" ident="abstractModel-structure-p-in-ab-or-p" scheme="schematron" mode="change">
                 <constraint>
-                    <report xmlns="http://purl.oclc.org/dsdl/schematron" test="(ancestor::tei:p or ancestor::tei:ab)                          and not(parent::tei:exemplum                         |parent::tei:item                         |parent::tei:note                         |parent::tei:q                         |parent::tei:quote                         |parent::tei:remarks                         |parent::tei:said                         |parent::tei:sp                         |parent::tei:stage                         |parent::tei:cell                         |parent::tei:figure                         |parent::tei:footNote)">
-                        Abstract model violation: Paragraphs may not contain other paragraphs or ab elements.
-                    </report>
+                    <sch:rule context="tei:p">
+                        <report xmlns="http://purl.oclc.org/dsdl/schematron" test="(ancestor::tei:p or ancestor::tei:ab)                              and not(parent::tei:exemplum                             |parent::tei:item                             |parent::tei:note                             |parent::tei:q                             |parent::tei:quote                             |parent::tei:remarks                             |parent::tei:said                             |parent::tei:sp                             |parent::tei:stage                             |parent::tei:cell                             |parent::tei:figure                             |parent::tei:footNote)">
+                            Abstract model violation: Paragraphs may not contain other paragraphs or ab elements.
+                        </report>
+                    </sch:rule>
                 </constraint>
             </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" ident="abstractModel-structure-l" scheme="schematron" mode="change">
                 <constraint>
-                    <report xmlns="http://purl.oclc.org/dsdl/schematron" test="(ancestor::tei:l or ancestor::tei:lg)                          and not(parent::tei:figure or parent::tei:note or ancestor::tei:floatingText or parent::tei:footNote)">
-                        Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab, unless p is a child of figure or note, or is a descendant of floatingText.
-                    </report>
+                    <sch:rule context="tei:p">
+                        <report xmlns="http://purl.oclc.org/dsdl/schematron" test="(ancestor::tei:l or ancestor::tei:lg)                              and not(parent::tei:figure or parent::tei:note or ancestor::tei:floatingText or parent::tei:footNote)">
+                            Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab, unless p is a child of figure or note, or is a descendant of floatingText.
+                        </report>
+                    </sch:rule>
                 </constraint>
             </constraintSpec><constraintSpec ident="abstractModel-structure-p-in-l-or-lg" scheme="schematron">
     <constraint>
@@ -5865,25 +5871,34 @@ TOURS</addrLine>
                 <desc versionDate="2013-11-11" xml:lang="en">checks for the cooccurence of date and duration attributes</desc>
                 <desc versionDate="2013-11-11" xml:lang="de">sucht nach der Kookkurenz von Datums- und Zeitattributen</desc>
                 <constraint>
-                    <sch:report test="(@from or @to) and (@when or @notAfter or @notBefore)">cooccurence of date and duration attributes</sch:report>
+                    <sch:rule context="tei:date">
+                        <sch:report test="(@from or @to) and (@when or @notAfter or @notBefore)">cooccurence of date and duration attributes</sch:report>
+                    </sch:rule>
                 </constraint>
             </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="dateHeuristics4">
                 <desc versionDate="2013-11-11" xml:lang="en">checks for the cooccurence of exact and uncertain date attributes</desc>
                 <desc versionDate="2013-11-11" xml:lang="de">sucht nach der Kookkurenz von exaten und ungenauen Datumsattributen</desc>
                 <constraint>
-                    <sch:report test="@when and (@notAfter or @notBefore)">cooccurence of exact and uncertain date attributes</sch:report>
+                    <sch:rule context="tei:date">
+                        <sch:report test="@when and (@notAfter or @notBefore)">cooccurence of exact and uncertain date attributes</sch:report>
+                    </sch:rule>
                 </constraint>
             </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="dateHeuristics5">
-                <desc versionDate="2013-11-11" xml:lang="en">If a <gi>date</gi> is present it must either have an attribute 
-                    <att>when</att>, <att>notBefore</att>, <att>notAfter</att>, <att>from</att> or <att>to</att>.
-                    Alternatively the content of <gi>date</gi> may contain at least four zeros, "unknown" or "o.J.", which qualifies as undated.
+                <desc versionDate="2024-11-21" xml:lang="en">If a <gi>date</gi> is present within the <gi>teiHeader</gi> 
+                    it must either have an attribute <att>when</att>, <att>notBefore</att>, <att>notAfter</att>, <att>from</att> or <att>to</att>.
+                    Alternatively, a <att>cert</att> attribute with value "unknown" needs to be present 
+                    or the content of <gi>date</gi> may contain <q>o.J.</q> (= without year).
                 </desc>
-                <desc versionDate="2013-11-11" xml:lang="de">Wenn ein <gi>date</gi> vorhanden ist, muss es entweder die Attribute
-                    <att>when</att>, <att>notBefore</att>, <att>notAfter</att>, <att>from</att> oder <att>to</att> haben.
-                    Alternativ kann der Inhalt von <gi>date</gi> mindestens vier Nullen, "unbekannt" oder "oJ" enthalten, die die Quellen dann als undatiert bezeichnen.
+                <desc versionDate="2024-11-21" xml:lang="de">Wenn ein <gi>date</gi> innerhalb des <gi>teiHeader</gi> vorhanden ist, 
+                    muss eine maschinenlesbare Datumsangabe mindestens durch eines der Attribute <att>when</att>, <att>notBefore</att>, 
+                    <att>notAfter</att>, <att>from</att> oder <att>to</att> ausgedrückt werden.
+                    Alternativ muss ein <att>cert</att> Attribut mit Wert "unknown" angegeben oder der Textinhalt des 
+                    <gi>date</gi> Elements <q>o.J.</q> sein (= ohne Jahr).
                 </desc>
                 <constraint>
-                    <sch:assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</sch:assert>
+                    <sch:rule context="tei:date[ancestor::tei:teiHeader]">
+                        <sch:assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or .='o.J.'">tei:date benötigt ein Attribut @when, @notBefore o.ä.</sch:assert>
+                    </sch:rule>
                 </constraint>
             </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="dateHeuristics6">
                 <desc versionDate="2018-03-12" xml:lang="en">checks for future dates</desc>
@@ -5976,7 +5991,9 @@ TOURS</addrLine>
     <ref target="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ND.html#NDDATE">14.4. Dates</ref>
   </listRef></elementSpec><elementSpec rend="change" module="core" ident="ref"><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">reference</gloss><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">Quellenangabe</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="en">defines a reference to another location, possibly modified by additional text or comment.</desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2013-11-11" xml:lang="de">definiert eine Quellenangabe an einer anderen Stelle, die womöglich durch zusätzlichen Text oder Kommentare modifizert wurde.</desc><classes><memberOf key="att.cReferencing"/><memberOf key="att.internetMedia"/><memberOf key="model.ptrLike"/></classes><content><macroRef key="macro.paraContent"/></content><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="prev-next-correspContext">
                 <constraint>
-                    <sch:report test="@type=('previousLetterFromAddressee', 'nextLetterFromAddressee') and not(parent::tei:correspContext)">'previousLetterFromAddressee' and 'nextLetterFromAddressee' are only used within the correspContext element.</sch:report>
+                    <sch:rule context="tei:ref[not(parent::tei:correspContext)]">
+                        <sch:report test="@type=('previousLetterFromAddressee', 'nextLetterFromAddressee')">'previousLetterFromAddressee' and 'nextLetterFromAddressee' are only used within the correspContext element.</sch:report>
+                    </sch:rule>
                 </constraint>
             </constraintSpec><constraintSpec scheme="schematron" ident="refAtts">
     <constraint>
@@ -6043,7 +6060,9 @@ TOURS</addrLine>
                 <desc versionDate="2014-07-09" xml:lang="en">checks for <gi>label</gi> within <gi>list</gi> without <att>type</att>='gloss'.</desc>
                 <desc versionDate="2014-07-09" xml:lang="de">stellt sicher, dass <gi>label</gi> nur innerhalb einer <gi>list</gi> mit <att>type</att>='gloss' vorkommen.</desc>
                 <constraint>
-                    <sch:report test="./tei:label and not(@type='gloss')">Labels are only allowed in lists of type='gloss'</sch:report>
+                    <sch:rule context="tei:list">
+                        <sch:report test="./tei:label and not(@type='gloss')">Labels are only allowed in lists of type='gloss'</sch:report>
+                    </sch:rule>
                 </constraint>
             </constraintSpec><constraintSpec ident="gloss-list-must-have-labels" scheme="schematron">
     <constraint>
@@ -7076,7 +7095,9 @@ psychological significance.
                 <desc versionDate="2021-03-19" xml:lang="en">assert that either a @url or @sameAs attribute is present.</desc>
                 <desc versionDate="2021-03-19" xml:lang="de">stellt sicher, dass entweder ein @url oder @sameAs Attribut angegeben ist.</desc>
                 <constraint>
-                    <sch:assert test="(@url or @sameAs) and (count(@url|@sameAs) eq 1)">Exactly one @url or @sameAs attribute is mandatory</sch:assert>
+                    <sch:rule context="tei:graphic">
+                        <sch:assert test="(@url or @sameAs) and (count(@url|@sameAs) eq 1)">Exactly one @url or @sameAs attribute is mandatory</sch:assert>
+                    </sch:rule>
                 </constraint>
             </constraintSpec><attList><attDef ident="scale" mode="delete"/><attDef ident="url" mode="change" usage="opt"/><attRef name="xml:id" class="att.global"/><attRef name="sameAs" class="att.global.linking"/></attList><exemplum xml:lang="en">
     <egXML xmlns="http://www.tei-c.org/ns/Examples">
@@ -7397,19 +7418,25 @@ places, in particular where  multiple names are given.</p>
                 <desc versionDate="2014-11-24" xml:lang="en">reports when there is a punctuation mark at the end of the title (punctuation will be added automatically during rendering)</desc>
                 <desc versionDate="2014-11-24" xml:lang="de">warnt bei Satzendezeichen am Ende des Titels (denn Interpunktion wird beim Rendern automatisch hinzugefügt)</desc>
                 <constraint>
-                    <sch:report test="matches(normalize-space(self::tei:title), '[\.,;]$') and not(matches(normalize-space(self::tei:title), '((\p{Lu})|(\setc)|(\sal)|([\s\.]a)|(\sBl)|(\sAufl)|(\s&amp;c))\.$'))">Found a non-valid punctuation mark at the end of <sch:name/> </sch:report>
+                    <sch:rule context="tei:title">
+                        <sch:report test="matches(normalize-space(self::tei:title), '[\.,;]$') and not(matches(normalize-space(self::tei:title), '((\p{Lu})|(\setc)|(\sal)|([\s\.]a)|(\sBl)|(\sAufl)|(\s&amp;c))\.$'))">Found a non-valid punctuation mark at the end of <sch:name/> </sch:report>
+                    </sch:rule>
                 </constraint>
             </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="report-leading-zeros">
                 <desc versionDate="2020-09-14" xml:lang="en">report leading zeros in dates</desc>
                 <desc versionDate="2020-09-14" xml:lang="de">warnt bei führenden Nullen in Datumsangaben</desc>
                 <constraint>
-                    <sch:report test="matches(., '\s0\d+\.')">please do not prefix numbers with a zero</sch:report>
+                    <sch:rule context="tei:title">
+                        <sch:report test="matches(., '\s0\d+\.')">please do not prefix numbers with a zero</sch:report>
+                    </sch:rule>
                 </constraint>
             </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="report-quotation-marks">
                 <desc versionDate="2020-09-14" xml:lang="en">report literal quotation marks which should be replaced by tags</desc>
                 <desc versionDate="2020-09-14" xml:lang="de">weist auf Anführungszeichen hin die durch Tags ersetzt werden sollten</desc>
                 <constraint>
-                    <sch:report test="matches(., '&#34;“„')">please replace literal quotation marks with q-tags</sch:report>
+                    <sch:rule context="tei:title">
+                        <sch:report test="matches(., '&#34;“„')">please replace literal quotation marks with q-tags</sch:report>
+                    </sch:rule>
                 </constraint>
             </constraintSpec><constraintSpec scheme="schematron" ident="calendar-check-title">
             <constraint>
@@ -9666,7 +9693,9 @@ to use nested tables.</p>
   </listRef>
 </classSpec><elementSpec rend="change" module="figures" ident="table"><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2021-12-20" xml:lang="en">table</gloss><gloss xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2014-07-09" xml:lang="de">Tabelle</gloss><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2014-07-09" xml:lang="en">contains text displayed in tabular form, in rows and columns</desc><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" rend="replace" versionDate="2014-07-09" xml:lang="de">enthält Text in Tabellenform, d.h. in Zeilen und Spalten.</desc><classes><memberOf key="model.listLike"/><memberOf key="att.typed"/></classes><content><sequence minOccurs="1" maxOccurs="1"><elementRef xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" key="head" minOccurs="0" maxOccurs="1"/><elementRef xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" key="row" minOccurs="1" maxOccurs="unbounded"/></sequence></content><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:s="http://www.ascc.net/xml/schematron" scheme="schematron" ident="collapsible-head">
                 <constraint>
-                    <sch:report test="@rend='collapsible' and not(tei:head)">For the collapsible feature to work a head must be given for the <sch:name/>.</sch:report>
+                    <sch:rule context="tei:table[@rend='collapsible']">
+                        <sch:assert test="tei:head">For the collapsible feature to work a head must be given for the <sch:name/>.</sch:assert>
+                    </sch:rule>
                 </constraint>
             </constraintSpec><attList><attDef ident="rend" usage="opt">
                     <gloss versionDate="2014-07-09" xml:lang="en">rendition</gloss>

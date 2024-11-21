@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2024-11-15T14:32:18Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2024-11-21T16:26:55Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -64,7 +64,7 @@
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaNews-p-extent-within-physDesc-10">
-      <rule context="p">
+      <rule context="tei:p">
          <report test="@n='extent' and not(parent::tei:physDesc)"> The value 'extent' must only be used within the tei:physDesc.</report>
       </rule>
    </pattern>
@@ -79,13 +79,13 @@
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaNews-p-abstractModel-structure-p-in-ab-or-p-13">
-      <rule context="p">
-         <report test="(ancestor::tei:p or ancestor::tei:ab)                          and not(parent::tei:exemplum                         |parent::tei:item                         |parent::tei:note                         |parent::tei:q                         |parent::tei:quote                         |parent::tei:remarks                         |parent::tei:said                         |parent::tei:sp                         |parent::tei:stage                         |parent::tei:cell                         |parent::tei:figure                         |parent::tei:footNote)"> Abstract model violation: Paragraphs may not contain other paragraphs or ab elements.</report>
+      <rule context="tei:p">
+         <report test="(ancestor::tei:p or ancestor::tei:ab)                              and not(parent::tei:exemplum                             |parent::tei:item                             |parent::tei:note                             |parent::tei:q                             |parent::tei:quote                             |parent::tei:remarks                             |parent::tei:said                             |parent::tei:sp                             |parent::tei:stage                             |parent::tei:cell                             |parent::tei:figure                             |parent::tei:footNote)"> Abstract model violation: Paragraphs may not contain other paragraphs or ab elements.</report>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaNews-p-abstractModel-structure-l-14">
-      <rule context="p">
-         <report test="(ancestor::tei:l or ancestor::tei:lg)                          and not(parent::tei:figure or parent::tei:note or ancestor::tei:floatingText or parent::tei:footNote)"> Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab, unless p is a child of figure or note, or is a descendant of floatingText.</report>
+      <rule context="tei:p">
+         <report test="(ancestor::tei:l or ancestor::tei:lg)                              and not(parent::tei:figure or parent::tei:note or ancestor::tei:floatingText or parent::tei:footNote)"> Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab, unless p is a child of figure or note, or is a descendant of floatingText.</report>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaNews-p-abstractModel-structure-p-in-l-or-lg-15">
@@ -175,18 +175,18 @@
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaNews-date-dateHeuristics3-19">
-      <rule context="date">
+      <rule context="tei:date">
          <report test="(@from or @to) and (@when or @notAfter or @notBefore)">cooccurence of date and duration attributes</report>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaNews-date-dateHeuristics4-20">
-      <rule context="date">
+      <rule context="tei:date">
          <report test="@when and (@notAfter or @notBefore)">cooccurence of exact and uncertain date attributes</report>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaNews-date-dateHeuristics5-21">
-      <rule context="date">
-         <assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</assert>
+      <rule context="tei:date[ancestor::tei:teiHeader]">
+         <assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or .='o.J.'">tei:date benötigt ein Attribut @when, @notBefore o.ä.</assert>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaNews-date-dateHeuristics6-22">
@@ -203,8 +203,8 @@
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaNews-ref-prev-next-correspContext-24">
-      <rule context="ref">
-         <report test="@type=('previousLetterFromAddressee', 'nextLetterFromAddressee') and not(parent::tei:correspContext)">'previousLetterFromAddressee' and 'nextLetterFromAddressee' are only used within the correspContext element.</report>
+      <rule context="tei:ref[not(parent::tei:correspContext)]">
+         <report test="@type=('previousLetterFromAddressee', 'nextLetterFromAddressee')">'previousLetterFromAddressee' and 'nextLetterFromAddressee' are only used within the correspContext element.</report>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaNews-ref-refAtts-25">
@@ -214,7 +214,7 @@
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaNews-list-gloss-list-26">
-      <rule context="list">
+      <rule context="tei:list">
          <report test="./tei:label and not(@type='gloss')">Labels are only allowed in lists of type='gloss'</report>
       </rule>
    </pattern>
@@ -264,7 +264,7 @@
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaNews-graphic-url-or-sameAs-36">
-      <rule context="graphic">
+      <rule context="tei:graphic">
          <assert test="(@url or @sameAs) and (count(@url|@sameAs) eq 1)">Exactly one @url or @sameAs attribute is mandatory</assert>
       </rule>
    </pattern>
@@ -292,18 +292,18 @@
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaNews-title-punctuation-mark-41">
-      <rule context="title">
+      <rule context="tei:title">
          <report test="matches(normalize-space(self::tei:title), '[\.,;]$') and not(matches(normalize-space(self::tei:title), '((\p{Lu})|(\setc)|(\sal)|([\s\.]a)|(\sBl)|(\sAufl)|(\s&amp;c))\.$'))">Found a non-valid punctuation mark at the end of <name/>
          </report>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaNews-title-report-leading-zeros-42">
-      <rule context="title">
+      <rule context="tei:title">
          <report test="matches(., '\s0\d+\.')">please do not prefix numbers with a zero</report>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaNews-title-report-quotation-marks-43">
-      <rule context="title">
+      <rule context="tei:title">
          <report test="matches(., '&#34;“„')">please replace literal quotation marks with q-tags</report>
       </rule>
    </pattern>
@@ -373,8 +373,8 @@
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaNews-table-collapsible-head-60">
-      <rule context="table">
-         <report test="@rend='collapsible' and not(tei:head)">For the collapsible feature to work a head must be given for the <name/>.</report>
+      <rule context="tei:table[@rend='collapsible']">
+         <assert test="tei:head">For the collapsible feature to work a head must be given for the <name/>.</assert>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaNews-row-number-of-cells-61">

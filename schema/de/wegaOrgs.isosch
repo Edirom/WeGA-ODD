@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2024-11-15T14:32:18Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2024-11-21T16:26:55Z by 'extract-isosch.xsl'. -->
 
    <!-- ********************* -->
    <!-- namespaces, declared: -->
@@ -63,7 +63,7 @@
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-p-extent-within-physDesc-10">
-      <rule context="p">
+      <rule context="tei:p">
          <report test="@n='extent' and not(parent::tei:physDesc)"> The value 'extent' must only be used within the tei:physDesc.</report>
       </rule>
    </pattern>
@@ -78,13 +78,13 @@
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-p-abstractModel-structure-p-in-ab-or-p-13">
-      <rule context="p">
-         <report test="(ancestor::tei:p or ancestor::tei:ab)                          and not(parent::tei:exemplum                         |parent::tei:item                         |parent::tei:note                         |parent::tei:q                         |parent::tei:quote                         |parent::tei:remarks                         |parent::tei:said                         |parent::tei:sp                         |parent::tei:stage                         |parent::tei:cell                         |parent::tei:figure                         |parent::tei:footNote)"> Abstract model violation: Paragraphs may not contain other paragraphs or ab elements.</report>
+      <rule context="tei:p">
+         <report test="(ancestor::tei:p or ancestor::tei:ab)                              and not(parent::tei:exemplum                             |parent::tei:item                             |parent::tei:note                             |parent::tei:q                             |parent::tei:quote                             |parent::tei:remarks                             |parent::tei:said                             |parent::tei:sp                             |parent::tei:stage                             |parent::tei:cell                             |parent::tei:figure                             |parent::tei:footNote)"> Abstract model violation: Paragraphs may not contain other paragraphs or ab elements.</report>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-p-abstractModel-structure-l-14">
-      <rule context="p">
-         <report test="(ancestor::tei:l or ancestor::tei:lg)                          and not(parent::tei:figure or parent::tei:note or ancestor::tei:floatingText or parent::tei:footNote)"> Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab, unless p is a child of figure or note, or is a descendant of floatingText.</report>
+      <rule context="tei:p">
+         <report test="(ancestor::tei:l or ancestor::tei:lg)                              and not(parent::tei:figure or parent::tei:note or ancestor::tei:floatingText or parent::tei:footNote)"> Abstract model violation: Lines may not contain higher-level structural elements such as div, p, or ab, unless p is a child of figure or note, or is a descendant of floatingText.</report>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-p-abstractModel-structure-p-in-l-or-lg-15">
@@ -98,7 +98,7 @@
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-sic-empty-sic-17">
-      <rule context="sic">
+      <rule context="tei:sic">
          <report test="normalize-space(.) = ''">ein sic sollte immer Text enthalten. Alternativ kann ein supplied oder gap eingesetzt werden.</report>
       </rule>
    </pattern>
@@ -184,18 +184,18 @@
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-date-dateHeuristics3-21">
-      <rule context="date">
+      <rule context="tei:date">
          <report test="(@from or @to) and (@when or @notAfter or @notBefore)">cooccurence of date and duration attributes</report>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-date-dateHeuristics4-22">
-      <rule context="date">
+      <rule context="tei:date">
          <report test="@when and (@notAfter or @notBefore)">cooccurence of exact and uncertain date attributes</report>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-date-dateHeuristics5-23">
-      <rule context="date">
-         <assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</assert>
+      <rule context="tei:date[ancestor::tei:teiHeader]">
+         <assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or .='o.J.'">tei:date benötigt ein Attribut @when, @notBefore o.ä.</assert>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-date-dateHeuristics6-24">
@@ -217,7 +217,7 @@
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-ptr-duplicate-ptr-27">
-      <rule context="ptr">
+      <rule context="tei:ptr">
          <report test="following::tei:ptr[@target=current()/@target]"> There must be only one pointer with the @target (<value-of select="@target"/>)</report>
       </rule>
    </pattern>
@@ -227,8 +227,8 @@
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-ref-prev-next-correspContext-29">
-      <rule context="ref">
-         <report test="@type=('previousLetterFromAddressee', 'nextLetterFromAddressee') and not(parent::tei:correspContext)">'previousLetterFromAddressee' and 'nextLetterFromAddressee' are only used within the correspContext element.</report>
+      <rule context="tei:ref[not(parent::tei:correspContext)]">
+         <report test="@type=('previousLetterFromAddressee', 'nextLetterFromAddressee')">'previousLetterFromAddressee' and 'nextLetterFromAddressee' are only used within the correspContext element.</report>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-ref-refAtts-30">
@@ -238,7 +238,7 @@
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-list-gloss-list-31">
-      <rule context="list">
+      <rule context="tei:list">
          <report test="./tei:label and not(@type='gloss')">Labels are only allowed in lists of type='gloss'</report>
       </rule>
    </pattern>
@@ -316,18 +316,18 @@
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-title-punctuation-mark-46">
-      <rule context="title">
+      <rule context="tei:title">
          <report test="matches(normalize-space(self::tei:title), '[\.,;]$') and not(matches(normalize-space(self::tei:title), '((\p{Lu})|(\setc)|(\sal)|([\s\.]a)|(\sBl)|(\sAufl)|(\s&amp;c))\.$'))">Found a non-valid punctuation mark at the end of <name/>
          </report>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-title-report-leading-zeros-47">
-      <rule context="title">
+      <rule context="tei:title">
          <report test="matches(., '\s0\d+\.')">please do not prefix numbers with a zero</report>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-title-report-quotation-marks-48">
-      <rule context="title">
+      <rule context="tei:title">
          <report test="matches(., '&#34;“„')">please replace literal quotation marks with q-tags</report>
       </rule>
    </pattern>
@@ -468,12 +468,12 @@
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-seg-activeOrPassivePerformance-73">
-      <rule context="seg">
+      <rule context="tei:seg">
          <report test="./@subtype = ('active', 'passive') and not(./@type = 'performance')">if @subtype contains 'active' or 'passive' @type has to be 'performance'</report>
       </rule>
    </pattern>
    <pattern id="schematron-constraint-wegaOrgs-seg-AddresseeOrSenderCorrespondence-74">
-      <rule context="seg">
+      <rule context="tei:seg">
          <report test="./@subtype = ('sender', 'addressee') and not(./@type = 'correspondence')">if @subtype contains 'sender' or 'addressee' @type has to be 'correspondence'</report>
       </rule>
    </pattern>
