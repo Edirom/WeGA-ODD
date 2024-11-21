@@ -1366,17 +1366,20 @@
                 </constraint>
             </constraintSpec>
             <constraintSpec scheme="schematron" ident="dateHeuristics5">
-                <desc versionDate="2013-11-11" xml:lang="en">If a <gi>date</gi> is present it must either have an attribute 
-                    <att>when</att>, <att>notBefore</att>, <att>notAfter</att>, <att>from</att> or <att>to</att>.
-                    Alternatively the content of <gi>date</gi> may contain at least four zeros, "unknown" or "o.J.", which qualifies as undated.
+                <desc versionDate="2024-11-21" xml:lang="en">If a <gi>date</gi> is present within the <gi>teiHeader</gi> 
+                    it must either have an attribute <att>when</att>, <att>notBefore</att>, <att>notAfter</att>, <att>from</att> or <att>to</att>.
+                    Alternatively, a <att>cert</att> attribute with value "unknown" needs to be present 
+                    or the content of <gi>date</gi> may contain <q>o.J.</q> (= without year).
                 </desc>
-                <desc  versionDate="2013-11-11" xml:lang="de">Wenn ein <gi>date</gi> vorhanden ist, muss es entweder die Attribute
-                    <att>when</att>, <att>notBefore</att>, <att>notAfter</att>, <att>from</att> oder <att>to</att> haben.
-                    Alternativ kann der Inhalt von <gi>date</gi> mindestens vier Nullen, "unbekannt" oder "oJ" enthalten, die die Quellen dann als undatiert bezeichnen.
+                <desc  versionDate="2024-11-21" xml:lang="de">Wenn ein <gi>date</gi> innerhalb des <gi>teiHeader</gi> vorhanden ist, 
+                    muss eine maschinenlesbare Datumsangabe mindestens durch eines der Attribute <att>when</att>, <att>notBefore</att>, 
+                    <att>notAfter</att>, <att>from</att> oder <att>to</att> ausgedrückt werden.
+                    Alternativ muss ein <att>cert</att> Attribut mit Wert "unknown" angegeben oder der Textinhalt des 
+                    <gi>date</gi> Elements <q>o.J.</q> sein (= ohne Jahr).
                 </desc>
                 <constraint>
-                    <sch:rule context="tei:date">
-                        <sch:assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or matches(., '0000|o\.J\.|unknown') or ancestor::tei:text">tei:date benötigt ein Attribut @when, @notBefore o.ä.</sch:assert>
+                    <sch:rule context="tei:date[ancestor::tei:teiHeader]">
+                        <sch:assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or .='o.J.'">tei:date benötigt ein Attribut @when, @notBefore o.ä.</sch:assert>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
