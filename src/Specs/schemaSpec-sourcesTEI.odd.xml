@@ -125,7 +125,7 @@
             <memberOf key="att.declaring" mode="delete"/>
         </classes>
         <content>
-            <elementRef key="keywords"/>
+            <elementRef key="keywords" maxOccurs="2"/>
         </content>
     </elementSpec>
     
@@ -136,12 +136,27 @@
         <content>
             <elementRef key="term" maxOccurs="unbounded"/>
         </content>
+        <constraintSpec scheme="schematron" ident="sources-meta-cat" mode="add">
+            <constraint>
+                <sch:rule context="tei:keywords[@scheme='sources-meta-cat']">
+                    <sch:assert test="every $term in tei:term satisfies $term = ('Druck', 'Handschrift', 'Musik', 'Text')"
+                        >Only 'Druck', 'Handschrift', 'Musik', or 'Text' are valid WeGA source meta categories</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
         <attList>
             <attDef ident="scheme" mode="change" usage="req">
                 <desc versionDate="2013-11-11" xml:lang="en">identifies the controlled vocabulary within which the set of keywords concerned is defined.</desc>
                 <desc versionDate="2013-11-11" xml:lang="de">bezeichnet kontrolliert strukturiertes Vokabular, in dem die entsprechenden Keywords definiert sind.</desc>
                 <valList type="closed" mode="replace">
-                    <valItem ident="asksam-cat"/>
+                    <valItem ident="sources-details-cat">
+                        <desc versionDate="2024-11-22" xml:lang="en">Categories detailing the source</desc>
+                        <desc versionDate="2024-11-22" xml:lang="de">Detail-Kategorien der Quelle</desc>
+                    </valItem>
+                    <valItem ident="sources-meta-cat">
+                        <desc versionDate="2024-11-22" xml:lang="en">Meta Categories describing a source</desc>
+                        <desc versionDate="2024-11-22" xml:lang="de">Meta-Kategorien der Quelle</desc>
+                    </valItem>
                 </valList>
             </attDef>
         </attList>
