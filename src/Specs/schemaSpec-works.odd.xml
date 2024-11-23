@@ -567,14 +567,32 @@
     
     <elementSpec ident="classification" module="MEI.header" mode="change" ns="http://www.music-encoding.org/ns/mei">
         <content>
-            <elementRef key="termList" maxOccurs="3"/>
+            <elementRef key="termList" minOccurs="1" maxOccurs="3"/>
         </content>
+        <constraintSpec scheme="schematron" ident="enforce-sources-meta-cat" mode="add">
+            <!-- when modifying this constraint please also check the corresponding schematron constraint at sourcesTEI -->
+            <constraint>
+                <sch:rule context="mei:classification">
+                    <sch:assert test="count(mei:termList[@label='sources-meta-cat']) eq 1"
+                        >There needs to be exactly one termlist child element with label-attribute "sources-meta-cat".</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
     </elementSpec>
     
     <elementSpec ident="termList" module="MEI.header" mode="change" ns="http://www.music-encoding.org/ns/mei">
         <content>
             <elementRef key="term" minOccurs="1" maxOccurs="unbounded"/>
         </content>
+        <constraintSpec scheme="schematron" ident="sources-meta-cat" mode="add">
+            <!-- when modifying this constraint please also check the corresponding schematron constraint at sourcesTEI -->
+            <constraint>
+                <sch:rule context="mei:termList[@label='sources-meta-cat']">
+                    <sch:assert test="every $term in mei:term satisfies $term = ('Druck', 'Handschrift', 'Musik', 'Text')"
+                        >Only 'Druck', 'Handschrift', 'Musik', or 'Text' are valid WeGA source meta categories</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
     </elementSpec>
     
     <elementSpec ident="respStmt" module="MEI.shared" mode="change" ns="http://www.music-encoding.org/ns/mei">

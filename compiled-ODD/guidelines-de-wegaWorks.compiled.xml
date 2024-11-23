@@ -4185,7 +4185,14 @@
       <memberOf key="att.lang"/>
     </classes><content xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
       <oneOrMore xmlns="http://relaxng.org/ns/structure/1.0"><ref name="model.pLike"/></oneOrMore>
-    </content></elementSpec><elementSpec rend="add" ident="classification" module="MEI.header" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en">Groups information which describes the nature or topic of an entity.</desc><classes><memberOf key="att.common"/><memberOf key="att.bibl"/></classes><content><elementRef key="termList" maxOccurs="3"/></content><remarks xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en">
+    </content></elementSpec><elementSpec rend="add" ident="classification" module="MEI.header" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en">Groups information which describes the nature or topic of an entity.</desc><classes><memberOf key="att.common"/><memberOf key="att.bibl"/></classes><content><elementRef key="termList" minOccurs="1" maxOccurs="3"/></content><constraintSpec scheme="schematron" ident="enforce-sources-meta-cat" mode="add">
+            
+            <constraint>
+                <sch:rule context="mei:classification">
+                    <sch:assert test="count(mei:termList[@label='sources-meta-cat']) eq 1">There needs to be exactly one termlist child element with label-attribute "sources-meta-cat".</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec><remarks xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en">
       <p>Although the use of names and terms from locally controlled vocabularies is possible, best
         practice suggests that terms should come from standard national or international
         vocabularies whenever they are available in order to enable searches in systems that include
@@ -4551,7 +4558,14 @@
         provided within seriesStmt for the description of a sub-series.</p>
     </remarks><remarks xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en">
       <p>The model of this element is based on the <ref target="https://tei-c.org/release/doc/tei-p5-doc/en/html/ref-seriesStmt.html">seriesStmt</ref> element of the Text Encoding Initiative (TEI).</p>
-    </remarks></elementSpec><elementSpec rend="add" ident="termList" module="MEI.header" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en">Collection of text phrases which describe a resource.</desc><classes><memberOf key="att.common"/><memberOf key="att.bibl"/><memberOf key="att.pointing"/></classes><content><elementRef key="term" minOccurs="1" maxOccurs="unbounded"/></content><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" ident="checkTermListLabels" scheme="schematron">
+    </remarks></elementSpec><elementSpec rend="add" ident="termList" module="MEI.header" ns="http://www.music-encoding.org/ns/mei"><desc xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en">Collection of text phrases which describe a resource.</desc><classes><memberOf key="att.common"/><memberOf key="att.bibl"/><memberOf key="att.pointing"/></classes><content><elementRef key="term" minOccurs="1" maxOccurs="unbounded"/></content><constraintSpec scheme="schematron" ident="sources-meta-cat" mode="add">
+            
+            <constraint>
+                <sch:rule context="mei:termList[@label='sources-meta-cat']">
+                    <sch:assert test="every $term in mei:term satisfies $term = ('Druck', 'Handschrift', 'Musik', 'Text')">Only 'Druck', 'Handschrift', 'Musik', or 'Text' are valid WeGA source meta categories</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec><constraintSpec xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xi="http://www.w3.org/2001/XInclude" ident="checkTermListLabels" scheme="schematron">
       <constraint>
         <sch:rule context="mei:termList[mei:label]">
           <sch:assert role="warning" test="count(mei:label) = count(mei:term)">When labels are used,

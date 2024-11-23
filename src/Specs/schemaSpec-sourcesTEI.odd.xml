@@ -125,8 +125,17 @@
             <memberOf key="att.declaring" mode="delete"/>
         </classes>
         <content>
-            <elementRef key="keywords" maxOccurs="2"/>
+            <elementRef key="keywords" minOccurs="1" maxOccurs="2"/>
         </content>
+        <constraintSpec scheme="schematron" ident="enforce-sources-meta-cat" mode="add">
+            <!-- when modifying this constraint please also check the corresponding schematron constraint at works -->
+            <constraint>
+                <sch:rule context="tei:textClass">
+                    <sch:assert test="count(tei:keywords[@scheme='sources-meta-cat']) eq 1"
+                        >There needs to be exactly one keywords child element with schemea-attribute "sources-meta-cat".</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
     </elementSpec>
     
     <elementSpec ident="keywords" mode="change" module="header">
@@ -137,6 +146,7 @@
             <elementRef key="term" maxOccurs="unbounded"/>
         </content>
         <constraintSpec scheme="schematron" ident="sources-meta-cat" mode="add">
+            <!-- when modifying this constraint please also check the corresponding schematron constraint at works -->
             <constraint>
                 <sch:rule context="tei:keywords[@scheme='sources-meta-cat']">
                     <sch:assert test="every $term in tei:term satisfies $term = ('Druck', 'Handschrift', 'Musik', 'Text')"
