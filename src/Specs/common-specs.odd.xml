@@ -379,27 +379,27 @@
         
         <macroSpec ident="WeGA_keywords.list" mode="add" module="wega.core.module">
             <content>
-                <rng:choice>
-                    <rng:value>release</rng:value>
-                    <rng:value>sig</rng:value>
-                    <rng:value>announcement</rng:value>
-                    <rng:value>publication</rng:value>
-                    <rng:value>conference</rng:value>
-                    <rng:value>report</rng:value>
-                    <rng:value>source</rng:value>
-                    <rng:value>performance</rng:value>
-                    <rng:value>teaching</rng:value>
-                    <rng:value>presscomment</rng:value>
-                    <rng:value>guidelines</rng:value>
-                    <rng:value>review</rng:value>
-                </rng:choice>
+                <valList type="closed">
+                    <valItem ident="release"/>
+                    <valItem ident="sig"/>
+                    <valItem ident="announcement"/>
+                    <valItem ident="publication"/>
+                    <valItem ident="conference"/>
+                    <valItem ident="report"/>
+                    <valItem ident="source"/>
+                    <valItem ident="performance"/>
+                    <valItem ident="teaching"/>
+                    <valItem ident="presscomment"/>
+                    <valItem ident="guidelines"/>
+                    <valItem ident="review"/>
+                </valList>
             </content>
         </macroSpec>
         
         <macroSpec ident="marcRelator.list" mode="add" module="wega.core.module">
             <desc versionDate="2014-04-02" xml:lang="en"><ref target="http://www.loc.gov/marc/relators/relaterm.html">MARC Code List for Relators</ref>, constrained for use in the WeGA.</desc>
             <content>
-                <rng:choice>
+                <alternate>
                     <rng:value>arr</rng:value><a:documentation>(Arranger) A person, family, or organization contributing to a musical work by rewriting the composition for a medium of performance different from that for which the work was originally intended, or modifying the work for the same medium of performance, etc., such that the musical substance of the original composition remains essentially unchanged. For extensive modification that effectively results in the creation of a new musical work, see composer.</a:documentation>
                     <rng:value>aut</rng:value><a:documentation>(Author) Use for a person or organization chiefly responsible for the intellectual or artistic content of a work, usually printed text. This term may also be used when more than one person or body bears such responsibility.</a:documentation>
                     <rng:value>cmp</rng:value><a:documentation>(Composer) Use for a person or organization who creates a musical work, usually a piece of music in manuscript or printed form.</a:documentation>
@@ -413,7 +413,7 @@
                     <rng:value>scr</rng:value><a:documentation>(Scribe) A person who is an amanuensis and for a writer of manuscripts proper.</a:documentation>
                     <rng:value>trl</rng:value><a:documentation>(Translator) Use for a person or organization who renders a text from one language into another, or from an older form of a language into the modern form.</a:documentation>
                     <rng:value>chr</rng:value><a:documentation>(Choreographer) A person responsible for creating or contributing to a work of movement.</a:documentation>
-                </rng:choice>
+                </alternate>
             </content>
         </macroSpec>
     </specGrp>
@@ -1142,7 +1142,7 @@
                 <memberOf key="model.nameLike.agent"/>
             </classes>
             <content>
-                <rng:ref name="macro.phraseSeq"/>
+                <macroRef name="macro.phraseSeq"/>
             </content>
             <attList>
                 <!-- wurde bisher noch nicht implementiert.
@@ -1164,7 +1164,7 @@
                 <memberOf key="model.nameLike" mode="add"/>
             </classes>
             <content>
-                <rng:ref name="macro.phraseSeq"/>
+                <macroRef name="macro.phraseSeq"/>
             </content>
             <attList>
                 <attDef ident="key" mode="add" usage="opt">
@@ -1186,7 +1186,7 @@
                 <memberOf key="model.noteLike" mode="add"/>
             </classes>
             <content>
-                <rng:ref name="macro.specialPara"/>
+                <macroRef name="macro.specialPara"/>
             </content>
             <attList>
                 <attRef class="att.global" name="xml:id"/>
@@ -2241,22 +2241,17 @@
                 <memberOf key="model.damagePart" mode="add"/>
             </classes>
             <content>
-                <rng:choice>
-                    <rng:group>
-                        <rng:ref name="sic"/>
-                        <rng:ref name="corr"/>
-                    </rng:group>
-                    <rng:group>
-                        <rng:ref name="abbr"/>
-                        <rng:ref name="expan"/>
-                    </rng:group>
-                    <rng:group>
-                        <rng:ref name="unclear"/>
-                        <rng:oneOrMore>
-                            <rng:ref name="unclear"/>
-                        </rng:oneOrMore>
-                    </rng:group>
-                </rng:choice>
+                <alternate>
+                    <sequence>
+                        <elementRef key="sic"/>
+                        <elementRef key="corr"/>
+                    </sequence>
+                    <sequence>
+                        <elementRef key="abbr"/>
+                        <elementRef key="expan"/>
+                    </sequence>
+                    <elementRef key="unclear" minOccurs="2" maxOccurs="unbounded"/>
+                </alternate>
             </content>
             <!--<constraintSpec scheme="schematron" ident="multipleUnclear">
                 <desc versionDate="2013-11-11" xml:lang="en">when working with several <gi>unclear</gi>, accurately one has to be marked with a <att>cert</att>="high".</desc>
@@ -4643,13 +4638,13 @@
                 <memberOf key="att.global" mode="delete"/>
             </classes>
             <content>
-                <rng:choice>
-                    <rng:ref name="pnd.pattern"/>
-                    <rng:ref name="viaf.pattern"/>
-                    <rng:ref name="bd.pattern"/>
-                    <rng:ref name="wikidata.id.pattern"/>
-                    <rng:ref name="geonames.pattern"/>
-                </rng:choice>
+                <alternate>
+                    <macroRef name="pnd.pattern"/>
+                    <macroRef name="viaf.pattern"/>
+                    <macroRef name="bd.pattern"/>
+                    <macroRef name="wikidata.id.pattern"/>
+                    <macroRef name="geonames.pattern"/>
+                </alternate>
             </content>
             <constraintSpec scheme="schematron" ident="types-match-external-identifiers">
                 <desc xml:lang="en" versionDate="2019-07-08">assert that provided ID matches the external identifier's pattern for IDs.</desc>
@@ -4732,7 +4727,7 @@
     <!-\-            <memberOf key="att.global" mode="delete"/>-\->
             </classes>
             <content>
-                <rng:ref name="macro.paraContent"/>
+                <macroRef name="macro.paraContent"/>
             </content>
             <attList>
                 <attDef ident="target" mode="add" usage="req">
