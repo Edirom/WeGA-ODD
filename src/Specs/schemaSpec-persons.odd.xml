@@ -242,9 +242,11 @@
                 <!--<sch:report test="count(./tei:persName[@subtype='birth']) > 1"
                     >Mehrere Geburtsnamen gefunden</sch:report>-->
                 <!-- für Lebensdaten nach Christi Geburt -->
-                <sch:report
-                    test="./tei:birth/tei:date/(@when, @notBefore, @notAfter) > ./tei:death/tei:date/(@when, @notBefore, @notAfter) and not(./tei:death/tei:date/(@when, @notBefore, @notAfter)[starts-with(., '-')])"
-                    >Geburtsdatum nach Todesdatum</sch:report>
+                <sch:rule context="tei:person">
+                    <sch:report
+                        test="./tei:birth/tei:date/(@when, @notBefore, @notAfter) > ./tei:death/tei:date/(@when, @notBefore, @notAfter) and not(./tei:death/tei:date/(@when, @notBefore, @notAfter)[starts-with(., '-')])"
+                        >Geburtsdatum nach Todesdatum</sch:report>
+                </sch:rule>
                 <!--<sch:report
                     test="./tei:death/tei:date/@notBefore > ./tei:death/tei:date/@notAfter"
                     >Datumsangabe notBefore nach notAfter</sch:report>-->
@@ -260,9 +262,11 @@
                 <!--<sch:report test="count(./tei:persName[@subtype='birth']) > 1"
                     >Mehrere Geburtsnamen gefunden</sch:report>-->
                 <!-- für Lebensdaten vor Christi Geburt -->
-                <sch:report
-                    test="./tei:death/tei:date/(@when, @notBefore, @notAfter) > ./tei:birth/tei:date/(@when, @notBefore, @notAfter) and ./tei:death/tei:date/(@when, @notBefore, @notAfter)[starts-with(., '-')]"
-                    >Geburtsdatum nach Todesdatum</sch:report>
+                <sch:rule context="tei:person">
+                    <sch:report
+                        test="./tei:death/tei:date/(@when, @notBefore, @notAfter) > ./tei:birth/tei:date/(@when, @notBefore, @notAfter) and ./tei:death/tei:date/(@when, @notBefore, @notAfter)[starts-with(., '-')]"
+                        >Geburtsdatum nach Todesdatum</sch:report>
+                </sch:rule>
                 <!--<sch:report
                     test="./tei:death/tei:date/@notBefore > ./tei:death/tei:date/@notAfter"
                     >Datumsangabe notBefore nach notAfter</sch:report>-->
@@ -364,7 +368,9 @@
         </classes>
         <constraintSpec scheme="schematron" ident="forename-exclusions">
             <constraint>
-                <sch:report test=".=('Frau', 'Fräulein', 'Dem.', 'Herr', 'Hr.', 'Mad.', 'Madame', 'Miss', 'Mrs.',  'Mr.')">Forms of address (e.g. "Frau", or "Herr") must not be encoded as <sch:name/></sch:report>
+                <sch:rule context="tei:forename">
+                    <sch:report test=".=('Frau', 'Fräulein', 'Dem.', 'Herr', 'Hr.', 'Mad.', 'Madame', 'Miss', 'Mrs.',  'Mr.')">Forms of address (e.g. "Frau", or "Herr") must not be encoded as <sch:name/></sch:report>
+                </sch:rule>
             </constraint>
         </constraintSpec>
         <attList>
@@ -577,7 +583,9 @@
         </content>
         <constraintSpec scheme="schematron" ident="residence-no-mixed-content">
             <constraint>
-                <sch:report test="tei:*/tei:*">No further markup allowed within <sch:name/></sch:report>
+                <sch:rule context="tei:residence">
+                    <sch:report test="tei:*/tei:*">No further markup allowed within <sch:name/></sch:report>
+                </sch:rule>
             </constraint>
         </constraintSpec>
         <attList>
