@@ -219,18 +219,18 @@
             <memberOf key="att.global" mode="delete"/>
         </classes>
         <content>
-            <rng:oneOrMore>
-                <rng:ref name="term"/>
-            </rng:oneOrMore>
+            <elementRef key="term" minOccurs="1" maxOccurs="unbounded"/>
         </content>
+        <constraintSpec scheme="schematron" ident="report-duplicate-keywords">
+            <constraint>
+                <sch:rule context="tei:keywords">
+                    <sch:report test="count(tei:term) ne count(distinct-values(tei:term))"
+                        >each keyword must only occur once</sch:report>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
         <attList>
-            <attDef ident="scheme" mode="change" usage="req">
-                <desc versionDate="2013-11-11" xml:lang="en">identifies the controlled vocabulary within which the set of keywords concerned is defined.</desc>
-                <desc versionDate="2013-11-11" xml:lang="de">bezeichnet kontrolliert strukturiertes Vokabular, in dem die entsprechenden Keywords definiert sind.</desc>
-                <valList type="closed" mode="replace">
-                    <valItem ident="WeGA_cat"/>
-                </valList>
-            </attDef>
+            <attDef ident="scheme" mode="delete"/>
         </attList>
     </elementSpec>
     
@@ -243,14 +243,12 @@
             <memberOf key="att.pointing" mode="delete"/>
             <memberOf key="att.typed" mode="delete"/>
             <memberOf key="att.canonical" mode="delete"/>
+            <memberOf key="att.sortable" mode="delete"/>
+            <memberOf key="att.cReferencing" mode="delete"/>
         </classes>
         <content>
-            <rng:ref name="WeGA_keywords.list"/>
+            <rng:ref name="document.keywords.list"/>
         </content>
-        <attList>
-            <attDef ident="cRef" mode="delete"/>
-            <attDef ident="sortKey" mode="delete"/>
-        </attList>
     </elementSpec>
     
 </schemaSpec>
