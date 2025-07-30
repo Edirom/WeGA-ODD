@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2025-07-09T10:10:54Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2025-07-30T14:11:40Z by 'extract-isosch.xsl'. -->
    <!-- ********************* -->
    <!-- namespaces, declared: -->
    <!-- ********************* -->
@@ -14,7 +14,7 @@
    <ns prefix="mei" uri="http://www.music-encoding.org/ns/mei"/>
    <ns prefix="teix" uri="http://www.tei-c.org/ns/Examples"/>
    <!-- ******************************************************* -->
-   <!-- constraints in en, und, mul, zxx, of which there are 74 -->
+   <!-- constraints in en, und, mul, zxx, of which there are 76 -->
    <!-- ******************************************************* -->
    <pattern id="schematron-constraint-att-datable-w3c-when-1">
       <rule context="tei:*[@when]">
@@ -394,6 +394,18 @@
    <pattern id="schematron-constraint-underline-n-74">
       <rule context="*:hi[@n] | *:rend[@n]">
          <assert test="@rend = ('underline', 'indent')">The @n-attribute is only supported in combination with @rend='underline' and @rend='indent'</assert>
+      </rule>
+   </pattern>
+   <pattern id="schematron-constraint-biblStruct-structure-logic-75">
+      <rule context="tei:biblStruct">
+         <assert test="not(tei:ref) or count(*) = 1"> Duplicates and Deletions may not contain any other elements than the ref-element itself.</assert>
+      </rule>
+   </pattern>
+   <pattern id="schematron-constraint-biblStruct-structure-logic-76">
+      <rule context="tei:biblStruct[not(tei:ref)]">
+         <assert test="tei:monogr"> The element biblStruct must contain a monogr element.</assert>
+         <report test="@type=('article', 'review', 'inbook', 'incollection', 'inproceedings') and not(tei:analytic)"> For biblStruct with type 'article', 'review', 'inbook', 'incollection', 'inproceedings', an analytic element is required.</report>
+         <assert test="not(@type=('book', 'mastersthesis', 'phdthesis', 'score') and tei:analytic)"> For biblStruct with type 'book', 'mastersthesis', 'phdthesis', 'score', the analytic element is not allowed.</assert>
       </rule>
    </pattern>
 </schema>
