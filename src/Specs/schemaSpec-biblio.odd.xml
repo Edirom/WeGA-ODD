@@ -2,6 +2,7 @@
 <schemaSpec ident="wegaBiblio" xml:lang="en" start="biblStruct"
     xmlns="http://www.tei-c.org/ns/1.0" 
     xmlns:rng="http://relaxng.org/ns/structure/1.0"
+    xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" 
     xmlns:sch="http://purl.oclc.org/dsdl/schematron">
     <moduleRef key="core" include="analytic author biblScope date editor hi imprint monogr note p pubPlace publisher q ref rs series term title"/>
     <moduleRef key="tei"/>
@@ -21,6 +22,28 @@
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-transcr"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-datatypes"/>
     
+    <constraintSpec scheme="schematron" ident="biblStruct-structure-logic">
+        <desc xml:lang="en">Validates biblStruct structure based on @type.</desc>
+        <constraint>
+            <sch:rule context="tei:biblStruct">
+                <sch:assert test="not(tei:ref) or count(*) = 1">
+                    Duplicates and Deletions may not contain any other elements than the ref-element itself.
+                </sch:assert>
+            </sch:rule>
+            <sch:rule context="tei:biblStruct[not(tei:ref)]">
+                <sch:assert test="tei:monogr">
+                    The element biblStruct must contain a monogr element.
+                </sch:assert>
+                <sch:report test="@type=('article', 'review', 'inbook', 'incollection', 'inproceedings') and not(tei:analytic)">
+                    For biblStruct with type 'article', 'review', 'inbook', 'incollection', 'inproceedings', an analytic element is required.
+                </sch:report>
+                <sch:assert test="not(@type=('book', 'mastersthesis', 'phdthesis', 'score') and tei:analytic)">
+                    For biblStruct with type 'book', 'mastersthesis', 'phdthesis', 'score', the analytic element is not allowed.
+                </sch:assert>
+            </sch:rule>
+        </constraint>
+    </constraintSpec>
+    
     <elementSpec ident="biblStruct" mode="add" module="wega.core.module">
         <gloss versionDate="2013-11-11" xml:lang="en">structured bibliographic citation</gloss>
         <desc versionDate="2013-11-11" xml:lang="en">contains a structured bibliographic citation, in which only bibliographic sub-elements appear and in a specified order.</desc>
@@ -33,6 +56,7 @@
             <rng:choice>
                 <!--  Dubletten  -->
                 <rng:element name="ref">
+                    <a:documentation>Test einer Annotation</a:documentation>
                     <rng:attribute name="type">
                         <rng:choice>
                             <rng:value>duplicate</rng:value>
@@ -87,8 +111,8 @@
                 </datatype>
             </attDef>
             <attDef ident="type" mode="add" usage="req">
-                <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
-                <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</desc>
+                <desc versionDate="2013-11-11" xml:lang="en">characterizes the bibliographic entry by type. The values follow the BibTeX classification scheme (e.g., article, book, incollection).</desc>
+                <desc versionDate="2013-11-11" xml:lang="de">charakterisiert den bibliographischen Eintrag nach Typ. Die Werte folgen dem Klassifikationsschema von BibTeX (z. B. article, book, incollection).</desc>
                 <datatype>
                     <dataRef key="wega.biblio.types"/>
                 </datatype>
@@ -103,72 +127,6 @@
                 </valList>
             </attDef>
             <attDef ident="status" usage="req" mode="change"/>
-        </attList>
-    </elementSpec>
-    
-    <elementSpec ident="keywords" mode="change" module="header">
-        <desc versionDate="2013-11-11" xml:lang="en">contains a list of keywords or phrases identifying the topic or nature of a text.</desc>
-        <desc versionDate="2013-11-11" xml:lang="de">enthält eine Liste von Keywords oder Passagen, die das Thema oder die Art eines Textes identifizieren.</desc>
-        <classes mode="change">
-            <memberOf key="att.global" mode="delete"/>
-        </classes>
-        <content>
-            <rng:oneOrMore>
-                <rng:ref name="term"/>
-            </rng:oneOrMore>
-        </content>
-        <attList>
-            <attDef ident="scheme" mode="change" usage="req">
-                <desc versionDate="2013-11-11" xml:lang="en">identifies the controlled vocabulary within which the set of keywords concerned is defined.</desc>
-                <desc versionDate="2013-11-11" xml:lang="de">bezeichnet kontrolliert strukturiertes Vokabular, in dem die entsprechenden Keywords definiert sind.</desc>
-                <valList>
-                    <valItem ident="WeGA_biblio"/>
-                </valList>
-            </attDef>
-        </attList>
-    </elementSpec>
-    
-    <!--<elementSpec ident="title" mode="change" module="core">
-                        <classes mode="change">
-                            <memberOf key="att.global" mode="delete"/>
-                            <memberOf key="att.canonical" mode="delete"/>
-                        </classes>
-                        <attList>
-                            <attDef ident="level" mode="change" usage="req">
-                                <valList type="closed" mode="replace">
-                                    <valItem ident="s">
-                                        <desc>(series) Reihentitel</desc>
-                                    </valItem>
-                                    <valItem ident="a">
-                                        <desc>(analytic) Titel des Einzelwerks / der Datei</desc>
-                                    </valItem>
-                                </valList>
-                            </attDef>
-                            <attDef ident="xml:lang" mode="add" usage="req">
-                                <datatype>
-                                    <dataRef key="teidata.language"/>
-                                </datatype>
-                            </attDef>
-                            <attDef ident="type" mode="delete"/>
-                        </attList>
-                    </elementSpec>-->
-    
-    <elementSpec ident="term" mode="change" module="core">
-        <desc versionDate="2013-11-11" xml:lang="en">contains a single-word, multi-word, or symbolic designation which is regarded as a technical term.</desc>
-        <desc versionDate="2013-11-11" xml:lang="de">enthält ein einzelnes Wort, mehrere Wörter oder eine symbolische Bezeichnung, die als Fachbegriff gilt.</desc>
-        <classes mode="change">
-            <memberOf key="att.global" mode="delete"/>
-            <memberOf key="att.declaring" mode="delete"/>
-            <memberOf key="att.pointing" mode="delete"/>
-            <memberOf key="att.typed" mode="delete"/>
-            <memberOf key="att.canonical" mode="delete"/>
-        </classes>
-        <content>
-            <dataRef key="teidata.text"/>
-        </content>
-        <attList>
-            <attDef ident="cRef" mode="delete"/>
-            <attDef ident="sortKey" mode="delete"/>
         </attList>
     </elementSpec>
     
@@ -203,60 +161,126 @@
         </attList>
         <exemplum xml:lang="mul">
             <egXML xmlns="http://www.tei-c.org/ns/Examples" source="A111057">
-<biblStruct xml:id="A111057" status="approved" type="book">
-    <monogr>
-        <title level="m">
-            Die Rezeption von Carl Maria von Webers <q>Der 
-            Freischütz</q> als deutsche Nationaloper
-        </title>
-        <title level="m" type="sub">
-            Diplomarbeit zur Magistra der Philosophie 
-            (Mag. phil.) an der Universität  Wien
-        </title>
-        <idno type="DOI">10.25365/thesis.25680</idno>
-        <author>Xenia Hofmann</author>
-        <imprint>
-            <pubPlace>Wien</pubPlace>
-            <date when="2010">2013</date>
-        </imprint>
-    </monogr>
-</biblStruct>
+                <biblStruct xml:id="A111057" status="approved" type="book">
+                    <monogr>
+                        <title level="m">
+                            Die Rezeption von Carl Maria von Webers <q>Der 
+                                Freischütz</q> als deutsche Nationaloper
+                        </title>
+                        <title level="m" type="sub">
+                            Diplomarbeit zur Magistra der Philosophie 
+                            (Mag. phil.) an der Universität  Wien
+                        </title>
+                        <idno type="DOI">10.25365/thesis.25680</idno>
+                        <author>Xenia Hofmann</author>
+                        <imprint>
+                            <pubPlace>Wien</pubPlace>
+                            <date when="2010">2013</date>
+                        </imprint>
+                    </monogr>
+                </biblStruct>
             </egXML>
         </exemplum>
         <exemplum xml:lang="mul">
             <egXML xmlns="http://www.tei-c.org/ns/Examples" source="A112512">
-<biblStruct xml:id="A112512" status="candidate" type="article">
-    <analytic>
-        <author key="A000288">Helmina von Chézy</author>
-        <title level="a">
-            Carl Maria von Weber's Euryanthe. Ein Beitrag zur Geschichte 
-            der deutschen Oper, von Helmina v. Chezy, geb. Freiin Klencke
-        </title>
-        <idno type="WeGA">A031868</idno>
-        <idno type="WeGA">A031757</idno>
-        <idno type="WeGA">A031897</idno>
-        <idno type="WeGA">A031534</idno>
-        <idno type="WeGA">A031842</idno>
-        <idno type="WeGA">A031984</idno>
-        <idno type="WeGA">A031927</idno>
-        <idno type="WeGA">A031880</idno>
-        <idno type="WeGA">A031903</idno>
-    </analytic>
-    <monogr>
-        <title level="j">Neue Zeitschrift für Musik</title>
-        <imprint>
-            <biblScope unit="jg">7</biblScope>
-            <biblScope unit="vol">13</biblScope>
-            <biblScope unit="nr">1–11</biblScope>
-            <date when="1840">Juli-August 1840</date>
-            <biblScope unit="pp">
-                1–2, 5–6, 9–10, 13–14, 17–19, 21–22, 33–35, 37–39, 41–43
-            </biblScope>
-        </imprint>
-    </monogr>
-</biblStruct>
+                <biblStruct xml:id="A112512" status="candidate" type="article">
+                    <analytic>
+                        <author key="A000288">Helmina von Chézy</author>
+                        <title level="a">
+                            Carl Maria von Weber's Euryanthe. Ein Beitrag zur Geschichte 
+                            der deutschen Oper, von Helmina v. Chezy, geb. Freiin Klencke
+                        </title>
+                        <idno type="WeGA">A031868</idno>
+                        <idno type="WeGA">A031757</idno>
+                        <idno type="WeGA">A031897</idno>
+                        <idno type="WeGA">A031534</idno>
+                        <idno type="WeGA">A031842</idno>
+                        <idno type="WeGA">A031984</idno>
+                        <idno type="WeGA">A031927</idno>
+                        <idno type="WeGA">A031880</idno>
+                        <idno type="WeGA">A031903</idno>
+                    </analytic>
+                    <monogr>
+                        <title level="j">Neue Zeitschrift für Musik</title>
+                        <imprint>
+                            <biblScope unit="jg">7</biblScope>
+                            <biblScope unit="vol">13</biblScope>
+                            <biblScope unit="nr">1–11</biblScope>
+                            <date when="1840">Juli-August 1840</date>
+                            <biblScope unit="pp">
+                                1–2, 5–6, 9–10, 13–14, 17–19, 21–22, 33–35, 37–39, 41–43
+                            </biblScope>
+                        </imprint>
+                    </monogr>
+                </biblStruct>
             </egXML>
         </exemplum>
+    </elementSpec>
+    
+    <!--<elementSpec ident="title" mode="change" module="core">
+                        <classes mode="change">
+                            <memberOf key="att.global" mode="delete"/>
+                            <memberOf key="att.canonical" mode="delete"/>
+                        </classes>
+                        <attList>
+                            <attDef ident="level" mode="change" usage="req">
+                                <valList type="closed" mode="replace">
+                                    <valItem ident="s">
+                                        <desc>(series) Reihentitel</desc>
+                                    </valItem>
+                                    <valItem ident="a">
+                                        <desc>(analytic) Titel des Einzelwerks / der Datei</desc>
+                                    </valItem>
+                                </valList>
+                            </attDef>
+                            <attDef ident="xml:lang" mode="add" usage="req">
+                                <datatype>
+                                    <dataRef key="teidata.language"/>
+                                </datatype>
+                            </attDef>
+                            <attDef ident="type" mode="delete"/>
+                        </attList>
+                    </elementSpec>-->
+    
+    <elementSpec ident="keywords" mode="change" module="header">
+        <desc versionDate="2013-11-11" xml:lang="en">contains a list of keywords or phrases identifying the topic or nature of a text.</desc>
+        <desc versionDate="2013-11-11" xml:lang="de">enthält eine Liste von Keywords oder Passagen, die das Thema oder die Art eines Textes identifizieren.</desc>
+        <classes mode="change">
+            <memberOf key="att.global" mode="delete"/>
+        </classes>
+        <content>
+            <rng:oneOrMore>
+                <rng:ref name="term"/>
+            </rng:oneOrMore>
+        </content>
+        <attList>
+            <attDef ident="scheme" mode="change" usage="req">
+                <desc versionDate="2013-11-11" xml:lang="en">identifies the controlled vocabulary within which the set of keywords concerned is defined.</desc>
+                <desc versionDate="2013-11-11" xml:lang="de">bezeichnet kontrolliert strukturiertes Vokabular, in dem die entsprechenden Keywords definiert sind.</desc>
+                <valList>
+                    <valItem ident="WeGA_biblio"/>
+                </valList>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="term" mode="change" module="core">
+        <desc versionDate="2013-11-11" xml:lang="en">contains a single-word, multi-word, or symbolic designation which is regarded as a technical term.</desc>
+        <desc versionDate="2013-11-11" xml:lang="de">enthält ein einzelnes Wort, mehrere Wörter oder eine symbolische Bezeichnung, die als Fachbegriff gilt.</desc>
+        <classes mode="change">
+            <memberOf key="att.global" mode="delete"/>
+            <memberOf key="att.declaring" mode="delete"/>
+            <memberOf key="att.pointing" mode="delete"/>
+            <memberOf key="att.typed" mode="delete"/>
+            <memberOf key="att.canonical" mode="delete"/>
+        </classes>
+        <content>
+            <dataRef key="teidata.text"/>
+        </content>
+        <attList>
+            <attDef ident="cRef" mode="delete"/>
+            <attDef ident="sortKey" mode="delete"/>
+        </attList>
     </elementSpec>
     
 </schemaSpec>
