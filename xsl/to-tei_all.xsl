@@ -7,7 +7,7 @@
     exclude-result-prefixes="xs wega"
     version="2.0">
     
-    <xsl:param name="current-tei-version" as="xs:string">4.8.1</xsl:param>
+    <xsl:param name="current-tei-version" as="xs:string">4.10.2</xsl:param>
     <xsl:param name="facsimileWhiteList" as="xs:string">D-B</xsl:param>
     
     <xsl:output media-type="application/tei+xml" encoding="UTF-8" indent="no" method="xml"/>
