@@ -21,6 +21,53 @@
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-transcr"/>
     <specGrpRef target="../Specs/common-specs.odd.xml#wega-datatypes"/>
     
+    <constraintSpec scheme="schematron" ident="biblStruct-structure">
+        <desc versionDate="2025-10-01" xml:lang="en">Validates the structure of biblStruct elements based on their @type.</desc>
+        <desc versionDate="2025-10-01" xml:lang="de">Validiert die Struktur von biblStruct-Elementen basierend auf ihrem @type.</desc>
+        <constraint>
+            <sch:rule context="tei:biblStruct[not(tei:ref)]">
+                <sch:report test="@type=('article', 'review', 'inbook', 'incollection', 'inproceedings', 'lexicon') and not(tei:analytic)">
+                    For biblStruct with type 'article', 'review', 'inbook', 'incollection', 'inproceedings', or 'lexicon', an analytic element is required.
+                </sch:report>
+                <sch:assert test="not(@type=('book', 'mastersthesis', 'phdthesis', 'score') and tei:analytic)">
+                    For biblStruct with type 'book', 'mastersthesis', 'phdthesis', 'score', the analytic element is not allowed.
+                </sch:assert>
+            </sch:rule>
+        </constraint>
+    </constraintSpec>
+    
+    <constraintSpec scheme="schematron" ident="analytic-title">
+        <desc xml:lang="en">Validates the structure of analytic elements.</desc>
+        <constraint>
+            <sch:rule context="tei:biblStruct/tei:analytic">
+                <sch:assert test="tei:title">
+                    The element analytic must contain a title element.
+                </sch:assert>
+            </sch:rule>
+            <sch:rule context="tei:biblStruct/tei:analytic/tei:title/tei:rs">
+                <sch:report test=".">
+                    A link to the corresponding writing is provided through the element ref.
+                </sch:report>
+            </sch:rule>
+            <sch:rule context="tei:biblStruct/tei:analytic/tei:title/tei:ref">
+                <sch:assert test="matches(@target, 'wega:A[0-9A-F]')">
+                    A link to the corresponding writing is provided with the suffix 'wega:' followed by the key
+                </sch:assert>
+            </sch:rule>
+        </constraint>
+    </constraintSpec>
+    
+    <constraintSpec scheme="schematron" ident="biblio-author-placement">
+        <desc xml:lang="en">Checks for wrong author placements.</desc>
+        <constraint>
+            <sch:rule context="tei:biblStruct/tei:monogr/tei:author">
+                <sch:report test="ancestor::tei:biblStruct[@type='inbook'] and not(../../tei:analytic/tei:author)">
+                    Authors of chapters are stated inside of analytic even if they wrote the whole monography.
+                </sch:report>
+            </sch:rule>
+        </constraint>
+    </constraintSpec>
+    
     <elementSpec ident="biblStruct" mode="add" module="wega.core.module">
         <gloss versionDate="2013-11-11" xml:lang="en">structured bibliographic citation</gloss>
         <desc versionDate="2013-11-11" xml:lang="en">contains a structured bibliographic citation, in which only bibliographic sub-elements appear and in a specified order.</desc>
@@ -87,8 +134,8 @@
                 </datatype>
             </attDef>
             <attDef ident="type" mode="add" usage="req">
-                <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
-                <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angwendet wird.</desc>
+                <desc versionDate="2025-08-20" xml:lang="en">characterizes the bibliographic entry by type. The values follow the BibTeX classification scheme (e.g., article, book, incollection).</desc>
+                <desc versionDate="2013-08-20" xml:lang="de">charakterisiert den bibliographischen Eintrag nach Typ. Die Werte folgen dem Klassifikationsschema von BibTeX (z. B. article, book, incollection).</desc>
                 <datatype>
                     <dataRef key="wega.biblio.types"/>
                 </datatype>
