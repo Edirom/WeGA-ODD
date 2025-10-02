@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2025-09-19T15:08:36Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2025-10-02T17:29:34Z by 'extract-isosch.xsl'. -->
    <!-- ********************* -->
    <!-- namespaces, declared: -->
    <!-- ********************* -->
@@ -14,7 +14,7 @@
    <ns prefix="mei" uri="http://www.music-encoding.org/ns/mei"/>
    <ns prefix="teix" uri="http://www.tei-c.org/ns/Examples"/>
    <!-- ******************************************************* -->
-   <!-- constraints in en, und, mul, zxx, of which there are 74 -->
+   <!-- constraints in en, und, mul, zxx, of which there are 79 -->
    <!-- ******************************************************* -->
    <pattern id="schematron-constraint-att-datable-w3c-when-1">
       <rule context="tei:*[@when]">
@@ -394,6 +394,32 @@
    <pattern id="schematron-constraint-underline-n-74">
       <rule context="*:hi[@n] | *:rend[@n]">
          <assert test="@rend = ('underline', 'indent')">The @n-attribute is only supported in combination with @rend='underline' and @rend='indent'</assert>
+      </rule>
+   </pattern>
+   <pattern id="schematron-constraint-biblStruct-structure-75">
+      <rule context="tei:biblStruct[not(tei:ref)]">
+         <report test="@type=('article', 'review', 'inbook', 'incollection', 'inproceedings', 'lexicon') and not(tei:analytic)"> For biblStruct with type 'article', 'review', 'inbook', 'incollection', 'inproceedings', or 'lexicon', an analytic element is required.</report>
+         <assert test="not(@type=('book', 'mastersthesis', 'phdthesis', 'score') and tei:analytic)"> For biblStruct with type 'book', 'mastersthesis', 'phdthesis', 'score', the analytic element is not allowed.</assert>
+      </rule>
+   </pattern>
+   <pattern id="schematron-constraint-analytic-title-76">
+      <rule context="tei:biblStruct/tei:analytic">
+         <assert test="tei:title"> The element analytic must contain a title element.</assert>
+      </rule>
+   </pattern>
+   <pattern id="schematron-constraint-analytic-title-77">
+      <rule context="tei:biblStruct/tei:analytic/tei:title/tei:rs">
+         <report test="."> A link to the corresponding writing is provided through the element ref.</report>
+      </rule>
+   </pattern>
+   <pattern id="schematron-constraint-analytic-title-78">
+      <rule context="tei:biblStruct/tei:analytic/tei:title/tei:ref">
+         <assert test="matches(@target, 'wega:A[0-9A-F]')"> A link to the corresponding writing is provided with the suffix 'wega:' followed by the key</assert>
+      </rule>
+   </pattern>
+   <pattern id="schematron-constraint-biblio-author-placement-79">
+      <rule context="tei:biblStruct/tei:monogr/tei:author">
+         <report test="ancestor::tei:biblStruct[@type='inbook'] and not(../../tei:analytic/tei:author)"> Authors of chapters are stated inside of analytic even if they wrote the whole monography.</report>
       </rule>
    </pattern>
 </schema>
