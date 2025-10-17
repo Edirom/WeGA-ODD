@@ -2036,7 +2036,14 @@
 <!--                <memberOf key="att.global" mode="delete"/>-->
                 <memberOf key="att.placement" mode="delete"/>
                 <memberOf key="model.correspDescPart"/>
+                <memberOf key="att.datable.w3c"/>
             </classes>
+            <content>
+                <sequence>
+                    <elementRef key="head" minOccurs="0" maxOccurs="1"/>
+                    <macroRef name="macro.specialPara"/>
+                </sequence>
+            </content>
             <constraintSpec scheme="schematron" ident="note-in-text">
                 <constraint>
                     <sch:rule context="tei:note[not(parent::tei:org or parent::tei:person or parent::tei:notesStmt or parent::tei:biblStruct or parent::tei:imprint or parent::tei:place)]">
@@ -2061,7 +2068,7 @@
             <constraintSpec scheme="schematron" ident="notesStmt-notes">
                 <constraint>
                     <sch:rule context="tei:note[parent::tei:notesStmt]">
-                        <sch:assert test="@type=('editorial', 'summary', 'thematicCom', 'incipit', 'textConst')">Within the notesStmt only 'editorial', 'summary', 'textConst', or 'thematicCom' are allowed for @type on note.</sch:assert>
+                        <sch:assert test="@type=('editorial', 'summary', 'thematicCom', 'incipit', 'textConst', 'teaser')">Within the notesStmt only 'editorial', 'summary', 'textConst', 'teaser', or 'thematicCom' are allowed for @type on note.</sch:assert>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
@@ -2074,8 +2081,8 @@
             </constraintSpec>
             <constraintSpec scheme="schematron" ident="structured-content-notes">
                 <constraint>
-                    <sch:rule context="tei:note[parent::tei:notesStmt][tei:p|tei:list|tei:table]">
-                        <sch:report test="text()[matches(., '\w')] or *[not(self::tei:p or self::tei:list or self::tei:table)]">There must be no mixed content when a tei:p, tei:list, or tei:table is present.</sch:report>
+                    <sch:rule context="tei:note[parent::tei:notesStmt][tei:p|tei:list|tei:table|tei:head]">
+                        <sch:report test="text()[matches(., '\w')] or *[not(self::tei:p or self::tei:list or self::tei:table or self::tei:head)]">There must be no mixed content when a tei:p, tei:list, tei:table, or tei:head is present.</sch:report>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
@@ -2084,6 +2091,23 @@
                 <constraint>
                     <sch:rule context="tei:note[@type='commentary'][not(*[1]/self::tei:q or *[1]/self::tei:quote)]">
                         <sch:assert test="matches(replace(normalize-unicode(normalize-space(.), 'NFKD'),  '[\p{M}]', ''), '^[A-Z0-9]')">Commentary notes must start with an upper case letter.</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="schematron" ident="head-only-in-teaser">
+                <constraint>
+                    <sch:rule context="tei:note">
+                        <sch:report test="tei:head and not(ancestor::tei:fileDesc/tei:notesStmt)">The element head is only allowed in teaser notes in notesStmt.</sch:report>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="schematron" ident="dates-only-in-teaser">
+                <constraint>
+                    <sch:rule context="tei:fileDesc/tei:notesStmt/tei:note[@type='teaser']">
+                        <sch:assert test="not(@when or @notBefore or @notAfter)">Only @from, @to are permitted on teaser notes in notesStmt.</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:note[@from or @to or @when or @notBefore or @notAfter]">
+                        <sch:report test="not(@type='teaser' and ancestor::tei:fileDesc/tei:notesStmt)">Datables are only allowed on teaser notes in fileDesc/notesStmt.</sch:report>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
@@ -2131,6 +2155,12 @@
                             <desc versionDate="2016-04-23" xml:lang="en">The text incipit of the letter (or other piece of correspondence).</desc>
                             <gloss versionDate="2016-04-23" xml:lang="de">Incipit</gloss>
                             <desc versionDate="2016-04-23" xml:lang="de">Das Textincipit des Briefs (oder anderer Korrespondenzmaterialien)</desc>
+                        </valItem>
+                        <valItem ident="teaser">
+                            <gloss versionDate="2025-10-16" xml:lang="en">teaser</gloss>
+                            <desc versionDate="2025-10-16" xml:lang="en">teaser for the anniversary year 2026.</desc>
+                            <gloss versionDate="2025-10-16" xml:lang="de">Teaser</gloss>
+                            <desc versionDate="2025-10-16" xml:lang="de">Teaser für das Jubiläumsjahr 2026.</desc>
                         </valItem>
                     </valList>
                 </attDef>
