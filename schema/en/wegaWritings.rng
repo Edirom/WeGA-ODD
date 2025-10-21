@@ -5,7 +5,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2025-10-21T11:28:58Z. . 
+Schema generated from ODD source 2025-10-21T12:53:38Z. . 
 TEI Edition: P5 Version 4.10.2. Last updated on 4th September 2025, revision bcfa98f42 
 TEI Edition Location: https://www.tei-c.org/Vault/P5/4.10.2/ 
   
@@ -3735,7 +3735,12 @@ Suggested values include: 1] deprecationInfo (deprecation information)</a:docume
    <define name="note">
       <element name="note">
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(note) contains a note or annotation. [3.9.1. Notes and Simple Annotation 2.2.6. The Notes Statement 3.12.2.8. Notes and Statement of Language 10.3.5.4. Notes within Entries]</a:documentation>
-         <ref name="macro.specialPara"/>
+         <group>
+            <optional>
+               <ref name="head"/>
+            </optional>
+            <ref name="macro.specialPara"/>
+         </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
                   id="wegaWritings-note-note-in-text-constraint-rule-59">
@@ -3781,7 +3786,7 @@ Suggested values include: 1] deprecationInfo (deprecation information)</a:docume
                       xmlns:s="http://www.ascc.net/xml/schematron"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       context="tei:note[parent::tei:notesStmt]">
-               <sch:assert test="@type=('editorial', 'summary', 'thematicCom', 'incipit', 'textConst')">Within the notesStmt only 'editorial', 'summary', 'textConst', or 'thematicCom' are allowed for @type on note.</sch:assert>
+               <sch:assert test="@type=('editorial', 'summary', 'thematicCom', 'incipit', 'textConst', 'teaser')">Within the notesStmt only 'editorial', 'summary', 'textConst', 'teaser', or 'thematicCom' are allowed for @type on note.</sch:assert>
             </sch:rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
@@ -3793,24 +3798,36 @@ Suggested values include: 1] deprecationInfo (deprecation information)</a:docume
                       xmlns:s="http://www.ascc.net/xml/schematron"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       context="tei:note[not(parent::tei:notesStmt)]">
-               <sch:report test="@type=('editorial', 'summary', 'incipit')">The note types 'editorial', 'summary', or 'thematicCom' are not allowed within the text section but only in the notesStmt.</sch:report>
+               <sch:report test="@type=('editorial', 'summary', 'incipit', 'teaser')">The note types 'editorial', 'summary', 'thematicCom', or 'teaser' are not allowed within the text section but only in the notesStmt.</sch:report>
             </sch:rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-note-structured-content-notes-constraint-rule-64">
+                  id="wegaWritings-note-teaser-notes-in-thematicCommentaries-constraint-rule-64">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
                       xmlns:s="http://www.ascc.net/xml/schematron"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
-                      context="tei:note[parent::tei:notesStmt][tei:p|tei:list|tei:table]">
-               <sch:report test="text()[matches(., '\w')] or *[not(self::tei:p or self::tei:list or self::tei:table)]">There must be no mixed content when a tei:p, tei:list, or tei:table is present.</sch:report>
+                      context="tei:note[@type='teaser']">
+               <sch:assert test="matches(ancestor::tei:TEI/@xml:id, '^A09')">The note type 'teaser' is only allowed in the notesStmt in thematic Commentaries.</sch:assert>
             </sch:rule>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-note-initial-uppercase-commentaries-constraint-rule-65">
+                  id="wegaWritings-note-structured-content-notes-constraint-rule-65">
+            <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      context="tei:note[parent::tei:notesStmt][tei:p|tei:list|tei:table|tei:head|tei:graphic]">
+               <sch:report test="text()[matches(., '\w')] or *[not(self::tei:p or self::tei:list or self::tei:table or self::tei:head or self::tei:graphic)]">There must be no mixed content when a tei:p, tei:list, tei:table, or tei:head is present.</sch:report>
+            </sch:rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                  id="wegaWritings-note-initial-uppercase-commentaries-constraint-rule-66">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -3818,6 +3835,33 @@ Suggested values include: 1] deprecationInfo (deprecation information)</a:docume
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       context="tei:note[@type='commentary'][not(*[1]/self::tei:q or *[1]/self::tei:quote)]">
                <sch:assert test="matches(replace(normalize-unicode(normalize-space(.), 'NFKD'),  '[\p{M}]', ''), '^[A-Z0-9]')">Commentary notes must start with an upper case letter.</sch:assert>
+            </sch:rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                  id="wegaWritings-note-head-only-in-teaser-constraint-rule-67">
+            <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      context="tei:note[tei:head]">
+               <sch:assert test="@type='teaser'">The element head is only allowed in teaser notes in notesStmt.</sch:assert>
+            </sch:rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                  id="wegaWritings-note-dates-in-teaser-constraint-rule-68">
+            <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+                      xmlns:mei="http://www.music-encoding.org/ns/mei"
+                      xmlns:s="http://www.ascc.net/xml/schematron"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      context="tei:note">
+               <sch:report test="@type='teaser' and not(@from)">Teaser notes must contain a @from attribute.</sch:report>
+               <sch:report test="@type='teaser' and not(@to)">Teaser notes must contain a @to attribute.</sch:report>
+               <sch:report test="not(@type='teaser') and @from">The attribute @from is only allowed in notes of the type 'teaser'.</sch:report>
+               <sch:report test="not(@type='teaser') and @to">The attribute @to is only allowed in notes of the type 'teaser'.</sch:report>
             </sch:rule>
          </pattern>
          <ref name="att.global.attribute.xmlid"/>
@@ -3941,9 +3985,13 @@ Suggested values include: 1] deprecationInfo (deprecation information)</a:docume
                            xmlns:rng="http://relaxng.org/ns/structure/1.0">&lt;notesStmt&gt;</code>).</a:documentation>
                   <value>incipit</value>
                   <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(incipit) The text incipit of the letter (or other piece of correspondence).</a:documentation>
+                  <value>teaser</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(teaser) teaser for the anniversary year 2026.</a:documentation>
                </choice>
             </attribute>
          </optional>
+         <ref name="att.datable.w3c.attribute.from"/>
+         <ref name="att.datable.w3c.attribute.to"/>
          <empty/>
       </element>
    </define>
@@ -3953,7 +4001,7 @@ Suggested values include: 1] deprecationInfo (deprecation information)</a:docume
          <empty/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-graphic-graphic-url-check-constraint-rule-66">
+                  id="wegaWritings-graphic-graphic-url-check-constraint-rule-69">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -3965,7 +4013,7 @@ Suggested values include: 1] deprecationInfo (deprecation information)</a:docume
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-graphic-url-or-sameAs-constraint-rule-67">
+                  id="wegaWritings-graphic-url-or-sameAs-constraint-rule-70">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -4008,7 +4056,7 @@ Elements]</a:documentation>
          </optional>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-pb-facs-facs-reference-constraint-rule-68">
+                  id="wegaWritings-pb-facs-facs-reference-constraint-rule-71">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -4064,7 +4112,7 @@ Elements]</a:documentation>
          </zeroOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-analytic-analyticTitle-constraint-rule-69">
+                  id="wegaWritings-analytic-analyticTitle-constraint-rule-72">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -4155,7 +4203,7 @@ Elements]</a:documentation>
          </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-monogr-monogrTitle-constraint-rule-70">
+                  id="wegaWritings-monogr-monogrTitle-constraint-rule-73">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -4175,7 +4223,7 @@ Elements]</a:documentation>
          <ref name="macro.phraseSeq"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-author-author-abb-constraint-rule-71">
+                  id="wegaWritings-author-author-abb-constraint-rule-74">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -4208,7 +4256,7 @@ Elements]</a:documentation>
          </optional>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-author-sameAs-sameAs-reference-constraint-rule-72">
+                  id="wegaWritings-author-sameAs-sameAs-reference-constraint-rule-75">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -4238,7 +4286,7 @@ Elements]</a:documentation>
          <ref name="macro.phraseSeq"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-editor-WeGA-editor-constraint-rule-73">
+                  id="wegaWritings-editor-WeGA-editor-constraint-rule-76">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -4296,7 +4344,7 @@ Elements]</a:documentation>
          <ref name="macro.paraContent"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-title-duplicate-title-constraint-rule-74">
+                  id="wegaWritings-title-duplicate-title-constraint-rule-77">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -4311,7 +4359,7 @@ Elements]</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-title-punctuation-mark-constraint-rule-75">
+                  id="wegaWritings-title-punctuation-mark-constraint-rule-78">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -4324,7 +4372,7 @@ Elements]</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-title-report-leading-zeros-constraint-rule-76">
+                  id="wegaWritings-title-report-leading-zeros-constraint-rule-79">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -4336,7 +4384,7 @@ Elements]</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-title-report-quotation-marks-constraint-rule-77">
+                  id="wegaWritings-title-report-quotation-marks-constraint-rule-80">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -4402,7 +4450,7 @@ Elements]</a:documentation>
          </oneOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-imprint-duplicate-biblScope-type-constraint-rule-78">
+                  id="wegaWritings-imprint-duplicate-biblScope-type-constraint-rule-81">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -4622,7 +4670,7 @@ Elements]</a:documentation>
          </optional>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-relatedItem-relatedItem-type-within-notesStmt-constraint-rule-79">
+                  id="wegaWritings-relatedItem-relatedItem-type-within-notesStmt-constraint-rule-82">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -4634,7 +4682,7 @@ Elements]</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-relatedItem-relatedItem-target-within-notesStmt-constraint-rule-80">
+                  id="wegaWritings-relatedItem-relatedItem-target-within-notesStmt-constraint-rule-83">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -4647,7 +4695,7 @@ Elements]</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-relatedItem-targetorcontent1-constraint-rule-81">
+                  id="wegaWritings-relatedItem-targetorcontent1-constraint-rule-84">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       context="tei:relatedItem">
@@ -4697,7 +4745,7 @@ Elements]</a:documentation>
          </zeroOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-l-l-indent-n-constraint-rule-82">
+                  id="wegaWritings-l-l-indent-n-constraint-rule-85">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -4709,7 +4757,7 @@ Elements]</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-l-abstractModel-structure-l-in-l-constraint-rule-83">
+                  id="wegaWritings-l-abstractModel-structure-l-in-l-constraint-rule-86">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       context="tei:l">
@@ -4773,7 +4821,7 @@ Elements]</a:documentation>
          </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-lg-lg-indent-n-constraint-rule-84">
+                  id="wegaWritings-lg-lg-indent-n-constraint-rule-87">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -4785,7 +4833,7 @@ Elements]</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-lg-atleast1oflggapl-constraint-rule-85">
+                  id="wegaWritings-lg-atleast1oflggapl-constraint-rule-88">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       context="tei:lg">
@@ -4794,7 +4842,7 @@ Elements]</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-lg-abstractModel-structure-lg-in-l-constraint-rule-86">
+                  id="wegaWritings-lg-abstractModel-structure-lg-in-l-constraint-rule-89">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       context="tei:lg">
@@ -4830,7 +4878,7 @@ Elements]</a:documentation>
          </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-teiHeader-seriesTitle-constraint-rule-87">
+                  id="wegaWritings-teiHeader-seriesTitle-constraint-rule-90">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -5007,7 +5055,7 @@ Elements]</a:documentation>
          </oneOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-notesStmt-count-notes-constraint-rule-88">
+                  id="wegaWritings-notesStmt-count-notes-constraint-rule-91">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -5132,7 +5180,7 @@ Elements]</a:documentation>
          </oneOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-langUsage-no-language-for-revealed-correspondence-constraint-rule-89">
+                  id="wegaWritings-langUsage-no-language-for-revealed-correspondence-constraint-rule-92">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -5203,7 +5251,7 @@ Elements]</a:documentation>
          </oneOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-revisionDesc-assert-status-alignment-constraint-rule-90">
+                  id="wegaWritings-revisionDesc-assert-status-alignment-constraint-rule-93">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -5234,7 +5282,7 @@ Elements]</a:documentation>
          <ref name="macro.specialPara"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-change-assert-chronologic-order-constraint-rule-91">
+                  id="wegaWritings-change-assert-chronologic-order-constraint-rule-94">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -5247,7 +5295,7 @@ Elements]</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-change-report-future-dates-constraint-rule-92">
+                  id="wegaWritings-change-report-future-dates-constraint-rule-95">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -5357,7 +5405,7 @@ Elements]</a:documentation>
          </oneOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-body-non-empty-body-needs-langUsage-constraint-rule-93">
+                  id="wegaWritings-body-non-empty-body-needs-langUsage-constraint-rule-96">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       context="tei:body[normalize-space(.) ne '']">
@@ -5443,7 +5491,7 @@ Elements]</a:documentation>
          </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-div-abstractModel-structure-div-in-l-constraint-rule-94">
+                  id="wegaWritings-div-abstractModel-structure-div-in-l-constraint-rule-97">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       context="tei:l//tei:div">
@@ -5454,7 +5502,7 @@ Elements]</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-div-abstractModel-structure-div-in-ab-or-p-constraint-rule-95">
+                  id="wegaWritings-div-abstractModel-structure-div-in-ab-or-p-constraint-rule-98">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       context="tei:div">
@@ -5623,7 +5671,7 @@ Elements]</a:documentation>
          <ref name="macro.phraseSeq"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-orgName-parent-org-constraint-rule-96">
+                  id="wegaWritings-orgName-parent-org-constraint-rule-99">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -5636,7 +5684,7 @@ Elements]</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-orgName-parent-org-reg-constraint-rule-97">
+                  id="wegaWritings-orgName-parent-org-reg-constraint-rule-100">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -5649,7 +5697,7 @@ Elements]</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-orgName-parent-org-reg2-constraint-rule-98">
+                  id="wegaWritings-orgName-parent-org-reg2-constraint-rule-101">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -5662,7 +5710,7 @@ Elements]</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-orgName-parent-not-org-constraint-rule-99">
+                  id="wegaWritings-orgName-parent-not-org-constraint-rule-102">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -5865,7 +5913,7 @@ Suggested values include: 1] label; 2] data</a:documentation>
          </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-table-collapsible-head-constraint-rule-100">
+                  id="wegaWritings-table-collapsible-head-constraint-rule-103">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -5900,7 +5948,7 @@ Suggested values include: 1] label; 2] data</a:documentation>
          </oneOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-row-number-of-cells-constraint-rule-101">
+                  id="wegaWritings-row-number-of-cells-constraint-rule-104">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -5932,7 +5980,7 @@ Suggested values include: 1] label; 2] data</a:documentation>
          <ref name="macro.specialPara"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-cell-cell-rows-constraint-rule-102">
+                  id="wegaWritings-cell-cell-rows-constraint-rule-105">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6162,7 +6210,7 @@ Suggested values include: 1] label; 2] data</a:documentation>
          </zeroOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-facsimile-graphicOrSameAs-constraint-rule-103">
+                  id="wegaWritings-facsimile-graphicOrSameAs-constraint-rule-106">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6175,7 +6223,7 @@ Suggested values include: 1] label; 2] data</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-facsimile-sourceNwitness-constraint-rule-104">
+                  id="wegaWritings-facsimile-sourceNwitness-constraint-rule-107">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6190,7 +6238,7 @@ Suggested values include: 1] label; 2] data</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-facsimile-sourcePattern-constraint-rule-105">
+                  id="wegaWritings-facsimile-sourcePattern-constraint-rule-108">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6204,7 +6252,7 @@ Suggested values include: 1] label; 2] data</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-facsimile-no_facsimile_text_nodes-constraint-rule-106">
+                  id="wegaWritings-facsimile-no_facsimile_text_nodes-constraint-rule-109">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -6277,7 +6325,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
          <empty/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-addSpan-addSpan-requires-spanTo-constraint-rule-107">
+                  id="wegaWritings-addSpan-addSpan-requires-spanTo-constraint-rule-110">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -6287,7 +6335,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-addSpan-addSpan-requires-spanTo-fr-constraint-rule-108">
+                  id="wegaWritings-addSpan-addSpan-requires-spanTo-fr-constraint-rule-111">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -6307,7 +6355,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
          </attribute>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-addSpan-spanTo-spanTo-7-constraint-rule-109">
+                  id="wegaWritings-addSpan-spanTo-spanTo-7-constraint-rule-112">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6328,7 +6376,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
          </attribute>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-addSpan-hand-hand-reference-constraint-rule-110">
+                  id="wegaWritings-addSpan-hand-hand-reference-constraint-rule-113">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6396,7 +6444,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
          </zeroOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-subst-substContents1-constraint-rule-111">
+                  id="wegaWritings-subst-substContents1-constraint-rule-114">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -6515,7 +6563,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
          </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-msDesc-one_ms_singleton_max-constraint-rule-112">
+                  id="wegaWritings-msDesc-one_ms_singleton_max-constraint-rule-115">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -6577,7 +6625,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
          </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-msIdentifier-msId_minimal-constraint-rule-113">
+                  id="wegaWritings-msIdentifier-msId_minimal-constraint-rule-116">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -6641,7 +6689,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
          </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-physDesc-empty-physDesc-constraint-rule-114">
+                  id="wegaWritings-physDesc-empty-physDesc-constraint-rule-117">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6734,7 +6782,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
          <ref name="macro.paraContent"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-seg-activeOrPassivePerformance-constraint-rule-115">
+                  id="wegaWritings-seg-activeOrPassivePerformance-constraint-rule-118">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6747,7 +6795,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-seg-AddresseeOrSenderCorrespondence-constraint-rule-116">
+                  id="wegaWritings-seg-AddresseeOrSenderCorrespondence-constraint-rule-119">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6911,7 +6959,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWritings-att.witnessed-att-wit-constraint-rule-117">
+            id="wegaWritings-att.witnessed-att-wit-constraint-rule-120">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -7004,7 +7052,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
          </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-listWit-only-one-witness-constraint-rule-118">
+                  id="wegaWritings-listWit-only-one-witness-constraint-rule-121">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -7049,7 +7097,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
          <text/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaWritings-g-enforce-ref-attribute-for-smufl-characters-constraint-rule-119">
+                  id="wegaWritings-g-enforce-ref-attribute-for-smufl-characters-constraint-rule-122">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -7164,7 +7212,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWritings-att.wega.rend-underline-n-constraint-rule-130">
+            id="wegaWritings-att.wega.rend-underline-n-constraint-rule-133">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -7219,7 +7267,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
            prefix="mei"
            uri="http://www.music-encoding.org/ns/mei"/>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWritings-whitespaceOnlyContent-constraint-rule-120">
+            id="wegaWritings-whitespaceOnlyContent-constraint-rule-123">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -7232,7 +7280,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
       </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWritings-elementStartsWithWhitespace-constraint-rule-121">
+            id="wegaWritings-elementStartsWithWhitespace-constraint-rule-124">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -7245,7 +7293,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
       </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWritings-untrimmedAttributeValues-constraint-rule-122">
+            id="wegaWritings-untrimmedAttributeValues-constraint-rule-125">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -7257,7 +7305,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
       </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWritings-wegaTargets-constraint-rule-123">
+            id="wegaWritings-wegaTargets-constraint-rule-126">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -7269,7 +7317,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
       </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWritings-emojiCheck-constraint-rule-124">
+            id="wegaWritings-emojiCheck-constraint-rule-127">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -7281,7 +7329,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
       </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWritings-sourceMustResolve-constraint-rule-125">
+            id="wegaWritings-sourceMustResolve-constraint-rule-128">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -7302,7 +7350,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
            prefix="teix"
            uri="http://www.tei-c.org/ns/Examples"/>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWritings-targetMustResolve-constraint-rule-126">
+            id="wegaWritings-targetMustResolve-constraint-rule-129">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -7315,7 +7363,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
       </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWritings-anonymus-id-constraint-rule-127">
+            id="wegaWritings-anonymus-id-constraint-rule-130">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -7327,7 +7375,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
       </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWritings-styleguide-document-node-content-constraint-rule-128">
+            id="wegaWritings-styleguide-document-node-content-constraint-rule-131">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -7340,7 +7388,7 @@ Sample values include: 1] glued; 2] pinned; 3] sewn</a:documentation>
       </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaWritings-styleguide-document-node-content-constraint-rule-129">
+            id="wegaWritings-styleguide-document-node-content-constraint-rule-132">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"

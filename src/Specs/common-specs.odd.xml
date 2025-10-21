@@ -2037,6 +2037,12 @@
                 <memberOf key="att.placement" mode="delete"/>
                 <memberOf key="model.correspDescPart"/>
             </classes>
+            <content>
+                <sequence>
+                    <elementRef key="head" minOccurs="0" maxOccurs="1"/>
+                    <macroRef name="macro.specialPara"/>
+                </sequence>
+            </content>
             <constraintSpec scheme="schematron" ident="note-in-text">
                 <constraint>
                     <sch:rule context="tei:note[not(parent::tei:org or parent::tei:person or parent::tei:notesStmt or parent::tei:biblStruct or parent::tei:imprint or parent::tei:place)]">
@@ -2061,21 +2067,29 @@
             <constraintSpec scheme="schematron" ident="notesStmt-notes">
                 <constraint>
                     <sch:rule context="tei:note[parent::tei:notesStmt]">
-                        <sch:assert test="@type=('editorial', 'summary', 'thematicCom', 'incipit', 'textConst')">Within the notesStmt only 'editorial', 'summary', 'textConst', or 'thematicCom' are allowed for @type on note.</sch:assert>
+                        <sch:assert test="@type=('editorial', 'summary', 'thematicCom', 'incipit', 'textConst', 'teaser')">Within the notesStmt only 'editorial', 'summary', 'textConst', 'teaser', or 'thematicCom' are allowed for @type on note.</sch:assert>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
             <constraintSpec scheme="schematron" ident="text-notes">
                 <constraint>
                     <sch:rule context="tei:note[not(parent::tei:notesStmt)]">
-                        <sch:report test="@type=('editorial', 'summary', 'incipit')">The note types 'editorial', 'summary', or 'thematicCom' are not allowed within the text section but only in the notesStmt.</sch:report>
+                        <sch:report test="@type=('editorial', 'summary', 'incipit', 'teaser')">The note types 'editorial', 'summary', 'thematicCom', or 'teaser' are not allowed within the text section but only in the notesStmt.</sch:report>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="schematron" ident="teaser-notes-in-thematicCommentaries">
+                <constraint>
+                    <sch:rule context="tei:note[@type='teaser']">
+                        <sch:assert test="matches(ancestor::tei:TEI/@xml:id, '^A09')">The note type 'teaser' is only allowed in the notesStmt in thematic Commentaries.</sch:assert>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
             <constraintSpec scheme="schematron" ident="structured-content-notes">
                 <constraint>
-                    <sch:rule context="tei:note[parent::tei:notesStmt][tei:p|tei:list|tei:table]">
-                        <sch:report test="text()[matches(., '\w')] or *[not(self::tei:p or self::tei:list or self::tei:table)]">There must be no mixed content when a tei:p, tei:list, or tei:table is present.</sch:report>
+                    <sch:rule context="tei:note[parent::tei:notesStmt][tei:p|tei:list|tei:table|tei:head|tei:graphic]">
+                        <!-- tei:graphic is only used within note/@type='teaser' within thematicCommentaries -->
+                        <sch:report test="text()[matches(., '\w')] or *[not(self::tei:p or self::tei:list or self::tei:table or self::tei:head or self::tei:graphic)]">There must be no mixed content when a tei:p, tei:list, tei:table, or tei:head is present.</sch:report>
                     </sch:rule>
                 </constraint>
             </constraintSpec>
@@ -2087,7 +2101,26 @@
                     </sch:rule>
                 </constraint>
             </constraintSpec>
+            <constraintSpec scheme="schematron" ident="head-only-in-teaser">
+                <constraint>
+                    <sch:rule context="tei:note[tei:head]">
+                        <sch:assert test="@type='teaser'">The element head is only allowed in teaser notes in notesStmt.</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+            <constraintSpec scheme="schematron" ident="dates-in-teaser">
+                <constraint>
+                    <sch:rule context="tei:note">
+                        <sch:report test="@type='teaser' and not(@from)">Teaser notes must contain a @from attribute.</sch:report>
+                        <sch:report test="@type='teaser' and not(@to)">Teaser notes must contain a @to attribute.</sch:report>
+                        <sch:report test="not(@type='teaser') and @from">The attribute @from is only allowed in notes of the type 'teaser'.</sch:report>
+                        <sch:report test="not(@type='teaser') and @to">The attribute @to is only allowed in notes of the type 'teaser'.</sch:report>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
             <attList>
+                <attRef name="from" class="att.datable.w3c"/>
+                <attRef name="to" class="att.datable.w3c"/>
                 <attDef ident="type" mode="change">
                     <desc versionDate="2013-11-11" xml:lang="en">characterizes the element in some sense, using any convenient classification scheme or typology.</desc>
                     <desc versionDate="2013-11-11" xml:lang="de">charakterisiert das Element in einem gewissen Sinne, wobei irgendeine zweckmäßige Systematik oder Typologie angewendet wird.</desc>
@@ -2131,6 +2164,12 @@
                             <desc versionDate="2016-04-23" xml:lang="en">The text incipit of the letter (or other piece of correspondence).</desc>
                             <gloss versionDate="2016-04-23" xml:lang="de">Incipit</gloss>
                             <desc versionDate="2016-04-23" xml:lang="de">Das Textincipit des Briefs (oder anderer Korrespondenzmaterialien)</desc>
+                        </valItem>
+                        <valItem ident="teaser">
+                            <gloss versionDate="2025-10-16" xml:lang="en">teaser</gloss>
+                            <desc versionDate="2025-10-16" xml:lang="en">teaser for the anniversary year 2026.</desc>
+                            <gloss versionDate="2025-10-16" xml:lang="de">Teaser</gloss>
+                            <desc versionDate="2025-10-16" xml:lang="de">Teaser für das Jubiläumsjahr 2026.</desc>
                         </valItem>
                     </valList>
                 </attDef>
