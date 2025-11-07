@@ -438,6 +438,21 @@
         </xsl:copy>
     </xsl:template>
     
+    <!-- teaser notes are used (quite idiosyncratically) for the jubilee 2026 -->
+    <xsl:template match="note[@type='teaser']">
+        <xsl:copy>
+            <!-- remove date attributes from tei:note -->
+            <xsl:apply-templates select="@* except @from except @to"/>
+            <xsl:if test="head">
+                <!-- turn tei:head into tei:p -->
+                <xsl:element name="p">
+                    <xsl:apply-templates select="head/node()"/>
+                </xsl:element>
+            </xsl:if>
+            <xsl:apply-templates select="node() except head"/>
+        </xsl:copy>
+    </xsl:template>
+    
     <xsl:template match="title[@level='a']" mode="biblio diaries persons orgs places">
         <xsl:param name="curNode" tunnel="yes"/>
         <xsl:copy>
