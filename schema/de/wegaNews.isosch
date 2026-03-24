@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://purl.oclc.org/dsdl/schematron" queryBinding="xslt2">
    <title>ISO Schematron rules</title>
-   <!-- This file generated 2025-11-18T15:58:43Z by 'extract-isosch.xsl'. -->
+   <!-- This file generated 2026-03-24T09:33:09Z by 'extract-isosch.xsl'. -->
    <!-- ********************* -->
    <!-- namespaces, declared: -->
    <!-- ********************* -->
@@ -14,7 +14,7 @@
    <ns prefix="mei" uri="http://www.music-encoding.org/ns/mei"/>
    <ns prefix="teix" uri="http://www.tei-c.org/ns/Examples"/>
    <!-- ******************************************************* -->
-   <!-- constraints in en, und, mul, zxx, of which there are 90 -->
+   <!-- constraints in en, und, mul, zxx, of which there are 92 -->
    <!-- ******************************************************* -->
    <pattern id="schematron-constraint-hyphenation-whitespace-1">
       <rule context="tei:*[@break]">
@@ -192,122 +192,132 @@
          <assert test="count(distinct-values(for $i in tokenize(@key, '\s+') return substring($i, 1, 3))) gt 1">A type value of 'mixed' must have keys referring to different document types</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-dateHeuristics2-36">
+   <pattern id="schematron-constraint-rs-typeNkey-36">
+      <rule context="tei:rs[@type='source'][@key]">
+         <assert test="matches(@key, '^A22\d{4}$')">A type value of 'source' must have only one key, starting with 'A22'</assert>
+      </rule>
+   </pattern>
+   <pattern id="schematron-constraint-rs-typeNkey-37">
+      <rule context="tei:rs[@type='sources'][@key]">
+         <assert test="matches(@key, '^(A22\d{4}\s)*A22\d{4}$')">A type value of 'sources' must have at least one key, each starting with 'A22'</assert>
+      </rule>
+   </pattern>
+   <pattern id="schematron-constraint-dateHeuristics2-38">
       <rule context="tei:date[@notBefore castable as xs:date and @notAfter castable as xs:date]">
          <report test="xs:date(@notBefore) gt xs:date(@notAfter)">the date value of notBefore is later than notAfter</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-dateHeuristics2-37">
+   <pattern id="schematron-constraint-dateHeuristics2-39">
       <rule context="tei:date[@notBefore castable as xs:gYear and @notAfter castable as xs:gYear]">
          <report test="xs:date(concat(@notBefore, '-01-01')) gt xs:date(concat(@notAfter, '-01-01'))">the date value of notBefore is later than notAfter</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-dateHeuristics2-38">
+   <pattern id="schematron-constraint-dateHeuristics2-40">
       <rule context="tei:date[@notBefore castable as xs:gYear and @notAfter castable as xs:date]">
          <report test="xs:date(concat(@notBefore, '-01-01')) gt xs:date(@notAfter)">the date value of notBefore is later than notAfter</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-dateHeuristics2-39">
+   <pattern id="schematron-constraint-dateHeuristics2-41">
       <rule context="tei:date[@notBefore castable as xs:date and @notAfter castable as xs:gYear]">
          <report test="xs:date(@notBefore) gt xs:date(concat(@notAfter, '-12-31'))">the date value of notBefore is later than notAfter</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-dateHeuristics3-40">
+   <pattern id="schematron-constraint-dateHeuristics3-42">
       <rule context="tei:date">
          <report test="(@from or @to) and (@when or @notAfter or @notBefore)">cooccurence of date and duration attributes</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-dateHeuristics4-41">
+   <pattern id="schematron-constraint-dateHeuristics4-43">
       <rule context="tei:date">
          <report test="@when and (@notAfter or @notBefore)">cooccurence of exact and uncertain date attributes</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-dateHeuristics5-42">
+   <pattern id="schematron-constraint-dateHeuristics5-44">
       <rule context="tei:date[ancestor::tei:teiHeader]">
          <assert test="@when or @notBefore or @notAfter or @from or @to or @cert='unknown' or .='o.J.' or .='o. J.'">tei:date benötigt ein Attribut @when, @notBefore o.ä.</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-dateHeuristics6-43">
+   <pattern id="schematron-constraint-dateHeuristics6-45">
       <rule context="tei:date[some $i in (@when, @notBefore, @notAfter, @from, @to) satisfies $i castable as xs:date]">
          <report test="every $j in (@when, @notBefore, @notAfter, @from, @to)[. castable as xs:date] satisfies xs:date($j) gt current-date()">some attribute value of <name/> is greater than the current date</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-dateHeuristics6-44">
+   <pattern id="schematron-constraint-dateHeuristics6-46">
       <rule context="tei:date[some $i in (@when, @notBefore, @notAfter, @from, @to) satisfies $i castable as xs:gYear]">
          <report test="every $j in (@when, @notBefore, @notAfter, @from, @to)[. castable as xs:gYear] satisfies number($j) gt year-from-date(current-date())">some attribute value of <name/> is greater than the current date</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-julian-before-1582-45">
+   <pattern id="schematron-constraint-julian-before-1582-47">
       <rule context="tei:date[@calendar='Julian']">
          <report test="some $i in (@when, @notBefore, @notAfter, @from, @to) satisfies $i lt '1582-10-15'">Before October 15, 1582 the default calendar is Julian so no extra calendar declaration is needed.</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-prev-next-correspContext-46">
+   <pattern id="schematron-constraint-prev-next-correspContext-48">
       <rule context="tei:ref[not(parent::tei:correspContext)]">
          <report test="@type=('previousLetterFromAddressee', 'nextLetterFromAddressee')">'previousLetterFromAddressee' and 'nextLetterFromAddressee' are only used within the correspContext element.</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-refAtts-47">
+   <pattern id="schematron-constraint-refAtts-49">
       <rule context="tei:ref">
          <report test="@target and @cRef">Only one of the attributes @target and @cRef may be supplied on <name/>.</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-gloss-list-48">
+   <pattern id="schematron-constraint-gloss-list-50">
       <rule context="tei:list">
          <report test="./tei:label and not(@type='gloss')">Labels are only allowed in lists of type='gloss'</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-gloss-list-must-have-labels-49">
+   <pattern id="schematron-constraint-gloss-list-must-have-labels-51">
       <rule context="tei:list[@type='gloss']">
          <assert test="tei:label">The content of a "gloss" list should include a sequence of one or more pairs of a label element followed by an item element</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-note-in-text-50">
+   <pattern id="schematron-constraint-note-in-text-52">
       <rule context="tei:note[not(parent::tei:org or parent::tei:person or parent::tei:notesStmt or parent::tei:biblStruct or parent::tei:imprint or parent::tei:place)]">
          <assert test="@type and @resp and @xml:id">It is required to provide @type and @resp and @xml:id on note.</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-thematicCom-target-51">
+   <pattern id="schematron-constraint-thematicCom-target-53">
       <rule context="tei:note[@type='thematicCom' or @target]">
          <assert test="@type='thematicCom' and @target">You need to provide thematic commentary targets (Only @type='thematicCom' and @target go together!).</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-thematicCom-must-be-empty-52">
+   <pattern id="schematron-constraint-thematicCom-must-be-empty-54">
       <rule context="tei:note[@type='thematicCom' or @target]">
          <report test="normalize-space() ne''">Thematic commentaries must not contain any text.</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-notesStmt-notes-53">
+   <pattern id="schematron-constraint-notesStmt-notes-55">
       <rule context="tei:note[parent::tei:notesStmt]">
          <assert test="@type=('editorial', 'summary', 'thematicCom', 'incipit', 'textConst', 'teaser')">Within the notesStmt only 'editorial', 'summary', 'textConst', 'teaser', or 'thematicCom' are allowed for @type on note.</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-text-notes-54">
+   <pattern id="schematron-constraint-text-notes-56">
       <rule context="tei:note[not(parent::tei:notesStmt)]">
          <report test="@type=('editorial', 'summary', 'incipit', 'teaser')">The note types 'editorial', 'summary', 'thematicCom', or 'teaser' are not allowed within the text section but only in the notesStmt.</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-teaser-notes-in-thematicCommentaries-55">
+   <pattern id="schematron-constraint-teaser-notes-in-thematicCommentaries-57">
       <rule context="tei:note[@type='teaser']">
          <assert test="matches(ancestor::tei:TEI/@xml:id, '^A09')">The note type 'teaser' is only allowed in the notesStmt in thematic Commentaries.</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-structured-content-notes-56">
+   <pattern id="schematron-constraint-structured-content-notes-58">
       <rule context="tei:note[parent::tei:notesStmt][tei:p|tei:list|tei:table|tei:head|tei:graphic]">
          <report test="text()[matches(., '\w')] or *[not(self::tei:p or self::tei:list or self::tei:table or self::tei:head or self::tei:graphic)]">There must be no mixed content when a tei:p, tei:list, tei:table, or tei:head is present.</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-initial-uppercase-commentaries-57">
+   <pattern id="schematron-constraint-initial-uppercase-commentaries-59">
       <rule context="tei:note[@type='commentary'][not(*[1]/self::tei:q or *[1]/self::tei:quote)]">
          <assert test="matches(replace(normalize-unicode(normalize-space(.), 'NFKD'),  '[\p{M}]', ''), '^[A-Z0-9]')">Commentary notes must start with an upper case letter.</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-head-only-in-teaser-58">
+   <pattern id="schematron-constraint-head-only-in-teaser-60">
       <rule context="tei:note[tei:head]">
          <assert test="@type='teaser'">The element head is only allowed in teaser notes in notesStmt.</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-dates-in-teaser-59">
+   <pattern id="schematron-constraint-dates-in-teaser-61">
       <rule context="tei:note">
          <report test="@type='teaser' and not(@from)">Teaser notes must contain a @from attribute.</report>
          <report test="@type='teaser' and not(@to)">Teaser notes must contain a @to attribute.</report>
@@ -315,27 +325,27 @@
          <report test="not(@type='teaser') and @to">The attribute @to is only allowed in notes of the type 'teaser'.</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-graphic-url-check-60">
+   <pattern id="schematron-constraint-graphic-url-check-62">
       <rule context="tei:graphic[@url]">
          <assert test="matches(@url, '^[-_A-Za-z0-9\.]+$') or starts-with(@url, 'http') or starts-with(@url, 'wega:')">Found invalid (non-ASCII) characters for an internal URL in @url</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-url-or-sameAs-61">
+   <pattern id="schematron-constraint-url-or-sameAs-63">
       <rule context="tei:graphic">
          <assert test="(@url or @sameAs) and (count(@url|@sameAs) eq 1)">Exactly one @url or @sameAs attribute is mandatory</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-author-abb-62">
+   <pattern id="schematron-constraint-author-abb-64">
       <rule context="tei:author[@full]">
          <assert test="ancestor::tei:biblStruct">The full-attribute on author may only be applied within biblStruct.</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-sameAs-reference-63">
+   <pattern id="schematron-constraint-sameAs-reference-65">
       <rule context="tei:author[@sameAs]">
          <assert test="id(substring(@sameAs,2)) or starts-with(@sameAs, 'wega:')">There must be an element with the xml:id = "<value-of select="substring(@sameAs,2)"/>" which is the target of this @sameAs.</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-duplicate-title-64">
+   <pattern id="schematron-constraint-duplicate-title-66">
       <rule context="tei:title[following-sibling::tei:title]">
          <let name="level" value="@level"/>
          <let name="type" value="string(@type)"/>
@@ -343,58 +353,58 @@
          <report test="following-sibling::tei:title[@level = $level][string(@xml:lang) = $lang][string(@type) = $type]">Following title without differing @type or xml:lang attribute</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-punctuation-mark-65">
+   <pattern id="schematron-constraint-punctuation-mark-67">
       <rule context="tei:title">
          <report test="matches(normalize-space(self::tei:title), '[\.,;]$') and not(matches(normalize-space(self::tei:title), '((\p{Lu})|(\setc)|(\sal)|([\s\.]a)|(\sBl)|(\sAufl)|(\s&amp;c))\.$'))">Found a non-valid punctuation mark at the end of <name/>
          </report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-report-leading-zeros-66">
+   <pattern id="schematron-constraint-report-leading-zeros-68">
       <rule context="tei:title">
          <report test="matches(., '\s0\d+\.')">please do not prefix numbers with a zero</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-report-quotation-marks-67">
+   <pattern id="schematron-constraint-report-quotation-marks-69">
       <rule context="tei:title">
          <report test="matches(., '&#34;“„')">please replace literal quotation marks with q-tags</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-abstractModel-structure-div-in-l-68">
+   <pattern id="schematron-constraint-abstractModel-structure-div-in-l-70">
       <rule context="tei:l//tei:div">
          <assert test="ancestor::tei:floatingText"> Abstract model violation: Metrical lines may not contain higher-level structural elements such as div, unless div is a descendant of floatingText.</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-abstractModel-structure-div-in-ab-or-p-69">
+   <pattern id="schematron-constraint-abstractModel-structure-div-in-ab-or-p-71">
       <rule context="tei:div">
          <report test="(ancestor::tei:p or ancestor::tei:ab) and not(ancestor::tei:floatingText)"> Abstract model violation: p and ab may not contain higher-level structural elements such as div, unless div is a descendant of floatingText.</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-parent-org-70">
+   <pattern id="schematron-constraint-parent-org-72">
       <rule context="tei:orgName[parent::tei:org]">
          <report test="@key or not(@type)">It is required to give the type ('alt' or 'reg') of the name while @key is forbiden here.</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-parent-org-reg-71">
+   <pattern id="schematron-constraint-parent-org-reg-73">
       <rule context="tei:orgName[parent::tei:org and not(preceding::tei:orgName)]">
          <assert test="@type='reg'">There must exactly be one name with @type='reg'.</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-parent-org-reg2-72">
+   <pattern id="schematron-constraint-parent-org-reg2-74">
       <rule context="tei:orgName[parent::tei:org and preceding::tei:orgName]">
          <report test="@type='reg'">Only the first name can be of @type='reg'. Following names are supposed to be alternative names, @type='alt'.</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-parent-not-org-73">
+   <pattern id="schematron-constraint-parent-not-org-75">
       <rule context="tei:orgName[not(parent::tei:org)]">
          <report test="@type">No @type attribute allowed here.</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-collapsible-head-74">
+   <pattern id="schematron-constraint-collapsible-head-76">
       <rule context="tei:table[@rend='collapsible']">
          <assert test="tei:head">For the collapsible feature to work a head must be given for the <name/>.</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-number-of-cells-75">
+   <pattern id="schematron-constraint-number-of-cells-77">
       <rule context="tei:row[preceding-sibling::tei:row]">
          <let name="thisNode" value="."/>
          <let name="thisRowCellCount"
@@ -410,62 +420,62 @@
          <assert test="$thisRowCellCount + $precedingCellsWithRowspanCount = $precedingRowCellCount">The total ammount of cells should be equal for every row in a table. This row ammounts to <value-of select="$thisRowCellCount + $precedingCellsWithRowspanCount"/> cells (possibly affected by some preceding rowspans, i.e. cell/@rows) instead of <value-of select="$precedingRowCellCount"/> for the preceding row.</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-cell-rows-76">
+   <pattern id="schematron-constraint-cell-rows-78">
       <rule context="tei:cell[@rows]">
          <report test="(count(parent::tei:row/following-sibling::tei:row) + 1) lt number(@rows)">There are less following rows than indicated in the @rows attribute.</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-styleguide-document-node-content-77">
+   <pattern id="schematron-constraint-styleguide-document-node-content-79">
       <rule context="document-node()">
          <report test="count(processing-instruction()) ne 2">WeGA styleguide error: there should exactly be two processing instructions before the root element</report>
          <report test="comment()">WeGA styleguide error: there should be no comments outside the root element</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-whitespaceOnlyContent-78">
+   <pattern id="schematron-constraint-whitespaceOnlyContent-80">
       <rule context="tei:surname | tei:forename | tei:persName | tei:author[not(@sameAs)] | tei:occupation |                      tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName |                      tei:hi[not(.//tei:gap or tei:g)] | tei:head | tei:note[not(@type=('thematicCom'))] | tei:placeName | tei:title |                      tei:seg | tei:item[not(@* or *)] | tei:publisher | mei:publisher | tei:relatedItem[ancestor::tei:sourceDesc] |                      tei:listBibl | tei:additional[ancestor::tei:sourceDesc]">
          <report test="normalize-space(.) = ''">
             <name/> has whitespace only content</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-elementStartsWithWhitespace-79">
+   <pattern id="schematron-constraint-elementStartsWithWhitespace-81">
       <rule context="tei:surname | tei:forename | tei:persName[not(@type)] | tei:author | tei:occupation | tei:settlement | tei:country | tei:region | tei:rs | tei:workName | tei:characterName | tei:hi | tei:placeName[not(parent::tei:address or parent::tei:birth or parent::tei:death)]">
          <report test="matches(.,'^\s') and (node()[1] = text()[1])">whitespace at the beginning of element <name/>
          </report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-untrimmedAttributeValues-80">
+   <pattern id="schematron-constraint-untrimmedAttributeValues-82">
       <rule context="*[@*]">
          <report test="some $i in @* satisfies string-length(normalize-unicode(normalize-space(replace($i, ' | | | ', ' ')))) ne string-length($i)">There is some whitespace here at the beginning or end of some attribute value.</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-wegaTargets-81">
+   <pattern id="schematron-constraint-wegaTargets-83">
       <rule context="*[starts-with(@target, 'wega:')]">
          <assert test="matches(@target, '^wega:A[0-9A-F]{6}(#.+)?(\s+wega:A[0-9A-F]{6}(#.+)?)*$')">"wega"-prefixed URIs must follow the pattern "wega:A002068" (i.e. without any file extension)</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-emojiCheck-82">
+   <pattern id="schematron-constraint-emojiCheck-84">
       <rule context="*[some $i in text() satisfies normalize-space($i) ne '']">
          <report test="matches(., '[⌚-⌛]|[⏩-⏬]|[⏰]|[⏳]|[◽-◾]|[☔-☕]|[♈-♓]|[♿]|[⚓]|[⚡]|[⚪-⚫]|[⚽-⚾]|[⛄-⛅]|[⛎]|[⛔]|[⛪]|[⛲-⛳]|[⛵]|[⛺]|[⛽]|[✅]|[✊-✋]|[✨]|[❌]|[❎]|[❓-❕]|[❗]|[➕-➗]|[➰]|[➿]|[⬛-⬜]|[⭐]|[⭕]|[🀄]|[🃏]|[🆎]|[🆑-🆚]|[🇦-🇿]|[🈁]|[🈚]|[🈯]|[🈲-🈶]|[🈸-🈺]|[🉐-🉑]|[🌀-🌠]|[🌭-🌯]|[🌰-🌵]|[🌷-🍼]|[🍾-🍿]|[🎀-🎓]|[🎠-🏄]|[🏅]|[🏆-🏊]|[🏏-🏓]|[🏠-🏰]|[🏴]|[🏸-🏿]|[🐀-🐾]|[👀]|[👂-📷]|[📸]|[📹-📼]|[📿]|[🔀-🔽]|[🕋-🕎]|[🕐-🕧]|[🕺]|[🖕-🖖]|[🖤]|[🗻-🗿]|[😀]|[😁-😐]|[😑]|[😒-😔]|[😕]|[😖]|[😗]|[😘]|[😙]|[😚]|[😛]|[😜-😞]|[😟]|[😠-😥]|[😦-😧]|[😨-😫]|[😬]|[😭]|[😮-😯]|[😰-😳]|[😴]|[😵-🙀]|[🙁-🙂]|[🙃-🙄]|[🙅-🙏]|[🚀-🛅]|[🛌]|[🛐]|[🛑-🛒]|[🛕]|[🛫-🛬]|[🛴-🛶]|[🛷-🛸]|[🛹]|[🛺]|[🟠-🟫]|[🤍-🤏]|[🤐-🤘]|[🤙-🤞]|[🤟]|[🤠-🤧]|[🤨-🤯]|[🤰]|[🤱-🤲]|[🤳-🤺]|[🤼-🤾]|[🤿]|[🥀-🥅]|[🥇-🥋]|[🥌]|[🥍-🥏]|[🥐-🥞]|[🥟-🥫]|[🥬-🥰]|[🥱]|[🥳-🥶]|[🥺]|[🥻]|[🥼-🥿]|[🦀-🦄]|[🦅-🦑]|[🦒-🦗]|[🦘-🦢]|[🦥-🦪]|[🦮-🦯]|[🦰-🦹]|[🦺-🦿]|[🧀]|[🧁-🧂]|[🧃-🧊]|[🧍-🧏]|[🧐-🧦]|[🧧-🧿]|[🩰-🩳]|[🩸-🩺]|[🪀-🪂]|[🪐-🪕]')">Text contains characters with Emoji presentation as default.</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-sourceMustResolve-83">
+   <pattern id="schematron-constraint-sourceMustResolve-85">
       <rule context="*[starts-with(@source, '#')]">
          <let name="source" value="@source"/>
          <assert test="id(substring($source,2))">Unable to locate the reference provided by the @source attribute.</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-targetMustResolve-84">
+   <pattern id="schematron-constraint-targetMustResolve-86">
       <rule context="*[starts-with(@target, '#')][not(ancestor::teix:*)]">
          <let name="target" value="@target"/>
          <assert test="id(substring($target,2))">Unable to locate the reference provided by the @target attribute.</assert>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-anonymus-id-85">
+   <pattern id="schematron-constraint-anonymus-id-87">
       <rule context="*[@key|@codedval]">
          <report test="(@key | @codedval) = 'A007979'">Please do not link to the anonymus ID.</report>
       </rule>
    </pattern>
-   <pattern id="schematron-constraint-underline-n-86">
+   <pattern id="schematron-constraint-underline-n-88">
       <rule context="*:hi[@n] | *:rend[@n]">
          <assert test="@rend = ('underline', 'indent')">The @n-attribute is only supported in combination with @rend='underline' and @rend='indent'</assert>
       </rule>
