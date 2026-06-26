@@ -954,20 +954,20 @@
             <content>
                 <valList type="closed">
                     <valItem ident="article">
-                        <desc versionDate="2013-11-11" xml:lang="en">article in a newspaper or magazine.</desc>
-                        <desc versionDate="2013-11-11" xml:lang="de">Zeitungs- oder Zeitschriftenartikel.</desc>
+                        <desc versionDate="2025-11-18" xml:lang="en">article in a newspaper, a magazine, or a lexicon. Included are yearbooks as the 'Weberiana' particularly.</desc>
+                        <desc versionDate="2025-11-18" xml:lang="de">Zeitungs- oder Zeitschriften- oder Lexikonartikel. Hierunter fallen insbesondere auch die Jahrbücher wie "Weberiana".</desc>
                     </valItem>
                     <valItem ident="book">
                         <desc versionDate="2013-11-11" xml:lang="en">book respectively monograph.</desc>
                         <desc versionDate="2013-11-11" xml:lang="de">Buch bzw. Monographie.</desc>
                     </valItem>
                     <valItem ident="inbook">
-                        <desc versionDate="2013-11-11" xml:lang="en">part (eg. chapters) of a monograph, usually by the same author.</desc>
-                        <desc versionDate="2013-11-11" xml:lang="de">Teil (z.B. Kapitel) einer Monographie, meist vom selben Autor.</desc>
+                        <desc versionDate="2025-11-18" xml:lang="en">part (e.g. chapter) of a book, where the monograph must represent a coherent unit (as opposed to an anthology); usually by a single author.</desc>
+                        <desc versionDate="2025-11-18" xml:lang="de">Teil (z.B. Kapitel) eines Buchs, wobei die Monographie eine zusammenhängende Einheit darstellen muss (im Gegensatz zum Sammelband); meist von einem Autor.</desc>
                     </valItem>
                     <valItem ident="incollection">
-                        <desc versionDate="2013-11-11" xml:lang="en">part of a book (eg. essay in an anthology) with its own title. Included are yearbooks as the 'Weberiana' particularly.</desc>
-                        <desc versionDate="2013-11-11" xml:lang="de">Teil eines Buches (z.B. Aufsatz in einem Sammelband) mit einem eigenen Titel. Hierunter fallen insbesondere auch die Jahrbücher wie "Weberiana".</desc>
+                        <desc versionDate="2025-11-18" xml:lang="en">part of a book (eg. essay in an anthology) with its own title.</desc>
+                        <desc versionDate="2025-11-18" xml:lang="de">Teil eines Buches (z.B. Aufsatz in einem Sammelband) mit einem eigenen Titel.</desc>
                     </valItem>
                     <valItem ident="inproceedings">
                         <desc versionDate="2013-11-11" xml:lang="en">article in a conference report. The decisive factor is that the reference to the conference in the title of the monograph is mentioned.</desc>
@@ -1930,6 +1930,12 @@
                     <sch:rule context="tei:rs[@type='mixed'][@key]">
                         <sch:assert test="count(distinct-values(for $i in tokenize(@key, '\s+') return substring($i, 1, 3))) gt 1">A type value of 'mixed' must have keys referring to different document types</sch:assert>
                     </sch:rule>
+                    <sch:rule context="tei:rs[@type='source'][@key]">
+                        <sch:assert test="matches(@key, '^A22\d{4}$')">A type value of 'source' must have only one key, starting with 'A22'</sch:assert>
+                    </sch:rule>
+                    <sch:rule context="tei:rs[@type='sources'][@key]">
+                        <sch:assert test="matches(@key, '^(A22\d{4}\s)*A22\d{4}$')">A type value of 'sources' must have at least one key, each starting with 'A22'</sch:assert>
+                    </sch:rule>
                 </constraint>
             </constraintSpec>
             <attList>
@@ -2023,6 +2029,14 @@
                         <valItem ident="addenda">
                             <desc versionDate="2018-11-19" xml:lang="en">marks a reference to addenda of printed volumes.</desc>
                             <desc versionDate="2018-11-19" xml:lang="de">markiert einen Verweis auf Addenda zu den gedruckten Bänden.</desc>
+                        </valItem>
+                        <valItem ident="source">
+                            <desc versionDate="2026-03-24" xml:lang="en">marks a source that is not explicitly entitled.</desc>
+                            <desc versionDate="2026-03-24" xml:lang="de">markiert eine Quelle, die nicht explizit genannt wird.</desc>
+                        </valItem>
+                        <valItem ident="sources">
+                            <desc versionDate="2026-03-24" xml:lang="en">marks sources that are not explicitly mentioned.</desc>
+                            <desc versionDate="2026-03-24" xml:lang="de">markiert mehrere Quellen, die nicht explizit genannt sind.</desc>
                         </valItem>
                     </valList>
                 </attDef>
@@ -2254,9 +2268,22 @@
                             <gloss versionDate="2013-11-11" xml:lang="de">getilgt</gloss>
                             <desc versionDate="2013-11-11" xml:lang="de">Das gelöschte Wort (bzw. das gelöschte Zeichen) ist durch Rasur oder sonstige Weise getilgt.</desc>
                         </valItem>
+                        <valItem ident="converted">
+                            <gloss versionDate="2026-04-14" xml:lang="en">rearranged</gloss>
+                            <desc versionDate="2026-04-14" xml:lang="en">A marking (typically small numbers above the words) indicates a new order.</desc>
+                            <gloss versionDate="2026-04-14" xml:lang="de">umgestellt</gloss>
+                            <desc versionDate="2026-04-14" xml:lang="de">Durch Markierung (typischerweise kleine Nummern über den Worten) wurde eine neue Reihenfolge kenntlich gemacht.</desc>
+                        </valItem>
                     </valList>
                 </attDef>
             </attList>
+            <constraintSpec scheme="schematron" ident="del-converted-only-in-subst">
+                <constraint>
+                    <sch:rule context="tei:del[@rend='converted']">
+                        <sch:assert test="parent::tei:subst">A tei:del with @rend='converted' must be a child of tei:subst.</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
         </elementSpec>
         
         <elementSpec ident="add" mode="change" module="core">
