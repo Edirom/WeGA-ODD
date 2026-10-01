@@ -3949,6 +3949,18 @@
     </specGrp>
     
     <specGrp xml:id="wega-transcr">
+        <elementSpec ident="handNotes" mode="change" module="transcr">
+            <constraintSpec scheme="schematron" ident="hand-scope-combinations">
+                <constraint>
+                    <sch:rule context="tei:handNotes">
+                        <sch:assert test="count(tei:handNote[@scope='sole']) le 1">Only one handNote with scope "sole" is allowed.</sch:assert>
+                        <sch:assert test="not(tei:handNote[@scope='sole']) or count(tei:handNote) eq 1">A handNote with scope "sole" must not occur with any other handNote.</sch:assert>
+                        <sch:assert test="not(tei:handNote[@scope='major']) or tei:handNote[@scope='minor']">A handNote with scope "major" requires at least one handNote with scope "minor".</sch:assert>
+                    </sch:rule>
+                </constraint>
+            </constraintSpec>
+        </elementSpec>
+
         <elementSpec ident="addSpan" mode="change" module="transcr">
             <gloss versionDate="2013-11-11" xml:lang="en">added span of text</gloss>
             <desc versionDate="2013-11-11" xml:lang="en">marks the beginning of a longer sequence of text added by an author, scribe, annotator or corrector.</desc>
