@@ -5,7 +5,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
          ns="http://www.tei-c.org/ns/1.0"><!--
-Schema generated from ODD source 2026-03-24T09:34:08Z. . 
+Schema generated from ODD source 2026-11-12T11:21:27Z. . 
 TEI Edition: P5 Version 4.10.2. Last updated on 4th September 2025, revision bcfa98f42 
 TEI Edition Location: https://www.tei-c.org/Vault/P5/4.10.2/ 
   
@@ -144,6 +144,8 @@ TEI Edition Location: https://www.tei-c.org/Vault/P5/4.10.2/
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Steffen Astheimer</a:documentation>
          <value>JW</value>
          <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Jelena Wißmann</a:documentation>
+         <value>TB</value>
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Tobias Bachmann</a:documentation>
       </choice>
    </define>
    <define name="WeGA_keywords.list">
@@ -1672,22 +1674,28 @@ Empfohlene Werte sind: 1] sole; 2] major; 3] minor</a:documentation>
    <define name="model.listLike">
       <choice>
          <ref name="list"/>
+         <ref name="listEvent"/>
          <ref name="table"/>
       </choice>
    </define>
    <define name="model.listLike_alternation">
       <choice>
          <ref name="list"/>
+         <ref name="listEvent"/>
          <ref name="table"/>
       </choice>
    </define>
    <define name="model.listLike_sequence">
       <ref name="list"/>
+      <ref name="listEvent"/>
       <ref name="table"/>
    </define>
    <define name="model.listLike_sequenceOptional">
       <optional>
          <ref name="list"/>
+      </optional>
+      <optional>
+         <ref name="listEvent"/>
       </optional>
       <optional>
          <ref name="table"/>
@@ -1698,12 +1706,18 @@ Empfohlene Werte sind: 1] sole; 2] major; 3] minor</a:documentation>
          <ref name="list"/>
       </zeroOrMore>
       <zeroOrMore>
+         <ref name="listEvent"/>
+      </zeroOrMore>
+      <zeroOrMore>
          <ref name="table"/>
       </zeroOrMore>
    </define>
    <define name="model.listLike_sequenceRepeatable">
       <oneOrMore>
          <ref name="list"/>
+      </oneOrMore>
+      <oneOrMore>
+         <ref name="listEvent"/>
       </oneOrMore>
       <oneOrMore>
          <ref name="table"/>
@@ -2859,6 +2873,8 @@ Empfohlene Werte sind: 1] deprecationInfo (deprecation information)</a:documenta
                   <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Steffen Astheimer</a:documentation>
                   <value>JW</value>
                   <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Jelena Wißmann</a:documentation>
+                  <value>TB</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Tobias Bachmann</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -3822,6 +3838,8 @@ Empfohlene Werte sind: 1] deprecationInfo (deprecation information)</a:documenta
                   <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Steffen Astheimer</a:documentation>
                   <value>JW</value>
                   <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Jelena Wißmann</a:documentation>
+                  <value>TB</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">Tobias Bachmann</a:documentation>
                </choice>
             </attribute>
          </optional>
@@ -5531,6 +5549,87 @@ Empfohlene Werte sind: 1] ISBN; 2] ISSN; 3] DOI; 4] URI; 5] VIAF; 6] ESTC; 7] OC
          <empty/>
       </element>
    </define>
+   <define name="event">
+      <element name="event">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Ereignis) enthält Daten zu einem einzelnen Ereignis innerhalb einer Liste von Ereignissen. [14.3.1. Basic Principles]</a:documentation>
+         <group>
+            <ref name="label"/>
+            <oneOrMore>
+               <ref name="desc"/>
+            </oneOrMore>
+         </group>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                  id="wegaVar-event-timeline-events-constraint-rule-92">
+            <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns:xi="http://www.w3.org/2001/XInclude"
+                      context="tei:listEvent[@type='timeline']/tei:event">
+               <sch:assert test="@type=('archive', 'edition', 'outreach', 'honour', 'publication')">Events within a timeline must provide a @type of 'archive', 'edition', 'outreach', 'honour', or 'publication'.</sch:assert>
+               <sch:report test="@subtype[not(.='highlight')]">The only @subtype allowed for events within a timeline is 'highlight'.</sch:report>
+               <sch:assert test="tei:desc[not(@type)]">Events within a timeline must provide at least one desc without @type (the description of the event).</sch:assert>
+               <sch:report test="count(tei:desc[@type='date']) gt 1">Events within a timeline must not provide more than one desc of @type 'date' (the date detail).</sch:report>
+               <sch:report test="@to and not(@from)">Events within a timeline must not provide @to without @from.</sch:report>
+            </sch:rule>
+         </pattern>
+         <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
+                  xmlns:rng="http://relaxng.org/ns/structure/1.0"
+                  id="wegaVar-event-timeline-event-descs-constraint-rule-93">
+            <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
+                      xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+                      xmlns:xi="http://www.w3.org/2001/XInclude"
+                      context="tei:listEvent[@type='timeline']/tei:event/tei:desc[@type]">
+               <sch:assert test="@type='date'">The only @type allowed for desc within events of a timeline is 'date' (a verbal date detail, e.g. the season or month).</sch:assert>
+            </sch:rule>
+         </pattern>
+         <attribute name="type">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">charakterisiert das Ereignis; bestimmt innerhalb eines Zeitstrahls Icon und Farbe des Ereignisses.</a:documentation>
+            <choice>
+               <value>archive</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Archiv) Arbeit an Archivbeständen und Sammlungen.</a:documentation>
+               <value>edition</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Edition) Editorische Arbeit.</a:documentation>
+               <value>outreach</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Vermittlung) Öffentlichkeitsarbeit, z.B. Vorträge, Ausstellungen oder Vereinsarbeit.</a:documentation>
+               <value>honour</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Ehrung) Preise und Ehrungen.</a:documentation>
+               <value>publication</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Publikation) Veröffentlichungen.</a:documentation>
+            </choice>
+         </attribute>
+         <optional>
+            <attribute name="subtype">
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">liefert eine Unterkategorie des Ereignisses.</a:documentation>
+               <choice>
+                  <value>highlight</value>
+                  <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Hervorhebung) Ein hervorgehobenes Ereignis; innerhalb eines Zeitstrahls wird es auf der gegenüberliegenden (linken) Seite der Achse platziert.</a:documentation>
+               </choice>
+            </attribute>
+         </optional>
+         <ref name="att.global.attribute.n"/>
+         <ref name="att.global.responsibility.attribute.cert"/>
+         <ref name="att.datable.w3c.attribute.when"/>
+         <ref name="att.datable.w3c.attribute.from"/>
+         <ref name="att.datable.w3c.attribute.to"/>
+         <empty/>
+      </element>
+   </define>
+   <define name="listEvent">
+      <element name="listEvent">
+         <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Liste von Ereignissen) enthält eine Liste von Beschreibungen, die jeweils Informationen über ein identifizierbares Ereignis liefern. [14.3.1. Basic Principles]</a:documentation>
+         <oneOrMore>
+            <ref name="event"/>
+         </oneOrMore>
+         <attribute name="type">
+            <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">charakterisiert die Liste von Ereignissen; bestimmt, wie die Liste dargestellt wird.</a:documentation>
+            <choice>
+               <value>timeline</value>
+               <a:documentation xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">(Zeitstrahl) Eine chronologische Liste von Ereignissen, die als Zeitstrahl dargestellt wird. Maßgeblich ist die Reihenfolge der Ereignisse im Dokument.</a:documentation>
+            </choice>
+         </attribute>
+         <empty/>
+      </element>
+   </define>
    <define name="att.tableDecoration.attributes">
       <ref name="att.tableDecoration.attribute.role"/>
       <ref name="att.tableDecoration.attribute.rows"/>
@@ -5588,7 +5687,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
          </group>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaVar-table-collapsible-head-constraint-rule-92">
+                  id="wegaVar-table-collapsible-head-constraint-rule-94">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -5623,7 +5722,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
          </oneOrMore>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaVar-row-number-of-cells-constraint-rule-93">
+                  id="wegaVar-row-number-of-cells-constraint-rule-95">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -5655,7 +5754,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
          <ref name="macro.specialPara"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaVar-cell-cell-rows-constraint-rule-94">
+                  id="wegaVar-cell-cell-rows-constraint-rule-96">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -5847,7 +5946,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
          <ref name="macro.abContent"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaVar-ab-abstractModel-structure-ab-in-l-constraint-rule-95">
+                  id="wegaVar-ab-abstractModel-structure-ab-in-l-constraint-rule-97">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:sch="http://purl.oclc.org/dsdl/schematron"
                       xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -5882,7 +5981,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
          <ref name="macro.paraContent"/>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaVar-seg-activeOrPassivePerformance-constraint-rule-96">
+                  id="wegaVar-seg-activeOrPassivePerformance-constraint-rule-98">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -5895,7 +5994,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
          </pattern>
          <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
                   xmlns:rng="http://relaxng.org/ns/structure/1.0"
-                  id="wegaVar-seg-AddresseeOrSenderCorrespondence-constraint-rule-97">
+                  id="wegaVar-seg-AddresseeOrSenderCorrespondence-constraint-rule-99">
             <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                       xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                       xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6149,7 +6248,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
       </optional>
    </define>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaVar-att.wega.rend-underline-n-constraint-rule-99">
+            id="wegaVar-att.wega.rend-underline-n-constraint-rule-101">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6234,7 +6333,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
            prefix="sch1x"
            uri="http://www.ascc.net/xml/schematron"/>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaVar-styleguide-document-node-content-constraint-rule-98">
+            id="wegaVar-styleguide-document-node-content-constraint-rule-100">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6255,7 +6354,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
            prefix="mei"
            uri="http://www.music-encoding.org/ns/mei"/>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaVar-whitespaceOnlyContent-constraint-rule-100">
+            id="wegaVar-whitespaceOnlyContent-constraint-rule-102">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6268,7 +6367,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
       </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaVar-elementStartsWithWhitespace-constraint-rule-101">
+            id="wegaVar-elementStartsWithWhitespace-constraint-rule-103">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6281,7 +6380,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
       </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaVar-untrimmedAttributeValues-constraint-rule-102">
+            id="wegaVar-untrimmedAttributeValues-constraint-rule-104">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6293,7 +6392,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
       </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaVar-wegaTargets-constraint-rule-103">
+            id="wegaVar-wegaTargets-constraint-rule-105">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6305,7 +6404,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
       </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaVar-emojiCheck-constraint-rule-104">
+            id="wegaVar-emojiCheck-constraint-rule-106">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6317,7 +6416,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
       </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaVar-sourceMustResolve-constraint-rule-105">
+            id="wegaVar-sourceMustResolve-constraint-rule-107">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6338,7 +6437,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
            prefix="teix"
            uri="http://www.tei-c.org/ns/Examples"/>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaVar-targetMustResolve-constraint-rule-106">
+            id="wegaVar-targetMustResolve-constraint-rule-108">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"
@@ -6351,7 +6450,7 @@ Empfohlene Werte sind: 1] label; 2] data</a:documentation>
       </sch:rule>
    </pattern>
    <pattern xmlns="http://purl.oclc.org/dsdl/schematron"
-            id="wegaVar-anonymus-id-constraint-rule-107">
+            id="wegaVar-anonymus-id-constraint-rule-109">
       <sch:rule xmlns="http://www.tei-c.org/ns/1.0"
                 xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 xmlns:mei="http://www.music-encoding.org/ns/mei"

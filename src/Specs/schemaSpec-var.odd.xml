@@ -7,7 +7,7 @@
     <moduleRef key="tei"/>
     <moduleRef key="header" include="authority availability change creation distributor edition editionStmt editorialDecl encodingDesc extent fileDesc funder handNote idno keywords langUsage language licence notesStmt profileDesc projectDesc publicationStmt quotation revisionDesc seriesStmt sourceDesc teiHeader textClass titleStmt"/>
     <moduleRef key="textstructure" include="TEI back body byline div floatingText signed text"/>
-    <moduleRef key="namesdates" include="bloc country geogName orgName persName placeName region settlement"/>
+    <moduleRef key="namesdates" include="bloc country event geogName listEvent orgName persName placeName region settlement"/>
     <moduleRef key="figures" include="cell figDesc figure notatedMusic row table"/>
     <moduleRef key="tagdocs" include="code eg egXML"/>
     <moduleRef key="linking" include="ab anchor seg"/>
@@ -137,6 +137,128 @@
                         <desc versionDate="2013-11-11" xml:lang="en">a list of related literature.</desc>
                         <gloss versionDate="2013-11-11" xml:lang="de">Bibliographie</gloss>
                         <desc versionDate="2013-11-11" xml:lang="de">Eine Liste mit verwandter Literatur</desc>
+                    </valItem>
+                </valList>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="listEvent" mode="change" module="namesdates">
+        <gloss versionDate="2026-11-10" xml:lang="en">list of events</gloss>
+        <desc versionDate="2026-11-10" xml:lang="en">contains a list of descriptions, each of which provides information about an identifiable event.</desc>
+        <gloss versionDate="2026-11-10" xml:lang="de">Liste von Ereignissen</gloss>
+        <desc versionDate="2026-11-10" xml:lang="de">enthält eine Liste von Beschreibungen, die jeweils Informationen über ein identifizierbares Ereignis liefern.</desc>
+        <classes mode="change">
+            <memberOf key="att.global" mode="delete"/>
+            <memberOf key="att.typed" mode="delete"/>
+        </classes>
+        <content>
+            <elementRef key="event" minOccurs="1" maxOccurs="unbounded"/>
+        </content>
+        <attList>
+            <attDef ident="type" mode="add" usage="req">
+                <desc versionDate="2026-11-10" xml:lang="en">characterizes the list of events; determines how the list is rendered.</desc>
+                <desc versionDate="2026-11-10" xml:lang="de">charakterisiert die Liste von Ereignissen; bestimmt, wie die Liste dargestellt wird.</desc>
+                <valList type="closed">
+                    <valItem ident="timeline">
+                        <gloss versionDate="2026-11-10" xml:lang="en">Timeline</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="en">a chronological list of events, rendered as a timeline. The order of the events in the document is authoritative.</desc>
+                        <gloss versionDate="2026-11-10" xml:lang="de">Zeitstrahl</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="de">Eine chronologische Liste von Ereignissen, die als Zeitstrahl dargestellt wird. Maßgeblich ist die Reihenfolge der Ereignisse im Dokument.</desc>
+                    </valItem>
+                </valList>
+            </attDef>
+        </attList>
+    </elementSpec>
+    
+    <elementSpec ident="event" mode="change" module="namesdates">
+        <gloss versionDate="2026-11-10" xml:lang="en">event</gloss>
+        <desc versionDate="2026-11-10" xml:lang="en">contains data relating to a single event within a list of events.</desc>
+        <gloss versionDate="2026-11-10" xml:lang="de">Ereignis</gloss>
+        <desc versionDate="2026-11-10" xml:lang="de">enthält Daten zu einem einzelnen Ereignis innerhalb einer Liste von Ereignissen.</desc>
+        <classes mode="change">
+            <memberOf key="att.global" mode="delete"/>
+            <memberOf key="att.editLike" mode="delete"/>
+            <memberOf key="att.datable" mode="delete"/>
+            <memberOf key="att.typed" mode="delete"/>
+            <memberOf key="att.naming" mode="delete"/>
+            <memberOf key="att.locatable" mode="delete"/>
+        </classes>
+        <content>
+            <sequence>
+                <elementRef key="label"/>
+                <elementRef key="desc" minOccurs="1" maxOccurs="unbounded"/>
+            </sequence>
+        </content>
+        <constraintSpec scheme="schematron" ident="timeline-events">
+            <constraint>
+                <sch:rule context="tei:listEvent[@type='timeline']/tei:event">
+                    <sch:assert test="@type=('archive', 'edition', 'outreach', 'honour', 'publication')">Events within a timeline must provide a @type of 'archive', 'edition', 'outreach', 'honour', or 'publication'.</sch:assert>
+                    <sch:report test="@subtype[not(.='highlight')]">The only @subtype allowed for events within a timeline is 'highlight'.</sch:report>
+                    <sch:assert test="tei:desc[not(@type)]">Events within a timeline must provide at least one desc without @type (the description of the event).</sch:assert>
+                    <sch:report test="count(tei:desc[@type='date']) gt 1">Events within a timeline must not provide more than one desc of @type 'date' (the date detail).</sch:report>
+                    <sch:report test="@to and not(@from)">Events within a timeline must not provide @to without @from.</sch:report>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
+        <constraintSpec scheme="schematron" ident="timeline-event-descs">
+            <constraint>
+                <sch:rule context="tei:listEvent[@type='timeline']/tei:event/tei:desc[@type]">
+                    <sch:assert test="@type='date'">The only @type allowed for desc within events of a timeline is 'date' (a verbal date detail, e.g. the season or month).</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec>
+        <attList>
+            <attRef name="n" class="att.global"/>
+            <attRef name="cert" class="att.global.responsibility"/>
+            <attRef name="when" class="att.datable.w3c"/>
+            <attRef name="from" class="att.datable.w3c"/>
+            <attRef name="to" class="att.datable.w3c"/>
+            <attDef ident="type" mode="add" usage="req">
+                <desc versionDate="2026-11-10" xml:lang="en">characterizes the event; within a timeline it determines the icon and color of the event.</desc>
+                <desc versionDate="2026-11-10" xml:lang="de">charakterisiert das Ereignis; bestimmt innerhalb eines Zeitstrahls Icon und Farbe des Ereignisses.</desc>
+                <valList type="closed">
+                    <valItem ident="archive">
+                        <gloss versionDate="2026-11-10" xml:lang="en">archive</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="en">work on archival holdings and collections.</desc>
+                        <gloss versionDate="2026-11-10" xml:lang="de">Archiv</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="de">Arbeit an Archivbeständen und Sammlungen.</desc>
+                    </valItem>
+                    <valItem ident="edition">
+                        <gloss versionDate="2026-11-10" xml:lang="en">edition</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="en">editorial work.</desc>
+                        <gloss versionDate="2026-11-10" xml:lang="de">Edition</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="de">Editorische Arbeit.</desc>
+                    </valItem>
+                    <valItem ident="outreach">
+                        <gloss versionDate="2026-11-10" xml:lang="en">outreach</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="en">public engagement, e.g. talks, exhibitions, or work for societies.</desc>
+                        <gloss versionDate="2026-11-10" xml:lang="de">Vermittlung</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="de">Öffentlichkeitsarbeit, z.B. Vorträge, Ausstellungen oder Vereinsarbeit.</desc>
+                    </valItem>
+                    <valItem ident="honour">
+                        <gloss versionDate="2026-11-10" xml:lang="en">honour</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="en">awards and honours.</desc>
+                        <gloss versionDate="2026-11-10" xml:lang="de">Ehrung</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="de">Preise und Ehrungen.</desc>
+                    </valItem>
+                    <valItem ident="publication">
+                        <gloss versionDate="2026-11-10" xml:lang="en">publication</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="en">publications.</desc>
+                        <gloss versionDate="2026-11-10" xml:lang="de">Publikation</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="de">Veröffentlichungen.</desc>
+                    </valItem>
+                </valList>
+            </attDef>
+            <attDef ident="subtype" mode="add" usage="opt">
+                <desc versionDate="2026-11-10" xml:lang="en">provides a sub-categorization of the event.</desc>
+                <desc versionDate="2026-11-10" xml:lang="de">liefert eine Unterkategorie des Ereignisses.</desc>
+                <valList type="closed">
+                    <valItem ident="highlight">
+                        <gloss versionDate="2026-11-10" xml:lang="en">highlight</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="en">an emphasized event; within a timeline it is placed on the opposite (left) side of the axis.</desc>
+                        <gloss versionDate="2026-11-10" xml:lang="de">Hervorhebung</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="de">Ein hervorgehobenes Ereignis; innerhalb eines Zeitstrahls wird es auf der gegenüberliegenden (linken) Seite der Achse platziert.</desc>
                     </valItem>
                 </valList>
             </attDef>
