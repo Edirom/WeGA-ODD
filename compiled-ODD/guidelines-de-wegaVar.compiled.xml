@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xml:base="file:/Users/steffenastheimer/repos/WeGA-ODD/src/Guidelines/guidelines-de.xml" xml:lang="de"><?TEIVERSION P5 Version 4.10.2. Last updated on
+<?xml version="1.0" encoding="utf-8"?><TEI xmlns="http://www.tei-c.org/ns/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xml:base="file:/Users/tbachmann/repos/wega/WeGA-ODD/src/Guidelines/guidelines-de.xml" xml:lang="de"><?TEIVERSION P5 Version 4.10.2. Last updated on
         4th September 2025, revision bcfa98f42?>
 	<teiHeader><fileDesc>
 			<titleStmt>
@@ -13418,6 +13418,253 @@ dedicatory epistle, or other division of a text.</desc>
     </egXML>
   </exemplum><listRef>
     <ref target="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ND.html#NDPLAC">14.2.3. Place Names</ref>
+  </listRef></elementSpec><elementSpec xmlns:xi="http://www.w3.org/2001/XInclude" rend="change" module="namesdates" xml:id="gi-event" ident="event"><gloss rend="replace" versionDate="2026-11-10" xml:lang="en">event</gloss><gloss rend="replace" versionDate="2026-11-10" xml:lang="de">Ereignis</gloss><desc rend="replace" versionDate="2026-11-10" xml:lang="en">contains data relating to a single event within a list of events.</desc><desc rend="replace" versionDate="2026-11-10" xml:lang="de">enthält Daten zu einem einzelnen Ereignis innerhalb einer Liste von Ereignissen.</desc><classes/><content><sequence minOccurs="1" maxOccurs="1"><elementRef key="label"/><elementRef key="desc" minOccurs="1" maxOccurs="unbounded"/></sequence></content><constraintSpec scheme="schematron" ident="timeline-events">
+            <constraint>
+                <sch:rule context="tei:listEvent[@type='timeline']/tei:event">
+                    <sch:assert test="@type=('archive', 'edition', 'outreach', 'honour', 'publication')">Events within a timeline must provide a @type of 'archive', 'edition', 'outreach', 'honour', or 'publication'.</sch:assert>
+                    <sch:report test="@subtype[not(.='highlight')]">The only @subtype allowed for events within a timeline is 'highlight'.</sch:report>
+                    <sch:assert test="tei:desc[not(@type)]">Events within a timeline must provide at least one desc without @type (the description of the event).</sch:assert>
+                    <sch:report test="count(tei:desc[@type='date']) gt 1">Events within a timeline must not provide more than one desc of @type 'date' (the date detail).</sch:report>
+                    <sch:report test="@to and not(@from)">Events within a timeline must not provide @to without @from.</sch:report>
+                </sch:rule>
+            </constraint>
+        </constraintSpec><constraintSpec scheme="schematron" ident="timeline-event-descs">
+            <constraint>
+                <sch:rule context="tei:listEvent[@type='timeline']/tei:event/tei:desc[@type]">
+                    <sch:assert test="@type='date'">The only @type allowed for desc within events of a timeline is 'date' (a verbal date detail, e.g. the season or month).</sch:assert>
+                </sch:rule>
+            </constraint>
+        </constraintSpec><attList><attDef ident="type" usage="req">
+                <desc versionDate="2026-11-10" xml:lang="en">characterizes the event; within a timeline it determines the icon and color of the event.</desc>
+                <desc versionDate="2026-11-10" xml:lang="de">charakterisiert das Ereignis; bestimmt innerhalb eines Zeitstrahls Icon und Farbe des Ereignisses.</desc>
+                <valList type="closed">
+                    <valItem ident="archive">
+                        <gloss versionDate="2026-11-10" xml:lang="en">archive</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="en">work on archival holdings and collections.</desc>
+                        <gloss versionDate="2026-11-10" xml:lang="de">Archiv</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="de">Arbeit an Archivbeständen und Sammlungen.</desc>
+                    </valItem>
+                    <valItem ident="edition">
+                        <gloss versionDate="2026-11-10" xml:lang="en">edition</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="en">editorial work.</desc>
+                        <gloss versionDate="2026-11-10" xml:lang="de">Edition</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="de">Editorische Arbeit.</desc>
+                    </valItem>
+                    <valItem ident="outreach">
+                        <gloss versionDate="2026-11-10" xml:lang="en">outreach</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="en">public engagement, e.g. talks, exhibitions, or work for societies.</desc>
+                        <gloss versionDate="2026-11-10" xml:lang="de">Vermittlung</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="de">Öffentlichkeitsarbeit, z.B. Vorträge, Ausstellungen oder Vereinsarbeit.</desc>
+                    </valItem>
+                    <valItem ident="honour">
+                        <gloss versionDate="2026-11-10" xml:lang="en">honour</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="en">awards and honours.</desc>
+                        <gloss versionDate="2026-11-10" xml:lang="de">Ehrung</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="de">Preise und Ehrungen.</desc>
+                    </valItem>
+                    <valItem ident="publication">
+                        <gloss versionDate="2026-11-10" xml:lang="en">publication</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="en">publications.</desc>
+                        <gloss versionDate="2026-11-10" xml:lang="de">Publikation</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="de">Veröffentlichungen.</desc>
+                    </valItem>
+                </valList>
+            </attDef><attDef ident="subtype" usage="opt">
+                <desc versionDate="2026-11-10" xml:lang="en">provides a sub-categorization of the event.</desc>
+                <desc versionDate="2026-11-10" xml:lang="de">liefert eine Unterkategorie des Ereignisses.</desc>
+                <valList type="closed">
+                    <valItem ident="highlight">
+                        <gloss versionDate="2026-11-10" xml:lang="en">highlight</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="en">an emphasized event; within a timeline it is placed on the opposite (left) side of the axis.</desc>
+                        <gloss versionDate="2026-11-10" xml:lang="de">Hervorhebung</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="de">Ein hervorgehobenes Ereignis; innerhalb eines Zeitstrahls wird es auf der gegenüberliegenden (linken) Seite der Achse platziert.</desc>
+                    </valItem>
+                </valList>
+            </attDef><attRef name="n" class="att.global"/><attRef name="cert" class="att.global.responsibility"/><attRef name="when" class="att.datable.w3c"/><attRef name="from" class="att.datable.w3c"/><attRef name="to" class="att.datable.w3c"/></attList><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" xml:id="gi-event-egXML-kl">
+      <listEvent>
+        <event when="1618-05-23" xml:id="SecondDefPrague" where="#Prague">
+          <eventName>1618 Defenestration of Prague</eventName>
+          <idno>https://www.wikidata.org/wiki/Q13365740</idno>
+          <listPerson type="defenstrated">
+            <person>
+              <persName>Jaroslav Bořita z Martinic</persName>
+              <idno type="GND">https://d-nb.info/gnd/116810998</idno>
+            </person>
+            <person>
+              <persName>Vilém Slavata z Chlumu a Košumberka</persName>
+              <idno type="GND">https://d-nb.info/gnd/1018376615</idno>
+            </person>
+            <person>
+              <persName>Filip Fabricius</persName>
+              <idno type="GND">https://d-nb.info/gnd/133946118</idno>
+            </person>
+          </listPerson>
+          <place xml:id="Prague"><placeName>Prague</placeName></place>
+        </event>
+        <event from="1618" to="1648" xml:id="ThirtyYearsWar">
+          <eventName>Thirty Years’ War</eventName>
+          <idno>https://www.wikidata.org/wiki/Q2487</idno>
+          <event when="1643-03-19" xml:id="BattleofRocroi" where="#Rocroi">
+            <eventName>Battle of Rocroi</eventName>
+            <idno type="Wikidata">https://www.wikidata.org/wiki/Q728480</idno>
+            <idno type="GND">https://d-nb.info/gnd/4202901-6</idno>
+            <place xml:id="Rocroi">
+              <placeName>Rocroi</placeName>
+              <location><geo decls="#WGS">49.926111 4.522222</geo></location>
+            </place>
+          </event>
+        </event>
+      </listEvent>
+    </egXML>
+  </exemplum><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" xml:id="gi-event-egXML-hz">
+      <person>
+        <event type="mat" when="1972-10-12">
+          <label>matriculation</label>
+        </event>
+        <event type="grad" when="1975-06-23">
+          <label>graduation</label>
+        </event>
+      </person>
+    </egXML>
+  </exemplum><exemplum versionDate="2008-04-06" xml:lang="fr">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" xml:id="gi-event-egXML-aq">
+      <person>
+        <event type="mat" when="1972-10-12">
+          <label>inscription</label>
+        </event>
+        <event type="grad" when="1975-06-23">
+          <label>diplômé</label>
+        </event>
+      </person>
+    </egXML>
+  </exemplum><exemplum xml:lang="zh-TW">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" xml:id="gi-event-egXML-lo">
+      <person>
+        <event type="mat" when="1972-10-12">
+          <label>入學</label>
+        </event>
+        <event type="grad" when="1975-06-23">
+          <label>畢業</label>
+        </event>
+      </person>
+    </egXML>
+  </exemplum><exemplum xml:lang="de-AT">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" xml:id="gi-event-egXML-kv">
+      <listEvent type="generated">
+        <event xml:id="mrp-events-MRP-1-1-01-0-18480401-P-0001" ref="https://mrp.oeaw.ac.at/pages/show.html?directory=editions&amp;document=MRP-1-1-01-0-18480401-P-0001.xml" type="session">
+          <head>Nr. 1 Ministerrat, Wien, 1. April 1848</head>
+          <label>Ministerratssitzung <date when="1848-04-01">1848-04-01</date>, aus Band 1 1/1, März 1848–21. November 1848</label>
+          <listEvent type="agenda_items">
+            <event type="agenda_item" xml:id="mrp-events-MRP-1-1-01-0-18480401-P-0001-top_1_1_1_1">
+              <label>I. Enthebung Baron Karl Friedrich v. Kübecks als Finanzminister und Ernennung des Freiherrn Philipp v. Krauß zu seinem Nachfolger</label>
+            </event>
+            <event type="agenda_item" xml:id="mrp-events-MRP-1-1-01-0-18480401-P-0001-top_1_1_1_2">
+              <label>II. Ernennung FML. Peter Zaninis zum Kriegsminister</label>
+            </event>
+            <event type="agenda_item" xml:id="mrp-events-MRP-1-1-01-0-18480401-P-0001-top_1_1_1_3">
+              <label>III. Öffentliche Erklärung über die konstitutionellen Grundsätze; Umformung des Staatsrates</label>
+            </event>
+            <event type="agenda_item" xml:id="mrp-events-MRP-1-1-01-0-18480401-P-0001-top_1_1_1_4">
+              <label>IV. Kriegserklärung Sardiniens; Vorgehen Radetzkys; Bestellung eines Hofkommissärs für Lombardo-Venetien</label>
+            </event>
+            <event type="agenda_item" xml:id="mrp-events-MRP-1-1-01-0-18480401-P-0001-top_1_1_1_5">
+              <label>V. Beeidigung der Minister</label>
+            </event>
+            <event type="agenda_item" xml:id="mrp-events-MRP-1-1-01-0-18480401-P-0001-top_1_1_1_6">
+              <label>VI. Tumulte im Kärntnertortheater</label>
+            </event>
+            <event type="agenda_item" xml:id="mrp-events-MRP-1-1-01-0-18480401-P-0001-top_1_1_1_7">
+              <label>VII. Bewegung der tschechischen demokratischen Partei; Berufung Paul Josef Safaiřiks nach Wien</label>
+            </event>
+            <event type="agenda_item" xml:id="mrp-events-MRP-1-1-01-0-18480401-P-0001-top_1_1_1_8">
+              <label>VIII. Behandlung der aus Lombardo-Venetien vertriebenen Justiz- und politischen Beamten</label>
+            </event>
+            <event type="agenda_item" xml:id="mrp-events-MRP-1-1-01-0-18480401-P-0001-top_1_1_1_9">
+              <label>IX. Besetzung der Landeschef- und Ständepräsidentenposten in Prag; böhmische Deputation in Wien</label>
+            </event>
+          </listEvent>
+          <listPerson type="attendants">
+            <person role="chair"><persName ref="https://mpr.acdh.oeaw.ac.at/entity/8141"><surname>Kolowrat</surname></persName></person>
+            <person role="attendant"><persName ref="https://mpr.acdh.oeaw.ac.at/entity/8145"><surname>Ficquelmont</surname></persName></person>
+            <person role="attendant"><persName ref="https://mpr.acdh.oeaw.ac.at/entity/8154"><surname>Taaffe</surname></persName></person>
+            <person role="attendant"><persName ref="https://mpr.acdh.oeaw.ac.at/entity/8148"><surname>Pillersdorf</surname></persName></person>
+            <person role="attendant"><persName ref="https://mpr.acdh.oeaw.ac.at/entity/8151"><surname>Sommaruga</surname></persName></person>
+            <person role="signed-protocol"><persName ref="https://mpr.acdh.oeaw.ac.at/entity/8141"><surname>Kolowrat</surname></persName><note>BdE. <date when="1848-04-02">2. 4.</date></note></person>
+            <person role="signed-protocol"><persName ref="https://mpr.acdh.oeaw.ac.at/entity/9251"><surname>Franz Karl</surname></persName><note>BdE. <date when="1848-04-02">2. 4.</date></note></person>
+          </listPerson>
+          <listPlace>
+            <place xml:id="Wien">
+              <placeName xml:lang="de">Wien</placeName>
+              <placeName xml:lang="en">Vienna</placeName>
+              <location>
+                <geo>48.208199 16.37169</geo>
+              </location>
+              <idno type="GeoNames">https://sws.geonames.org/2761369</idno>
+            </place>
+          </listPlace>
+        </event>
+        <!-- ... -->
+      </listEvent>
+    </egXML>
+  </exemplum><listRef>
+    <ref target="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ND.html#NDPERSbp">14.3.1. Basic Principles</ref>
+  </listRef></elementSpec><elementSpec xmlns:xi="http://www.w3.org/2001/XInclude" rend="change" module="namesdates" xml:id="gi-listEvent" ident="listEvent"><gloss rend="replace" versionDate="2026-11-10" xml:lang="en">list of events</gloss><gloss rend="replace" versionDate="2026-11-10" xml:lang="de">Liste von Ereignissen</gloss><desc rend="replace" versionDate="2026-11-10" xml:lang="en">contains a list of descriptions, each of which provides information about an identifiable event.</desc><desc rend="replace" versionDate="2026-11-10" xml:lang="de">enthält eine Liste von Beschreibungen, die jeweils Informationen über ein identifizierbares Ereignis liefern.</desc><classes><memberOf key="model.listLike"/></classes><content><elementRef key="event" minOccurs="1" maxOccurs="unbounded"/></content><constraintSpec ident="listEvent-is-declarable" scheme="schematron" xml:lang="en">
+    <constraint>
+      <sch:pattern is-a="declarable">
+        <sch:param name="tde" value="tei:listEvent"/>
+      </sch:pattern>
+    </constraint>
+  </constraintSpec><attList><attDef ident="type" usage="req">
+                <desc versionDate="2026-11-10" xml:lang="en">characterizes the list of events; determines how the list is rendered.</desc>
+                <desc versionDate="2026-11-10" xml:lang="de">charakterisiert die Liste von Ereignissen; bestimmt, wie die Liste dargestellt wird.</desc>
+                <valList type="closed">
+                    <valItem ident="timeline">
+                        <gloss versionDate="2026-11-10" xml:lang="en">Timeline</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="en">a chronological list of events, rendered as a timeline. The order of the events in the document is authoritative.</desc>
+                        <gloss versionDate="2026-11-10" xml:lang="de">Zeitstrahl</gloss>
+                        <desc versionDate="2026-11-10" xml:lang="de">Eine chronologische Liste von Ereignissen, die als Zeitstrahl dargestellt wird. Maßgeblich ist die Reihenfolge der Ereignisse im Dokument.</desc>
+                    </valItem>
+                </valList>
+            </attDef></attList><exemplum xml:lang="en">
+    <egXML xmlns="http://www.tei-c.org/ns/Examples" xml:id="gi-listEvent-egXML-ad">
+      <listEvent>
+        <head>Battles of the American Civil War: Kentucky</head>
+        <event xml:id="event01" when="1861-09-19">
+          <label>Barbourville</label>
+          <desc>The Battle of Barbourville was one of the early engagements of
+the American Civil War. It occurred September 19, 1861, in Knox
+County, Kentucky during the campaign known as the Kentucky Confederate
+Offensive. The battle is considered the first Confederate victory in
+the commonwealth, and threw a scare into Federal commanders, who
+rushed troops to central Kentucky in an effort to repel the invasion,
+which was finally thwarted at the <ref target="#event02">Battle of
+Camp Wildcat</ref> in October.</desc>
+        </event>
+        <event xml:id="event02" when="1861-10-21">
+          <label>Camp Wild Cat</label>
+          <desc>
+The Battle of Camp Wildcat (also known as Wildcat Mountain and Camp
+Wild Cat) was one of the early engagements of the American Civil
+War. It occurred October 21, 1861, in northern Laurel County, Kentucky
+during the campaign known as the Kentucky Confederate Offensive. The
+battle is considered one of the very first Union victories, and marked
+the first engagement of troops in the commonwealth of Kentucky.</desc>
+        </event>
+        <event xml:id="event03" from="1864-06-11" to="1864-06-12">
+          <label>Cynthiana</label>
+          <desc>The Battle of Cynthiana (or Kellar’s Bridge) was an engagement
+during the American Civil War that was fought on June 11 and 12, 1864,
+in Harrison County, Kentucky, near the town of Cynthiana. A part of
+Confederate Brigadier General John Hunt Morgan's 1864 Raid into
+Kentucky, the battle resulted in a victory by Union forces over the
+raiders and saved the town from capture.</desc>
+        </event>
+      </listEvent>
+    </egXML>
+  </exemplum><listRef>
+    <ref target="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ND.html#NDPERSbp">14.3.1. Basic Principles</ref>
   </listRef></elementSpec><classSpec xmlns:xi="http://www.w3.org/2001/XInclude" module="figures" type="atts" ident="att.tableDecoration">
   <desc versionDate="2006-04-17" xml:lang="en">provides attributes used to decorate rows or cells of a table.</desc>
   <desc versionDate="2007-12-20" xml:lang="ko">테이블의 행 또는 셀을 장식하는 속성을 제공한다.</desc>
@@ -14892,7 +15139,7 @@ used to mark normal inter-word space or the like.</p>
             </constraint>
         </constraintSpec><macroSpec rend="add" ident="staffSignatures.list" mode="add" module="wega.core.module">
             <content xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:tei="http://www.tei-c.org/ns/1.0">
-                <choice xmlns="http://relaxng.org/ns/structure/1.0"><value>PS</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Peter Stadler</a:documentation><value>DM</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Dominik Mersch</a:documentation><value>JV</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Joachim Veit</a:documentation><value>EB</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Eveline Bartlitz</a:documentation><value>DB</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Dagmar Beck</a:documentation><value>FH</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Frederik Hinkelmann</a:documentation><value>CA</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Christoph Albrecht</a:documentation><value>KR</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Kristina Richts</a:documentation><value>DH</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Hafenstein</a:documentation><value>AG</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Annelie Goldlücke</a:documentation><value>HF</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Heiko Fabig</a:documentation><value>PJ</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Philemon Jacobsen</a:documentation><value>JH</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Josefine Hoffmann</a:documentation><value>FZ</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Frank Ziegler</a:documentation><value>SS</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Solveig Schreiter</a:documentation><value>MB</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Markus Bandur</a:documentation><value>IC</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Irmlind Capelle</a:documentation><value>SK</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Sonja Klein</a:documentation><value>AF</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Andreas Fukerider</a:documentation><value>CK</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Cornelia Kohle</a:documentation><value>AS</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Agnes Seipelt</a:documentation><value>RM</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Ran Mo</a:documentation><value>DK</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Dana Kühnau</a:documentation><value>KH</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Kristin Herold</a:documentation><value>ED</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Esther Dubke</a:documentation><value>RK</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Roland Kolb</a:documentation><value>SF</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Shino Funayama</a:documentation><value>AK</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Anna Komprecht</a:documentation><value>SeS</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Sebastian Schaffer</a:documentation><value>LS</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Lena Schubert</a:documentation><value>CJ</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Charlene Jakob</a:documentation><value>IK</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Ina Klare</a:documentation><value>FS</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Fabian Schmidt</a:documentation><value>AAS</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Aida Amiryan-Stein</a:documentation><value>SO</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Salome Obert</a:documentation><value>StA</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Steffen Astheimer</a:documentation><value>JW</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Jelena Wißmann</a:documentation></choice>
+                <choice xmlns="http://relaxng.org/ns/structure/1.0"><value>PS</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Peter Stadler</a:documentation><value>DM</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Dominik Mersch</a:documentation><value>JV</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Joachim Veit</a:documentation><value>EB</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Eveline Bartlitz</a:documentation><value>DB</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Dagmar Beck</a:documentation><value>FH</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Frederik Hinkelmann</a:documentation><value>CA</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Christoph Albrecht</a:documentation><value>KR</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Kristina Richts</a:documentation><value>DH</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Hafenstein</a:documentation><value>AG</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Annelie Goldlücke</a:documentation><value>HF</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Heiko Fabig</a:documentation><value>PJ</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Philemon Jacobsen</a:documentation><value>JH</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Josefine Hoffmann</a:documentation><value>FZ</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Frank Ziegler</a:documentation><value>SS</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Solveig Schreiter</a:documentation><value>MB</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Markus Bandur</a:documentation><value>IC</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Irmlind Capelle</a:documentation><value>SK</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Sonja Klein</a:documentation><value>AF</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Andreas Fukerider</a:documentation><value>CK</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Cornelia Kohle</a:documentation><value>AS</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Agnes Seipelt</a:documentation><value>RM</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Ran Mo</a:documentation><value>DK</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Dana Kühnau</a:documentation><value>KH</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Kristin Herold</a:documentation><value>ED</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Esther Dubke</a:documentation><value>RK</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Roland Kolb</a:documentation><value>SF</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Shino Funayama</a:documentation><value>AK</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Anna Komprecht</a:documentation><value>SeS</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Sebastian Schaffer</a:documentation><value>LS</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Lena Schubert</a:documentation><value>CJ</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Charlene Jakob</a:documentation><value>IK</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Ina Klare</a:documentation><value>FS</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Fabian Schmidt</a:documentation><value>AAS</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Aida Amiryan-Stein</a:documentation><value>SO</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Salome Obert</a:documentation><value>StA</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Steffen Astheimer</a:documentation><value>JW</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Jelena Wißmann</a:documentation><value>TB</value><a:documentation xmlns="http://www.tei-c.org/ns/1.0">Tobias Bachmann</a:documentation></choice>
             </content>
         </macroSpec><macroSpec rend="add" ident="WeGA_keywords.list" mode="add" module="wega.core.module">
             <content xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:mei="http://www.music-encoding.org/ns/mei" xmlns:s="http://www.ascc.net/xml/schematron" xmlns:tei="http://www.tei-c.org/ns/1.0">
