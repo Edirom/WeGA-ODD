@@ -523,7 +523,7 @@
     
     <xsl:template match="facsimile">
         <xsl:variable name="wit" select="wega:facsimile-witness(.)"/>
-        <xsl:if test="$wit//repository[@n = $facsimileAllowListEntries] or root(.)/TEI/@xml:id = $facsimileAllowListEntries or @sameAs">
+        <xsl:if test="$wit//repository[@n = $facsimileAllowListEntries] or @publication = 'allowed' or @sameAs">
             <xsl:copy>
                 <xsl:apply-templates select="@*"/>
                 <!-- 
