@@ -523,7 +523,7 @@
     
     <xsl:template match="facsimile">
         <xsl:variable name="wit" select="wega:facsimile-witness(.)"/>
-        <xsl:if test="$wit//repository[@n = $facsimileAllowListEntries] or @publication = 'allowed' or @sameAs">
+        <xsl:if test="if (@publication) then @publication = 'allowed' else ($wit//repository[@n = $facsimileAllowListEntries] or @sameAs)">
             <xsl:copy>
                 <xsl:apply-templates select="@*"/>
                 <!-- 
@@ -584,6 +584,7 @@
         </xsl:attribute>
     </xsl:template>
     
+    <xsl:template match="@publication[parent::facsimile]" mode="#all"/>
     <xsl:template match="@notInvolved" mode="#all"/>
     <xsl:template match="@full[parent::author]" mode="#all"/>
     <xsl:template match="keywords[parent::biblStruct]" mode="#all"/>
